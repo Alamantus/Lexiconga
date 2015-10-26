@@ -1,0 +1,41 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>DictionaryBuilder.Windows</title>
+
+    <!-- DictionaryBuilder.Windows references -->
+    <link href="css/styles.css" rel="stylesheet" />
+    <script src="js/dictionaryBuilder.js"></script>
+</head>
+<body>
+    <form>
+        <label><span>Word</span>
+            <input type="text" id="word" />
+        </label>
+        <label><span>Equivalent Word</span>
+            <input type="text" id="simpleDefinition" />
+        </label>
+        <label><span>Long Definition</span>
+            <textarea id="longDefinition"></textarea>
+        </label>
+        <label><span>Part of Speech</span>
+            <select id="partOfSpeech">
+                <option value="noun">Noun</option>
+                <option value="adjective">Adjective</option>
+                <option value="verb">Verb</option>
+                <option value="adverb">Adverb</option>
+                <option value="preposition">Preposition</option>
+                <option value="pronoun">Pronoun</option>
+                <option value="conjunction">Conjunction</option>
+            </select>
+        </label>
+        <button type="button" onclick="AddWord(); return false;">Add Word</button>
+    </form>
+
+    <div id="dictionaryContainer">
+        <h2>Dictionary</h2>
+        <div id="theDictionary"></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,55 @@
+﻿body {
+    padding: 0;
+    margin: 0;
+    border: none;
+}
+
+form {
+    margin: 15px;
+    float: left;
+}
+
+label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+label span {
+    display: block;
+    font-weight: bold;
+}
+
+input, textarea {
+    display: block;
+    padding-left: 5px;
+}
+
+label textarea {
+    width: 350px;
+    height: 200px;
+}
+
+#dictionaryContainer {
+    margin: 15px;
+    width: 50%;
+    min-width: 350px;
+    float: right;
+}
+
+entry {
+    display: block;
+    margin-bottom: 10px;
+}
+
+word {
+    font-weight: bold;
+}
+
+partofspeech {
+    font-style: italic;
+    font-size: 10px;
+}
+
+longdefinition {
+    margin-left: 20px;
+}
