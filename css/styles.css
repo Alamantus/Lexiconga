@@ -4,6 +4,16 @@
     border: none;
 }
 
+footer {
+    width: 100%;
+    text-align: center;
+    position:fixed;
+    bottom: 0px;
+    left: 0px;
+    background: #aaaaaa;
+    padding: 3px;
+}
+
 form {
     margin: 15px;
     float: left;
