@@ -7,6 +7,9 @@
 form {
     margin: 15px;
     float: left;
+    max-width: 400px;
+    padding: 15px;
+    border: outset 3px;
 }
 
 label {
@@ -29,16 +32,26 @@ label textarea {
     height: 200px;
 }
 
+#errorMessage, #updateConflictMessage {
+    display: block;
+    color: red;
+    font-weight: bold;
+}
+
 #dictionaryContainer {
     margin: 15px;
     width: 50%;
     min-width: 350px;
-    float: right;
+    float: left;
 }
 
 entry {
     display: block;
-    margin-bottom: 10px;
+    width: 50%;
+    min-width: 300px;
+    padding: 10px 10px 3px;
+    border: outset 3px;
+    margin-bottom: 5px;
 }
 
 word {
@@ -50,6 +63,52 @@ partofspeech {
     font-size: 10px;
 }
 
+shortdefinition {
+    display: block;
+}
+
 longdefinition {
+    display: block;
     margin-left: 20px;
+}
+
+.management {
+    display: block;
+    right: 5px;
+    width: 100px;
+    padding: 3px;
+    border: inset 3px;
+    margin: 10px;
+}
+
+.editButton, .deleteButton, .deleteConfirmButton, .deleteCancelButton {
+    display: inline;
+    font-size: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    margin: 5px;
+}
+
+.deleteConfirm {
+    display: block;
+    font-size: 10px;
+}
+
+#settingsScreen {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 90%;
+    height: 90%;
+    padding: 5%;
+    background: #ffffff;
+    border-radius: 5px;
+    border: 1px solid black;
+}
+
+#settingsButton, #settingsScreenCloseButton {
+    float: right;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: bold;
 }
