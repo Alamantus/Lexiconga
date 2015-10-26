@@ -244,7 +244,9 @@ function ShowSettings() {
 }
 
 function SaveSettings() {
-    currentDictionary.name = htmlEntities(document.getElementById("dictionaryNameEdit").value);
+    if (htmlEntities(document.getElementById("dictionaryNameEdit").value) != "") {
+        currentDictionary.name = htmlEntities(document.getElementById("dictionaryNameEdit").value);
+    }
     currentDictionary.settings.isComplete = document.getElementById("dictionaryIsComplete").checked;
     ShowDictionary();
     SaveDictionary();
@@ -253,20 +255,6 @@ function SaveSettings() {
 function HideSettings() {
     document.getElementById("settingsScreen").style.display = "none";
     document.getElementById("wordEntryForm").style.display = (currentDictionary.settings.isComplete) ? "none" : "block";
-}
-
-function dynamicSort(property) {
-    /* Retrieved from http://stackoverflow.com/a/4760279
-       Usage: theArray.sort(dynamicSort("objectProperty"));*/
-    var sortOrder = 1;
-    if (property[0] === "-") {
-        sortOrder = -1;
-        property = property.substr(1);
-    }
-    return function (a, b) {
-        var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
-        return result * sortOrder;
-    }
 }
 
 function EmptyWholeDictionary() {
@@ -294,7 +282,11 @@ function LoadDictionary() {
 }
 
 function ExportDictionary() {
-    download("export.dict", localStorage.getItem('dictionary'));
+    var downloadName = currentDictionary.name.replace(/\W/g, '');
+    if (downloadName == "") {
+        downloadName = "export";
+    }
+    download(downloadName + ".dict", localStorage.getItem('dictionary'));
 }
 
 function ImportDictionary() {
@@ -345,6 +337,20 @@ function htmlEntities(string) {
 
 function htmlEntitiesParse(string) {
     return String(string).replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/<br>/g, '\n');
+}
+
+function dynamicSort(property) {
+    /* Retrieved from http://stackoverflow.com/a/4760279
+       Usage: theArray.sort(dynamicSort("objectProperty"));*/
+    var sortOrder = 1;
+    if (property[0] === "-") {
+        sortOrder = -1;
+        property = property.substr(1);
+    }
+    return function (a, b) {
+        var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
+        return result * sortOrder;
+    }
 }
 
 function download(filename, text) {
