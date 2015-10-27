@@ -1,4 +1,4 @@
-﻿var currentVersion = 0.1;
+﻿var currentVersion = 0.2;
 
 var currentDictionary = {
     name: "New",
@@ -6,9 +6,10 @@ var currentDictionary = {
     settings: {
         caseSensitive: false,
         preferUpperCase: false,
+        partsOfSpeech: "Noun,Adjective,Verb,Adverb,Preposition,Pronoun,Conjunction",
         isComplete: false
     },
-    dictionaryBuilderVersion: currentVersion
+    dictionaryImportVersion: currentVersion     // This needs to always be last.
 }
 
 var defaultDictionaryJSON = JSON.stringify(currentDictionary);  //Saves a stringifyed default dictionary.
@@ -20,12 +21,8 @@ var savedScroll = {
 }
 
 window.onload = function () {
-    //defaultDictionaryJSON = JSON.stringify(currentDictionary);  //Saves a stringifyed default dictionary.
     LoadDictionary();
     ClearForm();
-    if (currentDictionary.settings.isComplete) {
-        document.getElementById("wordEntryForm").style.display = "none";
-    }
 }
 
 var Word = function (word, simpleDefinition, longDefinition, partOfSpeech) {
@@ -45,22 +42,12 @@ function AddWord() {
     var errorMessageArea = document.getElementById("errorMessage");
     var errorMessage = "";
     var updateConflictArea = document.getElementById("updateConflict");
-    var updateConflictMessageArea = document.getElementById("updateConflictMessage");
-    var updateConfirmButton = document.getElementById("updateConfirmButton");
-
+    
     if (word != "" && (simpleDefinition != "" || longDefinition != "")) {
-        if (!currentDictionary.settings.caseSensitive) {
-            if (currentDictionary.settings.preferUpperCase) {
-                word = word.toUpperCase();
-            } else {
-                word = word.toLowerCase();
-            }
-        }
-
         var wordIndex = WordIndex(word);
 
         if (editIndex != "") {
-            if (currentDictionary.words[parseInt(editIndex)].name != word || currentDictionary.words[parseInt(editIndex)].simpleDefinition != simpleDefinition || currentDictionary.words[parseInt(editIndex)].longDefinition != longDefinition || currentDictionary.words[parseInt(editIndex)].partOfSpeech != partOfSpeech) {
+            if (WordAtIndexWasChanged(editIndex, word, simpleDefinition, longDefinition, partOfSpeech)) {
                 updateConflictArea.style.display = "block";
                 updateConflictArea.innerHTML = "<span id='updateConflictMessage'>Do you really want to change the word \"" + currentDictionary.words[parseInt(editIndex)].name + "\" to what you have set above?</span>";
                 updateConflictArea.innerHTML += '<button type="button" id="updateConfirmButton" onclick="UpdateWord(' + editIndex + ', \'' +
@@ -71,24 +58,46 @@ function AddWord() {
                 updateConflictArea.innerHTML += '<button type="button" id="updateCancelButton" onclick="CloseUpdateConflictArea(); return false;">No, Leave it</button>';
             } else {
                 errorMessage = "No change has been made to \"" + word + "\"";
+                if (currentDictionary.words[parseInt(editIndex)].name != word) {
+                    errorMessage += ". (Your dictionary is currently set to ignore case.)"
+                }
             }
         } else if (wordIndex >= 0) {
-            if (currentDictionary.words[parseInt(wordIndex)].simpleDefinition != simpleDefinition || currentDictionary.words[parseInt(wordIndex)].longDefinition != longDefinition || currentDictionary.words[parseInt(wordIndex)].partOfSpeech != partOfSpeech) {
+            if (currentDictionary.words[wordIndex].simpleDefinition != simpleDefinition || currentDictionary.words[wordIndex].longDefinition != longDefinition || currentDictionary.words[wordIndex].partOfSpeech != partOfSpeech) {
                 updateConflictArea.style.display = "block";
-                updateConflictArea.innerHTML = "<span id='updateConflictMessage'>\"" + word + "\" is already in the dictionary. Do you want to update it to what you have set above?</span>";
-                updateConflictArea.innerHTML += '<button type="button" id="updateConfirmButton" onclick="UpdateWord(' + wordIndex + ', \'' +
-                                                                                                                    htmlEntities(word) + '\', \'' +
-                                                                                                                    htmlEntities(simpleDefinition) + '\', \'' +
-                                                                                                                    htmlEntities(longDefinition) + '\', \'' +
-                                                                                                                    htmlEntities(partOfSpeech) + '\'); return false;">Yes, Update it</button>';
-                updateConflictArea.innerHTML += ' <button type="button" id="updateCancelButton" onclick="CloseUpdateConflictArea(); return false;">No, Leave it</button>';
+                
+                var updateConflictText = "<span id='updateConflictMessage'>\"" + word + "\" is already in the dictionary";
+                if (currentDictionary.words[wordIndex].name != word) {
+                    updateConflictText += " as \"" + currentDictionary.words[wordIndex].name + "\", and your dictionary is set to ignore case.";
+                } else {
+                    updateConflictText += "."
+                }
+                updateConflictText += "<br>Do you want to update it to what you have set above?</span>";
+                updateConflictText += '<button type="button" id="updateConfirmButton" onclick="UpdateWord(' + wordIndex + ', \'' +
+                                                                                                            htmlEntities(word) + '\', \'' +
+                                                                                                            htmlEntities(simpleDefinition) + '\', \'' +
+                                                                                                            htmlEntities(longDefinition) + '\', \'' +
+                                                                                                            htmlEntities(partOfSpeech) + '\'); return false;">Yes, Update it</button>';
+                updateConflictText += ' <button type="button" id="updateCancelButton" onclick="CloseUpdateConflictArea(); return false;">No, Leave it</button>';
+                
+                updateConflictArea.innerHTML = updateConflictText;
             } else {
-                errorMessage = "\"" + word + "\" is already in the dictionary exactly as it is written above.";
+                errorMessage = "\"" + word + "\" is already in the dictionary exactly as it is written above";
+                if (currentDictionary.words[wordIndex].name != word) {
+                    errorMessage += ". (Your dictionary is currently set to ignore case.)"
+                }
             }
         } else {
             currentDictionary.words.push(new Word(word, simpleDefinition, longDefinition, partOfSpeech));
             ClearForm();
         }
+        
+        /*  This will help simplify this function if I can figure out how to do it right. Not sure if it's even necessary, though.
+        errorMessage += ValidateWord();
+        if (errorMessage != "") {
+            currentDictionary.words.push(new Word(word, simpleDefinition, longDefinition, partOfSpeech));
+            ClearForm();
+        }*/
 
         currentDictionary.words.sort(dynamicSort("name"));
         errorMessageArea.innerHTML = "";
@@ -106,9 +115,71 @@ function AddWord() {
         } else if (simpleDefinition == "" && longDefinition == "") {
             errorMessage += "You need at least one definition."
         }
+        
+        
     }
-
+    
     errorMessageArea.innerHTML = errorMessage;
+}
+
+function ValidateWord(editIndex, word, simpleDefinition, longDefinition, partOfSpeech) {
+    var errorMessage = "";
+    var updateConflictArea = document.getElementById("updateConflict");
+    
+    var wordIndex = WordIndex(word);
+
+    if (editIndex != "") {
+        if (WordAtIndexWasChanged(editIndex, word, simpleDefinition, longDefinition, partOfSpeech)) {
+            updateConflictArea.style.display = "block";
+            updateConflictArea.innerHTML = "<span id='updateConflictMessage'>Do you really want to change the word \"" + currentDictionary.words[parseInt(editIndex)].name + "\" to what you have set above?</span>";
+            updateConflictArea.innerHTML += '<button type="button" id="updateConfirmButton" onclick="UpdateWord(' + editIndex + ', \'' +
+                                                                                                                htmlEntities(word) + '\', \'' +
+                                                                                                                htmlEntities(simpleDefinition) + '\', \'' +
+                                                                                                                htmlEntities(longDefinition) + '\', \'' +
+                                                                                                                htmlEntities(partOfSpeech) + '\'); return false;">Yes, Update it</button>';
+            updateConflictArea.innerHTML += '<button type="button" id="updateCancelButton" onclick="CloseUpdateConflictArea(); return false;">No, Leave it</button>';
+        } else {
+            errorMessage = "No change has been made to \"" + word + "\"";
+            if (currentDictionary.words[parseInt(editIndex)].name != word) {
+                errorMessage += ". (Your dictionary is currently set to ignore case.)"
+            }
+        }
+    } else if (wordIndex >= 0) {
+        if (currentDictionary.words[wordIndex].simpleDefinition != simpleDefinition || currentDictionary.words[wordIndex].longDefinition != longDefinition || currentDictionary.words[wordIndex].partOfSpeech != partOfSpeech) {
+            updateConflictArea.style.display = "block";
+            
+            var updateConflictText = "<span id='updateConflictMessage'>\"" + word + "\" is already in the dictionary";
+            if (currentDictionary.words[wordIndex].name != word) {
+                updateConflictText += " as \"" + currentDictionary.words[wordIndex].name + "\", and your dictionary is set to ignore case.";
+            } else {
+                updateConflictText += "."
+            }
+            updateConflictText += "<br>Do you want to update it to what you have set above?</span>";
+            updateConflictText += '<button type="button" id="updateConfirmButton" onclick="UpdateWord(' + wordIndex + ', \'' +
+                                                                                                        htmlEntities(word) + '\', \'' +
+                                                                                                        htmlEntities(simpleDefinition) + '\', \'' +
+                                                                                                        htmlEntities(longDefinition) + '\', \'' +
+                                                                                                        htmlEntities(partOfSpeech) + '\'); return false;">Yes, Update it</button>';
+            updateConflictText += ' <button type="button" id="updateCancelButton" onclick="CloseUpdateConflictArea(); return false;">No, Leave it</button>';
+            
+            updateConflictArea.innerHTML = updateConflictText;
+        } else {
+            errorMessage = "\"" + word + "\" is already in the dictionary exactly as it is written above";
+            if (currentDictionary.words[wordIndex].name != word) {
+                errorMessage += ". (Your dictionary is currently set to ignore case.)"
+            }
+        }
+    }
+    
+    return errorMessage;
+}
+
+function WordAtIndexWasChanged(indexString, word, simpleDefinition, longDefinition, partOfSpeech) {
+     return (!currentDictionary.settings.caseSensitive && currentDictionary.words[parseInt(indexString)].name.toLowerCase() != word.toLowerCase()) ||
+            (currentDictionary.settings.caseSensitive && currentDictionary.words[parseInt(indexString)].name != word) ||
+            currentDictionary.words[parseInt(indexString)].simpleDefinition != simpleDefinition ||
+            currentDictionary.words[parseInt(indexString)].longDefinition != longDefinition ||
+            currentDictionary.words[parseInt(indexString)].partOfSpeech != partOfSpeech;
 }
 
 function SaveScroll() {
@@ -240,6 +311,7 @@ function ManagementArea(itemIndex) {
 function ShowSettings() {
     document.getElementById("settingsScreen").style.display = "block";
     document.getElementById("dictionaryNameEdit").value = htmlEntitiesParse(currentDictionary.name);
+    document.getElementById("dictionaryPartsOfSpeechEdit").value = htmlEntitiesParse(currentDictionary.settings.partsOfSpeech);
     document.getElementById("dictionaryIsComplete").checked = currentDictionary.settings.isComplete;
 }
 
@@ -247,9 +319,38 @@ function SaveSettings() {
     if (htmlEntities(document.getElementById("dictionaryNameEdit").value) != "") {
         currentDictionary.name = htmlEntities(document.getElementById("dictionaryNameEdit").value);
     }
+    
+    CheckForPartsOfSpeechChange();
+    
     currentDictionary.settings.isComplete = document.getElementById("dictionaryIsComplete").checked;
+    
     ShowDictionary();
     SaveDictionary();
+}
+
+function CheckForPartsOfSpeechChange () {
+    if (htmlEntities(document.getElementById("dictionaryPartsOfSpeechEdit").value) != currentDictionary.settings.partsOfSpeech) {
+        if (htmlEntities(document.getElementById("dictionaryPartsOfSpeechEdit").value) != "") {
+            currentDictionary.settings.partsOfSpeech = htmlEntities(document.getElementById("dictionaryPartsOfSpeechEdit").value);
+            SetPartsOfSpeech();
+        }
+    }
+}
+
+function SetPartsOfSpeech () {
+    var partsOfSpeechSelect = document.getElementById("partOfSpeech");
+    if (partsOfSpeechSelect.options.length > 0) {
+        for (var i = partsOfSpeechSelect.options.length - 1; i >= 0; i--) {
+            partsOfSpeechSelect.removeChild(partsOfSpeechSelect.options[i]);
+        }
+    }
+    var newPartsOfSpeech = htmlEntitiesParse(currentDictionary.settings.partsOfSpeech).trim().split(",");
+    for (var j = 0; j < newPartsOfSpeech.length; j++) {
+        var partOfSpeechOption = document.createElement('option');
+        partOfSpeechOption.appendChild(document.createTextNode(newPartsOfSpeech[j].trim()));
+        partOfSpeechOption.value = newPartsOfSpeech[j].trim();
+        partsOfSpeechSelect.appendChild(partOfSpeechOption);
+    }
 }
 
 function HideSettings() {
@@ -279,6 +380,12 @@ function LoadDictionary() {
         tmpDictionary = null;
     }
     ShowDictionary();
+    
+    SetPartsOfSpeech();
+    
+    if (currentDictionary.settings.isComplete) {
+        document.getElementById("wordEntryForm").style.display = "none";
+    }
 }
 
 function ExportDictionary() {
@@ -303,7 +410,7 @@ function ImportDictionary() {
         // When it's loaded, process it
         reader.onloadend = function () {
             if (reader.result && reader.result.length) {
-                if (reader.result.substr(reader.result.length - 31) == '"dictionaryBuilderVersion":' + currentVersion + '}') {
+                if (reader.result.substr(reader.result.length - 30) == '"dictionaryImportVersion":' + currentVersion + '}') {
                     localStorage.setItem('dictionary', reader.result);
                     document.getElementById("importFile").value = "";
                     LoadDictionary();
@@ -324,7 +431,8 @@ function ImportDictionary() {
 function WordIndex(word) {
     for (var i = 0; i < currentDictionary.words.length; i++)
     {
-        if (currentDictionary.words[i].name == word) {
+        if ((!currentDictionary.settings.caseSensitive && currentDictionary.words[i].name.toLowerCase() == word.toLowerCase()) ||
+            (currentDictionary.settings.caseSensitive && currentDictionary.words[i].name == word)) {
             return i;
         }
     }

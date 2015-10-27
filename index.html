@@ -20,13 +20,15 @@
         </label>
         <label><span>Part of Speech</span>
             <select id="partOfSpeech">
-                <option value="noun">Noun</option>
-                <option value="adjective">Adjective</option>
-                <option value="verb">Verb</option>
-                <option value="adverb">Adverb</option>
-                <option value="preposition">Preposition</option>
-                <option value="pronoun">Pronoun</option>
-                <option value="conjunction">Conjunction</option>
+                <!--
+                    <option value="noun">Noun</option>
+                    <option value="adjective">Adjective</option>
+                    <option value="verb">Verb</option>
+                    <option value="adverb">Adverb</option>
+                    <option value="preposition">Preposition</option>
+                    <option value="pronoun">Pronoun</option>
+                    <option value="conjunction">Conjunction</option>
+                -->
             </select>
         </label>
         <input type="hidden" id="editIndex" />
@@ -47,29 +49,41 @@
     </div>
 
     <div id="settingsScreen" style="display:none;">
-        <span id="settingsScreenCloseButton" onclick="HideSettings()">Close</span>
-        <h2>Dictionary Settings</h2>
-        <form>
-            <label>
-                <span>Dictionary name</span>
-                <input type="text" id="dictionaryNameEdit" />
-            </label>
-            <label>
-                <span>Dictionary is complete</span>
-                <input type="checkbox" id="dictionaryIsComplete" />
-            </label>
-            <label><button type="button" onclick="ExportDictionary()" style="cursor:pointer;">Export Current Dictionary</button></label>
-            <label>
-                <span>Import Dictionary</span>
-                <input type="file" id="importFile" />
-                <button type="button" onclick="ImportDictionary(); return false;">Import</button>
-            </label>
-            <label><button type="button" onclick="EmptyWholeDictionary()" style="cursor:pointer;">Empty Current Dictionary</button></label>
-            <br>
-            <span id="settingsErrorMessage"></span>
-            <button type="button" onclick="SaveSettings(); return false;">Save Settings</button><br>
-            <button type="button" onclick="SaveSettings(); HideSettings(); return false;">Save and Close</button>
-        </form>
+        <div id="settingsBackgroundFade"></div>
+        <div id="settingsOptions">
+            <span id="settingsScreenCloseButton" onclick="HideSettings()">Close</span>
+            <h2>Dictionary Settings</h2>
+            <form id="settingsForm">
+                <div class="settingsCol">
+                    <label>
+                        <span>Dictionary name</span>
+                        <input type="text" id="dictionaryNameEdit" />
+                    </label>
+                    <label>
+                        <span>Parts of Speech</span>
+                        <input type="text" id="dictionaryPartsOfSpeechEdit" />
+                    </label>
+                    <label>
+                        <span>Dictionary is complete</span>
+                        <input type="checkbox" id="dictionaryIsComplete" />
+                    </label>
+                </div>
+                <div class="settingsCol">
+                    <label><button type="button" onclick="ExportDictionary()" style="cursor:pointer;">Export Current Dictionary</button></label>
+                    <label>
+                        <span>Import Dictionary</span>
+                        <input type="file" id="importFile" />
+                        <button type="button" onclick="ImportDictionary(); return false;">Import</button>
+                    </label>
+                    <label><button type="button" onclick="EmptyWholeDictionary()" style="cursor:pointer;">Empty Current Dictionary</button></label>
+                </div>
+                <div id="settingsSaveButtons">
+                    <span id="settingsErrorMessage"></span><br>
+                    <button type="button" onclick="SaveSettings(); HideSettings(); return false;">Save and Close</button>
+                    <button type="button" onclick="SaveSettings(); return false;">Save</button>
+                </div>
+            </form>
+        </div>
     </div>
     
     <footer>Version <script>document.write(currentVersion);</script>. Dictionary Builder only guaranteed to work with most up-to-date HTML5 browsers.</footer>
