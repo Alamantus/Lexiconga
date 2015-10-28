@@ -2,6 +2,7 @@
 
 var currentDictionary = {
     name: "New",
+    description: "A new dictionary.",
     words: [],
     settings: {
         caseSensitive: false,
@@ -260,6 +261,7 @@ function ManagementArea(itemIndex) {
 function ShowSettings() {
     document.getElementById("settingsScreen").style.display = "block";
     document.getElementById("dictionaryNameEdit").value = htmlEntitiesParse(currentDictionary.name);
+    document.getElementById("dictionaryDescriptionEdit").value = htmlEntitiesParse(currentDictionary.description);
     document.getElementById("dictionaryPartsOfSpeechEdit").value = htmlEntitiesParse(currentDictionary.settings.partsOfSpeech);
     document.getElementById("dictionaryIsComplete").checked = currentDictionary.settings.isComplete;
 }
@@ -268,6 +270,8 @@ function SaveSettings() {
     if (htmlEntities(document.getElementById("dictionaryNameEdit").value) != "") {
         currentDictionary.name = htmlEntities(document.getElementById("dictionaryNameEdit").value);
     }
+    
+    currentDictionary.description = htmlEntities(document.getElementById("dictionaryDescriptionEdit").value);
     
     CheckForPartsOfSpeechChange();
     
