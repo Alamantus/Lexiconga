@@ -1,4 +1,5 @@
-﻿var currentVersion = 0.2;
+﻿//Requires Markdown.js parser
+var currentVersion = 0.2;
 
 var currentDictionary = {
     name: "New",
@@ -14,7 +15,6 @@ var currentDictionary = {
 }
 
 var defaultDictionaryJSON = JSON.stringify(currentDictionary);  //Saves a stringifyed default dictionary.
-//document.write(defaultDictionaryJSON);
 
 var savedScroll = {
     x: 0,
