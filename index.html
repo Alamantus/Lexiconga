@@ -45,6 +45,12 @@
     <div id="dictionaryContainer">
         <span id="settingsButton" onclick="ShowSettings()">Settings</span>
         <h2 id="dictionaryName"></h2>
+        
+        <label><b>Filter </b><select id="wordFilter" onchange="UpdateFilter()">
+            <option value="">All</option>
+        </select>
+        </label>
+            
         <div id="theDictionary"></div>
     </div>
 
