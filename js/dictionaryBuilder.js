@@ -199,7 +199,10 @@ function ShowDictionary(filter) {
     
     var dictionaryNameArea = document.getElementById("dictionaryName");
     dictionaryNameArea.innerHTML = htmlEntitiesParse(currentDictionary.name) + " Dictionary";
-
+    
+    var dictionaryDescriptionArea = document.getElementById("dictionaryDescription");
+    dictionaryDescriptionArea.innerHTML = markdown.toHTML(htmlEntitiesParse(currentDictionary.description));
+    
     var dictionaryArea = document.getElementById("theDictionary");
     var dictionaryText = "";
 
@@ -214,6 +217,19 @@ function ShowDictionary(filter) {
     }
 
     dictionaryArea.innerHTML = dictionaryText;
+}
+
+function ToggleDescription() {
+    var descriptionToggle = document.getElementById("descriptionToggle");
+    var descriptionArea = document.getElementById("dictionaryDescription");
+    
+    if (descriptionArea.style.display == "none") {
+        descriptionArea.style.display = "block";
+        descriptionToggle.innerHTML = "Hide Description";
+    } else {
+        descriptionArea.style.display = "none";
+        descriptionToggle.innerHTML = "Show Description";
+    }
 }
 
 function DictionaryEntry(itemIndex) {
@@ -232,7 +248,7 @@ function DictionaryEntry(itemIndex) {
     }
 
     if (currentDictionary.words[itemIndex].longDefinition != "") {
-        entryText += "<longdefinition>" + currentDictionary.words[itemIndex].longDefinition + "</longdefinition>";
+        entryText += "<longdefinition>" + markdown.toHTML(htmlEntitiesParse(currentDictionary.words[itemIndex].longDefinition)) + "</longdefinition>";
     }
 
     entryText += ManagementArea(itemIndex);
@@ -245,17 +261,25 @@ function DictionaryEntry(itemIndex) {
 function ManagementArea(itemIndex) {
     var managementHTML = "<div class='management'>";
 
-    managementHTML += "<span class='editButton' onclick='EditWord(" + itemIndex + ")'>Edit</span>";
-    managementHTML += "<span class='deleteButton' onclick='document.getElementById(\"delete" + itemIndex + "Confirm\").style.display = \"block\";'>Delete</span>";
+    managementHTML += "<span class='clickable editButton' onclick='EditWord(" + itemIndex + ")'>Edit</span>";
+    managementHTML += "<span class='clickable deleteButton' onclick='document.getElementById(\"delete" + itemIndex + "Confirm\").style.display = \"block\";'>Delete</span>";
 
     managementHTML += "<div class='deleteConfirm' id='delete" + itemIndex + "Confirm' style='display:none;'>Are you sure you want to delete this entry?<br>";
-    managementHTML += "<span class='deleteCancelButton' onclick='document.getElementById(\"delete" + itemIndex + "Confirm\").style.display = \"none\";'>No</span>";
-    managementHTML += "<span class='deleteConfirmButton' onclick='DeleteWord(" + itemIndex + ")'>Yes</span>";
+    managementHTML += "<span class='clickable deleteCancelButton' onclick='document.getElementById(\"delete" + itemIndex + "Confirm\").style.display = \"none\";'>No</span>";
+    managementHTML += "<span class='clickable deleteConfirmButton' onclick='DeleteWord(" + itemIndex + ")'>Yes</span>";
     managementHTML += "</div>";
 
     managementHTML += "</div>";
 
     return managementHTML;
+}
+
+function ShowAbout() {
+    document.getElementById("aboutScreen").style.display = "block";
+}
+
+function HideAbout() {
+    document.getElementById("aboutScreen").style.display = "none";
 }
 
 function ShowSettings() {

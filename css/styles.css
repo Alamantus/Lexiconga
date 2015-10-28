@@ -14,9 +14,12 @@ footer {
     padding: 3px;
 }
 
+#leftColumn {
+    float: left;
+}
+
 form {
     margin: 15px;
-    float: left;
     padding: 15px;
 }
 
@@ -51,11 +54,37 @@ input, textarea {
     font-weight: bold;
 }
 
+#aboutPanel {
+    padding: 10px;
+}
+
 #dictionaryContainer {
     margin: 15px;
     width: 50%;
     min-width: 350px;
     float: left;
+}
+
+#dictionaryName {
+    margin: 0 0 5px;
+}
+
+.clickable {
+    font-weight: bold;
+    cursor: pointer;
+    padding: 4px;
+    background: #dddddd;
+    border-radius: 5px;
+}
+
+#descriptionToggle {
+    font-weight: bold;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+#wordFilter {
+    margin: 10px 0;
 }
 
 entry {
@@ -85,6 +114,41 @@ longdefinition {
     margin-left: 20px;
 }
 
+longDefinition h1, longDefinition h2, longDefinition h3, longDefinition h4, longDefinition h5, longDefinition h6 {
+    margin: 5px 0 8px;
+    font-weight: bold;
+}
+
+longDefinition h1 {
+    font-size: 22px;
+}
+
+longDefinition h2 {
+    font-size: 20px;
+}
+
+longDefinition h3 {
+    font-size: 20px;
+    font-weight: normal;
+}
+
+longDefinition h4 {
+    font-size: 18px;
+}
+
+longDefinition h5 {
+    font-size: 18px;
+    font-weight: normal;
+}
+
+longDefinition h6 {
+    font-size: 17px;
+}
+
+longDefinition p {
+    margin: 3px 0 8px;
+}
+
 .management {
     display: block;
     right: 5px;
@@ -97,8 +161,6 @@ longdefinition {
 .editButton, .deleteButton, .deleteConfirmButton, .deleteCancelButton {
     display: inline;
     font-size: 10px;
-    font-weight: bold;
-    cursor: pointer;
     margin: 5px;
 }
 
@@ -107,7 +169,7 @@ longdefinition {
     font-size: 10px;
 }
 
-#settingsBackgroundFade {
+#settingsBackgroundFade, #aboutBackgroundFade {
     position: fixed;
     top: 0;
     left: 0;
@@ -117,14 +179,14 @@ longdefinition {
     opacity: 0.75;
 }
 
-#settingsOptions {
+#settingsOptions, #aboutPage {
     position: fixed;
     top: 10%;
     left: 10%;
     right: 10%;
     bottom: 10%;
-    min-width: 350px;
-    min-height: 500px;
+    min-width: 300px;
+    min-height: 300px;
     padding: 5px 5% 5%;
     overflow-y: auto;
     overflow-x: hidden;
@@ -133,11 +195,10 @@ longdefinition {
     border: 1px solid black;
 }
 
-#settingsButton, #settingsScreenCloseButton, #settingsSaveButtons button {
+#settingsButton, #settingsScreenCloseButton,
+#settingsSaveButtons button, #aboutScreenCloseButton {
     float: right;
-    cursor: pointer;
     font-size: 12px;
-    font-weight: bold;
 }
 
 #settingsForm {
