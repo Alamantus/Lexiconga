@@ -347,6 +347,7 @@ function EmptyWholeDictionary() {
         currentDictionary = JSON.parse(defaultDictionaryJSON);
         ShowDictionary();
         SaveDictionary();
+        SetPartsOfSpeech();
         HideSettings();
     }
 }
