@@ -16,6 +16,10 @@ var currentDictionary = {
 
 var defaultDictionaryJSON = JSON.stringify(currentDictionary);  //Saves a stringifyed default dictionary.
 
+var dictionarySearchSnapshot;
+
+var searchResults = [];
+
 var savedScroll = {
     x: 0,
     y: 0
@@ -45,7 +49,7 @@ function AddWord() {
     var updateConflictArea = document.getElementById("updateConflict");
     
     if (word != "" && (simpleDefinition != "" || longDefinition != "")) {
-        var wordIndex = WordIndex(word);
+        var wordIndex = (!currentDictionary.settings.allowDuplicates) ? WordIndex(word) : -1;
 
         if (editIndex != "") {
             if (WordAtIndexWasChanged(editIndex, word, simpleDefinition, longDefinition, partOfSpeech)) {
@@ -195,6 +199,31 @@ function UpdateFilter() {
 function ShowDictionary(filter) {
     filter = (typeof filter !== 'undefined') ? filter : "";
     
+    searchResults = [];
+    var search = document.getElementById("searchBox").value;
+    if (search != "") {
+        if (document.getElementById("searchOptionWord").checked) {
+            var wordSearch = JSON.search(dictionarySearchSnapshot, '//words[contains(name, "' + search + '")]/name');
+            searchResults.push(wordSearch);
+        }
+        if (document.getElementById("searchOptionSimple").checked) {
+            var simpleDefinitionSearch = JSON.search(dictionarySearchSnapshot, '//words[contains(simpleDefinition, "' + search + '")]/name');
+            for (var i = 0; i < simpleDefinitionSearch.length; i++) {
+                if (searchResults.indexOf(simpleDefinitionSearch[i]) < 0) {
+                    searchResults.push(simpleDefinitionSearch[i]);
+                }
+            }
+        }
+        if (document.getElementById("searchOptionLong").checked) {
+            var longDefinitionSearch = JSON.search(dictionarySearchSnapshot, '//words[contains(longDefinition, "' + search + '")]/name');
+            for (var i = 0; i < longDefinitionSearch.length; i++) {
+                if (searchResults.indexOf(longDefinitionSearch[i]) < 0) {
+                    searchResults.push(longDefinitionSearch[i]);
+                }
+            }
+        }
+    }
+    
     var dictionaryNameArea = document.getElementById("dictionaryName");
     dictionaryNameArea.innerHTML = htmlEntitiesParse(currentDictionary.name) + " Dictionary";
     
@@ -207,7 +236,9 @@ function ShowDictionary(filter) {
     if (currentDictionary.words.length > 0) {
         for (var i = 0; i < currentDictionary.words.length; i++) {
             if (filter == "" || (filter != "" && currentDictionary.words[i].partOfSpeech == filter)) {
-                dictionaryText += DictionaryEntry(i);
+                if (search == "" || (search != "" && searchResults.indexOf(currentDictionary.words[i].name) >= 0)) {
+                    dictionaryText += DictionaryEntry(i);
+                }
             }
         }
     } else {
@@ -298,6 +329,7 @@ function ShowSettings() {
     document.getElementById("dictionaryAllowDuplicates").checked = currentDictionary.settings.allowDuplicates;
     document.getElementById("dictionaryCaseSensitive").checked = currentDictionary.settings.caseSensitive;
     document.getElementById("dictionaryIsComplete").checked = currentDictionary.settings.isComplete;
+    document.getElementById("numberOfWordsInDictionary").innerHTML = currentDictionary.words.length.toString();
 }
 
 function SaveSettings() {
@@ -377,6 +409,9 @@ function EmptyWholeDictionary() {
 
 function SaveDictionary() {
     localStorage.setItem('dictionary', JSON.stringify(currentDictionary));
+    
+    // Update search snapshot
+    dictionarySearchSnapshot = Defiant.getSnapshot(currentDictionary);
 }
 
 function LoadDictionary() {
@@ -397,6 +432,9 @@ function LoadDictionary() {
     if (currentDictionary.settings.isComplete) {
         document.getElementById("wordEntryForm").style.display = "none";
     }
+    
+    // Update search snapshot
+    dictionarySearchSnapshot = Defiant.getSnapshot(currentDictionary);
 }
 
 function ExportDictionary() {
@@ -440,13 +478,11 @@ function ImportDictionary() {
 }
 
 function WordIndex(word) {
-    if (!currentDictionary.settings.allowDuplicates) {
-        for (var i = 0; i < currentDictionary.words.length; i++)
-        {
-            if ((!currentDictionary.settings.caseSensitive && currentDictionary.words[i].name.toLowerCase() == word.toLowerCase()) ||
-                (currentDictionary.settings.caseSensitive && currentDictionary.words[i].name == word)) {
-                return i;
-            }
+    for (var i = 0; i < currentDictionary.words.length; i++)
+    {
+        if ((!currentDictionary.settings.caseSensitive && currentDictionary.words[i].name.toLowerCase() == word.toLowerCase()) ||
+            (currentDictionary.settings.caseSensitive && currentDictionary.words[i].name == word)) {
+            return i;
         }
     }
     return -1;

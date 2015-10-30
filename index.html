@@ -11,6 +11,9 @@
     <!-- Markdown Parser -->
     <script src="js/markdown-js/markdown.min.js"></script>
     
+    <!-- JSON Search -->
+    <script src="js/defiant-js/defiant-latest.min.js"></script>
+    
     <script src="js/dictionaryBuilder.js"></script>
 </head>
 <body>
@@ -48,9 +51,7 @@
         </div>
         <div id="updateConflict" style="display: none;"></div>
     </form>
-    <div id="aboutPanel">
-        <span id="aboutButton" class="clickable" onclick="ShowAbout()">About Dictionary Builder</span>
-    </div>
+    
     </div>
 
     <div id="dictionaryContainer">
@@ -61,7 +62,19 @@
         <span id="descriptionToggle" onclick="ToggleDescription();">Show Description</span>
         <div id="dictionaryDescription" style="display:none;"></div>
         
-        <label><b>Filter Words </b><select id="wordFilter" onchange="UpdateFilter()">
+        <div id="searchArea" style="display:block;">
+            <label style="margin-top:10px;">
+                <span>Search</span>
+                <input type="text" id="searchBox" onclick="this.select();" onchange="UpdateFilter()" style="display:block;" />
+                <div id="searchOptions" style="font-size:12px;">
+                    <label style="display:inline;margin:0;">Word <input type="checkbox" id="searchOptionWord" checked="checked" /></label>&nbsp;&nbsp;
+                    <label style="display:inline;margin:0;">Equivalent <input type="checkbox" id="searchOptionSimple" checked="checked" /></label>&nbsp;&nbsp;
+                    <label style="display:inline;margin:0;">Explanation <input type="checkbox" id="searchOptionLong" checked="checked" /></label>
+                </div>
+            </label>
+        </div>
+        
+        <label style="display:block;"><b>Filter Words </b><select id="wordFilter" onchange="UpdateFilter()">
             <option value="">All</option>
         </select>
         </label>
@@ -103,6 +116,9 @@
                     </label>
                 </div>
                 <div class="settingsCol">
+                    <label>
+                        <b>Total Entries:</b> <i id="numberOfWordsInDictionary"></i>
+                    </label>
                     <label><button type="button" onclick="ExportDictionary()" style="cursor:pointer;">Export Current Dictionary</button></label>
                     <label>
                         <span>Import Dictionary</span>
@@ -169,6 +185,9 @@
 	</div>
 </div>
     
-    <footer>Version <script>document.write(currentVersion);</script>. Dictionary Builder only guaranteed to work with most up-to-date HTML5 browsers.</footer>
+    <footer>
+        <span id="aboutButton" class="clickable" onclick="ShowAbout()">About Dictionary Builder</span>
+        Version <script>document.write(currentVersion);</script>. Dictionary Builder only guaranteed to work with most up-to-date HTML5 browsers.
+    </footer>
 </body>
 </html>

@@ -8,11 +8,13 @@
 footer {
     width: 100%;
     text-align: center;
+    vertical-align: middle;
     position:fixed;
     bottom: 0px;
     left: 0px;
     background: #aaaaaa;
-    padding: 3px;
+    padding: 6px;
+    max-height: 32px;   /* Update Dictionary Container's bottom margin to account for footer */
 }
 
 #leftColumn {
@@ -69,12 +71,13 @@ input[type=checkbox] {
     font-weight: bold;
 }
 
-#aboutPanel {
-    padding: 10px;
+#aboutButton {
+    display: inline;
+    margin: 0 10px 0 0;
 }
 
 #dictionaryContainer {
-    margin: 15px;
+    margin: 15px 0 36px;    /* bottom margin must clear footer */
     width: 50%;
     min-width: 350px;
     float: left;
