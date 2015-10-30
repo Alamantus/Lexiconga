@@ -77,7 +77,7 @@ input[type=checkbox] {
 }
 
 #dictionaryContainer {
-    margin: 15px 0 36px;    /* bottom margin must clear footer */
+    margin: 15px 0 36px 15px;    /* bottom margin must clear footer */
     width: 50%;
     min-width: 350px;
     float: left;
