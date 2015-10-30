@@ -26,6 +26,15 @@ var savedScroll = {
 window.onload = function () {
     LoadDictionary();
     ClearForm();
+    
+    var readmeFileRequest = new XMLHttpRequest();
+    readmeFileRequest.open('GET', 'README.md');
+    readmeFileRequest.onreadystatechange = function() {
+        if (readmeFileRequest.readyState == 4 && readmeFileRequest.status == 200) {
+            document.getElementById("aboutText").innerHTML = markdown.toHTML(readmeFileRequest.responseText);
+        }
+    }
+    readmeFileRequest.send();
 }
 
 function AddWord() {
