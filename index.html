@@ -65,16 +65,16 @@
         <div id="searchArea" style="display:block;">
             <label style="margin-top:10px;">
                 <span>Search</span>
-                <input type="text" id="searchBox" onclick="this.select();" onchange="UpdateFilter()" style="display:block;" />
+                <input type="text" id="searchBox" onclick="this.select();" onchange="ShowDictionary()" style="display:block;" />
                 <div id="searchOptions" style="font-size:12px;">
-                    <label style="display:inline;margin:0;">Word <input type="checkbox" id="searchOptionWord" checked="checked" /></label>&nbsp;&nbsp;
-                    <label style="display:inline;margin:0;">Equivalent <input type="checkbox" id="searchOptionSimple" checked="checked" /></label>&nbsp;&nbsp;
-                    <label style="display:inline;margin:0;">Explanation <input type="checkbox" id="searchOptionLong" checked="checked" /></label>
+                    <label style="display:inline;margin:0;">Word <input type="checkbox" id="searchOptionWord" checked="checked" onchange="ShowDictionary()" /></label>&nbsp;&nbsp;
+                    <label style="display:inline;margin:0;">Equivalent <input type="checkbox" id="searchOptionSimple" checked="checked" onchange="ShowDictionary()" /></label>&nbsp;&nbsp;
+                    <label style="display:inline;margin:0;">Explanation <input type="checkbox" id="searchOptionLong" checked="checked" onchange="ShowDictionary()" /></label>
                 </div>
             </label>
         </div>
         
-        <label style="display:block;"><b>Filter Words </b><select id="wordFilter" onchange="UpdateFilter()">
+        <label style="display:block;"><b>Filter Words </b><select id="wordFilter" onchange="ShowDictionary()">
             <option value="">All</option>
         </select>
         </label>

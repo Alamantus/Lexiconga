@@ -1,4 +1,6 @@
-﻿//Requires Markdown.js parser
+﻿/* global markdown */
+/* global Defiant */
+//Requires Markdown.js parser
 var currentVersion = 0.2;
 
 var currentDictionary = {
@@ -16,10 +18,6 @@ var currentDictionary = {
 
 var defaultDictionaryJSON = JSON.stringify(currentDictionary);  //Saves a stringifyed default dictionary.
 
-var dictionarySearchSnapshot;
-
-var searchResults = [];
-
 var savedScroll = {
     x: 0,
     y: 0
@@ -28,14 +26,6 @@ var savedScroll = {
 window.onload = function () {
     LoadDictionary();
     ClearForm();
-}
-
-var Word = function (word, simpleDefinition, longDefinition, partOfSpeech) {
-    //this.index = currentDictionary.index++;
-    this.name = word;
-    this.simpleDefinition = simpleDefinition;
-    this.longDefinition = longDefinition;
-    this.partOfSpeech = partOfSpeech;
 }
 
 function AddWord() {
@@ -93,15 +83,12 @@ function AddWord() {
                 }
             }
         } else {
-            currentDictionary.words.push(new Word(word, simpleDefinition, longDefinition, partOfSpeech));
-            ClearForm();
+            currentDictionary.words.push({name: word, simpleDefinition: simpleDefinition, longDefinition: longDefinition, partOfSpeech: partOfSpeech});
+            SaveAndUpdateDictionary(false);
         }
 
-        currentDictionary.words.sort(dynamicSort("name"));
+        
         errorMessageArea.innerHTML = "";
-
-        ShowDictionary(document.getElementById("wordFilter").value);
-        SaveDictionary();
     } else {
         if (word == "") {
             errorMessage += "Word cannot be blank";
@@ -151,15 +138,23 @@ function EditWord(index) {
     document.getElementById("editWordButtonArea").style.display = "block";
 }
 
+function SaveAndUpdateDictionary(keepFormContents) {
+    currentDictionary.words.sort(dynamicSort("name"));
+    SaveDictionary();
+    ShowDictionary();
+    if (!keepFormContents) {
+        ClearForm();
+    }
+    CloseUpdateConflictArea();
+}
+
 function UpdateWord(wordIndex, word, simpleDefinition, longDefinition, partOfSpeech) {
     currentDictionary.words[wordIndex].name = word;
     currentDictionary.words[wordIndex].simpleDefinition = simpleDefinition;
     currentDictionary.words[wordIndex].longDefinition = longDefinition;
     currentDictionary.words[wordIndex].partOfSpeech = partOfSpeech;
-    ShowDictionary(document.getElementById("wordFilter").value);
-    SaveDictionary();
-    ClearForm();
-    CloseUpdateConflictArea();
+    
+    SaveAndUpdateDictionary();
 
     window.scroll(savedScroll.x, savedScroll.y);
 }
@@ -169,10 +164,8 @@ function DeleteWord(index) {
         ClearForm();
 
     currentDictionary.words.splice(index, 1);
-    ShowDictionary(document.getElementById("wordFilter").value);
-    SaveDictionary();
-    CloseUpdateConflictArea();
-
+    
+    SaveAndUpdateDictionary(true);
 }
 
 function CloseUpdateConflictArea() {
@@ -193,21 +186,23 @@ function ClearForm() {
 }
 
 function UpdateFilter() {
-    ShowDictionary(document.getElementById("wordFilter").value);
+    ShowDictionary();
 }
 
-function ShowDictionary(filter) {
-    filter = (typeof filter !== 'undefined') ? filter : "";
+function ShowDictionary() {
+    var filter = document.getElementById("wordFilter").value;
     
-    searchResults = [];
-    var search = document.getElementById("searchBox").value;
+    var searchResults = [];
+    var search = htmlEntities(document.getElementById("searchBox").value);
     if (search != "") {
         if (document.getElementById("searchOptionWord").checked) {
-            var wordSearch = JSON.search(dictionarySearchSnapshot, '//words[contains(name, "' + search + '")]/name');
-            searchResults.push(wordSearch);
+            var wordNameSearch = JSON.search(currentDictionary, '//words[contains(name, "' + search + '")]/name');
+            for (var i = 0; i < wordNameSearch.length; i++) {
+                searchResults.push(wordNameSearch[i]);
+            }
         }
         if (document.getElementById("searchOptionSimple").checked) {
-            var simpleDefinitionSearch = JSON.search(dictionarySearchSnapshot, '//words[contains(simpleDefinition, "' + search + '")]/name');
+            var simpleDefinitionSearch = JSON.search(currentDictionary, '//words[contains(simpleDefinition, "' + search + '")]/name');
             for (var i = 0; i < simpleDefinitionSearch.length; i++) {
                 if (searchResults.indexOf(simpleDefinitionSearch[i]) < 0) {
                     searchResults.push(simpleDefinitionSearch[i]);
@@ -215,7 +210,7 @@ function ShowDictionary(filter) {
             }
         }
         if (document.getElementById("searchOptionLong").checked) {
-            var longDefinitionSearch = JSON.search(dictionarySearchSnapshot, '//words[contains(longDefinition, "' + search + '")]/name');
+            var longDefinitionSearch = JSON.search(currentDictionary, '//words[contains(longDefinition, "' + search + '")]/name');
             for (var i = 0; i < longDefinitionSearch.length; i++) {
                 if (searchResults.indexOf(longDefinitionSearch[i]) < 0) {
                     searchResults.push(longDefinitionSearch[i]);
@@ -348,8 +343,7 @@ function SaveSettings() {
     
     HideSettingsWhenComplete();
     
-    ShowDictionary(document.getElementById("wordFilter").value);
-    SaveDictionary();
+    SaveAndUpdateDictionary(true);
 }
 
 function HideSettingsWhenComplete() {
@@ -400,8 +394,7 @@ function HideSettings() {
 function EmptyWholeDictionary() {
     if (confirm("This will delete the entire current dictionary. If you do not have a backed up export, you will lose it forever!\n\nDo you still want to delete?")) {
         currentDictionary = JSON.parse(defaultDictionaryJSON);
-        ShowDictionary("");
-        SaveDictionary();
+        SaveAndUpdateDictionary(false);
         SetPartsOfSpeech();
         HideSettings();
     }
@@ -409,9 +402,7 @@ function EmptyWholeDictionary() {
 
 function SaveDictionary() {
     localStorage.setItem('dictionary', JSON.stringify(currentDictionary));
-    
-    // Update search snapshot
-    dictionarySearchSnapshot = Defiant.getSnapshot(currentDictionary);
+    //location.reload();
 }
 
 function LoadDictionary() {
@@ -434,7 +425,7 @@ function LoadDictionary() {
     }
     
     // Update search snapshot
-    dictionarySearchSnapshot = Defiant.getSnapshot(currentDictionary);
+    //dictionarySearchSnapshot = Defiant.getSnapshot(currentDictionary);
 }
 
 function ExportDictionary() {
