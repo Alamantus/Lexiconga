@@ -6,8 +6,8 @@ var currentDictionary = {
     description: "A new dictionary.",
     words: [],
     settings: {
+        allowDuplicates: false,
         caseSensitive: false,
-        preferUpperCase: false,
         partsOfSpeech: "Noun,Adjective,Verb,Adverb,Preposition,Pronoun,Conjunction",
         isComplete: false
     },
@@ -96,7 +96,7 @@ function AddWord() {
         currentDictionary.words.sort(dynamicSort("name"));
         errorMessageArea.innerHTML = "";
 
-        ShowDictionary();
+        ShowDictionary(document.getElementById("wordFilter").value);
         SaveDictionary();
     } else {
         if (word == "") {
@@ -152,7 +152,7 @@ function UpdateWord(wordIndex, word, simpleDefinition, longDefinition, partOfSpe
     currentDictionary.words[wordIndex].simpleDefinition = simpleDefinition;
     currentDictionary.words[wordIndex].longDefinition = longDefinition;
     currentDictionary.words[wordIndex].partOfSpeech = partOfSpeech;
-    ShowDictionary();
+    ShowDictionary(document.getElementById("wordFilter").value);
     SaveDictionary();
     ClearForm();
     CloseUpdateConflictArea();
@@ -165,7 +165,7 @@ function DeleteWord(index) {
         ClearForm();
 
     currentDictionary.words.splice(index, 1);
-    ShowDictionary();
+    ShowDictionary(document.getElementById("wordFilter").value);
     SaveDictionary();
     CloseUpdateConflictArea();
 
@@ -189,9 +189,7 @@ function ClearForm() {
 }
 
 function UpdateFilter() {
-    var filter = document.getElementById("wordFilter").value;
-    
-    ShowDictionary(filter);
+    ShowDictionary(document.getElementById("wordFilter").value);
 }
 
 function ShowDictionary(filter) {
@@ -244,14 +242,16 @@ function DictionaryEntry(itemIndex) {
     entryText += "<br>";
 
     if (currentDictionary.words[itemIndex].simpleDefinition != "") {
-        entryText += "<simpledefinition> ==> " + currentDictionary.words[itemIndex].simpleDefinition + "</simpledefinition>";
+        entryText += "<simpledefinition>" + currentDictionary.words[itemIndex].simpleDefinition + "</simpledefinition>";
     }
 
     if (currentDictionary.words[itemIndex].longDefinition != "") {
         entryText += "<longdefinition>" + markdown.toHTML(htmlEntitiesParse(currentDictionary.words[itemIndex].longDefinition)) + "</longdefinition>";
     }
 
-    entryText += ManagementArea(itemIndex);
+    if (!currentDictionary.settings.isComplete) {
+        entryText += ManagementArea(itemIndex);
+    }
 
     entryText += "</entry>";
 
@@ -264,7 +264,7 @@ function ManagementArea(itemIndex) {
     managementHTML += "<span class='clickable editButton' onclick='EditWord(" + itemIndex + ")'>Edit</span>";
     managementHTML += "<span class='clickable deleteButton' onclick='document.getElementById(\"delete" + itemIndex + "Confirm\").style.display = \"block\";'>Delete</span>";
 
-    managementHTML += "<div class='deleteConfirm' id='delete" + itemIndex + "Confirm' style='display:none;'>Are you sure you want to delete this entry?<br>";
+    managementHTML += "<div class='deleteConfirm' id='delete" + itemIndex + "Confirm' style='display:none;'>Are you sure you want to delete this entry?<br><br>";
     managementHTML += "<span class='clickable deleteCancelButton' onclick='document.getElementById(\"delete" + itemIndex + "Confirm\").style.display = \"none\";'>No</span>";
     managementHTML += "<span class='clickable deleteConfirmButton' onclick='DeleteWord(" + itemIndex + ")'>Yes</span>";
     managementHTML += "</div>";
@@ -282,11 +282,21 @@ function HideAbout() {
     document.getElementById("aboutScreen").style.display = "none";
 }
 
+function ToggleCaseSensitiveOption() {
+    if (document.getElementById("dictionaryAllowDuplicates").checked) {
+        document.getElementById("dictionaryCaseSensitive").disabled = true;
+    } else {
+        document.getElementById("dictionaryCaseSensitive").disabled = false;
+    }
+}
+
 function ShowSettings() {
     document.getElementById("settingsScreen").style.display = "block";
     document.getElementById("dictionaryNameEdit").value = htmlEntitiesParse(currentDictionary.name);
     document.getElementById("dictionaryDescriptionEdit").value = htmlEntitiesParse(currentDictionary.description);
     document.getElementById("dictionaryPartsOfSpeechEdit").value = htmlEntitiesParse(currentDictionary.settings.partsOfSpeech);
+    document.getElementById("dictionaryAllowDuplicates").checked = currentDictionary.settings.allowDuplicates;
+    document.getElementById("dictionaryCaseSensitive").checked = currentDictionary.settings.caseSensitive;
     document.getElementById("dictionaryIsComplete").checked = currentDictionary.settings.isComplete;
 }
 
@@ -299,10 +309,23 @@ function SaveSettings() {
     
     CheckForPartsOfSpeechChange();
     
+    currentDictionary.settings.allowDuplicates = document.getElementById("dictionaryAllowDuplicates").checked;
+    currentDictionary.settings.caseSensitive = document.getElementById("dictionaryCaseSensitive").checked;
+    
     currentDictionary.settings.isComplete = document.getElementById("dictionaryIsComplete").checked;
     
-    ShowDictionary();
+    HideSettingsWhenComplete();
+    
+    ShowDictionary(document.getElementById("wordFilter").value);
     SaveDictionary();
+}
+
+function HideSettingsWhenComplete() {
+    if (currentDictionary.settings.isComplete) {
+        document.getElementById("hideIfComplete").style.display = "none";
+    } else {
+        document.getElementById("hideIfComplete").style.display = "block";
+    }
 }
 
 function CheckForPartsOfSpeechChange () {
@@ -345,7 +368,7 @@ function HideSettings() {
 function EmptyWholeDictionary() {
     if (confirm("This will delete the entire current dictionary. If you do not have a backed up export, you will lose it forever!\n\nDo you still want to delete?")) {
         currentDictionary = JSON.parse(defaultDictionaryJSON);
-        ShowDictionary();
+        ShowDictionary("");
         SaveDictionary();
         SetPartsOfSpeech();
         HideSettings();
@@ -364,7 +387,10 @@ function LoadDictionary() {
         }
         tmpDictionary = null;
     }
-    ShowDictionary();
+    
+    HideSettingsWhenComplete();
+    
+    ShowDictionary("");
     
     SetPartsOfSpeech();
     
@@ -414,11 +440,13 @@ function ImportDictionary() {
 }
 
 function WordIndex(word) {
-    for (var i = 0; i < currentDictionary.words.length; i++)
-    {
-        if ((!currentDictionary.settings.caseSensitive && currentDictionary.words[i].name.toLowerCase() == word.toLowerCase()) ||
-            (currentDictionary.settings.caseSensitive && currentDictionary.words[i].name == word)) {
-            return i;
+    if (!currentDictionary.settings.allowDuplicates) {
+        for (var i = 0; i < currentDictionary.words.length; i++)
+        {
+            if ((!currentDictionary.settings.caseSensitive && currentDictionary.words[i].name.toLowerCase() == word.toLowerCase()) ||
+                (currentDictionary.settings.caseSensitive && currentDictionary.words[i].name == word)) {
+                return i;
+            }
         }
     }
     return -1;

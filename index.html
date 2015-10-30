@@ -76,8 +76,9 @@
             <h2>Dictionary Settings</h2>
             <form id="settingsForm">
                 <div class="settingsCol">
+                    <div id="hideIfComplete">
                     <label>
-                        <span>Dictionary name</span>
+                        <span>Dictionary Name</span>
                         <input type="text" id="dictionaryNameEdit" />
                     </label>
                     <label><span>Dictionary Description/Rules</span>
@@ -88,7 +89,16 @@
                         <input type="text" id="dictionaryPartsOfSpeechEdit" />
                     </label>
                     <label>
-                        <span>Dictionary is complete</span>
+                        <span class="checkboxlabel">Allow Duplicates</span>
+                        <input type="checkbox" id="dictionaryAllowDuplicates" onchange="ToggleCaseSensitiveOption()" />
+                        <label>
+                            <span class="checkboxlabel">Case-Sensitive</span>
+                            <input type="checkbox" id="dictionaryCaseSensitive" />
+                        </label>
+                    </label>
+                    </div>
+                    <label>
+                        <span class="checkboxlabel">Dictionary is Complete</span>
                         <input type="checkbox" id="dictionaryIsComplete" />
                     </label>
                 </div>
@@ -147,11 +157,11 @@
             Please note that if you have other parts of speech added to existing words, those words will not update and will keep the old parts of speech. You will need to manually update any words with incorrect parts of speech after the fact, which is why I recommend you update the available parts of speech as one of the first things you do if you need to change them at all!
         </p>
         <p>
-            The <b>Allow Duplicates</b> checkbox allows you to control whether or not Dictionary Builder will allow you to add the same word multiple times. If you leave Allow Duplicates unchecked and you try to add a word that is already in the dictionary, Dictionary Builder will tell you that the word already exists and will ask if you want to update it with the newly entered word. <em>Note: Allow Duplicates is not yet in the Settings menu!</em>
+            The <b>Allow Duplicates</b> checkbox allows you to control whether or not Dictionary Builder will allow you to add the same word multiple times. If you leave Allow Duplicates unchecked and you try to add a word that is already in the dictionary, Dictionary Builder will tell you that the word already exists and will ask if you want to update it with the newly entered word.
         </p>
         <p>
             The <b>Case-Sensitive</b> checkbox allows you to control Dictionary Builder's duplicate detection. If you leave Case-Sensitive unchecked, you will be alerted when you are trying to add a word with the same letters to your dictionary a second time. For example, "dog" is identified as the same word as "DOG" or "doG". The dictionary will keep whatever capitalization you save but it will identify words with the same spelling as duplicates. If Case-Sensitive is checked, then it will not identify "dog" and "DOG" as the same word.<br>
-            If Allow Duplicates is checked, this checkbox becomes unavailable. <em>Note: Case-Sensitive is not yet in the Settings menu!</em>
+            If Allow Duplicates is checked, this checkbox becomes unavailable.
         </p>
         <p>
             The "<b>Dictionary is complete</b>" checkbox will make the word add/edit form go away so you can view or share it more easily/safely. Plus when you export your dictionary, all of the options to change anything about your dictionary will be excluded when it is re-imported! Your dictionary will become static, and will not be able to be changed or updated without a password. <em>Note: At the moment, ONLY the word form goes away. Nothing else in this paragraph is implemented yet!</em>
