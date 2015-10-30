@@ -65,7 +65,10 @@
         <div id="searchArea" style="display:block;">
             <label style="margin-top:10px;">
                 <span>Search</span>
-                <input type="text" id="searchBox" onclick="this.select();" onchange="ShowDictionary()" style="display:block;" />
+                <div style="display:block;">
+                    <input type="text" id="searchBox" onclick="this.select();" onchange="ShowDictionary()" style="display:inline;" />&nbsp;
+                    <span style="display:inline;cursor:pointer;font-size:10px;font-weight:bold;" onclick="document.getElementById('searchBox').value='';ShowDictionary();">Clear Search</span>
+                </div>
                 <div id="searchOptions" style="font-size:12px;">
                     <label style="display:inline;margin:0;">Word <input type="checkbox" id="searchOptionWord" checked="checked" onchange="ShowDictionary()" /></label>&nbsp;&nbsp;
                     <label style="display:inline;margin:0;">Equivalent <input type="checkbox" id="searchOptionSimple" checked="checked" onchange="ShowDictionary()" /></label>&nbsp;&nbsp;

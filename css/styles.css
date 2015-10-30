@@ -178,6 +178,16 @@ longDefinition p {
     margin: 3px 0 8px;
 }
 
+searchTerm {
+    display: inline;
+    color: #ff0000;
+    background: #ffff00;
+    padding: 1px;
+    text-decoration: underline;
+    font-style: italic;
+    font-weight: bold;
+}
+
 .management {
     display: block;
     right: 5px;

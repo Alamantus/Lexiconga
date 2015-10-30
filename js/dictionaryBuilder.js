@@ -267,8 +267,11 @@ function ToggleDescription() {
 
 function DictionaryEntry(itemIndex) {
     var entryText = "<entry>";
+    
+    var searchTerm = htmlEntities(document.getElementById("searchBox").value);
+    var searchRegEx = new RegExp(searchTerm, "g");
 
-    entryText += "<word>" + currentDictionary.words[itemIndex].name + "</word>";
+    entryText += "<word>" + ((searchTerm != "") ? currentDictionary.words[itemIndex].name.replace(searchRegEx, "<searchTerm>" + searchTerm + "</searchterm>") : currentDictionary.words[itemIndex].name) + "</word>";
 
     if (currentDictionary.words[itemIndex].partOfSpeech != "") {
         entryText += " <partofspeech>" + currentDictionary.words[itemIndex].partOfSpeech + "</partofspeech>";
@@ -277,11 +280,11 @@ function DictionaryEntry(itemIndex) {
     entryText += "<br>";
 
     if (currentDictionary.words[itemIndex].simpleDefinition != "") {
-        entryText += "<simpledefinition>" + currentDictionary.words[itemIndex].simpleDefinition + "</simpledefinition>";
+        entryText += "<simpledefinition>" + ((searchTerm != "") ? currentDictionary.words[itemIndex].simpleDefinition.replace(searchRegEx, "<searchTerm>" + searchTerm + "</searchterm>") : currentDictionary.words[itemIndex].simpleDefinition) + "</simpledefinition>";
     }
 
     if (currentDictionary.words[itemIndex].longDefinition != "") {
-        entryText += "<longdefinition>" + markdown.toHTML(htmlEntitiesParse(currentDictionary.words[itemIndex].longDefinition)) + "</longdefinition>";
+        entryText += "<longdefinition>" + ((searchTerm != "") ? markdown.toHTML(htmlEntitiesParse(currentDictionary.words[itemIndex].longDefinition)).replace(searchRegEx, "<searchTerm>" + searchTerm + "</searchterm>") : markdown.toHTML(htmlEntitiesParse(currentDictionary.words[itemIndex].longDefinition))) + "</longdefinition>";
     }
 
     if (!currentDictionary.settings.isComplete) {
