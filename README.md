@@ -1,11 +1,11 @@
-## What is Dictionary Builder?
-Dictionary Builder is a tool intended to help build constructed language dictionaries.
+## What is Lexiconga Dictionary Builder?
+Lexiconga is a tool intended to help build constructed language dictionaries.
 
 You can enter words and definitions, and they will appear nicely formatted and in alphabetical order under your dictionary's title, where you can also sort them by part of speech. If the default parts of speech are not adequate for your conlang, you can change them to whatever parts of speech you might need. You can even enter a description or full set of language rules that you can toggle on and off below the dictionary's title!
 
 It accepts Unicode characters so you can utilize whatever typable characters you might need and Markdown for formatting long text entries, and if you want to share or even just make a backup of your dictionary, you can export it to a single convenient file that can be easily re-imported. It also saves your dictionary to your browser's localStorage every time you make a change, which means as long as you use the same browser and don't deliberately delete it, your dictionary will always be there when you come back. 
 
-## How do I use Dictionary Builder?
+## How do I use Lexiconga?
 
 ### Getting Started
 When you have a brand new, empty dictionary, the first thing you'll probably want to do is change the title to whatever your conlang is called and add at least a little description of what your language is like or how to use it. You can do this by clicking on the Settings button, which will open up the settings screen. Here, you will find all the fields you need to update your dictionary's Name and Description/Rules. The Description/Rules text area uses [Markdown](https://help.github.com/articles/markdown-basics/) to format any text you include, so brush up on how to do basic things in Markdown before you get started (NOTE: a line break is done by adding 2 or more spaces to the end of the line and then going to the next line!). Update these fields to what you want them to say and click the "Save" button to keep the Settings menu open, or the "Save and Close" button to close the menu and start adding words!

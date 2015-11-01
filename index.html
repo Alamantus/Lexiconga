@@ -4,9 +4,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
-    <title>Dictionary Builder</title>
+    <title>Lexiconga Dictionary Builder</title>
 
     <link href="css/styles.css" rel="stylesheet" />
+    <link href="css/lexiconga.css" rel="stylesheet" />
     
     <!-- Markdown Parser -->
     <script src="js/markdown-js/markdown.min.js"></script>
@@ -17,6 +18,16 @@
     <script src="js/dictionaryBuilder.js"></script>
 </head>
 <body>
+    <header>
+        <div id="headerPadder">
+            <a href="/" id="siteLogo">Lexiconga Dictionary Builder</a>
+            <div id="loginoutArea">
+                <a href="?login" id="loginLink" class="clickable">Log In</a>
+                <a href="?logout" id="logoutLink" class="clickable" style="display:none;">Log Out</a>
+            </div>
+        </div>
+    </header>
+    <contents>
     <div id="leftColumn">
     <form id="wordEntryForm">
         <label><span>Word</span>
@@ -29,17 +40,7 @@
             <textarea id="longDefinition"></textarea>
         </label>
         <label><span>Part of Speech</span>
-            <select id="partOfSpeech">
-                <!--
-                    <option value="noun">Noun</option>
-                    <option value="adjective">Adjective</option>
-                    <option value="verb">Verb</option>
-                    <option value="adverb">Adverb</option>
-                    <option value="preposition">Preposition</option>
-                    <option value="pronoun">Pronoun</option>
-                    <option value="conjunction">Conjunction</option>
-                -->
-            </select>
+            <select id="partOfSpeech"></select>
         </label>
         <input type="hidden" id="editIndex" />
         <span id="errorMessage"></span>
@@ -57,9 +58,9 @@
     <div id="dictionaryContainer">
         <span id="settingsButton" class="clickable" onclick="ShowSettings()">Settings</span>
         
-        <h2 id="dictionaryName"></h2>
+        <h1 id="dictionaryName"></h1>
         
-        <span id="descriptionToggle" onclick="ToggleDescription();">Show Description</span>
+        <span id="descriptionToggle" class="clickable" onclick="ToggleDescription();">Show Description</span>
         <div id="dictionaryDescription" style="display:none;"></div>
         
         <div id="searchArea" style="display:block;">
@@ -140,15 +141,15 @@
     </div>
     
     <div id="aboutScreen" style="display:none;">
-	<div id="aboutBackgroundFade" onclick="HideAbout()"></div>
-	<div id="aboutPage">
-		<span id="aboutScreenCloseButton" class="clickable" onclick="HideAbout()">Close</span>
-		<div id="aboutText"></div>
-	</div>
-</div>
-    
+        <div id="aboutBackgroundFade" onclick="HideAbout()"></div>
+        <div id="aboutPage">
+            <span id="aboutScreenCloseButton" class="clickable" onclick="HideAbout()">Close</span>
+            <div id="aboutText"></div>
+        </div>
+    </div>
+    </contents>
     <footer>
-        <span id="aboutButton" class="clickable" onclick="ShowAbout()">About Dictionary Builder</span>
+        <span id="aboutButton" class="clickable" onclick="ShowAbout()">About Lexiconga</span>
         Version <script>document.write(currentVersion);</script>. Dictionary Builder only guaranteed to work with most up-to-date HTML5 browsers.
     </footer>
 </body>
