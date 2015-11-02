@@ -1,6 +1,6 @@
 ﻿/* global markdown */
 /* global Defiant */
-//Requires Markdown.js parser
+
 var currentVersion = 0.2;
 
 var currentDictionary = {
@@ -23,15 +23,29 @@ var savedScroll = {
     y: 0
 }
 
+var aboutText, termsText, privacyText;
+
 window.onload = function () {
     LoadDictionary();
     ClearForm();
     
+    GetTextFile("README.md");
+    GetTextFile("TERMS.md");
+    GetTextFile("PRIVACY.md");
+}
+
+function GetTextFile(filename) {
     var readmeFileRequest = new XMLHttpRequest();
-    readmeFileRequest.open('GET', 'README.md');
+    readmeFileRequest.open('GET', filename);
     readmeFileRequest.onreadystatechange = function() {
         if (readmeFileRequest.readyState == 4 && readmeFileRequest.status == 200) {
-            document.getElementById("aboutText").innerHTML = markdown.toHTML(readmeFileRequest.responseText);
+            if (filename == "TERMS.md") {
+                termsText = markdown.toHTML(readmeFileRequest.responseText);
+            } else if (filename == "PRIVACY.md") {
+                privacyText = markdown.toHTML(readmeFileRequest.responseText);
+            } else {
+                aboutText = markdown.toHTML(readmeFileRequest.responseText);
+            }
         }
     }
     readmeFileRequest.send();
@@ -312,12 +326,19 @@ function ManagementArea(itemIndex) {
     return managementHTML;
 }
 
-function ShowAbout() {
-    document.getElementById("aboutScreen").style.display = "block";
+function ShowInfo(text) {
+    if (text == "terms") {
+        document.getElementById("infoText").innerHTML = termsText;
+    } else if (text == "privacy") {
+        document.getElementById("infoText").innerHTML = privacyText;
+    } else {
+        document.getElementById("infoText").innerHTML = aboutText;
+    }
+    document.getElementById("infoScreen").style.display = "block";
 }
 
-function HideAbout() {
-    document.getElementById("aboutScreen").style.display = "none";
+function HideInfo() {
+    document.getElementById("infoScreen").style.display = "none";
 }
 
 function ToggleCaseSensitiveOption() {

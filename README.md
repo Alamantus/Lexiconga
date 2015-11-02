@@ -53,7 +53,7 @@ In the future, I'm planning to add the ability to save more than one dictionary 
 ## Thanks!
 I hope you enjoy Lexiconga and that it helps you build some awesome languages.
 
-- Robbie Antenesse
+–Robbie Antenesse
 
 ### Libraries Used
 * [Markdown.js](https://github.com/evilstreak/markdown-js) by Dominic Baggott (a.k.a. evilstreak)

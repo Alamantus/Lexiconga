@@ -80,7 +80,7 @@ input, textarea, select, option, button {
 	border-color: #d09b84 #915237 #915237 #d09b84;
 }
 
-#dictionaryDescription, .management, #settingsOptions, #aboutPage {
+#dictionaryDescription, .management, #settingsOptions, #infoPage {
 	background: #f2d5b2;
 }
 
@@ -100,7 +100,7 @@ input, textarea, select, option, button {
 #loginLink, #logoutLink,
 #descriptionToggle, #settingsButton,
 .deleteCancelButton, .deleteConfirmButton,
-#settingsScreenCloseButton, #aboutScreenCloseButton {
+#settingsScreenCloseButton, #infoScreenCloseButton {
 	background: #e0c19c;
 }
 

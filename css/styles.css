@@ -237,7 +237,7 @@ searchTerm {
     margin: 10px;
 }
 
-#settingsBackgroundFade, #aboutBackgroundFade {
+#settingsBackgroundFade, #infoBackgroundFade {
     position: fixed;
     top: 0;
     left: 0;
@@ -247,7 +247,7 @@ searchTerm {
     opacity: 0.75;
 }
 
-#settingsOptions, #aboutPage {
+#settingsOptions, #infoPage {
     position: fixed;
     top: 6%;
     left: 6%;
@@ -264,7 +264,7 @@ searchTerm {
 }
 
 #settingsButton, #settingsScreenCloseButton,
-#settingsSaveButtons button, #aboutScreenCloseButton {
+#settingsSaveButtons button, #infoScreenCloseButton {
     float: right;
     font-size: 12px;
 }

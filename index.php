@@ -8,21 +8,13 @@
 
     <link href="css/styles.css" rel="stylesheet" />
     <link href="css/lexiconga.css" rel="stylesheet" />
-    
-    <!-- Markdown Parser -->
-    <script src="js/markdown-js/markdown.min.js"></script>
-    
-    <!-- JSON Search -->
-    <script src="js/defiant-js/defiant-latest.min.js"></script>
-    
-    <script src="js/dictionaryBuilder.js"></script>
 </head>
 <body>
     <header>
         <div id="headerPadder">
             <a href="/" id="siteLogo">Lexiconga Dictionary Builder</a>
             <div style="float:right;margin: 16px 8px;font-size:12px;">
-                <span id="aboutButton" class="clickable" onclick="ShowAbout()">About Lexiconga</span>
+                <span id="aboutButton" class="clickable" onclick="ShowInfo('about')">About Lexiconga</span>
             </div>
             <div id="loginoutArea" style="display:none;">
                 <a href="?login" id="loginLink" class="clickable">Log In</a>
@@ -88,6 +80,10 @@
             
         <div id="theDictionary"></div>
     </div>
+    
+    <div id="rightColumn" class="googleads" style="float:right;width:20%;max-width:300px;min-width:200px;">
+        <?php include_once("php/google/adsense.php"); ?>
+    </div>
 
     <div id="settingsScreen" style="display:none;">
         <div id="settingsBackgroundFade" onclick="HideSettings()"></div>
@@ -143,16 +139,24 @@
         </div>
     </div>
     
-    <div id="aboutScreen" style="display:none;">
-        <div id="aboutBackgroundFade" onclick="HideAbout()"></div>
-        <div id="aboutPage">
-            <span id="aboutScreenCloseButton" class="clickable" onclick="HideAbout()">Close</span>
-            <div id="aboutText"></div>
+    <div id="infoScreen" style="display:none;">
+        <div id="infoBackgroundFade" onclick="HideInfo()"></div>
+        <div id="infoPage">
+            <span id="infoScreenCloseButton" class="clickable" onclick="HideInfo()">Close</span>
+            <div id="infoText"></div>
         </div>
     </div>
     </contents>
     <footer>
-        Version <script>document.write(currentVersion);</script>. Dictionary Builder only guaranteed to work with most up-to-date HTML5 browsers.
+        Dictionary Builder only guaranteed to work with most up-to-date HTML5 browsers. <span class="clickable" onclick="ShowInfo('terms')" style="font-size:12px;">Terms</span> <span class="clickable" onclick="ShowInfo('privacy')" style="font-size:12px;">Privacy</span>
     </footer>
+    
+    <!-- Markdown Parser -->
+    <script src="js/markdown-js/markdown.min.js"></script>
+    <!-- JSON Search -->
+    <script src="js/defiant-js/defiant-latest.min.js"></script>
+    <!-- Main Script -->
+    <script src="js/dictionaryBuilder.js"></script>
+    <?php include_once("php/google/analytics.php"); ?>
 </body>
 </html>
