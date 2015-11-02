@@ -21,6 +21,9 @@
     <header>
         <div id="headerPadder">
             <a href="/" id="siteLogo">Lexiconga Dictionary Builder</a>
+            <div style="float:right;margin: 16px 8px;">
+                <span id="aboutButton" class="clickable" onclick="ShowAbout()">About Lexiconga</span>
+            </div>
             <div id="loginoutArea" style="display:none;">
                 <a href="?login" id="loginLink" class="clickable">Log In</a>
                 <a href="?logout" id="logoutLink" class="clickable" style="display:none;">Log Out</a>
@@ -149,7 +152,6 @@
     </div>
     </contents>
     <footer>
-        <span id="aboutButton" class="clickable" onclick="ShowAbout()">About Lexiconga</span>
         Version <script>document.write(currentVersion);</script>. Dictionary Builder only guaranteed to work with most up-to-date HTML5 browsers.
     </footer>
 </body>

@@ -10,9 +10,28 @@ header {
 	border-bottom: 3px solid #e3bb7d;
 }
 
-footer {
-	background: #d69c42;
-	border-top: 3px solid #e3bb7d;
+#siteLogo {
+	display: block;
+	text-indent: -9999px;
+	width: 242px;
+	height: 48px;
+	background: url(../images/logo.svg);
+	background-size: 242px 48px;
+	float: left;
+}
+
+#aboutButton {
+	background: #dcb078;
+}
+
+#loginoutArea {
+	float: right;
+}
+
+#loginoutArea a {
+	color: #000000;
+	text-decoration: none;
+	font-size: 13px;
 }
 
 @media screen 
@@ -43,26 +62,6 @@ and (max-device-width : 480px) {
 	#loginoutArea {
 		margin: 16px 8px;
 	}
-}
-
-#siteLogo {
-	display: block;
-	text-indent: -9999px;
-	width: 242px;
-	height: 48px;
-	background: url(../images/logo.svg);
-	background-size: 242px 48px;
-	float: left;
-}
-
-#loginoutArea {
-	float: right;
-}
-
-#loginoutArea a {
-	color: #000000;
-	text-decoration: none;
-	font-size: 13px;
 }
 
 #wordEntryForm {
@@ -100,6 +99,7 @@ input, textarea, select, option, button {
 
 #loginLink, #logoutLink,
 #descriptionToggle, #settingsButton,
+.deleteCancelButton, .deleteConfirmButton,
 #settingsScreenCloseButton, #aboutScreenCloseButton {
 	background: #e0c19c;
 }
@@ -117,6 +117,7 @@ entry {
 	background: #cc8888;
 }
 
-#aboutButton {
-	background: #dcb078;
+footer {
+	background: #d69c42;
+	border-top: 3px solid #e3bb7d;
 }
