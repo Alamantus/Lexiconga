@@ -23,8 +23,6 @@ var savedScroll = {
     y: 0
 }
 
-var aboutText, termsText, privacyText;
-
 window.onload = function () {
     LoadDictionary();
     ClearForm();
@@ -32,6 +30,92 @@ window.onload = function () {
     GetTextFile("README.md");
     GetTextFile("TERMS.md");
     GetTextFile("PRIVACY.md");
+}
+
+var aboutText, termsText, privacyText, loginForm, createAccountForm;
+
+loginForm = '<div class="settingsCol"><form id="loginForm" method="post" action="?login"> \
+                 <h2>Log In</h2> \
+                 <label><span>Email</span> \
+                     <input type="email" id="loginEmailField" name="email" /> \
+                 </label> \
+                 <label><span>Password</span> \
+                     <input type="password" id="loginPasswordField" name="password" /> \
+                 </label> \
+                 <div id="loginError" style="font-weight:bold;color:red;"></div> \
+                 <button type="submit" id="loginSubmitButton" onclick="ValidateLogin(); return false;">Log In</button> \
+             </form></div> \
+             <div class="settingsCol"><form id="createAccountForm" method="post" action="?createaccount"> \
+                 <h2>Create a New Account</h2> \
+                 <p>Creating an account allows you to save and switch between up to 10 dictionaries and access them from any device for free! Plus if you allow us to send you emails, you\'ll be the first to hear about any new features that get added or if any of our policies change for any  reason.</p> \
+                 <label><span>Email</span> \
+                     <input type="email" id="createAccountEmailField" name="email" /> \
+                 </label> \
+                 <label><span>Password</span> \
+                     <input type="password" id="createAccountPasswordField" name="password" /> \
+                 </label> \
+                 <label><span>Confirm Password</span> \
+                     <input type="password" id="createAccountPasswordConfirmField" name="confirmpassword" /> \
+                 </label> \
+                 <label><b>Allow Emails</b> \
+                     <input type="checkbox" id="createAccountAllowEmailsField" name="allowemails" checked="checked" /> \
+                 </label> \
+                 <div id="createAccountError" style="font-weight:bold;color:red;"></div> \
+                 <button type="submit" id="createAccountSubmitButton" onclick="ValidateCreateAccount(); return false;">Create Account</button> \
+             </form></div>';
+
+function ValidateLogin() {
+    var errorMessage = document.getElementById("loginError");
+    var emailValue = document.getElementById("loginEmailField").value;
+    var passwordValue = document.getElementById("loginPasswordField").value;
+      
+    if (emailValue == "") {
+        errorMessage.innerHTML = "Email cannot be blank!";
+        return false;
+    } else if (!(/[^\s@]+@[^\s@]+\.[^\s@]+/.test(emailValue))) {
+        errorMessage.innerHTML = "Your email address looks fake. Email addresses look like this: name@email.com."
+        return false;
+    } else if (passwordValue == "") {
+        errorMessage.innerHTML = "Password cannot be blank!";
+        return false;
+    } else {
+        document.getElementById("loginForm").submit();
+    }
+}
+
+function ValidateCreateAccount() {
+    var errorMessage = document.getElementById("createAccountError");
+    var emailValue = document.getElementById("createAccountEmailField").value;
+    var passwordValue = document.getElementById("createAccountPasswordField").value;
+    var passwordConfirmValue = document.getElementById("createAccountPasswordConfirmField").value;
+      
+    if (emailValue == "") {
+        errorMessage.innerHTML = "Email cannot be blank!";
+        return false;
+    } else if (!(/[^\s@]+@[^\s@]+\.[^\s@]+/.test(emailValue))) {
+        errorMessage.innerHTML = "Your email address looks fake. Email addresses look like this: name@email.com."
+        return false;
+    } else if (passwordValue == "") {
+        errorMessage.innerHTML = "Password cannot be blank!";
+        return false;
+    } else if (passwordValue != passwordConfirmValue) {
+        errorMessage.innerHTML = "Passwords do not match!";
+        return false;
+    } else {
+        var emailCheck = new XMLHttpRequest();
+        emailCheck.open('GET', "php/ajax_createaccountemailcheck.php?email=" + emailValue);
+        emailCheck.onreadystatechange = function() {
+            if (emailCheck.readyState == 4 && emailCheck.status == 200) {
+                if (emailCheck.responseText != "ok") {
+                    errorMessage.innerHTML = "The email address entered is already being used. Try logging in or using a different email address instead.";
+                    return false;
+                } else {
+                    document.getElementById("createAccountForm").submit();
+                }
+            }
+        }
+        emailCheck.send();
+    }
 }
 
 function GetTextFile(filename) {
@@ -331,9 +415,12 @@ function ShowInfo(text) {
         document.getElementById("infoText").innerHTML = termsText;
     } else if (text == "privacy") {
         document.getElementById("infoText").innerHTML = privacyText;
+    } else if (text == "login" || text == "create") {
+        document.getElementById("infoText").innerHTML = loginForm;
     } else {
         document.getElementById("infoText").innerHTML = aboutText;
     }
+    document.getElementById("infoPage").scrollTop = 0;
     document.getElementById("infoScreen").style.display = "block";
 }
 
