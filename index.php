@@ -8,7 +8,7 @@ $notificationMessage = "";
 
 if (isset($_GET['logout']) && $current_user > 0) {
     session_destroy();
-    header('Location: ./index2.php?loggedout');
+    header('Location: ./?loggedout');
 }
 elseif (isset($_GET['login'])) {
     if (isset($_POST['email']) && isset($_POST['password'])) {
@@ -16,33 +16,33 @@ elseif (isset($_GET['login'])) {
             if (EmailExists($_POST['email'])) {
                 if (Validate_Login($_POST['email'], $_POST['password'])) {
                     $_SESSION['user'] = Get_User_Id($_POST['email']);
-                    header('Location: ./index2.php');
+                    header('Location: ./');
                 } else {
-                    header('Location: ./index2.php?error=loginfailed');
+                    header('Location: ./?error=loginfailed');
                 }
             } else {
-                header('Location: ./index2.php?error=emaildoesnotexist');
+                header('Location: ./?error=emaildoesnotexist');
             }
         } else {
-            header('Location: ./index2.php?error=emailinvalid');
+            header('Location: ./?error=emailinvalid');
         }
     } else {
-        header('Location: ./index2.php?error=loginemailorpasswordblank');
+        header('Location: ./?error=loginemailorpasswordblank');
     }
 }
 elseif (isset($_GET['createaccount'])) {
     if (isset($_POST['email']) && isset($_POST['password'])) {
         if (filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) && !EmailExists($_POST['email'])) {
             if (query("INSERT INTO users (email, password, public_name, allow_email) VALUES ('" . $_POST['email'] . "','" . crypt($_POST['password'], $_POST['email']) . "','" . htmlspecialchars($_POST['publicname'], ENT_QUOTES) . "'," . (($_POST['allowemails'] != "on") ? 0 : 1) . ")")) {
-                header('Location: ./index2.php?success');
+                header('Location: ./?success');
             } else {
-                header('Location: ./index2.php?error=couldnotcreate');
+                header('Location: ./?error=couldnotcreate');
             }
         } else {
-            header('Location: ./index2.php?error=emailcreateinvalid');
+            header('Location: ./?error=emailcreateinvalid');
         }
     } else {
-        header('Location: ./index2.php?error=createemailorpasswordblank');
+        header('Location: ./?error=createemailorpasswordblank');
     }
 }
 elseif (isset($_GET['error'])) {
@@ -240,7 +240,6 @@ elseif (isset($_GET['loggedout'])) {
     </div>
     </contents>
     <footer>
-        <?php if (isset($_GET['login'])) echo 'cool '; ?>
         Dictionary Builder only guaranteed to work with most up-to-date HTML5 browsers. <span class="clickable" onclick="ShowInfo('terms')" style="font-size:12px;">Terms</span> <span class="clickable" onclick="ShowInfo('privacy')" style="font-size:12px;">Privacy</span>
     </footer>
     
@@ -252,7 +251,7 @@ elseif (isset($_GET['loggedout'])) {
     <script src="js/dictionaryBuilder.js"></script>
     <script>
     currentUser = <?php echo $current_user; ?>;
-    publicName = <?php echo Get_Public_Name($current_user); ?>;
+    publicName = "<?php echo Get_Public_Name($current_user); ?>";
     </script>
     <?php //include_once("php/google/analytics.php"); ?>
 </body>

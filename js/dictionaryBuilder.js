@@ -1,14 +1,13 @@
 ﻿/* global markdown */
 /* global Defiant */
 
-var currentVersion = 0.3;
 var currentUser = 0;
 var publicName = "Someone";
 
 var currentDictionary = {
     name: "New",
     description: "A new dictionary.",
-    creatorName: publicName,
+    createdBy: publicName,
     words: [],
     settings: {
         allowDuplicates: false,
@@ -17,7 +16,7 @@ var currentDictionary = {
         isComplete: false
     },
     externalID: 0,
-    dictionaryImportVersion: currentVersion     // This needs to always be last.
+    fileIdentifier: "Lexiconga Dictionary"
 };
 
 var defaultDictionaryJSON = JSON.stringify(currentDictionary);  //Saves a stringifyed default dictionary.
@@ -260,7 +259,7 @@ function EditWord(index) {
 function SaveAndUpdateDictionary(keepFormContents, sendWords) {
     sendWords = (typeof sendWords !== 'undefined') ? sendWords : false;
     currentDictionary.words.sort(dynamicSort("name"));
-    SaveDictionary(sendWords);
+    SaveDictionary(true, sendWords);
     ShowDictionary();
     if (!keepFormContents) {
         ClearForm();
@@ -533,11 +532,11 @@ function EmptyWholeDictionary() {
     }
 }
 
-function SaveDictionary(sendWords) {
+function SaveDictionary(sendToDatabase, sendWords) {
     localStorage.setItem('dictionary', JSON.stringify(currentDictionary));
     
     //Always save local copy of current dictionary, but if logged in also send to database.
-    if (currentUser > 0) {
+    if (currentUser > 0 && sendToDatabase) {
         sendWords = (typeof sendWords !== 'undefined') ? sendWords : false;
         SendDictionary(sendWords);
     }
@@ -559,6 +558,7 @@ function SendDictionary(sendWords) {
     
     var sendDictionary = new XMLHttpRequest();
     sendDictionary.open('POST', "php/ajax_dictionarymanagement.php?action=" + action);
+    sendDictionary.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     sendDictionary.onreadystatechange = function() {
         if (sendDictionary.readyState == 4 && sendDictionary.status == 200) {
             if (sendDictionary.responseText == "updated successfully") {
@@ -611,6 +611,7 @@ function DataToSend(doSendWords) {
 }
 
 function LoadDictionary() {
+    LoadLocalDictionary();
     if (currentUser > 0) {  //If logged in, load the dictionary from database
         var loadDictionary = new XMLHttpRequest();
         loadDictionary.open('GET', "php/ajax_dictionarymanagement.php?action=load");
@@ -624,7 +625,10 @@ function LoadDictionary() {
                            loadDictionary.responseText == "no info provided") {
                     console.log(loadDictionary.responseText);
                 } else {
+                    console.log(loadDictionary.responseText);
                     currentDictionary = JSON.parse(loadDictionary.responseText);
+                    SaveDictionary(false, false);
+                    ProcessLoad();
                 }
                 return true;
             } else {
@@ -632,16 +636,22 @@ function LoadDictionary() {
             }
         }
         loadDictionary.send();
-    } else {    //Otherwise load the local one.
-        if (localStorage.getItem('dictionary')) {
-            var tmpDictionary = JSON.parse(localStorage.getItem('dictionary'));
-            if (tmpDictionary.words.length > 0) {
-                currentDictionary = JSON.parse(localStorage.getItem('dictionary'));
-            }
-            tmpDictionary = null;
-        }
+    } else {
+        ProcessLoad();
     }
-    
+}
+
+function LoadLocalDictionary() {
+    if (localStorage.getItem('dictionary')) {
+        var tmpDictionary = JSON.parse(localStorage.getItem('dictionary'));
+        if (tmpDictionary.words.length > 0) {
+            currentDictionary = JSON.parse(localStorage.getItem('dictionary'));
+        }
+        tmpDictionary = null;
+    }
+}
+
+function ProcessLoad() {
     HideSettingsWhenComplete();
     
     ShowDictionary("");
@@ -690,7 +700,7 @@ function ImportDictionary() {
         // When it's loaded, process it
         reader.onloadend = function () {
             if (reader.result && reader.result.length) {
-                if (reader.result.substr(reader.result.length - 30) == '"dictionaryImportVersion":' + currentVersion + '}') {
+                if (reader.result.substr(reader.result.length - 40) == '"fileIdentifier":"Lexiconga Dictionary"}') {
                     localStorage.setItem('dictionary', reader.result);
                     document.getElementById("importFile").value = "";
                     LoadDictionary();

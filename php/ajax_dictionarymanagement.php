@@ -1,6 +1,8 @@
 <?php
 require_once("../required.php");
 
+session_start();
+
 if ($_GET['action'] == 'getall') {
     Get_Dictionaries();
 }
@@ -49,25 +51,34 @@ function Get_Dictionaries() {
 
 function Load_Current_Dictionary() {
     if (isset($_SESSION['user'])) {
-        $query = "SELECT * FROM `dictionaries` WHERE `is_current`=1 AND `user`=" . $_SESSION['user'] . ";";
+        $query = "SELECT `d`.`id`, `d`.`name`, `d`.`description`, `u`.`public_name`, `d`.`words`, `d`.`allow_duplicates`, `d`.`case_sensitive`, `d`.`parts_of_speech`, `d`.`is_complete` ";
+        $query .= "FROM `dictionaries` AS `d` LEFT JOIN `users` AS `u` ON `user`=`u`.`id` WHERE `is_current`=1 AND `user`=" . $_SESSION['user'] . ";";
         $dictionary = query($query);
         
         if ($dictionary) {
-            if (num_rows($dictionary) === 1) {
-                while ($dict = fetch_assoc($dictionary)) {
-                    $_SESSION['dictionary'] = $dict['id'];
-                    $json = '{"name":"' . $dict['name'] . '","description":"' . $dict['description'] . '","words":"' . $dict['words'] . '",';
-                    $json .= '"settings":{"allowDuplicates":' . ($dict['allow_duplicates'] == 1) ? "true" : "false" . ',';
-                    $json .= '"caseSensitive":' . ($dict['case_sensitive'] == 1) ? "true" : "false" . ',';
-                    $json .= '"partsOfSpeech":"' . $dict['parts_of_speech'] . ',';
-                    $json .= '"isComplete":' . ($dict['is_complete'] == 1) ? "true" : "false" . '},';
-                    $json .= '"externalID":"' . $dict['id'] . ',';
-                    $json .= '"dictionaryImportVersion":' . $dict['import_version'] . '}';
-                    echo $json;
-                    return true;
+            if (num_rows($dictionary) > 0) {
+                if (num_rows($dictionary) === 1) {
+                    while ($dict = fetch_assoc($dictionary)) {
+                        $_SESSION['dictionary'] = $dict['id'];
+                        $json = '{"name":"' . $dict['name'] . '",';
+                        $json .= '"description":"' . $dict['description'] . '",';
+                        $json .= '"createdBy":"' . $dict['public_name'] . '",';
+                        $json .= '"words":' . $dict['words'] . ',';
+                        $json .= '"settings":{';
+                        $json .= '"allowDuplicates":' . (($dict['allow_duplicates'] == 1) ? 'true' : 'false') . ',';
+                        $json .= '"caseSensitive":' . (($dict['case_sensitive'] == 1) ? 'true' : 'false') . ',';
+                        $json .= '"partsOfSpeech":"' . $dict['parts_of_speech'] . '",';
+                        $json .= '"isComplete":' . (($dict['is_complete'] == 1) ? 'true' : 'false') . '},';
+                        $json .= '"externalID":' . $dict['id'] . ',';
+                        $json .= '"fileIdentifier":"Lexiconga Dictionary"}';
+                        echo $json;
+                        return true;
+                    }
+                } else {
+                    echo "more than 1 returned";
                 }
             } else {
-                echo "more than 1 returned";
+                echo "no dictionaries";
             }
         } else {
             echo "could not load";
@@ -80,17 +91,18 @@ function Load_Current_Dictionary() {
 
 function Save_Current_DictionaryAsNew() {
     if (isset($_SESSION['user'])) {
+        $conn = connection();
         $query = "INSERT INTO `dictionaries`(`user`, `is_current`, `name`, `description`, `words`, `allow_duplicates`, `case_sensitive`, `parts_of_speech`, `is_complete`, `is_public`) ";
-        $query .= "VALUES (" . $_SESSION['user'] . ",1,'" . $_POST['name'] . "','" . $_POST['description'] . "','" . $_POST['words'] . "'," . $_POST['allowduplicates'] . "," . $_POST['casesensitive'] . "," . $_POST['partsofspeech'] . "," . $_POST['iscomplete'] . "," . $_POST['ispublic'] . ")";
-        $update = query($query);
+        $query .= "VALUES (" . $_SESSION['user'] . ",1,'" . $_POST['name'] . "','" . $_POST['description'] . "','" . $_POST['words'] . "'," . $_POST['allowduplicates'] . "," . $_POST['casesensitive'] . ",'" . $_POST['partsofspeech'] . "'," . $_POST['iscomplete'] . "," . $_POST['ispublic'] . ")";
+        $update = mysqli_query($conn, $query);
         
         if ($update) {
-            $_SESSION['dictionary'] = mysql_insert_id(connection());
+            $_SESSION['dictionary'] = mysqli_insert_id($conn);
             $_SESSION['dictionaries'][] = $_SESSION['dictionary'];  //Add new id to valid dictionaries. 
             echo $_SESSION['dictionary'];
             return true;
         } else {
-            echo "could not update";
+            echo "could not update:\n" . mysqli_error($conn) . "\n" . $query;
         }
     } else {
         echo "no info provided";
