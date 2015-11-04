@@ -1,8 +1,84 @@
 <?php
-//require_once('required.php');
+require_once('required.php');
 
-//session_start();
-//$current_user = isset($_SESSION['user']) ? $_SESSION['user'] : 0;
+session_start();
+$current_user = isset($_SESSION['user']) ? $_SESSION['user'] : 0;
+
+$notificationMessage = "";
+
+if (isset($_GET['logout']) && $current_user > 0) {
+    session_destroy();
+    header('Location: ./index2.php?loggedout');
+}
+elseif (isset($_GET['login'])) {
+    if (isset($_POST['email']) && isset($_POST['password'])) {
+        if (filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+            if (EmailExists($_POST['email'])) {
+                if (Validate_Login($_POST['email'], $_POST['password'])) {
+                    $_SESSION['user'] = Get_User_Id($_POST['email']);
+                    header('Location: ./index2.php');
+                } else {
+                    header('Location: ./index2.php?error=loginfailed');
+                }
+            } else {
+                header('Location: ./index2.php?error=emaildoesnotexist');
+            }
+        } else {
+            header('Location: ./index2.php?error=emailinvalid');
+        }
+    } else {
+        header('Location: ./index2.php?error=loginemailorpasswordblank');
+    }
+}
+elseif (isset($_GET['createaccount'])) {
+    if (isset($_POST['email']) && isset($_POST['password'])) {
+        if (filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) && !EmailExists($_POST['email'])) {
+            if (query("INSERT INTO users (email, password, public_name, allow_email) VALUES ('" . $_POST['email'] . "','" . crypt($_POST['password'], $_POST['email']) . "','" . htmlspecialchars($_POST['publicname'], ENT_QUOTES) . "'," . (($_POST['allowemails'] != "on") ? 0 : 1) . ")")) {
+                header('Location: ./index2.php?success');
+            } else {
+                header('Location: ./index2.php?error=couldnotcreate');
+            }
+        } else {
+            header('Location: ./index2.php?error=emailcreateinvalid');
+        }
+    } else {
+        header('Location: ./index2.php?error=createemailorpasswordblank');
+    }
+}
+elseif (isset($_GET['error'])) {
+    if ($_GET['error'] == "couldnotcreate") {
+        $notificationMessage = "Could not create account.<br>Please try again later.";
+    } elseif ($_GET['error'] == "emailcreateinvalid") {
+        $notificationMessage = "The email address used to create your account didn't work.<br>Please try another.";
+    } elseif ($_GET['error'] == "createemailorpasswordblank") {
+        $notificationMessage = "The create account form somehow got submitted without some essential information.<br>Please try filling it out again.";
+    } elseif ($_GET['error'] == "loginfailed") {
+        $notificationMessage = "We couldn't log you in because your email or password was incorrect.<br>";
+        if (!isset($_SESSION['loginfailures']) || (isset($_SESSION['loginlockouttime']) && time() - $_SESSION['loginlockouttime'] > 3600)) {
+            // If never failed or more than 1 hour has passed, reset login failures.
+            $_SESSION['loginfailures'] = 0;
+        }
+        $_SESSION['loginfailures'] += 1;
+        if ($_SESSION['loginfailures'] < 10) {
+            $notificationMessage .= "This is your " . $_SESSION['loginfailures'] . " time. Please try again.";
+        } else {
+            $_SESSION['loginlockouttime'] = time();
+            $notificationMessage .= "Since you failed to log in successfully 10 times, you may not try again for about an hour.";
+        }
+    } elseif ($_GET['error'] == "emaildoesnotexist") {
+        $notificationMessage = "The email address you entered doesn't have an account.<br>Would you like to <span class='clickable' onclick='ShowInfo(\"create\")'>create an account</span>?";
+    } elseif ($_GET['error'] == "emailinvalid") {
+        $notificationMessage = "The email address you entered didn't work.<br>Please try another.";
+    } else {
+        $notificationMessage = "Something seems to have gone wrong, but I don't know what.<br>Please try again.";
+    }
+}
+elseif (isset($_GET['success'])) {
+    $notificationMessage = "Your account was created successfully!<br>Please log in using the email address and password you used to create it and you can start accessing your dictionaries anywhere!";
+}
+elseif (isset($_GET['loggedout'])) {
+    $notificationMessage = "You have been successfully logged out.<br>You will only be able to use the dictionary saved to your browser.";
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -22,13 +98,23 @@
             <div style="float:right;margin: 16px 8px;font-size:12px;">
                 <span id="aboutButton" class="clickable" onclick="ShowInfo('about')">About Lexiconga</span>
             </div>
-            <div id="loginoutArea" style="display:none;">
-                <a href="?login" id="loginLink" class="clickable">Log In</a>
-                <a href="?logout" id="logoutLink" class="clickable" style="display:none;">Log Out</a>
+            <div id="loginoutArea" style="font-size:12px;">
+                <?php if ($current_user > 0) {  //If logged in, show the log out button. ?>
+                    <a href="?logout" id="logoutLink" class="clickable">Log Out</a>
+                <?php } elseif (!isset($_SESSION['loginfailures']) || (isset($_SESSION['loginfailures']) && $_SESSION['loginfailures'] < 10) || (isset($_SESSION['loginlockouttime']) && time() - $_SESSION['loginlockouttime'] > 3600)) { ?>
+                    <span id="loginLink" class="clickable" onclick="ShowInfo('login')">Log In/Create Account</span>
+                <?php } else { ?>
+                    <span id="loginLink" class="clickable" onclick="alert('You failed logging in 10 times. To prevent request flooding and hacking attempts, you may not log in or create an account for a while.');">Can't Login</span>
+                <?php } ?>
             </div>
         </div>
     </header>
     <contents>
+    <?php if ($notificationMessage != "") { ?>
+        <div id="notificationArea" style="text-align:center;background:#c0c088;padding:10px;border-radius:5px;margin:0 auto;width:50%;min-width:200px;">
+            <?php echo $notificationMessage; ?>
+        </div>
+    <?php } ?>
     <div id="leftColumn">
     <form id="wordEntryForm">
         <label><span>Word</span>
@@ -88,7 +174,7 @@
     </div>
     
     <div id="rightColumn" class="googleads" style="float:right;width:20%;max-width:300px;min-width:200px;overflow:hidden;">
-        <?php include_once("php/google/adsense.php"); ?>
+        <?php //include_once("php/google/adsense.php"); ?>
     </div>
 
     <div id="settingsScreen" style="display:none;">
@@ -154,6 +240,7 @@
     </div>
     </contents>
     <footer>
+        <?php if (isset($_GET['login'])) echo 'cool '; ?>
         Dictionary Builder only guaranteed to work with most up-to-date HTML5 browsers. <span class="clickable" onclick="ShowInfo('terms')" style="font-size:12px;">Terms</span> <span class="clickable" onclick="ShowInfo('privacy')" style="font-size:12px;">Privacy</span>
     </footer>
     
@@ -163,6 +250,10 @@
     <script src="js/defiant-js/defiant-latest.min.js"></script>
     <!-- Main Script -->
     <script src="js/dictionaryBuilder.js"></script>
-    <?php include_once("php/google/analytics.php"); ?>
+    <script>
+    currentUser = <?php echo $current_user; ?>;
+    publicName = <?php echo Get_Public_Name($current_user); ?>;
+    </script>
+    <?php //include_once("php/google/analytics.php"); ?>
 </body>
 </html>
