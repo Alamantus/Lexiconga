@@ -10,7 +10,7 @@ if (isset($_GET['logout']) && $current_user > 0) {
     session_destroy();
     header('Location: ./index2.php?loggedout');
 }
-if (isset($_GET['login'])) {
+elseif (isset($_GET['login'])) {
     if (isset($_POST['email']) && isset($_POST['password'])) {
         if (filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
             if (EmailExists($_POST['email'])) {
@@ -30,10 +30,10 @@ if (isset($_GET['login'])) {
         header('Location: ./index2.php?error=loginemailorpasswordblank');
     }
 }
-if (isset($_GET['createaccount'])) {
+elseif (isset($_GET['createaccount'])) {
     if (isset($_POST['email']) && isset($_POST['password'])) {
         if (filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) && !EmailExists($_POST['email'])) {
-            if (query("INSERT INTO users (email, password, allow_email) VALUES ('" . $_POST['email'] . "','" . crypt($_POST['password'], $_POST['email']) . "'," . (($_POST['allowemails'] != "on") ? 0 : 1) . ")")) {
+            if (query("INSERT INTO users (email, password, public_name, allow_email) VALUES ('" . $_POST['email'] . "','" . crypt($_POST['password'], $_POST['email']) . "','" . htmlspecialchars($_POST['publicname'], ENT_QUOTES) . "'," . (($_POST['allowemails'] != "on") ? 0 : 1) . ")")) {
                 header('Location: ./index2.php?success');
             } else {
                 header('Location: ./index2.php?error=couldnotcreate');
@@ -45,7 +45,7 @@ if (isset($_GET['createaccount'])) {
         header('Location: ./index2.php?error=createemailorpasswordblank');
     }
 }
-if (isset($_GET['error'])) {
+elseif (isset($_GET['error'])) {
     if ($_GET['error'] == "couldnotcreate") {
         $notificationMessage = "Could not create account.<br>Please try again later.";
     } elseif ($_GET['error'] == "emailcreateinvalid") {
@@ -73,10 +73,10 @@ if (isset($_GET['error'])) {
         $notificationMessage = "Something seems to have gone wrong, but I don't know what.<br>Please try again.";
     }
 }
-if (isset($_GET['success'])) {
+elseif (isset($_GET['success'])) {
     $notificationMessage = "Your account was created successfully!<br>Please log in using the email address and password you used to create it and you can start accessing your dictionaries anywhere!";
 }
-if (isset($_GET['loggedout'])) {
+elseif (isset($_GET['loggedout'])) {
     $notificationMessage = "You have been successfully logged out.<br>You will only be able to use the dictionary saved to your browser.";
 }
 ?>
@@ -250,6 +250,10 @@ if (isset($_GET['loggedout'])) {
     <script src="js/defiant-js/defiant-latest.min.js"></script>
     <!-- Main Script -->
     <script src="js/dictionaryBuilder.js"></script>
+    <script>
+    currentUser = <?php echo $current_user; ?>;
+    publicName = <?php echo Get_Public_Name($current_user); ?>;
+    </script>
     <?php include_once("php/google/analytics.php"); ?>
 </body>
 </html>

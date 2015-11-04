@@ -5,6 +5,11 @@ function query ($query_string) {
     
     return $query;
 }
+function multi_query ($query_string) {
+    $query = mysqli_multi_query(connection(), $query_string);
+    
+    return $query;
+}
 function num_rows ($query_results) {
     $num_rows = mysqli_num_rows($query_results);
     
