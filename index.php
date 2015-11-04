@@ -81,7 +81,7 @@
         <div id="theDictionary"></div>
     </div>
     
-    <div id="rightColumn" class="googleads" style="float:right;width:20%;max-width:300px;min-width:200px;">
+    <div id="rightColumn" class="googleads" style="float:right;width:20%;max-width:300px;min-width:200px;overflow:hidden;">
         <?php include_once("php/google/adsense.php"); ?>
     </div>
 

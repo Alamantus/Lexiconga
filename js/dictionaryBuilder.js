@@ -334,6 +334,7 @@ function ShowInfo(text) {
     } else {
         document.getElementById("infoText").innerHTML = aboutText;
     }
+    document.getElementById("infoPage").scrollTop = 0;
     document.getElementById("infoScreen").style.display = "block";
 }
 
