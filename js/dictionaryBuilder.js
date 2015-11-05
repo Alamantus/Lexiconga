@@ -523,13 +523,17 @@ function HideSettings() {
     document.getElementById("wordEntryForm").style.display = (currentDictionary.settings.isComplete) ? "none" : "block";
 }
 
-function EmptyWholeDictionary() {
+function ConfirmEmptyWholeDictionary() {
     if (confirm("This will delete the entire current dictionary. If you do not have a backed up export, you will lose it forever!\n\nDo you still want to delete?")) {
-        currentDictionary = JSON.parse(defaultDictionaryJSON);
-        SaveAndUpdateDictionary(false, true);
-        SetPartsOfSpeech();
-        HideSettings();
+        EmptyWholeDictionary();
     }
+}
+
+function EmptyWholeDictionary() {
+    currentDictionary = JSON.parse(defaultDictionaryJSON);
+    SaveAndUpdateDictionary(false, true);
+    SetPartsOfSpeech();
+    HideSettings();
 }
 
 function SaveDictionary(sendToDatabase, sendWords) {
@@ -565,6 +569,7 @@ function SendDictionary(sendWords) {
                 console.log(sendDictionary.responseText);
             } else if (!isNaN(parseInt(sendDictionary.responseText))) {
                 currentDictionary.externalID = parseInt(sendDictionary.responseText);
+                ProcessLoad();
                 console.log("saved successfully");
             } else {
                 console.log(sendDictionary.responseText);
@@ -625,7 +630,6 @@ function LoadDictionary() {
                            loadDictionary.responseText == "no info provided") {
                     console.log(loadDictionary.responseText);
                 } else {
-                    console.log(loadDictionary.responseText);
                     currentDictionary = JSON.parse(loadDictionary.responseText);
                     SaveDictionary(false, false);
                     ProcessLoad();
@@ -654,7 +658,7 @@ function LoadLocalDictionary() {
 function ProcessLoad() {
     HideSettingsWhenComplete();
     
-    ShowDictionary("");
+    ShowDictionary();
     
     SetPartsOfSpeech();
     
@@ -686,6 +690,12 @@ function ExportDictionary() {
     download(downloadName + ".dict", localStorage.getItem('dictionary'));
 }
 
+function ConfirmImportDictionary() {
+    if (confirm("Importing this dictionary will overwrite your current one, making it impossible to retrieve if you have not already exported it! Do you still want to import?")) {
+        ImportDictionary();
+    }
+}
+
 function ImportDictionary() {
     if (!window.FileReader) {
         alert('Your browser is not supported');
@@ -703,7 +713,9 @@ function ImportDictionary() {
                 if (reader.result.substr(reader.result.length - 40) == '"fileIdentifier":"Lexiconga Dictionary"}') {
                     localStorage.setItem('dictionary', reader.result);
                     document.getElementById("importFile").value = "";
-                    LoadDictionary();
+                    LoadLocalDictionary();
+                    SendDictionary(true);
+                    ProcessLoad();
                     HideSettings();
                 } else {
                     alert("Uploaded file is not compatible.");

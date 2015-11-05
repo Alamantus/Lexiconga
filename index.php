@@ -10,7 +10,7 @@ if (isset($_GET['logout']) && $current_user > 0) {
     session_destroy();
     header('Location: ./?loggedout');
 }
-elseif (isset($_GET['login'])) {
+elseif (isset($_GET['login']) && $current_user <= 0) {
     if (isset($_POST['email']) && isset($_POST['password'])) {
         if (filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
             if (EmailExists($_POST['email'])) {
@@ -45,7 +45,7 @@ elseif (isset($_GET['createaccount'])) {
         header('Location: ./?error=createemailorpasswordblank');
     }
 }
-elseif (isset($_GET['error'])) {
+elseif (isset($_GET['error']) && $current_user <= 0) {
     if ($_GET['error'] == "couldnotcreate") {
         $notificationMessage = "Could not create account.<br>Please try again later.";
     } elseif ($_GET['error'] == "emailcreateinvalid") {
@@ -73,10 +73,10 @@ elseif (isset($_GET['error'])) {
         $notificationMessage = "Something seems to have gone wrong, but I don't know what.<br>Please try again.";
     }
 }
-elseif (isset($_GET['success'])) {
+elseif (isset($_GET['success']) && $current_user <= 0) {
     $notificationMessage = "Your account was created successfully!<br>Please log in using the email address and password you used to create it and you can start accessing your dictionaries anywhere!";
 }
-elseif (isset($_GET['loggedout'])) {
+elseif (isset($_GET['loggedout']) && $current_user <= 0) {
     $notificationMessage = "You have been successfully logged out.<br>You will only be able to use the dictionary saved to your browser.";
 }
 ?>
@@ -218,9 +218,9 @@ elseif (isset($_GET['loggedout'])) {
                     <label>
                         <span>Import Dictionary</span>
                         <input type="file" id="importFile" />
-                        <button type="button" onclick="ImportDictionary(); return false;">Import</button>
+                        <button type="button" onclick="ConfirmImportDictionary(); return false;">Import</button>
                     </label>
-                    <label><button type="button" onclick="EmptyWholeDictionary()" style="cursor:pointer;">Empty Current Dictionary</button></label>
+                    <label><button type="button" onclick="ConfirmEmptyWholeDictionary()" style="cursor:pointer;">Empty Current Dictionary</button></label>
                 </div>
                 <div id="settingsSaveButtons">
                     <span id="settingsErrorMessage"></span><br>
@@ -252,6 +252,9 @@ elseif (isset($_GET['loggedout'])) {
     <script>
     currentUser = <?php echo $current_user; ?>;
     publicName = "<?php echo Get_Public_Name($current_user); ?>";
+    <?php if (isset($_GET['loggedout']) && $current_user <= 0) { ?>
+        EmptyWholeDictionary();
+    <?php } ?>
     </script>
     <?php //include_once("php/google/analytics.php"); ?>
 </body>
