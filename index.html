@@ -22,24 +22,17 @@
         <label><span>Word</span>
             <input type="text" id="word" />
         </label>
+        <label><span>Pronunciation <a class="helperlink" href="ipa_character_picker.html" target="_blank" title="IPA Character Picker backed up from http://r12a.github.io/pickers/ipa/">IPA</a></span>
+            <input type="text" id="pronunciation" />
+        </label>
+        <label><span>Part of Speech</span>
+            <select id="partOfSpeech"></select>
+        </label>
         <label><span>Equivalent Word</span>
             <input type="text" id="simpleDefinition" />
         </label>
         <label><span>Explanation</span>
             <textarea id="longDefinition"></textarea>
-        </label>
-        <label><span>Part of Speech</span>
-            <select id="partOfSpeech">
-                <!--
-                    <option value="noun">Noun</option>
-                    <option value="adjective">Adjective</option>
-                    <option value="verb">Verb</option>
-                    <option value="adverb">Adverb</option>
-                    <option value="preposition">Preposition</option>
-                    <option value="pronoun">Pronoun</option>
-                    <option value="conjunction">Conjunction</option>
-                -->
-            </select>
         </label>
         <input type="hidden" id="editIndex" />
         <span id="errorMessage"></span>
@@ -57,7 +50,7 @@
     <div id="dictionaryContainer">
         <span id="settingsButton" class="clickable" onclick="ShowSettings()">Settings</span>
         
-        <h2 id="dictionaryName"></h2>
+        <h1 id="dictionaryName"></h1>
         
         <span id="descriptionToggle" onclick="ToggleDescription();">Show Description</span>
         <div id="dictionaryDescription" style="display:none;"></div>

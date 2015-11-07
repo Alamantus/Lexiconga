@@ -1,7 +1,5 @@
 ﻿/* global markdown */
 /* global Defiant */
-//Requires Markdown.js parser
-var currentVersion = 0.2;
 
 var currentDictionary = {
     name: "New",
@@ -12,8 +10,7 @@ var currentDictionary = {
         caseSensitive: false,
         partsOfSpeech: "Noun,Adjective,Verb,Adverb,Preposition,Pronoun,Conjunction",
         isComplete: false
-    },
-    dictionaryImportVersion: currentVersion     // This needs to always be last.
+    }
 }
 
 var defaultDictionaryJSON = JSON.stringify(currentDictionary);  //Saves a stringifyed default dictionary.
@@ -39,9 +36,10 @@ window.onload = function () {
 
 function AddWord() {
     var word = htmlEntities(document.getElementById("word").value);
+    var pronunciation = htmlEntities(document.getElementById("pronunciation").value);
+    var partOfSpeech = htmlEntities(document.getElementById("partOfSpeech").value);
     var simpleDefinition = htmlEntities(document.getElementById("simpleDefinition").value);
     var longDefinition = htmlEntities(document.getElementById("longDefinition").value);
-    var partOfSpeech = htmlEntities(document.getElementById("partOfSpeech").value);
     var editIndex = htmlEntities(document.getElementById("editIndex").value);
     var errorMessageArea = document.getElementById("errorMessage");
     var errorMessage = "";
@@ -51,14 +49,12 @@ function AddWord() {
         var wordIndex = (!currentDictionary.settings.allowDuplicates) ? WordIndex(word) : -1;
 
         if (editIndex != "") {
-            if (WordAtIndexWasChanged(editIndex, word, simpleDefinition, longDefinition, partOfSpeech)) {
+            if (WordAtIndexWasChanged(editIndex, word, pronunciation, partOfSpeech, simpleDefinition, longDefinition)) {
                 updateConflictArea.style.display = "block";
                 updateConflictArea.innerHTML = "<span id='updateConflictMessage'>Do you really want to change the word \"" + currentDictionary.words[parseInt(editIndex)].name + "\" to what you have set above?</span>";
-                updateConflictArea.innerHTML += '<button type="button" id="updateConfirmButton" onclick="UpdateWord(' + editIndex + ', \'' +
-                                                                                                                    htmlEntities(word) + '\', \'' +
-                                                                                                                    htmlEntities(simpleDefinition) + '\', \'' +
-                                                                                                                    htmlEntities(longDefinition) + '\', \'' +
-                                                                                                                    htmlEntities(partOfSpeech) + '\'); return false;">Yes, Update it</button>';
+                updateConflictArea.innerHTML += '<button type="button" id="updateConfirmButton" \
+                                                  onclick="UpdateWord(' + editIndex + ', \'' + word + '\', \'' + pronunciation + '\', \'' + partOfSpeech + '\', \'' + simpleDefinition + '\', \'' + longDefinition + '\'); \
+                                                  return false;">Yes, Update it</button>';
                 updateConflictArea.innerHTML += '<button type="button" id="updateCancelButton" onclick="CloseUpdateConflictArea(); return false;">No, Leave it</button>';
             } else {
                 errorMessage = "No change has been made to \"" + word + "\"";
@@ -67,7 +63,7 @@ function AddWord() {
                 }
             }
         } else if (wordIndex >= 0) {
-            if (currentDictionary.words[wordIndex].simpleDefinition != simpleDefinition || currentDictionary.words[wordIndex].longDefinition != longDefinition || currentDictionary.words[wordIndex].partOfSpeech != partOfSpeech) {
+            if (WordAtIndexWasChanged(wordIndex, word, pronunciation, partOfSpeech, simpleDefinition, longDefinition)) {
                 updateConflictArea.style.display = "block";
                 
                 var updateConflictText = "<span id='updateConflictMessage'>\"" + word + "\" is already in the dictionary";
@@ -77,11 +73,9 @@ function AddWord() {
                     updateConflictText += "."
                 }
                 updateConflictText += "<br>Do you want to update it to what you have set above?</span>";
-                updateConflictText += '<button type="button" id="updateConfirmButton" onclick="UpdateWord(' + wordIndex + ', \'' +
-                                                                                                            htmlEntities(word) + '\', \'' +
-                                                                                                            htmlEntities(simpleDefinition) + '\', \'' +
-                                                                                                            htmlEntities(longDefinition) + '\', \'' +
-                                                                                                            htmlEntities(partOfSpeech) + '\'); return false;">Yes, Update it</button>';
+                updateConflictText += '<button type="button" id="updateConfirmButton" \
+                                                  onclick="UpdateWord(' + wordIndex + ', \'' + word + '\', \'' + pronunciation + '\', \'' + partOfSpeech + '\', \'' + simpleDefinition + '\', \'' + longDefinition + '\'); \
+                                                  return false;">Yes, Update it</button>';
                 updateConflictText += ' <button type="button" id="updateCancelButton" onclick="CloseUpdateConflictArea(); return false;">No, Leave it</button>';
                 
                 updateConflictArea.innerHTML = updateConflictText;
@@ -92,7 +86,7 @@ function AddWord() {
                 }
             }
         } else {
-            currentDictionary.words.push({name: word, simpleDefinition: simpleDefinition, longDefinition: longDefinition, partOfSpeech: partOfSpeech});
+            currentDictionary.words.push({name: word, pronunciation: pronunciation, partOfSpeech: partOfSpeech, simpleDefinition: simpleDefinition, longDefinition: longDefinition});
             SaveAndUpdateDictionary(false);
         }
 
@@ -114,12 +108,13 @@ function AddWord() {
     errorMessageArea.innerHTML = errorMessage;
 }
 
-function WordAtIndexWasChanged(indexString, word, simpleDefinition, longDefinition, partOfSpeech) {
+function WordAtIndexWasChanged(indexString, word, pronunciation, partOfSpeech, simpleDefinition, longDefinition) {
      return (!currentDictionary.settings.caseSensitive && currentDictionary.words[parseInt(indexString)].name.toLowerCase() != word.toLowerCase()) ||
             (currentDictionary.settings.caseSensitive && currentDictionary.words[parseInt(indexString)].name != word) ||
+            currentDictionary.words[parseInt(indexString)].pronunciation != pronunciation ||
+            currentDictionary.words[parseInt(indexString)].partOfSpeech != partOfSpeech ||
             currentDictionary.words[parseInt(indexString)].simpleDefinition != simpleDefinition ||
-            currentDictionary.words[parseInt(indexString)].longDefinition != longDefinition ||
-            currentDictionary.words[parseInt(indexString)].partOfSpeech != partOfSpeech;
+            currentDictionary.words[parseInt(indexString)].longDefinition != longDefinition;
 }
 
 function SaveScroll() {
@@ -139,9 +134,10 @@ function EditWord(index) {
 
     document.getElementById("editIndex").value = index.toString();
     document.getElementById("word").value = htmlEntitiesParse(currentDictionary.words[index].name);
+    document.getElementById("pronunciation").value = htmlEntitiesParse(currentDictionary.words[index].pronunciation);
+    document.getElementById("partOfSpeech").value = htmlEntitiesParse(currentDictionary.words[index].partOfSpeech);
     document.getElementById("simpleDefinition").value = htmlEntitiesParse(currentDictionary.words[index].simpleDefinition);
     document.getElementById("longDefinition").value = htmlEntitiesParse(currentDictionary.words[index].longDefinition);
-    document.getElementById("partOfSpeech").value = htmlEntitiesParse(currentDictionary.words[index].partOfSpeech);
 
     document.getElementById("newWordButtonArea").style.display = "none";
     document.getElementById("editWordButtonArea").style.display = "block";
@@ -157,11 +153,12 @@ function SaveAndUpdateDictionary(keepFormContents) {
     CloseUpdateConflictArea();
 }
 
-function UpdateWord(wordIndex, word, simpleDefinition, longDefinition, partOfSpeech) {
+function UpdateWord(wordIndex, word, pronunciation, partOfSpeech, simpleDefinition, longDefinition) {
     currentDictionary.words[wordIndex].name = word;
+    currentDictionary.words[wordIndex].pronunciation = pronunciation;
+    currentDictionary.words[wordIndex].partOfSpeech = partOfSpeech;
     currentDictionary.words[wordIndex].simpleDefinition = simpleDefinition;
     currentDictionary.words[wordIndex].longDefinition = longDefinition;
-    currentDictionary.words[wordIndex].partOfSpeech = partOfSpeech;
     
     SaveAndUpdateDictionary();
 
@@ -183,9 +180,10 @@ function CloseUpdateConflictArea() {
 
 function ClearForm() {
     document.getElementById("word").value = "";
+    document.getElementById("pronunciation").value = "";
+    document.getElementById("partOfSpeech").value = "";
     document.getElementById("simpleDefinition").value = "";
     document.getElementById("longDefinition").value = "";
-    document.getElementById("partOfSpeech").value = "";
     document.getElementById("editIndex").value = "";
     
     document.getElementById("newWordButtonArea").style.display = "block";
@@ -204,28 +202,17 @@ function ShowDictionary() {
     var searchResults = [];
     var search = htmlEntities(document.getElementById("searchBox").value);
     if (search != "") {
+        var xpath = [];
         if (document.getElementById("searchOptionWord").checked) {
-            var wordNameSearch = JSON.search(currentDictionary, '//words[contains(name, "' + search + '")]/name');
-            for (var i = 0; i < wordNameSearch.length; i++) {
-                searchResults.push(wordNameSearch[i]);
-            }
+            xpath.push('contains(name, "'+ search +'")');
         }
         if (document.getElementById("searchOptionSimple").checked) {
-            var simpleDefinitionSearch = JSON.search(currentDictionary, '//words[contains(simpleDefinition, "' + search + '")]/name');
-            for (var i = 0; i < simpleDefinitionSearch.length; i++) {
-                if (searchResults.indexOf(simpleDefinitionSearch[i]) < 0) {
-                    searchResults.push(simpleDefinitionSearch[i]);
-                }
-            }
+            xpath.push('contains(simpleDefinition, "'+ search +'")');
         }
         if (document.getElementById("searchOptionLong").checked) {
-            var longDefinitionSearch = JSON.search(currentDictionary, '//words[contains(longDefinition, "' + search + '")]/name');
-            for (var i = 0; i < longDefinitionSearch.length; i++) {
-                if (searchResults.indexOf(longDefinitionSearch[i]) < 0) {
-                    searchResults.push(longDefinitionSearch[i]);
-                }
-            }
+            xpath.push('contains(longDefinition, "'+ search +'")');
         }
+        searchResults = JSON.search(currentDictionary, '//words['+ xpath.join(' or ') +']/name');
     }
     
     var dictionaryNameArea = document.getElementById("dictionaryName");
@@ -241,6 +228,9 @@ function ShowDictionary() {
         for (var i = 0; i < currentDictionary.words.length; i++) {
             if (filter == "" || (filter != "" && currentDictionary.words[i].partOfSpeech == filter)) {
                 if (search == "" || (search != "" && searchResults.indexOf(currentDictionary.words[i].name) >= 0)) {
+                    if (typeof currentDictionary.words[i].pronunciation === 'undefined') {
+                        currentDictionary.words[i].pronunciation = "";  //Account for new property
+                    }
                     dictionaryText += DictionaryEntry(i);
                 }
             }
@@ -272,9 +262,13 @@ function DictionaryEntry(itemIndex) {
     var searchRegEx = new RegExp(searchTerm, "gi");
 
     entryText += "<word>" + ((searchTerm != "" && document.getElementById("searchOptionWord").checked) ? currentDictionary.words[itemIndex].name.replace(searchRegEx, "<searchTerm>" + searchTerm + "</searchterm>") : currentDictionary.words[itemIndex].name) + "</word>";
-
+    
+    if (currentDictionary.words[itemIndex].pronunciation != "") {
+        entryText += "<pronunciation>" + markdown.toHTML(currentDictionary.words[itemIndex].pronunciation).replace("<p>","").replace("</p>","") + "</pronunciation>";
+    }
+    
     if (currentDictionary.words[itemIndex].partOfSpeech != "") {
-        entryText += " <partofspeech>" + currentDictionary.words[itemIndex].partOfSpeech + "</partofspeech>";
+        entryText += "<partofspeech>" + currentDictionary.words[itemIndex].partOfSpeech + "</partofspeech>";
     }
 
     entryText += "<br>";
@@ -462,14 +456,29 @@ function ImportDictionary() {
         // When it's loaded, process it
         reader.onloadend = function () {
             if (reader.result && reader.result.length) {
-                if (reader.result.substr(reader.result.length - 30) == '"dictionaryImportVersion":' + currentVersion + '}') {
+                var tmpDicitonary = JSON.parse(reader.result);
+                
+                if (tmpDicitonary.hasOwnProperty("name") && tmpDicitonary.hasOwnProperty("description") &&
+                    tmpDicitonary.hasOwnProperty("words") && tmpDicitonary.hasOwnProperty("settings"))
+                {
                     localStorage.setItem('dictionary', reader.result);
                     document.getElementById("importFile").value = "";
                     LoadDictionary();
                     HideSettings();
                 } else {
-                    alert("Uploaded file is not compatible.");
+                    var errorString = "File is missing:";
+                    if (!tmpDicitonary.hasOwnProperty("name"))
+                        errorString += " name";
+                    if (!tmpDicitonary.hasOwnProperty("description"))
+                        errorString += " description";
+                    if (!tmpDicitonary.hasOwnProperty("words"))
+                        errorString += " words";
+                    if (!tmpDicitonary.hasOwnProperty("settings"))
+                        errorString += " settings";
+                    alert("Uploaded file is not compatible.\n\n" + errorString);
                 }
+                
+                tmpDicitonary = null;
             } else {
                 alert("Upload Failed");
             }

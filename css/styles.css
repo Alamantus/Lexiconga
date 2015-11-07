@@ -41,6 +41,10 @@ label span {
     font-weight: bold;
 }
 
+label span .helperlink {
+    font-size: 10px;
+}
+
 label label {
     margin-left: 20px;
 }
@@ -128,9 +132,16 @@ word {
     font-size: 20px;
 }
 
+pronunciation {
+    font-size: 12px;
+    margin-left:10px;
+}
+
 partofspeech {
     font-style: italic;
+    font-weight: bold;
     font-size: 10px;
+    margin-left:10px;
 }
 
 simpledefinition {
