@@ -22,16 +22,16 @@
         <label><span>Word</span>
             <input type="text" id="word" />
         </label>
-        <label><span>Pronunciation <a class="helperlink" href="ipa_character_picker.html" target="_blank" title="IPA Character Picker backed up from http://r12a.github.io/pickers/ipa/">IPA</a></span>
+        <label><span>Pronunciation <a class="helperlink" href="./ipa_character_picker/" target="_blank" title="IPA Character Picker backed up from http://r12a.github.io/pickers/ipa/">IPA Characters</a></span>
             <input type="text" id="pronunciation" />
         </label>
         <label><span>Part of Speech</span>
             <select id="partOfSpeech"></select>
         </label>
-        <label><span>Equivalent Word</span>
+        <label><span>Equivalent Word(s)</span>
             <input type="text" id="simpleDefinition" />
         </label>
-        <label><span>Explanation</span>
+        <label><span>Explanation/Long Definition</span>
             <textarea id="longDefinition"></textarea>
         </label>
         <input type="hidden" id="editIndex" />
@@ -105,7 +105,12 @@
                             <input type="checkbox" id="dictionaryCaseSensitive" />
                         </label>
                     </label>
+                    <label class="inline">
+                        <span class="checkboxlabel">Sort by Equivalent Word</span>
+                        <input type="checkbox" id="dictionarySortByEquivalent" />
+                    </label> <span class="helperlink clickable" onclick='alert("By default, your dictionary is organized alphabetically by word. Checking this box will organize it by the \"Equivalent Word\" field instead");'>?</span>
                     </div>
+                    <br>
                     <label>
                         <span class="checkboxlabel">Dictionary is Complete</span>
                         <input type="checkbox" id="dictionaryIsComplete" />

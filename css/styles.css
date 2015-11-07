@@ -17,6 +17,10 @@ footer {
     max-height: 32px;   /* Update Dictionary Container's bottom margin to account for footer */
 }
 
+.inline {
+    display: inline !important;
+}
+
 #leftColumn {
     float: left;
 }
@@ -100,12 +104,16 @@ input[type=checkbox] {
     margin: 10px;
 }
 
-.clickable {
+.clickable, .helperlink {
+    display: inline;
     font-weight: bold;
-    cursor: pointer;
     padding: 4px;
     background: #dddddd;
     border-radius: 5px;
+}
+
+.clickable {
+    cursor: pointer;
 }
 
 #descriptionToggle {

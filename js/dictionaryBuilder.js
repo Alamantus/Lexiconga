@@ -9,6 +9,7 @@ var currentDictionary = {
         allowDuplicates: false,
         caseSensitive: false,
         partsOfSpeech: "Noun,Adjective,Verb,Adverb,Preposition,Pronoun,Conjunction",
+        sortByEquivalent: false,
         isComplete: false
     }
 }
@@ -35,10 +36,10 @@ window.onload = function () {
 }
 
 function AddWord() {
-    var word = htmlEntities(document.getElementById("word").value);
-    var pronunciation = htmlEntities(document.getElementById("pronunciation").value);
-    var partOfSpeech = htmlEntities(document.getElementById("partOfSpeech").value);
-    var simpleDefinition = htmlEntities(document.getElementById("simpleDefinition").value);
+    var word = htmlEntities(document.getElementById("word").value).trim();
+    var pronunciation = htmlEntities(document.getElementById("pronunciation").value).trim();
+    var partOfSpeech = htmlEntities(document.getElementById("partOfSpeech").value).trim();
+    var simpleDefinition = htmlEntities(document.getElementById("simpleDefinition").value).trim();
     var longDefinition = htmlEntities(document.getElementById("longDefinition").value);
     var editIndex = htmlEntities(document.getElementById("editIndex").value);
     var errorMessageArea = document.getElementById("errorMessage");
@@ -144,7 +145,11 @@ function EditWord(index) {
 }
 
 function SaveAndUpdateDictionary(keepFormContents) {
-    currentDictionary.words.sort(dynamicSort("name"));
+    if (!currentDictionary.settings.sortByEquivalent) {
+        currentDictionary.words.sort(dynamicSort("name"));
+    } else {
+        currentDictionary.words.sort(dynamicSort("simpleDefinition"));
+    }
     SaveDictionary();
     ShowDictionary();
     if (!keepFormContents) {
@@ -329,6 +334,7 @@ function ShowSettings() {
     document.getElementById("dictionaryPartsOfSpeechEdit").value = htmlEntitiesParse(currentDictionary.settings.partsOfSpeech);
     document.getElementById("dictionaryAllowDuplicates").checked = currentDictionary.settings.allowDuplicates;
     document.getElementById("dictionaryCaseSensitive").checked = currentDictionary.settings.caseSensitive;
+    document.getElementById("dictionarySortByEquivalent").checked = currentDictionary.settings.sortByEquivalent;
     document.getElementById("dictionaryIsComplete").checked = currentDictionary.settings.isComplete;
     document.getElementById("numberOfWordsInDictionary").innerHTML = currentDictionary.words.length.toString();
 }
@@ -344,6 +350,8 @@ function SaveSettings() {
     
     currentDictionary.settings.allowDuplicates = document.getElementById("dictionaryAllowDuplicates").checked;
     currentDictionary.settings.caseSensitive = document.getElementById("dictionaryCaseSensitive").checked;
+    
+    currentDictionary.settings.sortByEquivalent = document.getElementById("dictionarySortByEquivalent").checked;
     
     currentDictionary.settings.isComplete = document.getElementById("dictionaryIsComplete").checked;
     
