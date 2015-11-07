@@ -135,6 +135,11 @@ entry {
     margin-bottom: 5px;
 }
 
+.wordLink {
+    text-decoration: none;
+    float: right;
+}
+
 word {
     font-weight: bold;
     font-size: 20px;

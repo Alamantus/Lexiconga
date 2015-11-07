@@ -5,6 +5,7 @@ var currentDictionary = {
     name: "New",
     description: "A new dictionary.",
     words: [],
+    nextWordId: 1,
     settings: {
         allowDuplicates: false,
         caseSensitive: false,
@@ -87,7 +88,7 @@ function AddWord() {
                 }
             }
         } else {
-            currentDictionary.words.push({name: word, pronunciation: pronunciation, partOfSpeech: partOfSpeech, simpleDefinition: simpleDefinition, longDefinition: longDefinition});
+            currentDictionary.words.push({name: word, pronunciation: pronunciation, partOfSpeech: partOfSpeech, simpleDefinition: simpleDefinition, longDefinition: longDefinition, wordId: currentDictionary.nextWordId++});
             SaveAndUpdateDictionary(false);
         }
 
@@ -233,8 +234,11 @@ function ShowDictionary() {
         for (var i = 0; i < currentDictionary.words.length; i++) {
             if (filter == "" || (filter != "" && currentDictionary.words[i].partOfSpeech == filter)) {
                 if (search == "" || (search != "" && searchResults.indexOf(currentDictionary.words[i].name) >= 0)) {
-                    if (typeof currentDictionary.words[i].pronunciation === 'undefined') {
+                    if (!currentDictionary.words[i].hasOwnProperty("pronunciation")) {
                         currentDictionary.words[i].pronunciation = "";  //Account for new property
+                    }
+                    if (!currentDictionary.words[i].hasOwnProperty("wordId")) {
+                        currentDictionary.words[i].wordId = i + 1;  //Account for new property
                     }
                     dictionaryText += DictionaryEntry(i);
                 }
@@ -261,7 +265,7 @@ function ToggleDescription() {
 }
 
 function DictionaryEntry(itemIndex) {
-    var entryText = "<entry>";
+    var entryText = "<entry><a name='" + currentDictionary.words[itemIndex].wordId + "'></a><a href='#" + currentDictionary.words[itemIndex].wordId + "' class='wordLink clickable'>&#x1f517;</a>";
     
     var searchTerm = htmlEntities(document.getElementById("searchBox").value);
     var searchRegEx = new RegExp(searchTerm, "gi");
@@ -426,6 +430,10 @@ function LoadDictionary() {
             currentDictionary = JSON.parse(localStorage.getItem('dictionary'));
         }
         tmpDictionary = null;
+    }
+    
+    if (!currentDictionary.hasOwnProperty("nextWordId")) {
+        currentDictionary.nextWordId = currentDictionary.words.length + 1;
     }
     
     HideSettingsWhenComplete();
