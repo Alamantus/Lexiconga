@@ -22,15 +22,29 @@ var savedScroll = {
     y: 0
 }
 
+var aboutText, termsText, privacyText;
+
 window.onload = function () {
     LoadDictionary();
     ClearForm();
     
+    GetTextFile("README.md");
+    GetTextFile("TERMS.md");
+    GetTextFile("PRIVACY.md");
+}
+
+function GetTextFile(filename) {
     var readmeFileRequest = new XMLHttpRequest();
-    readmeFileRequest.open('GET', 'README.md');
+    readmeFileRequest.open('GET', filename);
     readmeFileRequest.onreadystatechange = function() {
         if (readmeFileRequest.readyState == 4 && readmeFileRequest.status == 200) {
-            document.getElementById("aboutText").innerHTML = markdown.toHTML(readmeFileRequest.responseText);
+            if (filename == "TERMS.md") {
+                termsText = markdown.toHTML(readmeFileRequest.responseText);
+            } else if (filename == "PRIVACY.md") {
+                privacyText = markdown.toHTML(readmeFileRequest.responseText);
+            } else {
+                aboutText = markdown.toHTML(readmeFileRequest.responseText);
+            }
         }
     }
     readmeFileRequest.send();

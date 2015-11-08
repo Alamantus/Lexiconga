@@ -1,0 +1,123 @@
+body {
+	background: #e6cfaa;
+}
+
+header {
+	height: 50px;
+	width: 100%;
+	background: #eacc9d;
+	margin-bottom: 3px;
+	border-bottom: 3px solid #e3bb7d;
+}
+
+#siteLogo {
+	display: block;
+	text-indent: -9999px;
+	width: 242px;
+	height: 48px;
+	background: url(../images/logo.svg);
+	background-size: 242px 48px;
+	float: left;
+}
+
+#aboutButton {
+	background: #dcb078;
+}
+
+#loginoutArea {
+	float: right;
+}
+
+#loginoutArea a {
+	color: #000000;
+	text-decoration: none;
+	font-size: 13px;
+}
+
+@media screen 
+and (min-device-width : 481px) {
+	#headerPadder {
+		padding: 1px;
+	}
+	
+	#loginoutArea {
+		margin: 16px;
+	}
+}
+
+/* Smartphones (portrait and landscape) ----------- */
+@media only screen 
+and (min-device-width : 320px) 
+and (max-device-width : 480px) {
+	#siteLogo {
+		display: block;
+		text-indent: -9999px;
+		width: 150px;
+		height: 30px;
+		background: url(../images/logo.svg);
+		background-size: 150px 30px;
+		float: left;
+	}
+	
+	#loginoutArea {
+		margin: 16px 8px;
+	}
+}
+
+#wordEntryForm {
+	background: #c05d5d;
+	border-color: #c08d8d #b00d0d #b00d0d #c08d8d;
+}
+
+input, textarea, select, option, button {
+	background: #efdfc0;
+}
+
+#dictionaryContainer {
+	background: #bd7251;
+	padding: 15px;
+	border: outset;
+	border-color: #d09b84 #915237 #915237 #d09b84;
+}
+
+#dictionaryDescription, .management, #settingsOptions, #infoPage {
+	background: #f2d5b2;
+}
+
+.management {
+	border-width: 2px;
+	border-color: #ebbe87 #f9ecdd #f9ecdd #ebbe87;
+}
+
+#dictionaryName {
+	text-shadow: 2px 2px 2px #915337;
+}
+
+#dictionaryDescription {
+	width: 90%;
+}
+
+#loginLink, #logoutLink,
+#descriptionToggle, #settingsButton,
+.deleteCancelButton, .deleteConfirmButton,
+#settingsScreenCloseButton, #infoScreenCloseButton {
+	background: #e0c19c;
+}
+
+entry {
+	background: #d7ad7d;
+	border-color: #e7cfb3 #c78b47 #c78b47 #e7cfb3;
+}
+
+.editButton {
+	background: #89cb89;
+}
+
+.deleteButton {
+	background: #cc8888;
+}
+
+footer {
+	background: #d69c42;
+	border-top: 3px solid #e3bb7d;
+}
