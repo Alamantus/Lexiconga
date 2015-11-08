@@ -49,6 +49,9 @@ The **Import Dictionary** form allows you to upload and view any previously-expo
 
 The **Empty Current Dictionary** should only be used if you want to completely start over from scratch. It will ask you to confirm that you want to delete, and if you confirm, your dictionary will be gone forever. If you have not exported your dictionary before emptying it, there will be absolutely no way to get it back. Please be careful with this!
 
+## Problems or Requests
+Please report any problems you come across to the [Dictionary Builder Issues page](https://github.com/Alamantus/DictionaryBuilder/issues). You can also submit enhancement requests to the same place if you have any requests for new features.
+
 ## Future Plans
 In the future, I'm planning to add the ability to save more than one dictionary at a time by allowing user accounts. Each account will be able to store a certain number of dictionaries and will be able to switch to any saved dictionary at any time without having to worry about exporting and importing .dict files. Along with this will also come the ability to easily share dictionaries if you want, but all dictionaries will be private by default.
 
