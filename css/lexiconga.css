@@ -100,7 +100,8 @@ input, textarea, select, option, button {
 #loginLink, #logoutLink,
 #descriptionToggle, #settingsButton,
 .deleteCancelButton, .deleteConfirmButton,
-#settingsScreenCloseButton, #infoScreenCloseButton {
+#settingsScreenCloseButton, #infoScreenCloseButton,
+.helperlink {
 	background: #e0c19c;
 }
 

@@ -1,10 +1,5 @@
-<<<<<<< HEAD
-## What is Dictionary Builder?
-Dictionary Builder is a tool intended to help you build constructed language (conlang) dictionaries/lexicons.
-=======
 ## What is Lexiconga Dictionary Builder?
 Lexiconga is a tool intended to help you build constructed language (conlang) dictionaries/lexicons.
->>>>>>> web
 
 You can enter words and definitions, and they will appear nicely formatted and in alphabetical order under your dictionary's title, where you can also sort them by part of speech. If the default parts of speech are not adequate for your conlang, you can change them to whatever parts of speech you might need. You can even enter a description or full set of language rules that you can toggle on and off below the dictionary's title!
 
@@ -27,7 +22,7 @@ After you enter a markdown-formatted description/rules in the Settings menu, you
 ### Entry Management
 After adding some words to your dictionary, you'll notice a link icon (&#x1f517;) and an "Edit" and "Delete" button attached to each entry.
 
-The link icon (&#x1f517;) is a link to that word. These links only work when there is nothing entered in the search box and no filters are set.
+The link icon (&#x1f517;) is a link to that word. These links only work when there is nothing entered in the search box and no filters are set. Also note that the links are only intended for linking within the same dictionary and will only work properly when your dictionary is loaded, so only share them with friends if your friends also have your dictionary imported.
 
 The **Edit** button will scroll to the top of the screen and fill the Word form with the current details of the word you edited. You can make any changes you want and click the "Edit Word" button. You will be asked to confirm your changes, and once you do, your word will be saved. If you do not want to make changes, just click the "Cancel" button.
 
@@ -58,11 +53,6 @@ The **Empty Current Dictionary** should only be used if you want to completely s
 In the future, I'm planning to add the ability to save more than one dictionary at a time by allowing user accounts. Each account will be able to store a certain number of dictionaries and will be able to switch to any saved dictionary at any time without having to worry about exporting and importing .dict files. Along with this will also come the ability to easily share dictionaries if you want, but all dictionaries will be private by default.
 
 ## Thanks!
-<<<<<<< HEAD
-I hope you enjoy Dictionary Builder and that it helps you build some awesome languages.
-
-- Robbie Antenesse
-=======
 I hope you enjoy Lexiconga and that it helps you build some awesome languages.
 
 –Robbie Antenesse
@@ -70,4 +60,3 @@ I hope you enjoy Lexiconga and that it helps you build some awesome languages.
 ### Libraries Used
 * [Markdown.js](https://github.com/evilstreak/markdown-js) by Dominic Baggott (a.k.a. evilstreak)
 * [Defiant.js](http://defiantjs.com) by Hakan Bilgin (a.k.a. hbi99)
->>>>>>> web
