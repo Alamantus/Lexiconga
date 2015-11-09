@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿<?php
+$notificationMessage = get_include_contents('notification.php');
+?>
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -25,6 +28,11 @@
         </div>
     </header>
     <contents>
+    <?php if ($notificationMessage) { ?>
+    <div id="notificationArea">
+        <?php echo $notificationMessage; ?>
+    </div>
+    <?php } ?>
     <div id="leftColumn">
     <form id="wordEntryForm">
         <label><span>Word</span>
@@ -171,3 +179,13 @@
     <?php include_once("php/google/analytics.php"); ?>
 </body>
 </html>
+<?php
+function get_include_contents($filename) {
+    if (is_file($filename)) {
+        ob_start();
+        include $filename;
+        return ob_get_clean();
+    }
+    return false;
+}
+?>

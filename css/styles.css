@@ -111,6 +111,15 @@ input[type=checkbox] {
     margin: 0 10px 0 0;
 }
 
+#notificationArea {
+    text-align:center;
+    padding:10px;
+    border-radius:5px;
+    margin:0 auto;
+    width:50%;
+    min-width:200px;
+}
+
 #dictionaryContainer {
     margin: 15px 0 36px 15px;    /* bottom margin must clear footer */
     width: 60%;
@@ -166,6 +175,9 @@ entry {
 .wordLink {
     text-decoration: none;
     float: right;
+    font-size: 13px;
+    padding: 2px;
+    line-height: 10px;
 }
 
 word {

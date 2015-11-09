@@ -73,6 +73,10 @@ input, textarea, select, option, button {
 	background: #efdfc0;
 }
 
+#notificationArea {
+    background:#c0c088;
+}
+
 #dictionaryContainer {
 	background: #bd7251;
 	padding: 15px;
