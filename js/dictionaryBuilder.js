@@ -256,7 +256,7 @@ function DictionaryEntry(itemIndex) {
     entryText += "<word>" + ((searchTerm != "" && document.getElementById("searchOptionWord").checked) ? currentDictionary.words[itemIndex].name.replace(searchRegEx, "<searchTerm>" + searchTerm + "</searchterm>") : currentDictionary.words[itemIndex].name) + "</word>";
     
     if (currentDictionary.words[itemIndex].pronunciation != "") {
-        entryText += "<pronunciation>" + markdown.toHTML(currentDictionary.words[itemIndex].pronunciation).replace("<p>","").replace("</p>","") + "</pronunciation>";
+        entryText += "<pronunciation>" + markdown.toHTML(htmlEntitiesParse(currentDictionary.words[itemIndex].pronunciation)).replace("<p>","").replace("</p>","") + "</pronunciation>";
     }
     
     if (currentDictionary.words[itemIndex].partOfSpeech != "") {

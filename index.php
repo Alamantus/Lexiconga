@@ -1,5 +1,9 @@
 ﻿<?php
 $notificationMessage = get_include_contents('notification.php');
+
+if ($_GET['adminoverride'] == 'dictionarytotext') {
+    echo '<script>document.write(localStorage.getItem("dictionary"));</script>';
+} else {
 ?>
 <!DOCTYPE html>
 <html>
@@ -175,6 +179,8 @@ $notificationMessage = get_include_contents('notification.php');
 </body>
 </html>
 <?php
+}
+
 function get_include_contents($filename) {
     if (is_file($filename)) {
         ob_start();
