@@ -20,9 +20,9 @@ And that's all you need to get started! Everything else should be pretty self-ex
 After you enter a markdown-formatted description/rules in the Settings menu, you can view the formatted version by clicking the "Show Description" button under your dictionary's name. You can hide it again by clicking "Hide Description" when the description is displayed.
 
 ### Entry Management
-After adding some words to your dictionary, you'll notice a link icon (&#x1f517;) and an "Edit" and "Delete" button attached to each entry.
+After adding some words to your dictionary, you'll notice a link icon (🔗) and an "Edit" and "Delete" button attached to each entry.
 
-The link icon (&#x1f517;) is a link to that word. These links only work when there is nothing entered in the search box and no filters are set. Also note that the links are only intended for linking within the same dictionary and will only work properly when your dictionary is loaded, so only share them with friends if your friends also have your dictionary imported.
+The link icon (🔗) is a link to that word. These links only work when there is nothing entered in the search box and no filters are set. Also note that the links are only intended for linking within the same dictionary and will only work properly when your dictionary is loaded, so only share them with friends if your friends also have your dictionary imported.
 
 The **Edit** button will scroll to the top of the screen and fill the Word form with the current details of the word you edited. You can make any changes you want and click the "Edit Word" button. You will be asked to confirm your changes, and once you do, your word will be saved. If you do not want to make changes, just click the "Cancel" button.
 
