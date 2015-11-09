@@ -299,6 +299,7 @@ searchTerm {
     border: 1px solid black;
 }
 
+#notificationCloseButton,
 #settingsButton, #settingsScreenCloseButton,
 #settingsSaveButtons button, #infoScreenCloseButton {
     float: right;

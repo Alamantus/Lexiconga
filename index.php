@@ -10,12 +10,6 @@ $notificationMessage = get_include_contents('notification.php');
     <title>Lexiconga Dictionary Builder</title>
 
     <link href="css/styles.css" rel="stylesheet" />
-    
-    <!-- Markdown Parser -->
-    <script src="js/markdown-js/markdown.min.js"></script>
-    
-    <!-- JSON Search -->
-    <script src="js/defiant-js/defiant-latest.min.js"></script>
     <link href="css/lexiconga.css" rel="stylesheet" />
 </head>
 <body>
@@ -30,6 +24,7 @@ $notificationMessage = get_include_contents('notification.php');
     <contents>
     <?php if ($notificationMessage) { ?>
     <div id="notificationArea">
+        <span id="notificationCloseButton" class="clickable" onclick="document.getElementById('notificationArea').style.display='none';">Close</span>
         <?php echo $notificationMessage; ?>
     </div>
     <?php } ?>
@@ -95,7 +90,7 @@ $notificationMessage = get_include_contents('notification.php');
     </div>
     
     <div id="rightColumn" class="googleads" style="float:right;width:20%;max-width:300px;min-width:200px;overflow:hidden;">
-        <?php include_once("php/google/adsense.php"); ?>
+        <?php if ($_GET['adminoverride'] != "noadsortracking") { include_once("php/google/adsense.php"); } ?>
     </div>
 
     <div id="settingsScreen" style="display:none;">
@@ -176,7 +171,7 @@ $notificationMessage = get_include_contents('notification.php');
     <!-- Main Script -->
     <script src="js/dictionaryBuilder.js"></script>
     <script src="js/ui.js"></script>
-    <?php include_once("php/google/analytics.php"); ?>
+    <?php if ($_GET['adminoverride'] != "noadsortracking") { include_once("php/google/analytics.php"); } ?>
 </body>
 </html>
 <?php

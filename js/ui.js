@@ -29,12 +29,20 @@ function ToggleDescription() {
     }
 }
 
-function ShowAbout() {
-    document.getElementById("aboutScreen").style.display = "block";
+function ShowInfo(text) {
+    if (text == "terms") {
+        document.getElementById("infoText").innerHTML = termsText;
+    } else if (text == "privacy") {
+        document.getElementById("infoText").innerHTML = privacyText;
+    } else {
+        document.getElementById("infoText").innerHTML = aboutText;
+    }
+    document.getElementById("infoPage").scrollTop = 0;
+    document.getElementById("infoScreen").style.display = "block";
 }
 
-function HideAbout() {
-    document.getElementById("aboutScreen").style.display = "none";
+function HideInfo() {
+    document.getElementById("infoScreen").style.display = "none";
 }
 
 function ToggleCaseSensitiveOption() {
