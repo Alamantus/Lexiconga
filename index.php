@@ -26,12 +26,10 @@ if ($_GET['adminoverride'] == 'dictionarytotext') {
         </div>
     </header>
     <contents>
-    <?php if ($notificationMessage) { ?>
-    <div id="notificationArea">
+    <div id="notificationArea" style="display:<?php echo (($notificationMessage) ? "block" : "none"); ?>;">
         <span id="notificationCloseButton" class="clickable" onclick="document.getElementById('notificationArea').style.display='none';">Close</span>
-        <?php echo $notificationMessage; ?>
+        <div id="notificationMessage"><?php echo $notificationMessage; ?></div>
     </div>
-    <?php } ?>
     <div id="leftColumn">
     <form id="wordEntryForm">
         <label><span>Word</span>

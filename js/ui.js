@@ -100,3 +100,15 @@ function HideSettings() {
     document.getElementById("settingsScreen").style.display = "none";
     document.getElementById("wordEntryForm").style.display = (currentDictionary.settings.isComplete) ? "none" : "block";
 }
+
+function NewWordNotification(word) {
+    var notificationArea = document.getElementById("notificationArea");
+    var notificationMessage = document.getElementById("notificationMessage");
+    var wordId = currentDictionary.nextWordId - 1;
+    notificationArea.style.display = "block";
+    notificationMessage.innerHTML = "New Word Added: <a href='#" + wordId.toString() + "'>" + word + "</a>";
+}
+
+function FocusAfterAddingNewWord() {
+    document.getElementById("word").focus();
+}

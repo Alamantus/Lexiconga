@@ -103,10 +103,11 @@ function AddWord() {
             }
         } else {
             currentDictionary.words.push({name: word, pronunciation: pronunciation, partOfSpeech: partOfSpeech, simpleDefinition: simpleDefinition, longDefinition: longDefinition, wordId: currentDictionary.nextWordId++});
+            FocusAfterAddingNewWord();
+            NewWordNotification(word);
             SaveAndUpdateDictionary(false);
         }
 
-        
         errorMessageArea.innerHTML = "";
     } else {
         if (word == "") {
