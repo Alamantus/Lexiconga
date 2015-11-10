@@ -344,7 +344,7 @@ function LoadDictionary() {
     
     HideSettingsWhenComplete();
     
-    ShowDictionary("");
+    ShowDictionary();
     
     SetPartsOfSpeech();
     
