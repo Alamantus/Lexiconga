@@ -55,7 +55,7 @@ function AddWord() {
                 updateConflictArea.style.display = "block";
                 updateConflictArea.innerHTML = "<span id='updateConflictMessage'>Do you really want to change the word \"" + currentDictionary.words[parseInt(editIndex)].name + "\" to what you have set above?</span>";
                 updateConflictArea.innerHTML += '<button type="button" id="updateConfirmButton" \
-                                                  onclick="UpdateWord(' + editIndex + ', \'' + word + '\', \'' + pronunciation + '\', \'' + partOfSpeech + '\', \'' + simpleDefinition + '\', \'' + longDefinition + '\'); \
+                                                  onclick="UpdateWord(' + editIndex + ', \'' + htmlEntities(word) + '\', \'' + htmlEntities(pronunciation) + '\', \'' + htmlEntities(partOfSpeech) + '\', \'' + htmlEntities(simpleDefinition) + '\', \'' + htmlEntities(longDefinition) + '\'); \
                                                   return false;">Yes, Update it</button>';
                 updateConflictArea.innerHTML += '<button type="button" id="updateCancelButton" onclick="CloseUpdateConflictArea(); return false;">No, Leave it</button>';
             } else {
@@ -76,7 +76,7 @@ function AddWord() {
                 }
                 updateConflictText += "<br>Do you want to update it to what you have set above?</span>";
                 updateConflictText += '<button type="button" id="updateConfirmButton" \
-                                                  onclick="UpdateWord(' + wordIndex + ', \'' + word + '\', \'' + pronunciation + '\', \'' + partOfSpeech + '\', \'' + simpleDefinition + '\', \'' + longDefinition + '\'); \
+                                                  onclick="UpdateWord(' + wordIndex + ', \'' + htmlEntities(word) + '\', \'' + htmlEntities(pronunciation) + '\', \'' + htmlEntities(partOfSpeech) + '\', \'' + htmlEntities(simpleDefinition) + '\', \'' + htmlEntities(longDefinition) + '\'); \
                                                   return false;">Yes, Update it</button>';
                 updateConflictText += ' <button type="button" id="updateCancelButton" onclick="CloseUpdateConflictArea(); return false;">No, Leave it</button>';
                 
@@ -216,7 +216,7 @@ function ShowDictionary() {
     if (currentDictionary.words.length > 0) {
         for (var i = 0; i < currentDictionary.words.length; i++) {
             if (filter == "" || (filter != "" && currentDictionary.words[i].partOfSpeech == filter)) {
-                if (search == "" || (search != "" && searchResults.indexOf(currentDictionary.words[i].name) >= 0)) {
+                if (search == "" || (search != "" && searchResults.indexOf(htmlEntities(currentDictionary.words[i].name)) >= 0)) {
                     if (!currentDictionary.words[i].hasOwnProperty("pronunciation")) {
                         currentDictionary.words[i].pronunciation = "";  //Account for new property
                     }
