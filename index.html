@@ -18,6 +18,11 @@
     <script src="js/ui.js"></script>
 </head>
 <body>
+    <contents>
+    <div id="notificationArea" style="display:none;">
+        <span id="notificationCloseButton" class="clickable" onclick="document.getElementById('notificationArea').style.display='none';">Close</span>
+        <div id="notificationMessage"></div>
+    </div>
     <div id="leftColumn">
     <form id="wordEntryForm">
         <label><span>Word</span>
@@ -139,13 +144,13 @@
     </div>
     
     <div id="aboutScreen" style="display:none;">
-	<div id="aboutBackgroundFade" onclick="HideAbout()"></div>
-	<div id="aboutPage">
-		<span id="aboutScreenCloseButton" class="clickable" onclick="HideAbout()">Close</span>
-		<div id="aboutText"></div>
-	</div>
-</div>
-    
+        <div id="aboutBackgroundFade" onclick="HideAbout()"></div>
+        <div id="aboutPage">
+            <span id="aboutScreenCloseButton" class="clickable" onclick="HideAbout()">Close</span>
+            <div id="aboutText"></div>
+        </div>
+    </div>
+    </contents>
     <footer>
         <span id="aboutButton" class="clickable" onclick="ShowAbout()">About Dictionary Builder</span>
         Dictionary Builder only guaranteed to work with most up-to-date HTML5 browsers.
