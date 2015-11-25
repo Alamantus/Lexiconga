@@ -28,9 +28,8 @@ function Get_User_Id($email) {
     
     if ($users && num_rows($users) > 0) {
         if (num_rows($users) === 1) {
-            while($user = fetch_assoc($users)) {
-                return $user["id"];
-            }
+            $user = fetch($users);
+            return $user["id"];
         } else {
             return "More than one user id returned!";
         }
@@ -45,9 +44,8 @@ function Get_Public_Name($id) {
     
     if ($users && num_rows($users) > 0) {
         if (num_rows($users) === 1) {
-            while($user = fetch_assoc($users)) {
-                return $user["public_name"];
-            }
+            $user = fetch($users);
+            return $user["public_name"];
         } else {
             return "More than one public name returned!";
         }

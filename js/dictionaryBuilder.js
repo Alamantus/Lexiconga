@@ -16,133 +16,16 @@ var currentDictionary = {
         partsOfSpeech: "Noun,Adjective,Verb,Adverb,Preposition,Pronoun,Conjunction",
         sortByEquivalent: false,
         isComplete: false
-    }
+    },
+    externalID: 0
 }
 
 var defaultDictionaryJSON = JSON.stringify(currentDictionary);  //Saves a stringifyed default dictionary.
+var previousDictionary = {};
 
 var savedScroll = {
     x: 0,
     y: 0
-}
-
-window.onload = function () {
-    LoadDictionary();
-    ClearForm();
-    
-    GetTextFile("README.md");
-    GetTextFile("TERMS.md");
-    GetTextFile("PRIVACY.md");
-}
-
-var aboutText, termsText, privacyText, loginForm, createAccountForm;
-
-loginForm = '<div class="settingsCol"><form id="loginForm" method="post" action="?login"> \
-                 <h2>Log In</h2> \
-                 <label><span>Email</span> \
-                     <input type="email" id="loginEmailField" name="email" /> \
-                 </label> \
-                 <label><span>Password</span> \
-                     <input type="password" id="loginPasswordField" name="password" /> \
-                 </label> \
-                 <div id="loginError" style="font-weight:bold;color:red;"></div> \
-                 <button type="submit" id="loginSubmitButton" onclick="ValidateLogin(); return false;">Log In</button> \
-             </form></div> \
-             <div class="settingsCol"><form id="createAccountForm" method="post" action="?createaccount"> \
-                 <h2>Create a New Account</h2> \
-                 <p>Creating an account allows you to save and switch between up to 10 dictionaries and access them from any device for free! Plus if you allow us to send you emails, you\'ll be the first to hear about any new features that get added or if any of our policies change for any  reason.</p> \
-                 <label><span>Email</span> \
-                     <input type="email" id="createAccountEmailField" name="email" /> \
-                 </label> \
-                 <label><span>Password</span> \
-                     <input type="password" id="createAccountPasswordField" name="password" /> \
-                 </label> \
-                 <label><span>Confirm Password</span> \
-                     <input type="password" id="createAccountPasswordConfirmField" name="confirmpassword" /> \
-                 </label> \
-                 <label><span>Public Name <span class="clickable" onclick="alert(\'This is the name we greet you with. It is also the name displayed if you ever decide to share any of your dictionaries.\n\nNote: this is not a username, and as such may not be unique. Use something people will recognize you as to differentiate from other people who might use the same name!\')">?</span></span> \
-                     <input type="text" id="createAccountPublicNameField" name="publicname" /> \
-                 </label> \
-                 <label><b>Allow Emails</b> \
-                     <input type="checkbox" id="createAccountAllowEmailsField" name="allowemails" checked="checked" /> \
-                 </label> \
-                 <div id="createAccountError" style="font-weight:bold;color:red;"></div> \
-                 <button type="submit" id="createAccountSubmitButton" onclick="ValidateCreateAccount(); return false;">Create Account</button> \
-             </form></div>';
-
-function ValidateLogin() {
-    var errorMessage = document.getElementById("loginError");
-    var emailValue = document.getElementById("loginEmailField").value;
-    var passwordValue = document.getElementById("loginPasswordField").value;
-      
-    if (emailValue == "") {
-        errorMessage.innerHTML = "Email cannot be blank!";
-        return false;
-    } else if (!(/[^\s@]+@[^\s@]+\.[^\s@]+/.test(emailValue))) {
-        errorMessage.innerHTML = "Your email address looks fake. Email addresses look like this: name@email.com."
-        return false;
-    } else if (passwordValue == "") {
-        errorMessage.innerHTML = "Password cannot be blank!";
-        return false;
-    } else {
-        document.getElementById("loginForm").submit();
-    }
-}
-
-function ValidateCreateAccount() {
-    var errorMessage = document.getElementById("createAccountError");
-    var emailValue = document.getElementById("createAccountEmailField").value;
-    var passwordValue = document.getElementById("createAccountPasswordField").value;
-    var passwordConfirmValue = document.getElementById("createAccountPasswordConfirmField").value;
-    var publicNameValue = document.getElementById("createAccountPublicNameField").value;
-      
-    if (emailValue == "") {
-        errorMessage.innerHTML = "Email cannot be blank!";
-        return false;
-    } else if (!(/[^\s@]+@[^\s@]+\.[^\s@]+/.test(emailValue))) {
-        errorMessage.innerHTML = "Your email address looks fake. Email addresses look like this: name@email.com."
-        return false;
-    } else if (passwordValue == "") {
-        errorMessage.innerHTML = "Password cannot be blank!";
-        return false;
-    } else if (passwordValue != passwordConfirmValue) {
-        errorMessage.innerHTML = "Passwords do not match!";
-        return false;
-    } else if (publicNameValue == "") {
-        errorMessage.innerHTML = "Public Name cannot be blank!";
-        return false;
-    } else {
-        var emailCheck = new XMLHttpRequest();
-        emailCheck.open('GET', "php/ajax_createaccountemailcheck.php?email=" + emailValue);
-        emailCheck.onreadystatechange = function() {
-            if (emailCheck.readyState == 4 && emailCheck.status == 200) {
-                if (emailCheck.responseText != "ok") {
-                    errorMessage.innerHTML = "The email address entered is already being used. Try logging in or using a different email address instead.";
-                    return false;
-                } else {
-                    document.getElementById("createAccountForm").submit();
-                }
-            }
-        }
-        emailCheck.send();
-    }
-}
-
-function GetTextFile(filename) {
-    var readmeFileRequest = new XMLHttpRequest();
-    readmeFileRequest.open('GET', filename);
-    readmeFileRequest.onreadystatechange = function() {
-        if (readmeFileRequest.readyState == 4 && readmeFileRequest.status == 200) {
-            if (filename == "TERMS.md") {
-                termsText = markdown.toHTML(readmeFileRequest.responseText);
-            } else if (filename == "PRIVACY.md") {
-                privacyText = markdown.toHTML(readmeFileRequest.responseText);
-            } else {
-                aboutText = markdown.toHTML(readmeFileRequest.responseText);
-            }
-        }
-    }
-    readmeFileRequest.send();
 }
 
 function AddWord() {
@@ -261,7 +144,7 @@ function SaveAndUpdateDictionary(keepFormContents) {
     } else {
         currentDictionary.words.sort(dynamicSort("simpleDefinition"));
     }
-    SaveDictionary();
+    SaveDictionary(true, true);
     ShowDictionary();
     if (!keepFormContents) {
         ClearForm();
@@ -402,6 +285,7 @@ function SaveSettings() {
     currentDictionary.description = htmlEntities(document.getElementById("dictionaryDescriptionEdit").value);
     
     CheckForPartsOfSpeechChange();
+    LoadUserDictionaries();
     
     currentDictionary.settings.allowDuplicates = document.getElementById("dictionaryAllowDuplicates").checked;
     currentDictionary.settings.caseSensitive = document.getElementById("dictionaryCaseSensitive").checked;
@@ -433,11 +317,11 @@ function EmptyWholeDictionary() {
     }
 }
 
-function SaveDictionary() {
+function SaveDictionary(sendToDatabase, sendWords) {
     localStorage.setItem('dictionary', JSON.stringify(currentDictionary));
     
     //Always save local copy of current dictionary, but if logged in also send to database.
-    if (currentUser > 0 && sendToDatabase) {
+    if (sendToDatabase) {
         sendWords = (typeof sendWords !== 'undefined') ? sendWords : false;
         SendDictionary(sendWords);
     }
@@ -504,6 +388,9 @@ function DataToSend(doSendWords) {
         if (currentDictionary.settings.partsOfSpeech != previousDictionary.partsOfSpeech) {
             data += ((data=="") ? "" : "&") + "partsofspeech=" + encodeURIComponent(currentDictionary.settings.partsOfSpeech);
         }
+        if (currentDictionary.settings.sortByEquivalent != previousDictionary.sortByEquivalent) {
+            data += ((data=="") ? "" : "&") + "sortbyequivalent=" + ((currentDictionary.settings.sortByEquivalent) ? "1" : "0");
+        }
         if (currentDictionary.settings.isComplete != previousDictionary.isComplete) {
             data += ((data=="") ? "" : "&") + "iscomplete=" + ((currentDictionary.settings.isComplete) ? "1" : "0");
         }
@@ -514,32 +401,26 @@ function DataToSend(doSendWords) {
 
 function LoadDictionary() {
     LoadLocalDictionary();
-    if (currentUser > 0) {  //If logged in, load the dictionary from database
-        var loadDictionary = new XMLHttpRequest();
-        loadDictionary.open('GET', "php/ajax_dictionarymanagement.php?action=load");
-        loadDictionary.onreadystatechange = function() {
-            if (loadDictionary.readyState == 4 && loadDictionary.status == 200) {
-                if (loadDictionary.responseText == "no dictionaries") {
-                    SendDictionary();
-                    console.log(loadDictionary.responseText);
-                } else if (loadDictionary.responseText == "could not load" ||
-                           loadDictionary.responseText == "not signed in" ||
-                           loadDictionary.responseText == "no info provided") {
-                    console.log(loadDictionary.responseText);
-                } else {
-                    currentDictionary = JSON.parse(loadDictionary.responseText);
-                    SaveDictionary(false, false);
-                    ProcessLoad();
-                }
-                return true;
+    var loadDictionary = new XMLHttpRequest();
+    loadDictionary.open('GET', "php/ajax_dictionarymanagement.php?action=load");
+    loadDictionary.onreadystatechange = function() {
+        if (loadDictionary.readyState == 4 && loadDictionary.status == 200) {
+            if (loadDictionary.responseText == "no dictionaries") {
+                SendDictionary(false);
+                console.log(loadDictionary.responseText);
+            } else if (loadDictionary.responseText.length < 20) {
+                console.log(loadDictionary.responseText);
             } else {
-                return false;
+                currentDictionary = JSON.parse(loadDictionary.responseText);
+                SaveDictionary(false, false);
+                ProcessLoad();
             }
+            return true;
+        } else {
+            return false;
         }
-        loadDictionary.send();
-    } else {
-        ProcessLoad();
     }
+    loadDictionary.send();
 }
 
 function LoadLocalDictionary() {
@@ -579,6 +460,7 @@ function SavePreviousDictionary () {
         allowDuplicates: currentDictionary.settings.allowDuplicates,
         caseSensitive: currentDictionary.settings.caseSensitive,
         partsOfSpeech: currentDictionary.settings.partsOfSpeech,
+        sortByEquivalent: currentDictionary.settings.sortByEquivalent,
         isComplete: currentDictionary.settings.isComplete
     };
 }

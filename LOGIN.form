@@ -1,0 +1,32 @@
+<div class="settingsCol"><form id="loginForm" method="post" action="?login">
+    <h2>Log In</h2>
+    <label><span>Email</span>
+        <input type="email" id="loginEmailField" name="email" />
+    </label>
+    <label><span>Password</span>
+        <input type="password" id="loginPasswordField" name="password" />
+    </label>
+    <div id="loginError" style="font-weight:bold;color:red;"></div>
+    <button type="submit" id="loginSubmitButton" onclick="ValidateLogin(); return false;">Log In</button>
+</form></div>
+<div class="settingsCol"><form id="createAccountForm" method="post" action="?createaccount">
+    <h2>Create a New Account</h2>
+    <p>Creating an account allows you to save and switch between up to 10 dictionaries and access them from any device for free! Plus if you allow us to send you emails, you'll be the first to hear about any new features that get added or if any of our policies change for any  reason.</p>
+    <label><span>Email</span>
+        <input type="email" id="createAccountEmailField" name="email" />
+    </label>
+    <label><span>Password</span>
+        <input type="password" id="createAccountPasswordField" name="password" />
+    </label>
+    <label><span>Confirm Password</span>
+        <input type="password" id="createAccountPasswordConfirmField" name="confirmpassword" />
+    </label>
+    <label><span>Public Name <span class="clickable" onclick="alert(\'This is the name we greet you with. It is also the name displayed if you ever decide to share any of your dictionaries.\n\nNote: this is not a username, and as such may not be unique. Use something people will recognize you as to differentiate from other people who might use the same name!\')">?</span></span>
+        <input type="text" id="createAccountPublicNameField" name="publicname" />
+    </label>
+    <label><b>Allow Emails</b>
+        <input type="checkbox" id="createAccountAllowEmailsField" name="allowemails" checked="checked" />
+    </label>
+    <div id="createAccountError" style="font-weight:bold;color:red;"></div>
+    <button type="submit" id="createAccountSubmitButton" onclick="ValidateCreateAccount(); return false;">Create Account</button>
+</form></div>

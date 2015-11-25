@@ -27,13 +27,15 @@ function Get_Dictionaries() {
             
             if ($dictionaries) {
                 if (num_rows($dictionaries) > 0) {
-                    while ($dict = fetch_assoc($dictionaries)) {
+                    $list = "";
+                    $_SESSION['dictionaries'] = [];
+                    while ($dict = fetch($dictionaries)) {
                         $_SESSION['dictionaries'][] = $dict['id'];  // Save a list of all dictionaries user has.
                         //list for the switch dictionaries dropdown.
-                        $list = $dict['id'] . '_IDNAMESEPARATOR_' . $dict['name'] . '_DICTIONARYSEPARATOR_';
-                        echo $list;
-                        return true;
+                        $list .= $dict['id'] . '_IDNAMESEPARATOR_' . $dict['name'] . '_DICTIONARYSEPARATOR_';
                     }
+                    echo $list;
+                    return true;
                 } else {
                     echo "no dictionaries";
                 }
@@ -58,7 +60,7 @@ function Load_Current_Dictionary() {
         if ($dictionary) {
             if (num_rows($dictionary) > 0) {
                 if (num_rows($dictionary) === 1) {
-                    while ($dict = fetch_assoc($dictionary)) {
+                    while ($dict = fetch($dictionary)) {
                         $_SESSION['dictionary'] = $dict['id'];
                         $json = '{"name":"' . $dict['name'] . '",';
                         $json .= '"description":"' . $dict['description'] . '",';
@@ -68,9 +70,9 @@ function Load_Current_Dictionary() {
                         $json .= '"allowDuplicates":' . (($dict['allow_duplicates'] == 1) ? 'true' : 'false') . ',';
                         $json .= '"caseSensitive":' . (($dict['case_sensitive'] == 1) ? 'true' : 'false') . ',';
                         $json .= '"partsOfSpeech":"' . $dict['parts_of_speech'] . '",';
+                        $json .= '"sortByEquivalent":' . (($dict['sort_by_equivalent'] == 1) ? 'true' : 'false') . ',';
                         $json .= '"isComplete":' . (($dict['is_complete'] == 1) ? 'true' : 'false') . '},';
-                        $json .= '"externalID":' . $dict['id'] . ',';
-                        $json .= '"fileIdentifier":"Lexiconga Dictionary"}';
+                        $json .= '"externalID":' . $dict['id'] . '}';
                         echo $json;
                         return true;
                     }
@@ -91,18 +93,25 @@ function Load_Current_Dictionary() {
 
 function Save_Current_DictionaryAsNew() {
     if (isset($_SESSION['user'])) {
-        $conn = connection();
-        $query = "INSERT INTO `dictionaries`(`user`, `is_current`, `name`, `description`, `words`, `allow_duplicates`, `case_sensitive`, `parts_of_speech`, `is_complete`, `is_public`) ";
-        $query .= "VALUES (" . $_SESSION['user'] . ",1,'" . $_POST['name'] . "','" . $_POST['description'] . "','" . $_POST['words'] . "'," . $_POST['allowduplicates'] . "," . $_POST['casesensitive'] . ",'" . $_POST['partsofspeech'] . "'," . $_POST['iscomplete'] . "," . $_POST['ispublic'] . ")";
-        $update = mysqli_query($conn, $query);
+        $dbconnection = new PDO('mysql:host=' . DATABASE_SERVERNAME . ';dbname=' . DATABASE_NAME . ';charset=utf8', DATABASE_USERNAME, DATABASE_PASSWORD);
+        $dbconnection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $dbconnection->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+        $dbconnection->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+
+        $query = "INSERT INTO `dictionaries`(`user`, `is_current`, `name`, `description`, `words`, `allow_duplicates`, `case_sensitive`, `parts_of_speech`, `sort_by_equivalent`, `is_complete`, `is_public`) ";
+        $query .= "VALUES (" . $_SESSION['user'] . ",1,'" . $_POST['name'] . "','" . $_POST['description'] . "','" . $_POST['words'] . "'," . $_POST['allowduplicates'] . "," . $_POST['casesensitive'] . ",'" . $_POST['partsofspeech'] . "'," . $_POST['sortbyequivalent'] . "," . $_POST['iscomplete'] . "," . $_POST['ispublic'] . ")";
         
-        if ($update) {
-            $_SESSION['dictionary'] = mysqli_insert_id($conn);
+        try {
+            $update = $dbconnection->prepare($query);
+            $update->execute();
+            $_SESSION['dictionary'] = $conn->lastInsertId;
             $_SESSION['dictionaries'][] = $_SESSION['dictionary'];  //Add new id to valid dictionaries. 
             echo $_SESSION['dictionary'];
             return true;
-        } else {
-            echo "could not update:\n" . mysqli_error($conn) . "\n" . $query;
+        }
+        catch (PDOException $ex) {
+            $errorMessage = $dbconnection->errorInfo();
+            echo "could not update:\n" . $errorMessage[2] . "\n" . $query;
         }
     } else {
         echo "no info provided";
@@ -131,6 +140,9 @@ function Update_Current_Dictionary() {
         }
         if (isset($_POST['partsofspeech'])) {
             $query .= "`parts_of_speech`='" . $_POST['partsofspeech'] . "', ";
+        }
+        if (isset($_POST['sortbyequivalent'])) {
+            $query .= "`sort_by_equivalent`='" . $_POST['sortbyequivalent'] . "', ";
         }
         if (isset($_POST['iscomplete'])) {
             $query .= "`is_complete`=" . $_POST['iscomplete'] . ", ";
@@ -161,7 +173,7 @@ function Switch_Current_Dictionary() {
             //Clear is_current from all user's dictionaries and then update the one they chose, only if the chosen dictionary is valid.
             $query = "UPDATE `dictionaries` SET `is_current`=0 WHERE `user`=" . $_SESSION['user'] . ";";
             $query .= "UPDATE `dictionaries` SET `is_current`=1 WHERE `id`=" . $_POST['newdictionaryid'] . " AND `user`=" . $_SESSION['user'] . ";";
-            $update = multi_query($query);
+            $update = query($query);
             
             if ($update) {
                 Load_Current_Dictionary();
