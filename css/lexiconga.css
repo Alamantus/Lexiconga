@@ -73,6 +73,10 @@ input, textarea, select, option, button {
 	background: #efdfc0;
 }
 
+#notificationArea {
+    background:#c0c088;
+}
+
 #dictionaryContainer {
 	background: #bd7251;
 	padding: 15px;
@@ -100,7 +104,8 @@ input, textarea, select, option, button {
 #loginLink, #logoutLink,
 #descriptionToggle, #settingsButton,
 .deleteCancelButton, .deleteConfirmButton,
-#settingsScreenCloseButton, #infoScreenCloseButton {
+#settingsScreenCloseButton, #infoScreenCloseButton,
+.helperlink {
 	background: #e0c19c;
 }
 

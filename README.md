@@ -11,8 +11,8 @@ It accepts Unicode characters so you can utilize whatever typable characters you
 When you have a brand new, empty dictionary, the first thing you'll probably want to do is change the title to whatever your conlang is called and add at least a little description of what your language is like or how to use it. You can do this by clicking on the Settings button, which will open up the settings screen. Here, you will find all the fields you need to update your dictionary's Name and Description/Rules. The Description/Rules text area uses [Markdown](https://help.github.com/articles/markdown-basics/) to format any text you include, so brush up on how to do basic things in Markdown before you get started _(NOTE: a line break is done by adding 2 or more spaces to the end of the line and then going to the next line!)_. After this, make sure that the Parts of Speech are adequate for your language _(see below for more information about this)_. Update these fields to what you want them to say and click the "Save" button to keep the Settings menu open, or the "Save and Close" button to close the menu and start adding words!
 
 To add words, just use the form on the top left side of the window. Hopefully the form is self-explanatory, but if not, here's a little guide:  
-Enter the word in your language in the "Word" field, an equivalent word or short definition in the "Equivalent Word" field, a longer definition or fuller explanation of the word using [Markdown](https://help.github.com/articles/markdown-basics/) in the "Explanation" text area, choose a part of speech, and click "Add Word". Your word will instantly appear in your dictionary under the dictionary's name! You can add as many words as you want this way.  
-The only things to remember while adding new words is that the minimum information that you can enter is the Word itself and either the Equivalent Word OR the Explanation. You can have both of these or just one, but you need at least one. If you do not want to use the Parts of Speech, you do not need to, though you will miss out on the handy Filter feature of the dictionary.
+Enter the word in your language in the "Word" field, the pronunciation of the word in the "Pronunciation" field, choose a Part of Speech, enter an equivalent word/short definition in the "Equivalent Word(s)" field and/or a longer definition or fuller explanation of the word using [Markdown](https://help.github.com/articles/markdown-basics/) in the "Explanation/Long Definition" text area, and click "Add Word". Your word will instantly appear in your dictionary under the dictionary's name! You can add as many words as you want this way.  
+The only things to remember while adding new words is that the minimum information that you can enter is the Word itself and either the Equivalent Word OR the Explanation. You can have both of these or just one, but you need at least one. If you do not want to use the Pronunciation or Parts of Speech then you do not need to, though if you leave out Part of Speech, you will miss out on the handy Filter feature of the dictionary.
 
 And that's all you need to get started! Everything else should be pretty self-explanatory, but a full explanation of Dictionary Builder and all of its functions continues below.
 
@@ -20,7 +20,9 @@ And that's all you need to get started! Everything else should be pretty self-ex
 After you enter a markdown-formatted description/rules in the Settings menu, you can view the formatted version by clicking the "Show Description" button under your dictionary's name. You can hide it again by clicking "Hide Description" when the description is displayed.
 
 ### Entry Management
-After adding some words to your dictionary, you'll notice an "Edit" and "Delete" button attached to each entry.
+After adding some words to your dictionary, you'll notice a link icon (🔗) and an "Edit" and "Delete" button attached to each entry.
+
+The link icon (🔗) is a link to that word. These links only work when there is nothing entered in the search box and no filters are set. Also note that the links are only intended for linking within the same dictionary and will only work properly when your dictionary is loaded, so only share them with friends if your friends also have your dictionary imported.
 
 The **Edit** button will scroll to the top of the screen and fill the Word form with the current details of the word you edited. You can make any changes you want and click the "Edit Word" button. You will be asked to confirm your changes, and once you do, your word will be saved. If you do not want to make changes, just click the "Cancel" button.
 
@@ -46,6 +48,9 @@ The **Export Current Dictionary** button will immediately do exactly that. Your 
 The **Import Dictionary** form allows you to upload and view any previously-exported ".dict" files. After selecting your ".dict" file, click the "Import" button to _overwrite your current dictionary_ and view the imported one. Again, please note that this import process will _**permanently overwrite your current dictionary**_, so please be sure to export your dictionary _before_ you import a new one.
 
 The **Empty Current Dictionary** should only be used if you want to completely start over from scratch. It will ask you to confirm that you want to delete, and if you confirm, your dictionary will be gone forever. If you have not exported your dictionary before emptying it, there will be absolutely no way to get it back. Please be careful with this!
+
+## Problems or Requests
+Please report any problems you come across to the [Dictionary Builder Issues page](https://github.com/Alamantus/DictionaryBuilder/issues). You can also submit enhancement requests to the same place if you have any requests for new features.
 
 ## Future Plans
 In the future, I'm planning to add the ability to save more than one dictionary at a time by allowing user accounts. Each account will be able to store a certain number of dictionaries and will be able to switch to any saved dictionary at any time without having to worry about exporting and importing .dict files. Along with this will also come the ability to easily share dictionaries if you want, but all dictionaries will be private by default.

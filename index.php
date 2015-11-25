@@ -110,24 +110,26 @@ elseif (isset($_GET['loggedout']) && $current_user <= 0) {
         </div>
     </header>
     <contents>
-    <?php if ($notificationMessage != "") { ?>
-        <div id="notificationArea" style="text-align:center;background:#c0c088;padding:10px;border-radius:5px;margin:0 auto;width:50%;min-width:200px;">
-            <?php echo $notificationMessage; ?>
-        </div>
-    <?php } ?>
+    <div id="notificationArea" style="display:<?php echo (($notificationMessage) ? "block" : "none"); ?>;">
+        <span id="notificationCloseButton" class="clickable" onclick="document.getElementById('notificationArea').style.display='none';">Close</span>
+        <div id="notificationMessage"><?php echo $notificationMessage; ?></div>
+    </div>
     <div id="leftColumn">
     <form id="wordEntryForm">
         <label><span>Word</span>
             <input type="text" id="word" />
         </label>
-        <label><span>Equivalent Word</span>
-            <input type="text" id="simpleDefinition" />
-        </label>
-        <label><span>Explanation</span>
-            <textarea id="longDefinition"></textarea>
+        <label><span>Pronunciation <a class="helperlink" href="./ipa_character_picker/" target="_blank" title="IPA Character Picker backed up from http://r12a.github.io/pickers/ipa/">IPA Characters</a></span>
+            <input type="text" id="pronunciation" />
         </label>
         <label><span>Part of Speech</span>
             <select id="partOfSpeech"></select>
+        </label>
+        <label><span>Equivalent Word(s)</span>
+            <input type="text" id="simpleDefinition" />
+        </label>
+        <label><span>Explanation/Long Definition</span>
+            <textarea id="longDefinition"></textarea>
         </label>
         <input type="hidden" id="editIndex" />
         <span id="errorMessage"></span>
@@ -174,7 +176,7 @@ elseif (isset($_GET['loggedout']) && $current_user <= 0) {
     </div>
     
     <div id="rightColumn" class="googleads" style="float:right;width:20%;max-width:300px;min-width:200px;overflow:hidden;">
-        <?php //include_once("php/google/adsense.php"); ?>
+        <?php if ($_GET['adminoverride'] != "noadsortracking") { include_once("php/google/adsense.php"); } ?>
     </div>
 
     <div id="settingsScreen" style="display:none;">
@@ -204,7 +206,12 @@ elseif (isset($_GET['loggedout']) && $current_user <= 0) {
                             <input type="checkbox" id="dictionaryCaseSensitive" />
                         </label>
                     </label>
+                    <label class="inline">
+                        <span class="checkboxlabel">Sort by Equivalent Word</span>
+                        <input type="checkbox" id="dictionarySortByEquivalent" />
+                    </label> <span class="helperlink clickable" onclick='alert("By default, your dictionary is organized alphabetically by word. Checking this box will organize it by the \"Equivalent Word\" field instead");'>?</span>
                     </div>
+                    <br>
                     <label>
                         <span class="checkboxlabel">Dictionary is Complete</span>
                         <input type="checkbox" id="dictionaryIsComplete" />
@@ -218,9 +225,9 @@ elseif (isset($_GET['loggedout']) && $current_user <= 0) {
                     <label>
                         <span>Import Dictionary</span>
                         <input type="file" id="importFile" />
-                        <button type="button" onclick="ConfirmImportDictionary(); return false;">Import</button>
+                        <button type="button" onclick="ImportDictionary(); return false;">Import</button>
                     </label>
-                    <label><button type="button" onclick="ConfirmEmptyWholeDictionary()" style="cursor:pointer;">Empty Current Dictionary</button></label>
+                    <label><button type="button" onclick="EmptyWholeDictionary()" style="cursor:pointer;">Empty Current Dictionary</button></label>
                 </div>
                 <div id="settingsSaveButtons">
                     <span id="settingsErrorMessage"></span><br>
@@ -240,7 +247,7 @@ elseif (isset($_GET['loggedout']) && $current_user <= 0) {
     </div>
     </contents>
     <footer>
-        Dictionary Builder only guaranteed to work with most up-to-date HTML5 browsers. <span class="clickable" onclick="ShowInfo('terms')" style="font-size:12px;">Terms</span> <span class="clickable" onclick="ShowInfo('privacy')" style="font-size:12px;">Privacy</span>
+        Dictionary Builder only guaranteed to work with most up-to-date HTML5 browsers. <a href="https://github.com/Alamantus/DictionaryBuilder/issues" target="_blank">Report a Problem</a> | <span class="clickable" onclick="ShowInfo('terms')" style="font-size:12px;">Terms</span> <span class="clickable" onclick="ShowInfo('privacy')" style="font-size:12px;">Privacy</span>
     </footer>
     
     <!-- Markdown Parser -->
@@ -249,13 +256,19 @@ elseif (isset($_GET['loggedout']) && $current_user <= 0) {
     <script src="js/defiant-js/defiant-latest.min.js"></script>
     <!-- Main Script -->
     <script src="js/dictionaryBuilder.js"></script>
-    <script>
-    currentUser = <?php echo $current_user; ?>;
-    publicName = "<?php echo Get_Public_Name($current_user); ?>";
-    <?php if (isset($_GET['loggedout']) && $current_user <= 0) { ?>
-        EmptyWholeDictionary();
-    <?php } ?>
-    </script>
-    <?php //include_once("php/google/analytics.php"); ?>
+    <script src="js/ui.js"></script>
+    <?php if ($_GET['adminoverride'] != "noadsortracking") { include_once("php/google/analytics.php"); } ?>
 </body>
 </html>
+<?php
+}
+
+function get_include_contents($filename) {
+    if (is_file($filename)) {
+        ob_start();
+        include $filename;
+        return ob_get_clean();
+    }
+    return false;
+}
+?>

@@ -22,6 +22,10 @@ footer {
     max-height: 32px;   /* Update Dictionary Container's bottom margin to account for footer */
 }
 
+.inline {
+    display: inline !important;
+}
+
 /* Smartphones (portrait and landscape) ----------- */
 @media only screen 
 and (min-device-width : 320px) 
@@ -61,6 +65,10 @@ label {
 label span {
     display: block;
     font-weight: bold;
+}
+
+label span .helperlink {
+    font-size: 10px;
 }
 
 label label {
@@ -103,6 +111,15 @@ input[type=checkbox] {
     margin: 0 10px 0 0;
 }
 
+#notificationArea {
+    text-align:center;
+    padding:10px;
+    border-radius:5px;
+    margin:0 auto;
+    width:50%;
+    min-width:200px;
+}
+
 #dictionaryContainer {
     margin: 15px 0 36px 15px;    /* bottom margin must clear footer */
     width: 60%;
@@ -124,12 +141,16 @@ input[type=checkbox] {
     margin: 10px;
 }
 
-.clickable {
+.clickable, .helperlink {
+    display: inline;
     font-weight: bold;
-    cursor: pointer;
     padding: 4px;
     background: #dddddd;
     border-radius: 5px;
+}
+
+.clickable {
+    cursor: pointer;
 }
 
 #descriptionToggle {
@@ -151,14 +172,29 @@ entry {
     margin-bottom: 5px;
 }
 
+.wordLink {
+    text-decoration: none;
+    float: right;
+    font-size: 13px;
+    padding: 2px;
+    line-height: 10px;
+}
+
 word {
     font-weight: bold;
     font-size: 20px;
 }
 
+pronunciation {
+    font-size: 12px;
+    margin-left:10px;
+}
+
 partofspeech {
     font-style: italic;
+    font-weight: bold;
     font-size: 10px;
+    margin-left:10px;
 }
 
 simpledefinition {
@@ -263,6 +299,7 @@ searchTerm {
     border: 1px solid black;
 }
 
+#notificationCloseButton,
 #settingsButton, #settingsScreenCloseButton,
 #settingsSaveButtons button, #infoScreenCloseButton {
     float: right;
