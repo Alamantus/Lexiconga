@@ -1,4 +1,4 @@
-﻿/* global markdown */
+/* global markdown */
 /* global Defiant */
 
 var currentUser = 0;
@@ -299,7 +299,7 @@ function SaveSettings() {
     SaveAndUpdateDictionary(true);
 }
 
-function CheckForPartsOfSpeechChange () {
+function CheckForPartsOfSpeechChange() {
     if (htmlEntities(document.getElementById("dictionaryPartsOfSpeechEdit").value) != currentDictionary.settings.partsOfSpeech) {
         if (htmlEntities(document.getElementById("dictionaryPartsOfSpeechEdit").value) != "") {
             currentDictionary.settings.partsOfSpeech = htmlEntities(document.getElementById("dictionaryPartsOfSpeechEdit").value);
@@ -310,11 +310,24 @@ function CheckForPartsOfSpeechChange () {
 
 function EmptyWholeDictionary() {
     if (confirm("This will delete the entire current dictionary. If you do not have a backed up export, you will lose it forever!\n\nDo you still want to delete?")) {
-        currentDictionary = JSON.parse(defaultDictionaryJSON);
+        ResetDictionaryToDefault();
         SaveAndUpdateDictionary(false);
         SetPartsOfSpeech();
         HideSettings();
     }
+}
+
+function CreateNewDictionary() {
+    // This is EmptyWholeDictionary() without the confirmation. ONLY USE WHEN LOGGED IN.
+    ResetDictionaryToDefault();
+    SaveAndUpdateDictionary(false);
+    LoadUserDictionaries();
+    SetPartsOfSpeech();
+    HideSettings();
+}
+
+function ResetDictionaryToDefault() {
+    currentDictionary = JSON.parse(defaultDictionaryJSON);
 }
 
 function SaveDictionary(sendToDatabase, sendWords) {
@@ -368,7 +381,7 @@ function DataToSend(doSendWords) {
     if (currentDictionary.externalID == 0) {
         data = "name=" + encodeURIComponent(currentDictionary.name) + "&description=" + encodeURIComponent(currentDictionary.description) + "&words=" + encodeURIComponent(JSON.stringify(currentDictionary.words));
         data += "&allowduplicates=" + ((currentDictionary.settings.allowDuplicates) ? "1" : "0") + "&casesensitive=" + ((currentDictionary.settings.caseSensitive) ? "1" : "0");
-        data += "&partsofspeech=" + encodeURIComponent(currentDictionary.settings.partsOfSpeech) + "&iscomplete=" + ((currentDictionary.settings.isComplete) ? "1" : "0") + "&ispublic=0";
+        data += "&partsofspeech=" + encodeURIComponent(currentDictionary.settings.partsOfSpeech) + "&sortbyequivalent=" + ((currentDictionary.settings.sortByEquivalent) ? "1" : "0") + "&iscomplete=" + ((currentDictionary.settings.isComplete) ? "1" : "0") + "&ispublic=0";
     } else {
         if (currentDictionary.name != previousDictionary.name) {
             data += "name=" + encodeURIComponent(currentDictionary.name);
@@ -407,13 +420,12 @@ function LoadDictionary() {
         if (loadDictionary.readyState == 4 && loadDictionary.status == 200) {
             if (loadDictionary.responseText == "no dictionaries") {
                 SendDictionary(false);
-                console.log(loadDictionary.responseText);
-            } else if (loadDictionary.responseText.length < 20) {
-                console.log(loadDictionary.responseText);
-            } else {
+            } else if (loadDictionary.responseText.length > 50) {
                 currentDictionary = JSON.parse(loadDictionary.responseText);
                 SaveDictionary(false, false);
                 ProcessLoad();
+            } else {
+                console.log(loadDictionary.responseText);
             }
             return true;
         } else {
@@ -421,6 +433,35 @@ function LoadDictionary() {
         }
     }
     loadDictionary.send();
+}
+
+function ChangeDictionary() {
+    var userDictionariesSelect = document.getElementById("userDictionaries");
+    if (currentDictionary.externalID != userDictionariesSelect.value && userDictionariesSelect.options.length > 1) {
+        var changeDictionaryRequest = new XMLHttpRequest();
+        changeDictionaryRequest.open('POST', "php/ajax_dictionarymanagement.php?action=switch");
+        changeDictionaryRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        var postString = "newdictionaryid=" + userDictionariesSelect.value.toString();
+        changeDictionaryRequest.onreadystatechange = function() {
+            if (changeDictionaryRequest.readyState == 4 && changeDictionaryRequest.status == 200) {
+                if (changeDictionaryRequest.responseText == "no dictionaries") {
+                    SendDictionary(false);
+                    console.log(changeDictionaryRequest.responseText);
+                } else if (changeDictionaryRequest.responseText.length > 50) {
+                    currentDictionary = JSON.parse(changeDictionaryRequest.responseText);
+                    SaveDictionary(false, false);
+                    ProcessLoad();
+                    HideSettings();
+                } else {
+                    console.log(changeDictionaryRequest.responseText);
+                }
+                return true;
+            } else {
+                return false;
+            }
+        }
+        changeDictionaryRequest.send(postString);
+    }
 }
 
 function LoadLocalDictionary() {

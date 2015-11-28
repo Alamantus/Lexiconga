@@ -1,10 +1,12 @@
 <?php
-require_once("../required.php");
+// require_once("../required.php");
+require_once('config.php');
+require_once(SITE_LOCATION . '/php/functions.php');
 
 session_start();
 
 if ($_GET['action'] == 'getall') {
-    Get_Dictionaries();
+    Get_Dictionaries(true);
 }
 elseif ($_GET['action'] == 'load') {
     Load_Current_Dictionary();
@@ -16,10 +18,13 @@ elseif ($_GET['action'] == 'update') {
     Update_Current_Dictionary();
 }
 elseif ($_GET['action'] == 'switch') {
-    Switch_Current_Dictionary();
+    Switch_Current_Dictionary($_POST['newdictionaryid'], true);
+}
+elseif ($_GET['action'] == 'delete') {
+    Switch_Current_Dictionary($_POST['deletedictionaryid']);
 }
 
-function Get_Dictionaries() {
+function Get_Dictionaries($return_list = true) {
     if (isset($_SESSION['user'])) {
         if ($_SESSION['user'] > 0) {
             $query = "SELECT `id`, `name` FROM `dictionaries` WHERE `user`=" . $_SESSION['user'] . " ORDER BY `name` ASC;";
@@ -27,14 +32,16 @@ function Get_Dictionaries() {
             
             if ($dictionaries) {
                 if (num_rows($dictionaries) > 0) {
-                    $list = "";
-                    $_SESSION['dictionaries'] = [];
-                    while ($dict = fetch($dictionaries)) {
-                        $_SESSION['dictionaries'][] = $dict['id'];  // Save a list of all dictionaries user has.
-                        //list for the switch dictionaries dropdown.
-                        $list .= $dict['id'] . '_IDNAMESEPARATOR_' . $dict['name'] . '_DICTIONARYSEPARATOR_';
+                    if ($return_list) {
+                        $list = "";
+                        $_SESSION['dictionaries'] = [];
+                        while ($dict = fetch($dictionaries)) {
+                            $_SESSION['dictionaries'][] = $dict['id'];  // Save a list of all dictionaries user has.
+                            //list for the switch dictionaries dropdown.
+                            $list .= $dict['id'] . '_IDNAMESEPARATOR_' . $dict['name'] . '_DICTIONARYSEPARATOR_';
+                        }
+                        echo $list;
                     }
-                    echo $list;
                     return true;
                 } else {
                     echo "no dictionaries";
@@ -99,13 +106,14 @@ function Save_Current_DictionaryAsNew() {
         $dbconnection->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 
         $query = "INSERT INTO `dictionaries`(`user`, `is_current`, `name`, `description`, `words`, `allow_duplicates`, `case_sensitive`, `parts_of_speech`, `sort_by_equivalent`, `is_complete`, `is_public`) ";
-        $query .= "VALUES (" . $_SESSION['user'] . ",1,'" . $_POST['name'] . "','" . $_POST['description'] . "','" . $_POST['words'] . "'," . $_POST['allowduplicates'] . "," . $_POST['casesensitive'] . ",'" . $_POST['partsofspeech'] . "'," . $_POST['sortbyequivalent'] . "," . $_POST['iscomplete'] . "," . $_POST['ispublic'] . ")";
+        $query .= "VALUES (" . $_SESSION['user'] . ",0,'" . $_POST['name'] . "','" . $_POST['description'] . "','" . $_POST['words'] . "'," . $_POST['allowduplicates'] . "," . $_POST['casesensitive'] . ",'" . $_POST['partsofspeech'] . "'," . $_POST['sortbyequivalent'] . "," . $_POST['iscomplete'] . "," . $_POST['ispublic'] . ")";
         
         try {
             $update = $dbconnection->prepare($query);
             $update->execute();
             $_SESSION['dictionary'] = $conn->lastInsertId;
             $_SESSION['dictionaries'][] = $_SESSION['dictionary'];  //Add new id to valid dictionaries. 
+            Switch_Current_Dictionary($_SESSION['dictionary'], false);
             echo $_SESSION['dictionary'];
             return true;
         }
@@ -167,16 +175,20 @@ function Update_Current_Dictionary() {
     return false;
 }
 
-function Switch_Current_Dictionary() {
-    if (isset($_POST['newdictionaryid']) && isset($_SESSION['user'])) {
-        if (in_array($_POST['newdictionaryid'], $_SESSION['dictionaries'])) {
+function Switch_Current_Dictionary($newdictionaryid, $returndictionary = true) {
+    if (isset($newdictionaryid) && isset($_SESSION['user'])) {
+        if (in_array($newdictionaryid, $_SESSION['dictionaries'])) {
             //Clear is_current from all user's dictionaries and then update the one they chose, only if the chosen dictionary is valid.
             $query = "UPDATE `dictionaries` SET `is_current`=0 WHERE `user`=" . $_SESSION['user'] . ";";
-            $query .= "UPDATE `dictionaries` SET `is_current`=1 WHERE `id`=" . $_POST['newdictionaryid'] . " AND `user`=" . $_SESSION['user'] . ";";
+            $query .= "UPDATE `dictionaries` SET `is_current`=1 WHERE `id`=" . $newdictionaryid . " AND `user`=" . $_SESSION['user'] . ";";
             $update = query($query);
             
             if ($update) {
-                Load_Current_Dictionary();
+                if ($returndictionary) {
+                    Load_Current_Dictionary();
+                } else {
+                    echo "dictionary switched";
+                }
                 return true;
             } else {
                 echo "could not update";
@@ -189,4 +201,31 @@ function Switch_Current_Dictionary() {
     }
     return false;
 }
+
+/*function Delete_Current_Dictionary($deletedictionaryid) {
+    if (isset($deletedictionaryid) && isset($_SESSION['user'])) {
+        if (in_array($deletedictionaryid, $_SESSION['dictionaries'])) {
+            //Clear is_current from all user's dictionaries and then update the one they chose, only if the chosen dictionary is valid.
+            $query = "DELETE FROM `dictionaries` WHERE `id`=" . $deletedictionaryid . " AND `user`=" . $_SESSION['user'] . ";";
+            $update = query($query);
+            
+            if ($update) {
+                Get_Dictionaries(false);
+                $query = "UPDATE `dictionaries` SET `is_current`=1 WHERE `id`=" . $_SESSION['dictionaries'][0] . " AND `user`=" . $_SESSION['user'] . ";";
+                $update = query($query);
+                if ($update) {
+                    Load_Current_Dictionary();
+                }
+                return true;
+            } else {
+                echo "could not update";
+            }
+        } else {
+            echo "invalid dictionary";
+        }
+    } else {
+        echo "no info provided";
+    }
+    return false;
+}*/
 ?>

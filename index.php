@@ -224,7 +224,7 @@ elseif (isset($_GET['loggedout']) && $current_user <= 0) {
                     <label><button type="button" onclick="ExportDictionary()" style="cursor:pointer;">Export Current Dictionary</button></label>
                     <?php if ($current_user > 0) {  //If logged in, show the log out button. ?>
                         <label><span>Change Dictionaries</span>
-                            <select id="userDictionaries" onchange="LoadOtherDictionary();"></select>
+                            <select id="userDictionaries" onchange="ChangeDictionary();"></select>
                         </label>
                         <label><button type="button" onclick="CreateNewDictionary()" style="cursor:pointer;">Create a New Dictionary</button></label>
                     <?php } ?>

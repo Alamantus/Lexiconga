@@ -13,31 +13,32 @@ window.onload = function () {
 
 function LoadUserDictionaries() {
     var getDictionariesRequest = new XMLHttpRequest();
-    getDictionariesRequest.open('GET', "php/ajax_dictionarymanagement.php?action=getall");
-    getDictionariesRequest.onreadystatechange = function() {
-        if (getDictionariesRequest.readyState == 4 && getDictionariesRequest.status == 200) {
-            console.log()
-            var userDictionariesSelect = document.getElementById("userDictionaries");
-            if (userDictionariesSelect.options.length > 0) {
-                for (var i = userDictionariesSelect.options.length - 1; i >= 0; i--) {
-                    userDictionariesSelect.removeChild(userDictionariesSelect.options[i]);
+    var userDictionariesSelect = document.getElementById("userDictionaries");
+    if (userDictionariesSelect != null) {
+        getDictionariesRequest.open('GET', "php/ajax_dictionarymanagement.php?action=getall");
+        getDictionariesRequest.onreadystatechange = function() {
+            if (getDictionariesRequest.readyState == 4 && getDictionariesRequest.status == 200) {
+                if (userDictionariesSelect.options.length > 0) {
+                    for (var i = userDictionariesSelect.options.length - 1; i >= 0; i--) {
+                        userDictionariesSelect.removeChild(userDictionariesSelect.options[i]);
+                    }
+                }
+                
+                var dictionaries = getDictionariesRequest.responseText.split("_DICTIONARYSEPARATOR_");
+                for (var j = 0; j < dictionaries.length - 1; j++) {
+                    var dictionaryOption = document.createElement('option');
+                    var dictionaryValues = dictionaries[j].split("_IDNAMESEPARATOR_");
+                    dictionaryOption.appendChild(document.createTextNode(dictionaryValues[1]));
+                    dictionaryOption.value = dictionaryValues[0];
+                    userDictionariesSelect.appendChild(dictionaryOption);
+                }
+                if (dictionaries.length > 1) {
+                    userDictionariesSelect.value = currentDictionary.externalID;
                 }
             }
-            
-            var dictionaries = getDictionariesRequest.responseText.split("_DICTIONARYSEPARATOR_");
-            for (var j = 0; j < dictionaries.length; j++) {
-                var dictionaryOption = document.createElement('option');
-                var dictionaryValues = dictionaries[j].split("_IDNAMESEPARATOR_");
-                dictionaryOption.appendChild(document.createTextNode(dictionaryValues[1]));
-                dictionaryOption.value = dictionaryValues[0];
-                userDictionariesSelect.appendChild(dictionaryOption);
-            }
-            if (dictionaries.length > 1) {
-                userDictionariesSelect.value = "";
-            }
         }
+        getDictionariesRequest.send();
     }
-    getDictionariesRequest.send();
 }
 
 function GetTextFile(filename) {
