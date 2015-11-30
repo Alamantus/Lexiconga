@@ -18,27 +18,29 @@ function LoadUserDictionaries() {
         getDictionariesRequest.open('GET', "php/ajax_dictionarymanagement.php?action=getall");
         getDictionariesRequest.onreadystatechange = function() {
             if (getDictionariesRequest.readyState == 4 && getDictionariesRequest.status == 200) {
-                if (userDictionariesSelect.options.length > 0) {
-                    for (var i = userDictionariesSelect.options.length - 1; i >= 0; i--) {
-                        userDictionariesSelect.removeChild(userDictionariesSelect.options[i]);
-                    }
-                }
-                
-                var dictionaries = getDictionariesRequest.responseText.split("_DICTIONARYSEPARATOR_");
-                for (var j = 0; j < dictionaries.length - 1; j++) {
-                    var dictionaryOption = document.createElement('option');
-                    var dictionaryValues = dictionaries[j].split("_IDNAMESEPARATOR_");
-                    dictionaryOption.appendChild(document.createTextNode(dictionaryValues[1]));
-                    dictionaryOption.value = dictionaryValues[0];
-                    userDictionariesSelect.appendChild(dictionaryOption);
-                }
-                if (dictionaries.length > 1) {
-                    userDictionariesSelect.value = currentDictionary.externalID;
-                }
+                ParseUserDictionariesIntoSelect(userDictionariesSelect, getDictionariesRequest.responseText);
             }
         }
         getDictionariesRequest.send();
     }
+}
+
+function ParseUserDictionariesIntoSelect(selectToPopulate, dicitonaryList) {
+    if (selectToPopulate.options.length > 0) {
+        for (var i = selectToPopulate.options.length - 1; i >= 0; i--) {
+            selectToPopulate.removeChild(selectToPopulate.options[i]);
+        }
+    }
+    
+    var dictionaries = dicitonaryList.split("_DICTIONARYSEPARATOR_");
+    for (var j = 0; j < dictionaries.length - 1; j++) {
+        var dictionaryOption = document.createElement('option');
+        var dictionaryValues = dictionaries[j].split("_IDNAMESEPARATOR_");
+        dictionaryOption.appendChild(document.createTextNode(htmlEntitiesParse(dictionaryValues[1])));
+        dictionaryOption.value = dictionaryValues[0];
+        selectToPopulate.appendChild(dictionaryOption);
+    }
+    selectToPopulate.value = (currentDictionary.externalID > 0) ? currentDictionary.externalID : "";
 }
 
 function GetTextFile(filename) {
@@ -118,6 +120,10 @@ function ValidateCreateAccount() {
     }
 }
 
+function ExplainPublicName() {
+    alert("This is the name we greet you with. It's also the name displayed if you ever decide to share any of your dictionaries.\n\nNote: this is not a username, and as such is not guaranteed to be unique. Use something people will recognize you as to differentiate from other people who might use the same name!");
+}
+
 function CloseUpdateConflictArea() {
     document.getElementById("updateConflict").style.display = "none";
 }
@@ -156,6 +162,9 @@ function ShowInfo(text) {
         document.getElementById("infoText").innerHTML = privacyText;
     } else if (text == "login") {
         document.getElementById("infoText").innerHTML = loginForm;
+        if (currentDictionary.words.length > 0 || currentDictionary.name != "New" || currentDictionary.description != "A new dictionary.") {
+            document.getElementById("dictionaryWarn").innerHTML = "If your current dictionary is not already saved to your account, be sure to <span class='exportWarnText' onclick='ExportDictionary()'>export it before logging in</span> so you don't lose anything!";
+        }
     } else {
         document.getElementById("infoText").innerHTML = aboutText;
     }

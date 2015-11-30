@@ -84,7 +84,7 @@ input, textarea, select, option, button {
 	border-color: #d09b84 #915237 #915237 #d09b84;
 }
 
-#dictionaryDescription, .management, #settingsOptions, #infoPage {
+#dictionaryDescription, .management, #settingsOptions, #infoPage, #loadAfterDeletePage {
 	background: #f2d5b2;
 }
 

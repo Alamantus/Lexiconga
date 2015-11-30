@@ -78,6 +78,8 @@ elseif (isset($_GET['success']) && $current_user <= 0) {
 }
 elseif (isset($_GET['loggedout']) && $current_user <= 0) {
     $notificationMessage = "You have been successfully logged out.<br>You will only be able to use the dictionary saved to your browser.";
+} elseif ($current_user > 0) {
+    $notificationMessage = "Welcome back, " . Get_Public_Name($current_user) . "!";
 }
 ?>
 <!DOCTYPE html>
@@ -146,7 +148,7 @@ elseif (isset($_GET['loggedout']) && $current_user <= 0) {
 
     <div id="dictionaryContainer">
         <span id="settingsButton" class="clickable" onclick="ShowSettings()">Settings</span>
-        
+
         <h1 id="dictionaryName"></h1>
         
         <span id="descriptionToggle" class="clickable" onclick="ToggleDescription();">Show Description</span>
@@ -176,7 +178,7 @@ elseif (isset($_GET['loggedout']) && $current_user <= 0) {
     </div>
     
     <div id="rightColumn" class="googleads" style="float:right;width:20%;max-width:300px;min-width:200px;overflow:hidden;">
-        <?php if ($_GET['adminoverride'] != "noadsortracking") { include_once("php/google/adsense.php"); } ?>
+        <?php //if ($_GET['adminoverride'] != "noadsortracking") { include_once("php/google/adsense.php"); } ?>
     </div>
 
     <div id="settingsScreen" style="display:none;">
@@ -233,7 +235,11 @@ elseif (isset($_GET['loggedout']) && $current_user <= 0) {
                         <input type="file" id="importFile" />
                         <button type="button" onclick="ImportDictionary(); return false;">Import</button>
                     </label>
-                    <label><button type="button" onclick="EmptyWholeDictionary()" style="cursor:pointer;">Empty Current Dictionary</button></label>
+                    <?php if ($current_user > 0) {  //If logged in, show the log out button. ?>
+                        <label><button type="button" onclick="DeleteCurrentDictionary()" style="cursor:pointer;">Delete Current Dictionary</button></label>
+                    <?php } else {  //If logged in, show the log out button. ?>
+                        <label><button type="button" onclick="EmptyWholeDictionary()" style="cursor:pointer;">Empty Current Dictionary</button></label>
+                    <?php } ?>
                 </div>
                 <div id="settingsSaveButtons">
                     <span id="settingsErrorMessage"></span><br>
@@ -251,6 +257,20 @@ elseif (isset($_GET['loggedout']) && $current_user <= 0) {
             <div id="infoText"></div>
         </div>
     </div>
+
+    <div id="loadAfterDeleteScreen" style="display:none;">
+        <div id="loadAfterDeleteFade"></div>
+        <div id="loadAfterDeletePage">
+            <div class="settingsCol">
+                <h1>Dictionary Deleted</h1>
+                <label>Select dictionary to load:<br />
+                    <select id="loadAfterDelete" onchange="ChangeDictionary(this);document.getElementById('loadAfterDeleteScreen').style.display = 'none';"></select>
+                </label>
+                <p>Or</p>
+                <label><button type="button" onclick="CreateNewDictionary();document.getElementById('loadAfterDeleteScreen').style.display = 'none';" style="cursor:pointer;">Create a New Dictionary</button></label>
+            </div>
+        </div>
+    </div>
     </contents>
     <footer>
         Dictionary Builder only guaranteed to work with most up-to-date HTML5 browsers. <a href="https://github.com/Alamantus/DictionaryBuilder/issues" target="_blank">Report a Problem</a> | <span class="clickable" onclick="ShowInfo('terms')" style="font-size:12px;">Terms</span> <span class="clickable" onclick="ShowInfo('privacy')" style="font-size:12px;">Privacy</span>
@@ -263,7 +283,7 @@ elseif (isset($_GET['loggedout']) && $current_user <= 0) {
     <!-- Main Script -->
     <script src="js/dictionaryBuilder.js"></script>
     <script src="js/ui.js"></script>
-    <?php if ($_GET['adminoverride'] != "noadsortracking") { include_once("php/google/analytics.php"); } ?>
+    <?php //if ($_GET['adminoverride'] != "noadsortracking") { include_once("php/google/analytics.php"); } ?>
 </body>
 </html>
 <?php

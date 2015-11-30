@@ -106,6 +106,20 @@ input[type=checkbox] {
     font-weight: bold;
 }
 
+#dictionaryWarn {
+    margin-top: 10px;
+    font-size: 12px;
+    font-weight: bold;
+    font-style: italic;
+}
+
+.exportWarnText {
+    display: inline;
+    color: red;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
 #aboutButton {
     display: inline;
     margin: 0 10px 0 0;
@@ -273,7 +287,7 @@ searchTerm {
     margin: 10px;
 }
 
-#settingsBackgroundFade, #infoBackgroundFade {
+#settingsBackgroundFade, #infoBackgroundFade, #loadAfterDeleteFade {
     position: fixed;
     top: 0;
     left: 0;
@@ -283,7 +297,7 @@ searchTerm {
     opacity: 0.75;
 }
 
-#settingsOptions, #infoPage {
+#settingsOptions, #infoPage, #loadAfterDeletePage {
     position: fixed;
     top: 6%;
     left: 6%;
@@ -295,6 +309,7 @@ searchTerm {
     overflow-y: auto;
     overflow-x: hidden;
     background: #ffffff;
+    opacity: 1;
     border-radius: 5px;
     border: 1px solid black;
 }

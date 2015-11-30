@@ -285,7 +285,6 @@ function SaveSettings() {
     currentDictionary.description = htmlEntities(document.getElementById("dictionaryDescriptionEdit").value);
     
     CheckForPartsOfSpeechChange();
-    LoadUserDictionaries();
     
     currentDictionary.settings.allowDuplicates = document.getElementById("dictionaryAllowDuplicates").checked;
     currentDictionary.settings.caseSensitive = document.getElementById("dictionaryCaseSensitive").checked;
@@ -297,6 +296,7 @@ function SaveSettings() {
     HideSettingsWhenComplete();
     
     SaveAndUpdateDictionary(true);
+    LoadUserDictionaries();
 }
 
 function CheckForPartsOfSpeechChange() {
@@ -310,21 +310,50 @@ function CheckForPartsOfSpeechChange() {
 
 function EmptyWholeDictionary() {
     if (confirm("This will delete the entire current dictionary. If you do not have a backed up export, you will lose it forever!\n\nDo you still want to delete?")) {
-        ResetDictionaryToDefault();
-        SaveAndUpdateDictionary(false);
-        SetPartsOfSpeech();
-        HideSettings();
+        CreateNewDictionary();
     }
 }
 
 function CreateNewDictionary() {
-    // This is EmptyWholeDictionary() without the confirmation. ONLY USE WHEN LOGGED IN.
     ResetDictionaryToDefault();
     SaveAndUpdateDictionary(false);
-    LoadUserDictionaries();
     SetPartsOfSpeech();
     HideSettings();
 }
+
+function DeleteCurrentDictionary() {
+    if (confirm("This will delete the current dictionary from the database. If you do not have a backed up export, you will lose it forever!\n\nDo you still want to delete?")) {
+        ResetDictionaryToDefault();
+        
+        var deleteDictionary = new XMLHttpRequest();
+        deleteDictionary.open('POST', "php/ajax_dictionarymanagement.php?action=delete");
+        deleteDictionary.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        deleteDictionary.onreadystatechange = function() {
+            if (deleteDictionary.readyState == 4 && deleteDictionary.status == 200) {
+                if (deleteDictionary.responseText.length < 31) {
+                    console.log(deleteDictionary.responseText);
+                    CreateNewDictionary();
+                } else {
+                    HideSettings();
+                    document.getElementById('loadAfterDeleteScreen').style.display = 'block';
+                    //Parse response into the list that forces you to load one and reload select in settings.
+                    ParseUserDictionariesIntoSelect(document.getElementById("loadAfterDelete"), deleteDictionary.responseText);
+                    ParseUserDictionariesIntoSelect(document.getElementById("userDictionaries"), deleteDictionary.responseText);
+
+                    if (document.getElementById("loadAfterDelete").options.length == 0) {
+                        document.getElementById('loadAfterDeleteScreen').style.display = 'none';
+                        CreateNewDictionary();
+                    }
+                }
+                return true;
+            } else {
+                return false;
+            }
+        }
+        deleteDictionary.send();
+    }
+}
+
 
 function ResetDictionaryToDefault() {
     currentDictionary = JSON.parse(defaultDictionaryJSON);
@@ -351,9 +380,9 @@ function SendDictionary(sendWords) {
         postString = DataToSend(sendWords);
     } else {
         action = "new";
-        postString = DataToSend(true);
+        postString = DataToSend(true, true);
     }
-    
+
     var sendDictionary = new XMLHttpRequest();
     sendDictionary.open('POST', "php/ajax_dictionarymanagement.php?action=" + action);
     sendDictionary.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -361,12 +390,15 @@ function SendDictionary(sendWords) {
         if (sendDictionary.readyState == 4 && sendDictionary.status == 200) {
             if (sendDictionary.responseText == "updated successfully") {
                 console.log(sendDictionary.responseText);
-            } else if (!isNaN(parseInt(sendDictionary.responseText))) {
+                LoadUserDictionaries();
+                ProcessLoad();
+            } else if (isNaN(parseInt(sendDictionary.responseText))) {
+                console.log(sendDictionary.responseText);
+            } else {    // It will only be a number if it is a new dictionary.
                 currentDictionary.externalID = parseInt(sendDictionary.responseText);
+                LoadUserDictionaries();
                 ProcessLoad();
                 console.log("saved successfully");
-            } else {
-                console.log(sendDictionary.responseText);
             }
             return true;
         } else {
@@ -376,35 +408,39 @@ function SendDictionary(sendWords) {
     sendDictionary.send(postString);
 }
 
-function DataToSend(doSendWords) {
+function DataToSend(doSendWords, sendAll) {
+    sendAll = (typeof sendAll !== 'undefined' && sendAll != null) ? sendAll : false;
     var data = "";
     if (currentDictionary.externalID == 0) {
         data = "name=" + encodeURIComponent(currentDictionary.name) + "&description=" + encodeURIComponent(currentDictionary.description) + "&words=" + encodeURIComponent(JSON.stringify(currentDictionary.words));
-        data += "&allowduplicates=" + ((currentDictionary.settings.allowDuplicates) ? "1" : "0") + "&casesensitive=" + ((currentDictionary.settings.caseSensitive) ? "1" : "0");
+        data += "&nextwordid=" + currentDictionary.nextWordId + "&allowduplicates=" + ((currentDictionary.settings.allowDuplicates) ? "1" : "0") + "&casesensitive=" + ((currentDictionary.settings.caseSensitive) ? "1" : "0");
         data += "&partsofspeech=" + encodeURIComponent(currentDictionary.settings.partsOfSpeech) + "&sortbyequivalent=" + ((currentDictionary.settings.sortByEquivalent) ? "1" : "0") + "&iscomplete=" + ((currentDictionary.settings.isComplete) ? "1" : "0") + "&ispublic=0";
     } else {
-        if (currentDictionary.name != previousDictionary.name) {
+        if (sendAll || currentDictionary.name != previousDictionary.name) {
             data += "name=" + encodeURIComponent(currentDictionary.name);
         }
-        if (currentDictionary.description != previousDictionary.description) {
+        if (sendAll || currentDictionary.description != previousDictionary.description) {
             data += ((data=="") ? "" : "&") + "description=" + encodeURIComponent(currentDictionary.description);
         }
-        if (doSendWords) {
+        if (sendAll || doSendWords) {
             data += ((data=="") ? "" : "&") + "words=" + encodeURIComponent(JSON.stringify(currentDictionary.words));
         }
-        if (currentDictionary.settings.allowDuplicates != previousDictionary.allowDuplicates) {
+        if (sendAll || currentDictionary.nextWordId != previousDictionary.nextWordId) {
+            data += ((data=="") ? "" : "&") + "nextwordid=" + currentDictionary.nextWordId;
+        }
+        if (sendAll || currentDictionary.settings.allowDuplicates != previousDictionary.allowDuplicates) {
             data += ((data=="") ? "" : "&") + "allowduplicates=" + ((currentDictionary.settings.allowDuplicates) ? "1" : "0");
         }
-        if (currentDictionary.settings.caseSensitive != previousDictionary.caseSensitive) {
+        if (sendAll || currentDictionary.settings.caseSensitive != previousDictionary.caseSensitive) {
             data += ((data=="") ? "" : "&") + "casesensitive=" + ((currentDictionary.settings.caseSensitive) ? "1" : "0");
         }
-        if (currentDictionary.settings.partsOfSpeech != previousDictionary.partsOfSpeech) {
+        if (sendAll || currentDictionary.settings.partsOfSpeech != previousDictionary.partsOfSpeech) {
             data += ((data=="") ? "" : "&") + "partsofspeech=" + encodeURIComponent(currentDictionary.settings.partsOfSpeech);
         }
-        if (currentDictionary.settings.sortByEquivalent != previousDictionary.sortByEquivalent) {
+        if (sendAll || currentDictionary.settings.sortByEquivalent != previousDictionary.sortByEquivalent) {
             data += ((data=="") ? "" : "&") + "sortbyequivalent=" + ((currentDictionary.settings.sortByEquivalent) ? "1" : "0");
         }
-        if (currentDictionary.settings.isComplete != previousDictionary.isComplete) {
+        if (sendAll || currentDictionary.settings.isComplete != previousDictionary.isComplete) {
             data += ((data=="") ? "" : "&") + "iscomplete=" + ((currentDictionary.settings.isComplete) ? "1" : "0");
         }
         data += ((data=="") ? "" : "&") + "ispublic=0";
@@ -419,25 +455,24 @@ function LoadDictionary() {
     loadDictionary.onreadystatechange = function() {
         if (loadDictionary.readyState == 4 && loadDictionary.status == 200) {
             if (loadDictionary.responseText == "no dictionaries") {
-                SendDictionary(false);
-            } else if (loadDictionary.responseText.length > 50) {
+                // If there are no dictionaries in the database and there's one in memory, remove the id and send it as a new one.
+                currentDictionary.externalID = 0;
+                SendDictionary(true);
+            } else if (loadDictionary.responseText.length < 60) {
+                console.log(loadDictionary.responseText);
+            } else {
                 currentDictionary = JSON.parse(loadDictionary.responseText);
                 SaveDictionary(false, false);
-                ProcessLoad();
-            } else {
-                console.log(loadDictionary.responseText);
             }
-            return true;
-        } else {
-            return false;
         }
+        ProcessLoad();
     }
     loadDictionary.send();
 }
 
-function ChangeDictionary() {
-    var userDictionariesSelect = document.getElementById("userDictionaries");
-    if (currentDictionary.externalID != userDictionariesSelect.value && userDictionariesSelect.options.length > 1) {
+function ChangeDictionary(userDictionariesSelect) {
+    userDictionariesSelect = (typeof userDictionariesSelect !== 'undefined' && userDictionariesSelect != null) ? userDictionariesSelect : document.getElementById("userDictionaries");
+    if (currentDictionary.externalID != userDictionariesSelect.value && userDictionariesSelect.options.length > 0) {
         var changeDictionaryRequest = new XMLHttpRequest();
         changeDictionaryRequest.open('POST', "php/ajax_dictionarymanagement.php?action=switch");
         changeDictionaryRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -445,19 +480,17 @@ function ChangeDictionary() {
         changeDictionaryRequest.onreadystatechange = function() {
             if (changeDictionaryRequest.readyState == 4 && changeDictionaryRequest.status == 200) {
                 if (changeDictionaryRequest.responseText == "no dictionaries") {
-                    SendDictionary(false);
                     console.log(changeDictionaryRequest.responseText);
-                } else if (changeDictionaryRequest.responseText.length > 50) {
+                    SendDictionary(false);
+                } else if (changeDictionaryRequest.responseText.length < 60) {
+                    console.log(changeDictionaryRequest.responseText);
+                } else {
                     currentDictionary = JSON.parse(changeDictionaryRequest.responseText);
                     SaveDictionary(false, false);
                     ProcessLoad();
+                    LoadUserDictionaries();
                     HideSettings();
-                } else {
-                    console.log(changeDictionaryRequest.responseText);
                 }
-                return true;
-            } else {
-                return false;
             }
         }
         changeDictionaryRequest.send(postString);
@@ -467,7 +500,7 @@ function ChangeDictionary() {
 function LoadLocalDictionary() {
     if (localStorage.getItem('dictionary')) {
         var tmpDictionary = JSON.parse(localStorage.getItem('dictionary'));
-        if (tmpDictionary.words.length > 0) {
+        if (tmpDictionary.words.length > 0 || tmpDictionary.description != "A new dictionary." || tmpDictionary.name != "New") {
             currentDictionary = JSON.parse(localStorage.getItem('dictionary'));
         }
         tmpDictionary = null;
@@ -498,6 +531,7 @@ function SavePreviousDictionary () {
     previousDictionary = {
         name: currentDictionary.name,
         description: currentDictionary.description,
+        nextWordId: currentDictionary.nextWordId,
         allowDuplicates: currentDictionary.settings.allowDuplicates,
         caseSensitive: currentDictionary.settings.caseSensitive,
         partsOfSpeech: currentDictionary.settings.partsOfSpeech,
@@ -507,7 +541,7 @@ function SavePreviousDictionary () {
 }
 
 function ExportDictionary() {
-    var downloadName = currentDictionary.name.replace(/\W/g, '');
+    var downloadName = stripHtmlEntities(currentDictionary.name).replace(/\W/g, '');
     if (downloadName == "") {
         downloadName = "export";
     }
@@ -515,7 +549,7 @@ function ExportDictionary() {
 }
 
 function ImportDictionary() {
-    if (confirm("Importing this dictionary will overwrite your current one, making it impossible to retrieve if you have not already exported it! Do you still want to import?")) {
+    if (currentDictionary.externalID > 0 || confirm("Importing this dictionary will overwrite your current one, making it impossible to retrieve if you have not already exported it! Do you still want to import?")) {
         if (!window.FileReader) {
             alert('Your browser is not supported');
             return false;
@@ -582,6 +616,11 @@ function htmlEntities(string) {
 
 function htmlEntitiesParse(string) {
     return String(string).replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/<br>/g, '\n');
+}
+
+function stripHtmlEntities(string) {
+    // This is for the export name.
+    return String(string).replace(/&amp;/g, '').replace(/&lt;/g, '').replace(/&gt;/g, '').replace(/&quot;/g, '').replace(/&apos;/g, "").replace(/<br>/g, '');
 }
 
 function dynamicSort(property) {
