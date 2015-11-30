@@ -568,12 +568,12 @@ function ImportDictionary() {
                     if (tmpDicitonary.hasOwnProperty("name") && tmpDicitonary.hasOwnProperty("description") &&
                         tmpDicitonary.hasOwnProperty("words") && tmpDicitonary.hasOwnProperty("settings"))
                     {
-                        localStorage.setItem('dictionary', reader.result);
-                        document.getElementById("importFile").value = "";
-                        LoadLocalDictionary();
-                        SendDictionary(true);
+                        currentDictionary = JSON.parse(reader.result);
+                        currentDictionary.externalID = 0;   // Reset external id for imported dictionary.
+                        SaveDictionary(true, true);
                         ProcessLoad();
                         HideSettings();
+                        document.getElementById("importFile").value = "";
                     } else {
                         var errorString = "File is missing:";
                         if (!tmpDicitonary.hasOwnProperty("name"))
