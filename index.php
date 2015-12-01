@@ -277,7 +277,7 @@ elseif (isset($_GET['loggedout']) && $current_user <= 0) {
     </footer>
     
     <!-- Markdown Parser -->
-    <script src="js/markdown-js/markdown.min.js"></script>
+    <script src="js/micromarkdown.js"></script>
     <!-- JSON Search -->
     <script src="js/defiant-js/defiant-latest.min.js"></script>
     <!-- Main Script -->

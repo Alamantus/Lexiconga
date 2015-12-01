@@ -200,7 +200,7 @@ function ShowDictionary() {
     dictionaryNameArea.innerHTML = htmlEntitiesParse(currentDictionary.name) + " Dictionary";
     
     var dictionaryDescriptionArea = document.getElementById("dictionaryDescription");
-    dictionaryDescriptionArea.innerHTML = markdown.toHTML(htmlEntitiesParse(currentDictionary.description));
+    dictionaryDescriptionArea.innerHTML = micromarkdown.parse(htmlEntitiesParse(currentDictionary.description), true);
     
     var dictionaryArea = document.getElementById("theDictionary");
     var dictionaryText = "";
@@ -235,7 +235,7 @@ function DictionaryEntry(itemIndex) {
     entryText += "<word>" + ((searchTerm != "" && document.getElementById("searchOptionWord").checked) ? currentDictionary.words[itemIndex].name.replace(searchRegEx, "<searchTerm>" + searchTerm + "</searchterm>") : currentDictionary.words[itemIndex].name) + "</word>";
     
     if (currentDictionary.words[itemIndex].pronunciation != "") {
-        entryText += "<pronunciation>" + markdown.toHTML(htmlEntitiesParse(currentDictionary.words[itemIndex].pronunciation)).replace("<p>","").replace("</p>","") + "</pronunciation>";
+        entryText += "<pronunciation>" + micromarkdown.parse(htmlEntitiesParse(currentDictionary.words[itemIndex].pronunciation)).replace("<p>","").replace("</p>","") + "</pronunciation>";
     }
     
     if (currentDictionary.words[itemIndex].partOfSpeech != "") {
@@ -249,7 +249,7 @@ function DictionaryEntry(itemIndex) {
     }
 
     if (currentDictionary.words[itemIndex].longDefinition != "") {
-        entryText += "<longdefinition>" + ((searchTerm != "" && document.getElementById("searchOptionLong").checked) ? markdown.toHTML(htmlEntitiesParse(currentDictionary.words[itemIndex].longDefinition)).replace(searchRegEx, "<searchTerm>" + searchTerm + "</searchterm>") : markdown.toHTML(htmlEntitiesParse(currentDictionary.words[itemIndex].longDefinition))) + "</longdefinition>";
+        entryText += "<longdefinition>" + ((searchTerm != "" && document.getElementById("searchOptionLong").checked) ? micromarkdown.parse(htmlEntitiesParse(currentDictionary.words[itemIndex].longDefinition)).replace(searchRegEx, "<searchTerm>" + searchTerm + "</searchterm>") : micromarkdown.parse(htmlEntitiesParse(currentDictionary.words[itemIndex].longDefinition))) + "</longdefinition>";
     }
 
     if (!currentDictionary.settings.isComplete) {
