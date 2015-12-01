@@ -10,6 +10,18 @@ header {
 	border-bottom: 3px solid #e3bb7d;
 }
 
+tr, thead {
+    border-bottom: 1px solid #af8050;
+}
+td, th {
+    border-right: 1px solid #af8050;
+}
+
+a {
+	text-decoration: underline;
+	color: #a01000;
+}
+
 #siteLogo {
 	display: block;
 	text-indent: -9999px;

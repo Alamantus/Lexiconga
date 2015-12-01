@@ -22,6 +22,26 @@ footer {
     max-height: 32px;   /* Update Dictionary Container's bottom margin to account for footer */
 }
 
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+tr, thead {
+    border-bottom: 1px solid #afafaf;
+}
+tr:last-child {
+    border-bottom: none;
+}
+
+td, th {
+    border-right: 1px solid #afafaf;
+    padding: 3px 10px;
+}
+td:last-child, th:last-child {
+    border-right: none;
+}
+
 .inline {
     display: inline !important;
 }

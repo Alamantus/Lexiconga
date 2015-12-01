@@ -56,7 +56,7 @@ function Get_Dictionaries($return_list = true) {
 
 function Load_Current_Dictionary() {
     if ($_SESSION['user'] > 0) {
-        $query = "SELECT `d`.`id`, `d`.`name`, `d`.`description`, `u`.`public_name`, `d`.`words`, `d`.`next_word_id`, `d`.`allow_duplicates`, `d`.`case_sensitive`, `d`.`parts_of_speech`, `d`.`is_complete` ";
+        $query = "SELECT `d`.`id`, `d`.`name`, `d`.`description`, `u`.`public_name`, `d`.`words`, `d`.`next_word_id`, `d`.`allow_duplicates`, `d`.`case_sensitive`, `d`.`parts_of_speech`, `d`.`sort_by_equivalent`, `d`.`is_complete` ";
         $query .= "FROM `dictionaries` AS `d` LEFT JOIN `users` AS `u` ON `user`=`u`.`id` WHERE `is_current`=1 AND `user`=" . $_SESSION['user'] . ";";
         $dictionary = query($query);
         

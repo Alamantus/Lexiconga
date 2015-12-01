@@ -49,13 +49,13 @@ function GetTextFile(filename) {
     readmeFileRequest.onreadystatechange = function() {
         if (readmeFileRequest.readyState == 4 && readmeFileRequest.status == 200) {
             if (filename == "TERMS.md") {
-                termsText = micromarkdown.parse(readmeFileRequest.responseText);
+                termsText = marked(readmeFileRequest.responseText);
             } else if (filename == "PRIVACY.md") {
-                privacyText = micromarkdown.parse(readmeFileRequest.responseText);
+                privacyText = marked(readmeFileRequest.responseText);
             } else if (filename == "LOGIN.form") {
                 loginForm = readmeFileRequest.responseText;
             } else {
-                aboutText = micromarkdown.parse(readmeFileRequest.responseText);
+                aboutText = marked(readmeFileRequest.responseText);
             }
         }
     }
