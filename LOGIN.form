@@ -12,8 +12,8 @@
 </form></div>
 <div class="settingsCol"><form id="createAccountForm" method="post" action="?createaccount">
     <h2>Create a New Account</h2>
-    <p style="font-size: 12px;">Creating an account allows you to save and switch between up to 10 dictionaries and access them from any device for free!</p>
-    <p style="font-size: 12px;">Plus if you allow us to send you emails, we'll never spam you or sell your information. It'll just make sure that you'll be the first to hear about any new features that get added or if any of our policies change for any  reason.</p>
+    <p style="font-size: 12px;">Creating an account allows you to save and switch between as many dictionaries as you need and access them from any device for free!</p>
+    <p style="font-size: 12px;">Plus if you allow us to send you emails, we'll make sure that you're the first to hear about any new features that get added or if any of our policies change for any  reason. We'll never spam you or sell your information.</p>
     <label><span>Email</span>
         <input type="email" id="createAccountEmailField" name="email" />
     </label>

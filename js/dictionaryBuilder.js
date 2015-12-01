@@ -335,10 +335,7 @@ function DeleteCurrentDictionary() {
                     CreateNewDictionary();
                 } else {
                     HideSettings();
-                    document.getElementById('loadAfterDeleteScreen').style.display = 'block';
-                    //Parse response into the list that forces you to load one and reload select in settings.
-                    ParseUserDictionariesIntoSelect(document.getElementById("loadAfterDelete"), deleteDictionary.responseText);
-                    ParseUserDictionariesIntoSelect(document.getElementById("userDictionaries"), deleteDictionary.responseText);
+                    ShowDictionaryDeleteMenu();
 
                     if (document.getElementById("loadAfterDelete").options.length == 0) {
                         document.getElementById('loadAfterDeleteScreen').style.display = 'none';

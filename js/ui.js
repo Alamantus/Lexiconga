@@ -176,6 +176,13 @@ function HideInfo() {
     document.getElementById("infoScreen").style.display = "none";
 }
 
+function ShowDictionaryDeleteMenu() {
+    document.getElementById('loadAfterDeleteScreen').style.display = 'block';
+    //Parse response into the list that forces you to load one and reload select in settings.
+    ParseUserDictionariesIntoSelect(document.getElementById("loadAfterDelete"), deleteDictionary.responseText);
+    ParseUserDictionariesIntoSelect(document.getElementById("userDictionaries"), deleteDictionary.responseText);
+}
+
 function ToggleCaseSensitiveOption() {
     if (document.getElementById("dictionaryAllowDuplicates").checked) {
         document.getElementById("dictionaryCaseSensitive").disabled = true;

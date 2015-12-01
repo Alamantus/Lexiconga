@@ -58,7 +58,7 @@ var micromarkdown = {
     /* headlines */
     while ((stra = micromarkdown.regexobject.headline.exec(str)) !== null) {
       count = stra[1].length;
-      str = str.replace(stra[0], '<h' + count + '>' + stra[2] + '</h' + count + '>' + '\n');
+      str = str.replace(stra[0], '<h' + count + '>' + stra[2] + '</h' + count + '>');
     }
 
     /* lists */
