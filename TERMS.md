@@ -2,9 +2,14 @@
 
 Last updated: November 1, 2015.
 
-Please read these Terms of Service ("Terms", "Terms of Service") carefully before using the http://lexicon.ga website (the "Service") operated by Robbie Antenesse and Alamantus GameDev ("us", "we", or "our").
+Please read these Terms of Service ("Terms", "Terms of Service") carefully before using the http://lexicon.ga website (the "Service") or the cloud account service (an "Account") operated by Robbie Antenesse and Alamantus GameDev ("us", "we", or "our").
 
 Your access to and use of the Service is conditioned on your acceptance of and compliance with these Terms. These Terms apply to all visitors, users and others who access or use the Service. By accessing or using the Service you agree to be bound by these Terms. If you disagree with any part of the terms then you may not access the Service.
+
+### Usage
+You may use our Service free of charge, and you are free to stop using our Service at any time. If you are utilizing an Account with our Service, you agree to never attempt maliciously dismantling the Service in any way or to use the Service in a way that is unlawful. If you are found in violation of this, your Account and access to the Service may be terminated without warning.
+
+If you stop using our Service, your data will remain unless you request its removal. When data is removed from an Account in our Service, it becomes permanently irretrievable. You agree that you understand the implications of deleting or requesting the deletion of your data and that we are not liable for its loss.
 
 ### Termination
 We may terminate or suspend access to our Service immediately, without prior notice or liability, for any reason whatsoever, including without limitation if you breach the Terms. All provisions of the Terms which by their nature should survive termination shall survive termination, including, without limitation, ownership provisions, warranty disclaimers, indemnity and limitations of liability.

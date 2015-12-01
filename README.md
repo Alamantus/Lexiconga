@@ -3,7 +3,9 @@ Lexiconga is a tool intended to help you build constructed language (conlang) di
 
 You can enter words and definitions, and they will appear nicely formatted and in alphabetical order under your dictionary's title, where you can also sort them by part of speech. If the default parts of speech are not adequate for your conlang, you can change them to whatever parts of speech you might need. You can even enter a description or full set of language rules that you can toggle on and off below the dictionary's title!
 
-It accepts Unicode characters so you can utilize whatever typable characters you might need and [Markdown](https://help.github.com/articles/markdown-basics/) for formatting long text entries, and if you want to share or even just make a backup of your dictionary, you can export it to a single convenient file that can be easily re-imported. Your dictionary is saved to your browser's localStorage every time you make a change, which means as long as you use the same browser and don't deliberately delete it, your dictionary will always be there when you come back.
+It accepts Unicode characters so you can utilize whatever typable characters you might need and [Markdown](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) for formatting long text entries, and if you want to share or even just make a backup of your dictionary, you can export it to a single convenient file that can be easily re-imported. Your dictionary is saved to your browser's localStorage every time you make a change, which means as long as you use the same browser and don't deliberately delete it (by clearing your cache), your dictionary will always be there when you come back.
+
+If you would like an added layer of accessibility and security (in case you clear your browser cache frequently), you can create an account, where you can store and switch between as many dictionaries as you need. Having an account will also allow you to access your dictionaries from any browser by logging in. (Just be careful you don't overwrite dictionaries by logging in and saving from separate locations!)
 
 ## How do I use Lexiconga?
 
@@ -49,11 +51,38 @@ The **Import Dictionary** form allows you to upload and view any previously-expo
 
 The **Empty Current Dictionary** should only be used if you want to completely start over from scratch. It will ask you to confirm that you want to delete, and if you confirm, your dictionary will be gone forever. If you have not exported your dictionary before emptying it, there will be absolutely no way to get it back. Please be careful with this!
 
+## Accounts
+If you are using an account with Lexiconga, your experience should remain essentially the same, but you will see some additional options in the Settings menu and you might notice some slight changes in performance as it saves to and loads from the database.
+
+### Creating An Account
+The first time you create an account, you will need to enter your email address and a password (for logging in) in addition to a "Public Name". Your Public Name will be more important when we add dictionary sharing later, but for now, it is important in that it helps indicate whether or not you are logged in (see below). If you have a dictionary loaded in your browser, it will be automatically uploaded to your account and saved after it is created.
+
+### Logging In
+To log in after creating an account, just click the "Log In/Create Account" button and enter your email address and password under the "Log In" form, just like any other account online. You will know that you are logged in from the "Welcome back!" notification at the top of the screen when you load the page. You can also know that you're logged in if you see a "Log Out" button instead of "Log In/Create Account" in the top right corner of the screen.
+
+### Differences
+Every time you save a change to your dictionary's settings or add, edit, or delete a word, the changes are automatically saved to both your browser's localStorage in addition to being sent to your account. If you're paranoid that your changes are not being saved, you can check your browser's console log to see the little save and update notifications.
+
+Under the Settings menu, you'll see some additional options:
+
+The **Change Dicitonaries** dropdown box contains the names of all of your created dictionaries. If you have more than one, selecting a different dictionary from the list will immediately download and display that dictionary.
+
+The **Create New Dictionary** button will instantly create and save a new blank dictionary to your account.
+
+The **Import Dictionary** button acts the same as before, but instead of overwriting your dictionary, it imports the dictionary as a new, separate dictionary and saves it to your account. After importing, the imported dictionary will display, and you can use the Change Dictionaries dropdown box to change to a previous one if you desire.
+
+The **Delete Current Dictionary** button will permanently and irretrievably delete the currently loaded dictionary from your account! Be careful with that one. After deleting, you will then be prompted to either select another dictionary to load or create a new one, _or_ if you have no other dictionaries, immediately create a new one for you.
+
 ## Problems or Requests
 Please report any problems you come across to the [Dictionary Builder Issues page](https://github.com/Alamantus/DictionaryBuilder/issues). You can also submit enhancement requests to the same place if you have any requests for new features.
 
 ## Future Plans
-In the future, I'm planning to add the ability to save more than one dictionary at a time by allowing user accounts. Each account will be able to store a certain number of dictionaries and will be able to switch to any saved dictionary at any time without having to worry about exporting and importing .dict files. Along with this will also come the ability to easily share dictionaries if you want, but all dictionaries will be private by default.
+In the future, I'm planning to:
+* add the ability to easily share dictionaries by your Public Name, but all dictionaries will be private by default
+* enable editing your account settings such as your password and Public Name
+* enable password reset if you forgot it
+* enable account deletion if you lose trust or hope in Lexiconga's services
+* ad removal option?
 
 ## Thanks!
 I hope you enjoy Lexiconga and that it helps you build some awesome languages.

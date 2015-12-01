@@ -2,7 +2,7 @@
 
 This document was last updated on November 02, 2015.
 
-This Privacy Policy governs the manner in which Lexiconga Dictionary Builder collects, uses, maintains and discloses information collected from users (each, a "User") of the http://lexicon.ga website ("Site").
+This Privacy Policy governs the manner in which Lexiconga Dictionary Builder collects, uses, maintains and discloses information collected from users (each, a "User") of the http://lexicon.ga website ("Site") and its accounts ("Account").
 
 ### Personal identification information
 We may collect personal identification information from Users in a variety of ways, including, but not limited to, when Users visit our site, register on the site, and in connection with other activities, services, features or resources we make available on our Site. Users may be asked for, as appropriate, their email address. Users may, however, use our Site anonymously. We will collect personal identification information from Users only if they voluntarily submit such information to us. Users can always refuse to supply personal identification information, except that it may prevent them from engaging in certain Site-related activities.
@@ -18,7 +18,9 @@ Lexiconga Dictionary Builder may collect and use Users personal information for 
 - **To run and operate our Site and personalize user experience:** We need your input to display content on the Site correctly, because it is a tool built entirely to display the content that you enter.
 
 ### How we protect your information
-We protect your information by keeping your information right on your own computer where it belongs. As mentioned previously, all data is stored in your browser's "local storage".
+If you are utilizing an Account, we protect your information by keeping your information on a trusted database server provided by the Site's web host. All data you save from an Account is uploaded to this database server from your browser.
+
+If you are not using an Account, then all of your information remains right on your own computer where it belongs. As mentioned previously, all data is stored in your browser's "local storage".
 
 ### Sharing your personal information
 We do not sell, trade, or rent Users personal identification information to others. We may share generic aggregated demographic information not linked to any personal identification information regarding visitors and users with our business partners, trusted affiliates and advertisers for the purposes outlined above.
