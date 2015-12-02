@@ -334,7 +334,7 @@ function DeleteCurrentDictionary() {
                     CreateNewDictionary();
                 } else {
                     HideSettings();
-                    ShowDictionaryDeleteMenu();
+                    ShowDictionaryDeleteMenu(deleteDictionary.responseText);
 
                     if (document.getElementById("loadAfterDelete").options.length == 0) {
                         document.getElementById('loadAfterDeleteScreen').style.display = 'none';

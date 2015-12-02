@@ -176,11 +176,11 @@ function HideInfo() {
     document.getElementById("infoScreen").style.display = "none";
 }
 
-function ShowDictionaryDeleteMenu() {
+function ShowDictionaryDeleteMenu(dictionaryList) {
     document.getElementById('loadAfterDeleteScreen').style.display = 'block';
     //Parse response into the list that forces you to load one and reload select in settings.
-    ParseUserDictionariesIntoSelect(document.getElementById("loadAfterDelete"), deleteDictionary.responseText);
-    ParseUserDictionariesIntoSelect(document.getElementById("userDictionaries"), deleteDictionary.responseText);
+    ParseUserDictionariesIntoSelect(document.getElementById("loadAfterDelete"), dictionaryList);
+    ParseUserDictionariesIntoSelect(document.getElementById("userDictionaries"), dictionaryList);
 }
 
 function ToggleCaseSensitiveOption() {
