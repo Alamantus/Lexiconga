@@ -6,6 +6,14 @@ $current_user = isset($_SESSION['user']) ? $_SESSION['user'] : 0;
 
 $notificationMessage = "";
 
+if (!isset($_SESSION['loginfailures']) || (isset($_SESSION['loginlockouttime']) && time() - $_SESSION['loginlockouttime'] >= 3600)) {
+    // If never failed or more than 1 hour has passed, reset login failures.
+    $_SESSION['loginfailures'] = 0;
+} else {
+    $alertlockoutmessage = "You failed logging in 10 times. To prevent request flooding and hacking attempts, you may not log in or create an account for about an hour.\\n\\nThe last time this page was loaded, you had been locked out for " . time_elapsed(time() - $_SESSION['loginlockouttime']);
+    $hoverlockoutmessage = str_replace("\\n", "\n", $alertlockoutmessage);
+}
+
 if (isset($_GET['logout']) && $current_user > 0) {
     session_destroy();
     header('Location: ./?loggedout');
@@ -54,13 +62,10 @@ elseif (isset($_GET['error']) && $current_user <= 0) {
         $notificationMessage = "The create account form somehow got submitted without some essential information.<br>Please try filling it out again.";
     } elseif ($_GET['error'] == "loginfailed") {
         $notificationMessage = "We couldn't log you in because your email or password was incorrect.<br>";
-        if (!isset($_SESSION['loginfailures']) || (isset($_SESSION['loginlockouttime']) && time() - $_SESSION['loginlockouttime'] > 3600)) {
-            // If never failed or more than 1 hour has passed, reset login failures.
-            $_SESSION['loginfailures'] = 0;
-        }
+        
         $_SESSION['loginfailures'] += 1;
         if ($_SESSION['loginfailures'] < 10) {
-            $notificationMessage .= "This is your " . $_SESSION['loginfailures'] . " time. Please try again.";
+            $notificationMessage .= "This is your " . ordinal($_SESSION['loginfailures']) . " time. Please try again.";
         } else {
             $_SESSION['loginlockouttime'] = time();
             $notificationMessage .= "Since you failed to log in successfully 10 times, you may not try again for about an hour.";
@@ -96,17 +101,17 @@ elseif (isset($_GET['loggedout']) && $current_user <= 0) {
 <body>
     <header>
         <div id="headerPadder">
-            <a href="/" id="siteLogo">Lexiconga Dictionary Builder</a>
+            <a href="./" id="siteLogo">Lexiconga Dictionary Builder</a>
             <div style="float:right;margin: 16px 8px;font-size:12px;">
                 <span id="aboutButton" class="clickable" onclick="ShowInfo('about')">About Lexiconga</span>
             </div>
             <div id="loginoutArea" style="font-size:12px;">
                 <?php if ($current_user > 0) {  //If logged in, show the log out button. ?>
                     <a href="?logout" id="logoutLink" class="clickable">Log Out</a>
-                <?php } elseif (!isset($_SESSION['loginfailures']) || (isset($_SESSION['loginfailures']) && $_SESSION['loginfailures'] < 10) || (isset($_SESSION['loginlockouttime']) && time() - $_SESSION['loginlockouttime'] > 3600)) { ?>
+                <?php } elseif (!isset($_SESSION['loginfailures']) || (isset($_SESSION['loginfailures']) && $_SESSION['loginfailures'] < 10)) { ?>
                     <span id="loginLink" class="clickable" onclick="ShowInfo('login')">Log In/Create Account</span>
                 <?php } else { ?>
-                    <span id="loginLink" class="clickable" onclick="alert('You failed logging in 10 times. To prevent request flooding and hacking attempts, you may not log in or create an account for a while.');">Can't Login</span>
+                    <span id="loginLink" class="clickable" title="<?php echo $hoverlockoutmessage; ?>" onclick="alert('<?php echo $alertlockoutmessage; ?>');">Can't Login</span>
                 <?php } ?>
             </div>
         </div>
@@ -178,7 +183,7 @@ elseif (isset($_GET['loggedout']) && $current_user <= 0) {
     </div>
     
     <div id="rightColumn" class="googleads" style="float:right;width:20%;max-width:300px;min-width:200px;overflow:hidden;">
-        <?php //if ($_GET['adminoverride'] != "noadsortracking") { include_once("php/google/adsense.php"); } ?>
+        <?php if ($_GET['adminoverride'] != "noadsortracking") { include_once("php/google/adsense.php"); } ?>
     </div>
 
     <div id="settingsScreen" style="display:none;">
@@ -280,10 +285,12 @@ elseif (isset($_GET['loggedout']) && $current_user <= 0) {
     <script src="js/marked.js"></script>
     <!-- JSON Search -->
     <script src="js/defiant-js/defiant-latest.min.js"></script>
+    <!-- Diacritics Removal for Exports -->
+    <script src="js/removeDiacritics.js"></script>
     <!-- Main Script -->
     <script src="js/dictionaryBuilder.js"></script>
     <script src="js/ui.js"></script>
-    <?php //if ($_GET['adminoverride'] != "noadsortracking") { include_once("php/google/analytics.php"); } ?>
+    <?php if ($_GET['adminoverride'] != "noadsortracking") { include_once("php/google/analytics.php"); } ?>
 </body>
 </html>
 <?php

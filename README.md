@@ -73,6 +73,9 @@ The **Import Dictionary** button acts the same as before, but instead of overwri
 
 The **Delete Current Dictionary** button will permanently and irretrievably delete the currently loaded dictionary from your account! Be careful with that one. After deleting, you will then be prompted to either select another dictionary to load or create a new one, _or_ if you have no other dictionaries, immediately create a new one for you.
 
+### Lockout
+If you manage to enter your password wrong 10 times, you'll be locked out from logging in for an hour. Use this time to try to remember your password or something. You can get an idea of how long you've waited by refreshing the page and clicking the unfortunate "Can't Login" button. After an hour has passed, refresh the page again and you'll get another 10 tries.
+
 ## Problems or Requests
 Please report any problems you come across to the [Dictionary Builder Issues page](https://github.com/Alamantus/DictionaryBuilder/issues). You can also submit enhancement requests to the same place if you have any requests for new features.
 
@@ -92,3 +95,4 @@ I hope you enjoy Lexiconga and that it helps you build some awesome languages.
 ### Libraries Used
 * [Marked.js](https://github.com/chjj/marked) by Christopher Jeffrey (JJ) (a.k.a. chjj)
 * [Defiant.js](http://defiantjs.com) by Hakan Bilgin (a.k.a. hbi99)
+* [removeDiacritics.js](http://stackoverflow.com/a/18391901/3508346) by [rdllopes](http://meta.stackoverflow.com/users/1879686/rdllopes)

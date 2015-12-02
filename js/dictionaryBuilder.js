@@ -1,7 +1,6 @@
 /* global markdown */
 /* global Defiant */
 
-var currentUser = 0;
 var publicName = "Someone";
 
 var currentDictionary = {
@@ -538,7 +537,7 @@ function SavePreviousDictionary () {
 }
 
 function ExportDictionary() {
-    var downloadName = stripHtmlEntities(currentDictionary.name).replace(/\W/g, '');
+    var downloadName = removeDiacritics(stripHtmlEntities(currentDictionary.name)).replace(/\W/g, '');
     if (downloadName == "") {
         downloadName = "export";
     }
