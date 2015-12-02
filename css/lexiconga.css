@@ -102,7 +102,7 @@ input, textarea, select, option, button {
 }
 
 #loginLink, #logoutLink,
-#descriptionToggle, #settingsButton,
+#descriptionToggle, #searchFilterToggle, #settingsButton,
 .deleteCancelButton, .deleteConfirmButton,
 #settingsScreenCloseButton, #infoScreenCloseButton,
 .helperlink {

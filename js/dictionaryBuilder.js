@@ -39,11 +39,11 @@ function GetTextFile(filename) {
     readmeFileRequest.onreadystatechange = function() {
         if (readmeFileRequest.readyState == 4 && readmeFileRequest.status == 200) {
             if (filename == "TERMS.md") {
-                termsText = markdown.toHTML(readmeFileRequest.responseText);
+                termsText = marked(readmeFileRequest.responseText);
             } else if (filename == "PRIVACY.md") {
-                privacyText = markdown.toHTML(readmeFileRequest.responseText);
+                privacyText = marked(readmeFileRequest.responseText);
             } else {
-                aboutText = markdown.toHTML(readmeFileRequest.responseText);
+                aboutText = marked(readmeFileRequest.responseText);
             }
         }
     }
@@ -203,26 +203,41 @@ function ShowDictionary() {
     var filter = document.getElementById("wordFilter").value;
     
     var searchResults = [];
-    var search = htmlEntities(document.getElementById("searchBox").value);
-    if (search != "") {
+    var search = htmlEntitiesParseForSearchEntry(document.getElementById("searchBox").value);
+    var searchByWord = document.getElementById("searchOptionWord").checked;
+    var searchBySimple = document.getElementById("searchOptionSimple").checked;
+    var searchByLong = document.getElementById("searchOptionLong").checked;
+    var searchIgnoreCase = !document.getElementById("searchCaseSensitive").checked; //It's easier to negate case here instead of negating it every use since ignore case is default.
+    var searchIgnoreDiacritics = document.getElementById("searchIgnoreDiacritics").checked;
+    if (search != "" && (searchByWord || searchBySimple || searchByLong)) {
         var xpath = [];
-        if (document.getElementById("searchOptionWord").checked) {
-            xpath.push('contains(name, "'+ search +'")');
+        var searchDictionaryJSON = htmlEntitiesParseForSearch(JSON.stringify(currentDictionary));
+        if (searchIgnoreCase) {
+            search = search.toLowerCase();
+            //searchDictionaryJSON = searchDictionaryJSON.toLowerCase();
         }
-        if (document.getElementById("searchOptionSimple").checked) {
-            xpath.push('contains(simpleDefinition, "'+ search +'")');
+        if (searchIgnoreDiacritics) {
+            search = removeDiacritics(search);
+            searchDictionaryJSON = removeDiacritics(searchDictionaryJSON);
         }
-        if (document.getElementById("searchOptionLong").checked) {
-            xpath.push('contains(longDefinition, "'+ search +'")');
+        if (searchByWord) {
+            xpath.push('contains('+ ((searchIgnoreCase) ? 'name' : 'translate(name, "", "")') +', "'+ search +'")');
         }
-        searchResults = JSON.search(currentDictionary, '//words['+ xpath.join(' or ') +']/name');
+        if (searchBySimple) {
+            xpath.push('contains('+ ((searchIgnoreCase) ? 'simpleDefinition' : 'translate(simpleDefinition, "", "")') +', "'+ search +'")');
+        }
+        if (searchByLong) {
+            xpath.push('contains('+ ((searchIgnoreCase) ? 'longDefinition' : 'translate(longDefinition, "", "")') +', "'+ search +'")');
+        }
+        var searchDictionary = JSON.parse(searchDictionaryJSON);
+        searchResults = JSON.search(searchDictionary, '//words['+ xpath.join(' or ') +']/wordId');
     }
     
     var dictionaryNameArea = document.getElementById("dictionaryName");
     dictionaryNameArea.innerHTML = htmlEntitiesParse(currentDictionary.name) + " Dictionary";
     
     var dictionaryDescriptionArea = document.getElementById("dictionaryDescription");
-    dictionaryDescriptionArea.innerHTML = markdown.toHTML(htmlEntitiesParse(currentDictionary.description));
+    dictionaryDescriptionArea.innerHTML = marked(htmlEntitiesParse(currentDictionary.description));
     
     var dictionaryArea = document.getElementById("theDictionary");
     var dictionaryText = "";
@@ -230,7 +245,7 @@ function ShowDictionary() {
     if (currentDictionary.words.length > 0) {
         for (var i = 0; i < currentDictionary.words.length; i++) {
             if (filter == "" || (filter != "" && currentDictionary.words[i].partOfSpeech == filter)) {
-                if (search == "" || (search != "" && searchResults.indexOf(htmlEntities(currentDictionary.words[i].name)) >= 0)) {
+                if (search == "" || (search != "" && (searchByWord || searchBySimple || searchByLong) && searchResults.indexOf(currentDictionary.words[i].wordId) >= 0)) {
                     if (!currentDictionary.words[i].hasOwnProperty("pronunciation")) {
                         currentDictionary.words[i].pronunciation = "";  //Account for new property
                     }
@@ -246,32 +261,67 @@ function ShowDictionary() {
     }
 
     dictionaryArea.innerHTML = dictionaryText;
+    console.log("dictionary shown");
 }
 
 function DictionaryEntry(itemIndex) {
     var entryText = "<entry><a name='" + currentDictionary.words[itemIndex].wordId + "'></a><a href='#" + currentDictionary.words[itemIndex].wordId + "' class='wordLink clickable'>&#x1f517;</a>";
     
-    var searchTerm = htmlEntities(document.getElementById("searchBox").value);
-    var searchRegEx = new RegExp(searchTerm, "gi");
+    var searchTerm = document.getElementById("searchBox").value;
+    var searchByWord = document.getElementById("searchOptionWord").checked;
+    var searchBySimple = document.getElementById("searchOptionSimple").checked;
+    var searchByLong = document.getElementById("searchOptionLong").checked;
+    var searchIgnoreCase = !document.getElementById("searchCaseSensitive").checked; //It's easier to negate case here instead of negating it every use since ignore case is default.
+    var searchIgnoreDiacritics = document.getElementById("searchIgnoreDiacritics").checked;
+    
+    var searchRegEx = new RegExp("(" + ((searchIgnoreDiacritics) ? removeDiacritics(searchTerm) + "|" + searchTerm : searchTerm) + ")", "g" + ((searchIgnoreCase) ? "i" : ""));
 
-    entryText += "<word>" + ((searchTerm != "" && document.getElementById("searchOptionWord").checked) ? currentDictionary.words[itemIndex].name.replace(searchRegEx, "<searchTerm>" + searchTerm + "</searchterm>") : currentDictionary.words[itemIndex].name) + "</word>";
+    entryText += "<word>";
+
+    if (searchTerm != "" && searchByWord) {
+        entryText += htmlEntitiesParse(currentDictionary.words[itemIndex].name).replace(searchRegEx, "<searchTerm>$1</searchterm>");
+    } else {
+        entryText += currentDictionary.words[itemIndex].name;
+    }
+    
+    entryText += "</word>";
     
     if (currentDictionary.words[itemIndex].pronunciation != "") {
-        entryText += "<pronunciation>" + markdown.toHTML(htmlEntitiesParse(currentDictionary.words[itemIndex].pronunciation)).replace("<p>","").replace("</p>","") + "</pronunciation>";
+        entryText += "<pronunciation>";
+        entryText += marked(htmlEntitiesParse(currentDictionary.words[itemIndex].pronunciation)).replace("<p>","").replace("</p>","");
+        entryText += "</pronunciation>";
     }
     
     if (currentDictionary.words[itemIndex].partOfSpeech != "") {
-        entryText += "<partofspeech>" + currentDictionary.words[itemIndex].partOfSpeech + "</partofspeech>";
+        entryText += "<partofspeech>";
+        entryText += currentDictionary.words[itemIndex].partOfSpeech;
+        entryText += "</partofspeech>";
     }
 
     entryText += "<br>";
 
     if (currentDictionary.words[itemIndex].simpleDefinition != "") {
-        entryText += "<simpledefinition>" + ((searchTerm != "" && document.getElementById("searchOptionSimple").checked) ? currentDictionary.words[itemIndex].simpleDefinition.replace(searchRegEx, "<searchTerm>" + searchTerm + "</searchterm>") : currentDictionary.words[itemIndex].simpleDefinition) + "</simpledefinition>";
+        entryText += "<simpledefinition>";
+        
+        if (searchTerm != "" && searchBySimple) {
+            entryText += htmlEntitiesParse(currentDictionary.words[itemIndex].simpleDefinition).replace(searchRegEx, "<searchTerm>$1</searchterm>");
+        } else {
+            entryText += currentDictionary.words[itemIndex].simpleDefinition;
+        }
+
+        entryText += "</simpledefinition>";
     }
 
     if (currentDictionary.words[itemIndex].longDefinition != "") {
-        entryText += "<longdefinition>" + ((searchTerm != "" && document.getElementById("searchOptionLong").checked) ? markdown.toHTML(htmlEntitiesParse(currentDictionary.words[itemIndex].longDefinition)).replace(searchRegEx, "<searchTerm>" + searchTerm + "</searchterm>") : markdown.toHTML(htmlEntitiesParse(currentDictionary.words[itemIndex].longDefinition))) + "</longdefinition>";
+        entryText += "<longdefinition>";
+
+        if (searchTerm != "" && searchByLong) {
+            entryText += marked(htmlEntitiesParse(currentDictionary.words[itemIndex].longDefinition).replace(searchRegEx, "<searchTerm>$1</searchterm>"));
+        } else {
+            entryText += marked(htmlEntitiesParse(currentDictionary.words[itemIndex].longDefinition));
+        }
+
+        entryText += "</longdefinition>";
     }
 
     if (!currentDictionary.settings.isComplete) {
@@ -371,7 +421,7 @@ function LoadDictionary() {
 }
 
 function ExportDictionary() {
-    var downloadName = currentDictionary.name.replace(/\W/g, '');
+    var downloadName = removeDiacritics(stripHtmlEntities(currentDictionary.name)).replace(/\W/g, '');
     if (downloadName == "") {
         downloadName = "export";
     }
@@ -442,6 +492,19 @@ function htmlEntities(string) {
 
 function htmlEntitiesParse(string) {
     return String(string).replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/<br>/g, '\n');
+}
+
+function stripHtmlEntities(string) {
+    // This is for the export name.
+    return String(string).replace(/&amp;/g, '').replace(/&lt;/g, '').replace(/&gt;/g, '').replace(/&quot;/g, '').replace(/&apos;/g, "").replace(/<br>/g, '');
+}
+
+function htmlEntitiesParseForSearchEntry(string) {
+    return String(string).replace(/"/g, '%%').replace(/'/g, "``");
+}
+
+function htmlEntitiesParseForSearch(string) {
+    return String(string).replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '%%').replace(/&apos;/g, "``");
 }
 
 function dynamicSort(property) {

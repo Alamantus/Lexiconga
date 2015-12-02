@@ -68,25 +68,31 @@ if ($_GET['adminoverride'] == 'dictionarytotext') {
         <span id="descriptionToggle" class="clickable" onclick="ToggleDescription();">Show Description</span>
         <div id="dictionaryDescription" style="display:none;"></div>
         
-        <div id="searchArea" style="display:block;">
-            <label style="margin-top:10px;">
-                <span>Search</span>
-                <div style="display:block;">
-                    <input type="text" id="searchBox" onclick="this.select();" onchange="ShowDictionary()" style="display:inline;" />&nbsp;
-                    <span style="display:inline;cursor:pointer;font-size:10px;font-weight:bold;" onclick="document.getElementById('searchBox').value='';ShowDictionary();">Clear Search</span>
-                </div>
-                <div id="searchOptions" style="font-size:12px;">
-                    <label style="display:inline;margin:0;">Word <input type="checkbox" id="searchOptionWord" checked="checked" onchange="ShowDictionary()" /></label>&nbsp;&nbsp;
-                    <label style="display:inline;margin:0;">Equivalent <input type="checkbox" id="searchOptionSimple" checked="checked" onchange="ShowDictionary()" /></label>&nbsp;&nbsp;
-                    <label style="display:inline;margin:0;">Explanation <input type="checkbox" id="searchOptionLong" checked="checked" onchange="ShowDictionary()" /></label>
-                </div>
+        <span id="searchFilterToggle" class="clickable" onclick="ToggleSearchFilter();">Search/Filter Options</span>
+        <div id="searchFilterArea" style="display:none;">
+            <div id="searchArea" style="display:block;">
+                <label style="margin-top:10px;">
+                    <span>Search</span>
+                    <div style="display:block;">
+                        <input type="text" id="searchBox" onclick="this.select();" onchange="ShowDictionary()" style="display:inline;" />&nbsp;
+                        <span style="display:inline;cursor:pointer;font-size:10px;font-weight:bold;" onclick="document.getElementById('searchBox').value='';ShowDictionary();">Clear Search</span>
+                    </div>
+                    <div id="searchOptions" style="font-size:12px;">
+                        <label style="display:inline;margin:0;">Word <input type="checkbox" id="searchOptionWord" checked="checked" onchange="ShowDictionary()" /></label>&nbsp;&nbsp;
+                        <label style="display:inline;margin:0;">Equivalent <input type="checkbox" id="searchOptionSimple" checked="checked" onchange="ShowDictionary()" /></label>&nbsp;&nbsp;
+                        <label style="display:inline;margin:0;">Explanation <input type="checkbox" id="searchOptionLong" checked="checked" onchange="ShowDictionary()" /></label>
+                        <br />
+                        <label style="display:inline;margin:0;">Search Case-Sensitive <input type="checkbox" id="searchCaseSensitive" onchange="ShowDictionary()" /></label>
+                        <label style="display:inline;margin:0;" title="Note: Matching diacritics will appear but may not highlight.">Ignore Diacritics/Accents <input type="checkbox" id="searchIgnoreDiacritics" onchange="ShowDictionary()" /></label>
+                    </div>
+                </label>
+            </div>
+            
+            <label style="display:block;"><b>Filter Words </b><select id="wordFilter" onchange="ShowDictionary()">
+                <option value="">All</option>
+            </select>
             </label>
         </div>
-        
-        <label style="display:block;"><b>Filter Words </b><select id="wordFilter" onchange="ShowDictionary()">
-            <option value="">All</option>
-        </select>
-        </label>
             
         <div id="theDictionary"></div>
     </div>
@@ -167,9 +173,11 @@ if ($_GET['adminoverride'] == 'dictionarytotext') {
     </footer>
     
     <!-- Markdown Parser -->
-    <script src="js/markdown-js/markdown.min.js"></script>
+    <script src="js/marked.js"></script>
     <!-- JSON Search -->
-    <script src="js/defiant-js/defiant-latest.min.js"></script>
+    <script src="js/defiant-js/defiant-latest.js"></script>
+    <!-- Diacritics Removal for Exports -->
+    <script src="js/removeDiacritics.js"></script>
     <!-- Main Script -->
     <script src="js/dictionaryBuilder.js"></script>
     <script src="js/ui.js"></script>
