@@ -1,7 +1,7 @@
 <?php
 function Set_Password_Reset($email) {
     $date = date("Y-m-d H:i:s");
-    $reset_code = Random_String(20);
+    $reset_code = random_string(20);
     $query = "UPDATE `users` SET `password_reset_code`=" . $reset_code . ", `password_reset_date`='" . $date . "' WHERE `email`='" . $email . ";";
     $reset = query($query);
     
