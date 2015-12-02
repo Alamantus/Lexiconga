@@ -187,7 +187,9 @@ input[type=checkbox] {
     cursor: pointer;
 }
 
-#descriptionToggle {
+#descriptionToggle, #searchFilterToggle {
+    display: inline-block;
+    margin: 8px;
     font-weight: bold;
     font-size: 12px;
     cursor: pointer;

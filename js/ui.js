@@ -155,6 +155,19 @@ function ToggleDescription() {
     }
 }
 
+function ToggleSearchFilter() {
+    var searchFilterToggle = document.getElementById("searchFilterToggle");
+    var searchFilterArea = document.getElementById("searchFilterArea");
+    
+    if (searchFilterArea.style.display == "none") {
+        searchFilterArea.style.display = "block";
+        searchFilterToggle.innerHTML = "Hide Search/Filter Options";
+    } else {
+        searchFilterArea.style.display = "none";
+        searchFilterToggle.innerHTML = "Search/Filter Options";
+    }
+}
+
 function ShowInfo(text) {
     if (text == "terms") {
         document.getElementById("infoText").innerHTML = termsText;
