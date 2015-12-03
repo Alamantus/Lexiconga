@@ -6,7 +6,20 @@ function Set_Password_Reset($email) {
     $reset = query($query);
     
     if ($reset) {
-        return true;
+        $to = $email;
+        $subject = "Here's your Lexiconga password reset link";
+        $message = "Hello " . Get_Public_Name(Get_User_Id($email)) . "\n\nSomeone has requested a password reset link for your Lexiconga account. If it was you, you can reset your password by going to the link below and entering a new password for yourself:\n";
+        $message .= "http://lexicon.ga/?action=passwordreset&code=" . $reset_code . "\n\n";
+        $message .= "If it wasn't you who requested the link, you can ignore this email since it was only sent to you, but you might want to consider changing your password when you have a chance.\n\n";
+        $message .= "The password link will only be valid for today until you use it.\n\n";
+        $message .= "Thanks!\nThe Lexiconga Admins";
+        $header = "From: help@lexicon.ga\r\n";
+
+        if (mail($to, $subject, $message, $header)) {
+            return true;
+        } else {
+            return "could not send";
+        }
     } else {
         return false;
     }
