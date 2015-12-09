@@ -1,0 +1,10 @@
+<div class="settingsCol"><form id="forgotForm" method="post" action="?forgot">
+    <h2>Forgot Password</h2>
+    <label><span>Email</span>
+        <input type="email" id="forgotEmailField" name="email" />
+    </label>
+    <div id="forgotError" style="font-weight:bold;color:red;"></div>
+    <button type="submit" id="forgotSubmitButton" onclick="ValidateLogin(); return false;">Email Password Reset Key</button>
+    <div id="dictionaryWarn"></div>
+    <span id="forgotPassword" onclick="ShowInfo('login')">Log In/Create Account</span>
+</form></div>

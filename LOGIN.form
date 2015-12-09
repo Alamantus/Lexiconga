@@ -9,6 +9,7 @@
     <div id="loginError" style="font-weight:bold;color:red;"></div>
     <button type="submit" id="loginSubmitButton" onclick="ValidateLogin(); return false;">Log In</button>
     <div id="dictionaryWarn"></div>
+    <span id="forgotPassword" onclick="ShowInfo('forgot')">Forgot Password?</span>
 </form></div>
 <div class="settingsCol"><form id="createAccountForm" method="post" action="?createaccount">
     <h2>Create a New Account</h2>
