@@ -261,6 +261,7 @@ function ShowInfo(variableName) {
             document.getElementById("dictionaryWarn").innerHTML = "If your current dictionary is not already saved to your account, be sure to <span class='exportWarnText' onclick='ExportDictionary()'>export it before logging in</span> so you don't lose anything!";
         }
     }
+    HideAccountSettings();
     document.getElementById("infoPage").scrollTop = 0;
     document.getElementById("infoScreen").style.display = "block";
 }
@@ -271,6 +272,7 @@ function HideInfo() {
 
 function ShowAccountSettings(variableName) {
     document.getElementById("accountSettingsScreen").style.display = "block";
+    HideInfo();
 }
 
 function HideAccountSettings() {

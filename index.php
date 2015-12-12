@@ -199,20 +199,6 @@ require_once(SITE_LOCATION . '/php/notificationconditiontree.php');
         </div>
     </div>
 
-    <div id="loadAfterDeleteScreen" style="display:none;">
-        <div id="loadAfterDeleteFade"></div>
-        <div id="loadAfterDeletePage">
-            <div class="settingsCol">
-                <h1>Dictionary Deleted</h1>
-                <label>Select dictionary to load:<br />
-                    <select id="loadAfterDelete" onchange="ChangeDictionary(this);document.getElementById('loadAfterDeleteScreen').style.display = 'none';"></select>
-                </label>
-                <p>Or</p>
-                <label><button type="button" onclick="CreateNewDictionary();document.getElementById('loadAfterDeleteScreen').style.display = 'none';" style="cursor:pointer;">Create a New Dictionary</button></label>
-            </div>
-        </div>
-    </div>
-
     <?php if ($current_user > 0) {
         $user_email = Get_User_Email($current_user);
     ?>
@@ -245,6 +231,20 @@ require_once(SITE_LOCATION . '/php/notificationconditiontree.php');
     <?php
         }
     ?>
+
+    <div id="loadAfterDeleteScreen" style="display:none;">
+        <div id="loadAfterDeleteFade"></div>
+        <div id="loadAfterDeletePage">
+            <div class="settingsCol">
+                <h1>Dictionary Deleted</h1>
+                <label>Select dictionary to load:<br />
+                    <select id="loadAfterDelete" onchange="ChangeDictionary(this);document.getElementById('loadAfterDeleteScreen').style.display = 'none';"></select>
+                </label>
+                <p>Or</p>
+                <label><button type="button" onclick="CreateNewDictionary();document.getElementById('loadAfterDeleteScreen').style.display = 'none';" style="cursor:pointer;">Create a New Dictionary</button></label>
+            </div>
+        </div>
+    </div>
 
     </contents>
     <footer>
