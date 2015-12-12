@@ -178,6 +178,7 @@ input[type=checkbox] {
 .clickable, .helperlink {
     display: inline;
     font-weight: bold;
+    font-size: 13px;
     padding: 4px;
     background: #dddddd;
     border-radius: 5px;
@@ -309,7 +310,7 @@ searchTerm {
     margin: 10px;
 }
 
-#settingsBackgroundFade, #infoBackgroundFade, #loadAfterDeleteFade {
+#settingsBackgroundFade, #infoBackgroundFade, #loadAfterDeleteFade, #accountSettingsBackgroundFade {
     position: fixed;
     top: 0;
     left: 0;
@@ -319,7 +320,7 @@ searchTerm {
     opacity: 0.75;
 }
 
-#settingsOptions, #infoPage, #loadAfterDeletePage {
+#settingsOptions, #infoPage, #loadAfterDeletePage, #accountSettingsPage {
     position: fixed;
     top: 6%;
     left: 6%;

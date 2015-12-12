@@ -1,14 +1,15 @@
-var aboutText, termsText, privacyText, loginForm, createAccountForm;
+var aboutText = termsText = privacyText = loginForm = forgotForm = "Loading...";
 
 window.onload = function () {
     LoadDictionary();
     ClearForm();
     LoadUserDictionaries();
     
-    GetTextFile("README.md");
-    GetTextFile("TERMS.md");
-    GetTextFile("PRIVACY.md");
-    GetTextFile("LOGIN.form");
+    GetTextFile("README.md", "aboutText", true);
+    GetTextFile("TERMS.md", "termsText", true);
+    GetTextFile("PRIVACY.md", "privacyText", true);
+    GetTextFile("LOGIN.form", "loginForm", false);
+    GetTextFile("FORGOT.form", "forgotForm", false);
 }
 
 function LoadUserDictionaries() {
@@ -43,20 +44,13 @@ function ParseUserDictionariesIntoSelect(selectToPopulate, dicitonaryList) {
     selectToPopulate.value = (currentDictionary.externalID > 0) ? currentDictionary.externalID : "";
 }
 
-function GetTextFile(filename) {
+function GetTextFile(filename, variableName, parseMarkdown) {
+    parseMarkdown = (typeof parseMarkdown !== 'undefined') ? parseMarkdown : false;
     var readmeFileRequest = new XMLHttpRequest();
     readmeFileRequest.open('GET', filename);
     readmeFileRequest.onreadystatechange = function() {
         if (readmeFileRequest.readyState == 4 && readmeFileRequest.status == 200) {
-            if (filename == "TERMS.md") {
-                termsText = marked(readmeFileRequest.responseText);
-            } else if (filename == "PRIVACY.md") {
-                privacyText = marked(readmeFileRequest.responseText);
-            } else if (filename == "LOGIN.form") {
-                loginForm = readmeFileRequest.responseText;
-            } else {
-                aboutText = marked(readmeFileRequest.responseText);
-            }
+            window[variableName] = (parseMarkdown) ? marked(readmeFileRequest.responseText) : readmeFileRequest.responseText;
         }
     }
     readmeFileRequest.send();
@@ -120,6 +114,97 @@ function ValidateCreateAccount() {
     }
 }
 
+function ValidateAccountSettings() {
+    var errorMessage = document.getElementById("accountSettingsError");
+    var emailValue = document.getElementById("accountSettingsEmailField").value;
+    var publicNameValue = document.getElementById("accountSettingsPublicNameField").value;
+      
+    if (emailValue == "") {
+        errorMessage.innerHTML = "Email cannot be blank!";
+        return false;
+    } else if (!(/[^\s@]+@[^\s@]+\.[^\s@]+/.test(emailValue))) {
+        errorMessage.innerHTML = "Your email address looks fake. Email addresses look like this: name@email.com."
+        return false;
+    } else if (publicNameValue == "") {
+        errorMessage.innerHTML = "Public Name cannot be blank!";
+        return false;
+    } else {
+        document.getElementById("createAccountForm").submit();
+    }
+}
+
+function WarnEmailChange() {
+    var emailChangeWarning = document.getElementById("accountSettingsEmailChangeWarning");
+    var emailValue = document.getElementById("accountSettingsEmailField").value;
+    var originalEmailValue = document.getElementById("accountSettingsPreviousEmailField").value;
+
+    if (emailValue != originalEmailValue) {
+        emailChangeWarning.style.display = "block";
+    } else {
+        emailChangeWarning.style.display = "none";
+    }
+}
+
+function ValidateForgotPassword() {
+    var errorMessage = document.getElementById("forgotError");
+    var emailValue = document.getElementById("forgotEmailField").value;
+      
+    if (emailValue == "") {
+        errorMessage.innerHTML = "Email cannot be blank!";
+        return false;
+    } else if (!(/[^\s@]+@[^\s@]+\.[^\s@]+/.test(emailValue))) {
+        errorMessage.innerHTML = "Your email address looks fake. Email addresses look like this: name@email.com."
+        return false;
+    } else {
+        var emailCheck = new XMLHttpRequest();
+        emailCheck.open('GET', "php/ajax_passwordresetemailcheck.php?email=" + emailValue);
+        emailCheck.onreadystatechange = function() {
+            if (emailCheck.readyState == 4 && emailCheck.status == 200) {
+                if (emailCheck.responseText != "email exists") {
+                    errorMessage.innerHTML = "The email address entered is not in use and therefore can't have its password reset. Try <span class='clickable' onclick='ShowInfo(\"loginForm\")'>creating an account</span> instead!";
+                    return false;
+                } else {
+                    document.getElementById("forgotForm").submit();
+                }
+            }
+        }
+        emailCheck.send();
+    }
+}
+
+function ValidateResetPassword() {
+    var errorMessage = document.getElementById("resetPasswordError");
+    var passwordValue = document.getElementById("newPasswordField").value;
+    var passwordConfirmValue = document.getElementById("newPasswordConfirmField").value;
+      
+    if (passwordValue == "") {
+        errorMessage.innerHTML = "Password cannot be blank!";
+        return false;
+    } else if (passwordValue != passwordConfirmValue) {
+        errorMessage.innerHTML = "Passwords do not match!";
+        return false;
+    } else {
+        document.getElementById("resetPasswordForm").submit();
+    }
+}
+
+function LoggedInResetPassword() {
+    var resetPasswordRequest = new XMLHttpRequest();
+    resetPasswordRequest.open('GET', "php/ajax_setnewpassword.php");
+    resetPasswordRequest.onreadystatechange = function() {
+        if (resetPasswordRequest.readyState == 4 && resetPasswordRequest.status == 200) {
+            if (resetPasswordRequest.responseText != "done") {
+                console.log(resetPasswordRequest.responseText);
+                alert("Error resetting password.\n\nTry again later.");
+                return false;
+            } else {
+                window.location = "./";
+            }
+        }
+    }
+    resetPasswordRequest.send();
+}
+
 function ExplainPublicName() {
     alert("This is the name we greet you with. It's also the name displayed if you ever decide to share any of your dictionaries.\n\nNote: this is not a username, and as such is not guaranteed to be unique. Use something people will recognize you as to differentiate from other people who might use the same name!");
 }
@@ -168,18 +253,13 @@ function ToggleSearchFilter() {
     }
 }
 
-function ShowInfo(text) {
-    if (text == "terms") {
-        document.getElementById("infoText").innerHTML = termsText;
-    } else if (text == "privacy") {
-        document.getElementById("infoText").innerHTML = privacyText;
-    } else if (text == "login") {
-        document.getElementById("infoText").innerHTML = loginForm;
+function ShowInfo(variableName) {
+    document.getElementById("infoText").innerHTML = window[variableName];
+    if (variableName == "loginForm") {
+        // document.getElementById("infoText").innerHTML = loginForm;
         if (currentDictionary.words.length > 0 || currentDictionary.name != "New" || currentDictionary.description != "A new dictionary.") {
             document.getElementById("dictionaryWarn").innerHTML = "If your current dictionary is not already saved to your account, be sure to <span class='exportWarnText' onclick='ExportDictionary()'>export it before logging in</span> so you don't lose anything!";
         }
-    } else {
-        document.getElementById("infoText").innerHTML = aboutText;
     }
     document.getElementById("infoPage").scrollTop = 0;
     document.getElementById("infoScreen").style.display = "block";
@@ -187,6 +267,14 @@ function ShowInfo(text) {
 
 function HideInfo() {
     document.getElementById("infoScreen").style.display = "none";
+}
+
+function ShowAccountSettings(variableName) {
+    document.getElementById("accountSettingsScreen").style.display = "block";
+}
+
+function HideAccountSettings() {
+    document.getElementById("accountSettingsScreen").style.display = "none";
 }
 
 function ShowDictionaryDeleteMenu(dictionaryList) {

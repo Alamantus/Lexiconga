@@ -4,7 +4,7 @@
         <input type="email" id="forgotEmailField" name="email" />
     </label>
     <div id="forgotError" style="font-weight:bold;color:red;"></div>
-    <button type="submit" id="forgotSubmitButton" onclick="ValidateLogin(); return false;">Email Password Reset Key</button>
+    <button type="submit" id="forgotSubmitButton" onclick="ValidateForgot(); return false;">Email Password Reset Key</button>
     <div id="dictionaryWarn"></div>
-    <span id="forgotPassword" onclick="ShowInfo('login')">Log In/Create Account</span>
+    <span id="forgotPassword" class="clickable" onclick="ShowInfo('loginForm')">Log In/Create Account</span>
 </form></div>

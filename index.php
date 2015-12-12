@@ -6,86 +6,16 @@ $current_user = isset($_SESSION['user']) ? $_SESSION['user'] : 0;
 
 $notificationMessage = "";
 
-if (!isset($_SESSION['loginfailures']) || (isset($_SESSION['loginlockouttime']) && time() - $_SESSION['loginlockouttime'] >= 3600)) {
-    // If never failed or more than 1 hour has passed, reset login failures.
+if ($current_user > 0 || !isset($_SESSION['loginfailures']) || (isset($_SESSION['loginlockouttime']) && time() - $_SESSION['loginlockouttime'] >= 3600)) {
+    // If logged in, never failed, or more than 1 hour has passed, reset login failures.
     $_SESSION['loginfailures'] = 0;
 } else {
-    $alertlockoutmessage = "You failed logging in 10 times. To prevent request flooding and hacking attempts, you may not log in or create an account for about an hour.\\n\\nThe last time this page was loaded, you had been locked out for " . time_elapsed(time() - $_SESSION['loginlockouttime']);
+    $alertlockoutmessage = "You failed logging in 10 times. To prevent request flooding and hacking attempts, you may not log in or create an account for 1 hour.\\n\\nThe last time this page was loaded, you had been locked out for " . time_elapsed(time() - $_SESSION['loginlockouttime']) . "\\n\\nRefresh the page once the hour has passed.";
     $hoverlockoutmessage = str_replace("\\n", "\n", $alertlockoutmessage);
 }
 
-if (isset($_GET['logout']) && $current_user > 0) {
-    session_destroy();
-    header('Location: ./?loggedout');
-}
-elseif (isset($_GET['login']) && $current_user <= 0) {
-    if (isset($_POST['email']) && isset($_POST['password'])) {
-        if (filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
-            if (EmailExists($_POST['email'])) {
-                if (Validate_Login($_POST['email'], $_POST['password'])) {
-                    $_SESSION['user'] = Get_User_Id($_POST['email']);
-                    header('Location: ./');
-                } else {
-                    header('Location: ./?error=loginfailed');
-                }
-            } else {
-                header('Location: ./?error=emaildoesnotexist');
-            }
-        } else {
-            header('Location: ./?error=emailinvalid');
-        }
-    } else {
-        header('Location: ./?error=loginemailorpasswordblank');
-    }
-}
-elseif (isset($_GET['createaccount'])) {
-    if (isset($_POST['email']) && isset($_POST['password'])) {
-        if (filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) && !EmailExists($_POST['email'])) {
-            if (query("INSERT INTO users (email, password, public_name, allow_email) VALUES ('" . $_POST['email'] . "','" . crypt($_POST['password'], $_POST['email']) . "','" . htmlspecialchars($_POST['publicname'], ENT_QUOTES) . "'," . (($_POST['allowemails'] != "on") ? 0 : 1) . ")")) {
-                header('Location: ./?success');
-            } else {
-                header('Location: ./?error=couldnotcreate');
-            }
-        } else {
-            header('Location: ./?error=emailcreateinvalid');
-        }
-    } else {
-        header('Location: ./?error=createemailorpasswordblank');
-    }
-}
-elseif (isset($_GET['error']) && $current_user <= 0) {
-    if ($_GET['error'] == "couldnotcreate") {
-        $notificationMessage = "Could not create account.<br>Please try again later.";
-    } elseif ($_GET['error'] == "emailcreateinvalid") {
-        $notificationMessage = "The email address used to create your account didn't work.<br>Please try another.";
-    } elseif ($_GET['error'] == "createemailorpasswordblank") {
-        $notificationMessage = "The create account form somehow got submitted without some essential information.<br>Please try filling it out again.";
-    } elseif ($_GET['error'] == "loginfailed") {
-        $notificationMessage = "We couldn't log you in because your email or password was incorrect.<br>";
-        
-        $_SESSION['loginfailures'] += 1;
-        if ($_SESSION['loginfailures'] < 10) {
-            $notificationMessage .= "This is your " . ordinal($_SESSION['loginfailures']) . " time. Please try again.";
-        } else {
-            $_SESSION['loginlockouttime'] = time();
-            $notificationMessage .= "Since you failed to log in successfully 10 times, you may not try again for about an hour.";
-        }
-    } elseif ($_GET['error'] == "emaildoesnotexist") {
-        $notificationMessage = "The email address you entered doesn't have an account.<br>Would you like to <span class='clickable' onclick='ShowInfo(\"create\")'>create an account</span>?";
-    } elseif ($_GET['error'] == "emailinvalid") {
-        $notificationMessage = "The email address you entered didn't work.<br>Please try another.";
-    } else {
-        $notificationMessage = "Something seems to have gone wrong, but I don't know what.<br>Please try again.";
-    }
-}
-elseif (isset($_GET['success']) && $current_user <= 0) {
-    $notificationMessage = "Your account was created successfully!<br>Please log in using the email address and password you used to create it and you can start accessing your dictionaries anywhere!";
-}
-elseif (isset($_GET['loggedout']) && $current_user <= 0) {
-    $notificationMessage = "You have been successfully logged out.<br>You will only be able to use the dictionary saved to your browser.";
-} elseif ($current_user > 0) {
-    $notificationMessage = "Welcome back, " . Get_Public_Name($current_user) . "!";
-}
+require_once(SITE_LOCATION . '/php/notificationconditiontree.php');
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -103,13 +33,13 @@ elseif (isset($_GET['loggedout']) && $current_user <= 0) {
         <div id="headerPadder">
             <a href="./" id="siteLogo">Lexiconga Dictionary Builder</a>
             <div style="float:right;margin: 16px 8px;font-size:12px;">
-                <span id="aboutButton" class="clickable" onclick="ShowInfo('about')">About Lexiconga</span>
+                <span id="aboutButton" class="clickable" onclick="ShowInfo('aboutText')">About Lexiconga</span>
             </div>
             <div id="loginoutArea" style="font-size:12px;">
                 <?php if ($current_user > 0) {  //If logged in, show the log out button. ?>
-                    <a href="?logout" id="logoutLink" class="clickable">Log Out</a>
+                    <span id="accountSettings" class="clickable" onclick="ShowAccountSettings()">Account Settings</span> <a href="?logout" id="logoutLink" class="clickable">Log Out</a>
                 <?php } elseif (!isset($_SESSION['loginfailures']) || (isset($_SESSION['loginfailures']) && $_SESSION['loginfailures'] < 10)) { ?>
-                    <span id="loginLink" class="clickable" onclick="ShowInfo('login')">Log In/Create Account</span>
+                    <span id="loginLink" class="clickable" onclick="ShowInfo('loginForm')">Log In/Create Account</span>
                 <?php } else { ?>
                     <span id="loginLink" class="clickable" title="<?php echo $hoverlockoutmessage; ?>" onclick="alert('<?php echo $alertlockoutmessage; ?>');">Can't Login</span>
                 <?php } ?>
@@ -282,9 +212,43 @@ elseif (isset($_GET['loggedout']) && $current_user <= 0) {
             </div>
         </div>
     </div>
+
+    <?php if ($current_user > 0) {
+        $user_email = Get_User_Email($current_user);
+    ?>
+    <div id="accountSettingsScreen" style="display:none;">
+        <div id="accountSettingsBackgroundFade" onclick="HideAccountSettings()"></div>
+        <div id="accountSettingsPage">
+            <span id="accountSettingsScreenCloseButton" class="clickable" onclick="HideAccountSettings()">Close</span>
+            <div class="settingsCol"><form id="accountSettingsForm" method="post" action="?accountsettings">
+                <h2>Account Settings</h2>
+                <label><span>Email</span>
+                    <input type="email" id="accountSettingsEmailField" name="email" value="<?php echo $user_email; ?>" onchange="WarnEmailChange()" />
+                    <input type="hidden" id="accountSettingsPreviousEmailField" name="previousemail" value="<?php echo $user_email; ?>" />
+                </label>
+                <div id="accountSettingsEmailChangeWarning" style="display:none;font-weight:bold;color:#dd5500;font-size:11px;margin-bottom:10px;">If you change your email address, please note that you will no longer be able to log in with your old email address, <?php echo $user_email; ?>.<br>Change it back unless you are completely sure that you want to change your email address!</div>
+                <label><span>Public Name <span class="clickable" onclick="ExplainPublicName()" style="font-size:11px;vertical-align:top;background:#e0c19c;padding:4px 7px;">?</span></span>
+                    <input type="text" id="accountSettingsPublicNameField" name="publicname" value="<?php echo Get_Public_Name_By_Id($current_user); ?>" />
+                </label>
+                <label><b>Allow Emails</b>
+                    <input type="checkbox" id="accountSettingsAllowEmailsField" name="allowemails" <?php if (Get_Allow_Email_By_Id($current_user) == 1) echo 'checked="checked"'; ?> />
+                </label>
+                <div id="accountSettingsError" style="font-weight:bold;color:red;"></div>
+                <button type="submit" id="accountSettingsSubmitButton" onclick="ValidateAccountSettings(); return false;">Save Settings</button>
+                <br><br>
+                <h2>Reset Your Password</h2>
+                <p style="font-size: 12px;">Click the button below to reload the page and show the Reset Password form. Filling out this form will instantly change your password, and you will need to log in using the new password from that point forward.</p>
+                <span id="resetPassword" class="clickable" onclick="this.innerHTML='Loading...';LoggedInResetPassword();" style="margin-top:20px;">Reset Password</span>
+            </form></div>
+        </div>
+    </div>
+    <?php
+        }
+    ?>
+
     </contents>
     <footer>
-        Dictionary Builder only guaranteed to work with most up-to-date HTML5 browsers. <a href="https://github.com/Alamantus/DictionaryBuilder/issues" target="_blank">Report a Problem</a> | <span class="clickable" onclick="ShowInfo('terms')" style="font-size:12px;">Terms</span> <span class="clickable" onclick="ShowInfo('privacy')" style="font-size:12px;">Privacy</span>
+        Dictionary Builder only guaranteed to work with most up-to-date HTML5 browsers. <a href="https://github.com/Alamantus/DictionaryBuilder/issues" target="_blank">Report a Problem</a> | <span class="clickable" onclick="ShowInfo('termsText')" style="font-size:12px;">Terms</span> <span class="clickable" onclick="ShowInfo('privacyText')" style="font-size:12px;">Privacy</span>
     </footer>
     
     <!-- Markdown Parser -->
