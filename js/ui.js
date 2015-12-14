@@ -276,7 +276,8 @@ function ShowAccountSettings(variableName) {
 }
 
 function HideAccountSettings() {
-    document.getElementById("accountSettingsScreen").style.display = "none";
+    If (document.getElementById("accountSettingsScreen"))
+        document.getElementById("accountSettingsScreen").style.display = "none";
 }
 
 function ShowDictionaryDeleteMenu(dictionaryList) {
