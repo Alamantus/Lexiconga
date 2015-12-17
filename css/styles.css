@@ -140,6 +140,10 @@ input[type=checkbox] {
     text-decoration: underline;
 }
 
+#createAccountSubmitButton, #accountSettingsSubmitButton {
+    margin-top: 10px;
+}
+
 #aboutButton {
     display: inline;
     margin: 0 10px 0 0;

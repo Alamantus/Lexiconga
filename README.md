@@ -7,6 +7,26 @@ It accepts Unicode characters so you can utilize whatever typable characters you
 
 If you would like an added layer of accessibility and security (in case you clear your browser cache frequently), you can create an account, where you can store and switch between as many dictionaries as you need. Having an account will also allow you to access your dictionaries from any browser by logging in. (Just be careful you don't overwrite dictionaries by logging in and saving from separate locations!)
 
+## Table of Contents
+* [How do I use Lexiconga?](#how-do-i-use-lexiconga)
+  * [Getting Started](#getting-started)
+  * [Viewing your Dictionary's Description/Rules](#viewing-your-dictionary-s-description-rules)
+  * [Entry Management](#entry-management)
+  * [The Settings Menu](#the-settings-menu)
+  * [Search/Filter](#search-filter)
+* [Accounts](#accounts)
+  * [Creating An Account](#creating-an-account)
+  * [Logging In](#logging-in)
+  * [Differences](#differences)
+    * [Account Settings](#account-settings)
+    * [Dictionary Settings](#dictionary-settings)
+  * [Forgot Your Password?](#forgot-your-password-)
+  * [Lockout](#lockout)
+* [Problems or Requests](#problems-or-requests)
+* [Future Plans](#future-plans)
+* [Thanks](#thanks-)
+* [Libraries Used](#libraries-used)
+
 ## How do I use Lexiconga?
 
 ### Getting Started
@@ -51,6 +71,21 @@ The **Import Dictionary** form allows you to upload and view any previously-expo
 
 The **Empty Current Dictionary** should only be used if you want to completely start over from scratch. It will ask you to confirm that you want to delete, and if you confirm, your dictionary will be gone forever. If you have not exported your dictionary before emptying it, there will be absolutely no way to get it back. Please be careful with this!
 
+### Search/Filter
+You can search entries or filter by part of speech by clicking the "Search/Filter Options" button to expand the search panel.
+
+From there, you can enter any text you want in the search box and either press Enter or click anywhere outside the search box, and Lexiconga will display any and every entry including your entry. To display the entire dictionary again, you must clear the search box.
+
+You can refine your search by using the checkboxes below the search box:
+
+* **Word**: When checked, Lexiconga searches your dictionary's "Word" entries for the entered text. When unchecked, it ignores it.
+* **Equivalent**: When checked, Lexiconga searches your dictionary's "Equivalent Word(s)" entries for the entered text. When unchecked, it ignores it.
+* **Explanation**: When checked, Lexiconga searches your dictionary's "Explanation/Long Definition" entries for the entered text. When unchecked, it ignores it.
+* **Search Case-Sensitive**: When checked, Lexiconga finds entries matching the letter case in the entered text. When unchecked, it will find any case as long as the letters match.
+* **Ignore Diacritics/Accents**: When checked, Lexiconga will ignore accented letters and diacritics and identify them as their equivalent unaccented letter and vice-versa, in case you want to find a word with a diacritic without entering the diacritic in the search box. When unchecked, it will only find diacritics and accented letters if they are specifically entered in the search box.
+
+The "Filter Words" drop-down box allows you to filter your dictionary by part of speech. To display the whole dictionary again after setting a filter, reset the filter option to "All".
+
 ## Accounts
 If you are using an account with Lexiconga, your experience should remain essentially the same, but you will see some additional options in the Settings menu and you might notice some slight changes in performance as it saves to and loads from the database.
 
@@ -63,6 +98,20 @@ To log in after creating an account, just click the "Log In/Create Account" butt
 ### Differences
 Every time you save a change to your dictionary's settings or add, edit, or delete a word, the changes are automatically saved to both your browser's localStorage in addition to being sent to your account. If you're paranoid that your changes are not being saved, you can check your browser's console log to see the little save and update notifications.
 
+#### Account Settings
+After logging in, you'll see an "Account Settings" button in the top, right side of the Lexiconga window. Clicking this will allow you to change a few settings about your account:
+
+The **Email** field allows you to specify a different login and contact email address. Make sure that you do not forget what you chose, because there is no way to retrieve your email address if you change it to something you forget!
+
+The **Public Name** field allows you to change your public name.
+
+The **Allow Emails** checkbox allows you to choose if you would like to receive emails about important Lexiconga updates. Make sure that you allow emails from addresses at lexicon.ga or check your spam folder just in case. Note that this checkbox does not affect password reset requests—if you forget your password, Lexiconga will send you a password reset email regardless of your choice here.
+
+If you change any of the three options above, be sure you click the "Save Settings" button.
+
+The "Reset Password" button in the "Reset Your Password" section will allow you to reset your login password. Don't forget it!
+
+#### Dictionary Settings
 Under the Settings menu, you'll see some additional options:
 
 The **Change Dicitonaries** dropdown box contains the names of all of your created dictionaries. If you have more than one, selecting a different dictionary from the list will immediately download and display that dictionary.
@@ -73,6 +122,9 @@ The **Import Dictionary** button acts the same as before, but instead of overwri
 
 The **Delete Current Dictionary** button will permanently and irretrievably delete the currently loaded dictionary from your account! Be careful with that one. After deleting, you will then be prompted to either select another dictionary to load or create a new one, _or_ if you have no other dictionaries, immediately create a new one for you.
 
+### Forgot Your Password?
+If you forget your password, you can request a password reset email by clicking the "Forgot Password" button on the "Log In/Create Account" button entering the email address associated with your account and clicking "Email Password Reset Key". This will send an email (_check your spam_) with a link that will allow you to reset your password. When you go to the link provided, you'll be able to enter a new password that you can log in with.
+
 ### Lockout
 If you manage to enter your password wrong 10 times, you'll be locked out from logging in for an hour. Use this time to try to remember your password or something. You can get an idea of how long you've waited by refreshing the page and clicking the unfortunate "Can't Login" button. After an hour has passed, refresh the page again and you'll get another 10 tries.
 
@@ -82,8 +134,6 @@ Please report any problems you come across to the [Dictionary Builder Issues pag
 ## Future Plans
 In the future, I'm planning to:
 * add the ability to easily share dictionaries by your Public Name, but all dictionaries will be private by default
-* enable editing your account settings such as your password and Public Name
-* enable password reset if you forgot it
 * enable account deletion if you lose trust or hope in Lexiconga's services
 * ad removal option?
 
@@ -92,7 +142,7 @@ I hope you enjoy Lexiconga and that it helps you build some awesome languages.
 
 –Robbie Antenesse
 
-### Libraries Used
+## Libraries Used
 * [Marked.js](https://github.com/chjj/marked) by Christopher Jeffrey (JJ) (a.k.a. chjj)
 * [Defiant.js](http://defiantjs.com) by Hakan Bilgin (a.k.a. hbi99)
 * [removeDiacritics.js](http://stackoverflow.com/a/18391901/3508346) by [rdllopes](http://meta.stackoverflow.com/users/1879686/rdllopes)

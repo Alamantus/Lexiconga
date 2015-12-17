@@ -28,9 +28,9 @@
     <label><span>Public Name <span class="clickable" onclick="ExplainPublicName()" style="font-size:11px;vertical-align:top;background:#e0c19c;padding:4px 7px;">?</span></span>
         <input type="text" id="createAccountPublicNameField" name="publicname" />
     </label>
-    <label><b>Allow Emails</b>
+    <label style="display:inline;"><b>Allow Emails</b>
         <input type="checkbox" id="createAccountAllowEmailsField" name="allowemails" checked="checked" />
-    </label>
+    </label> <span class="clickable" onclick="ExplainAllowEmails()" style="font-size:11px;vertical-align:top;background:#e0c19c;padding:4px 7px;">?</span>
     <div id="createAccountError" style="font-weight:bold;color:red;"></div>
     <button type="submit" id="createAccountSubmitButton" onclick="ValidateCreateAccount(); return false;">Create Account</button>
 </form></div>

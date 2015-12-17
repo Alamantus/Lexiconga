@@ -4,6 +4,7 @@ require_once('required.php');
 session_start();
 $current_user = isset($_SESSION['user']) ? $_SESSION['user'] : 0;
 
+$announcement = get_include_contents(SITE_LOCATION . '/announcement.php');
 $notificationMessage = "";
 
 if ($current_user > 0 || !isset($_SESSION['loginfailures']) || (isset($_SESSION['loginlockouttime']) && time() - $_SESSION['loginlockouttime'] >= 3600)) {
@@ -47,9 +48,10 @@ require_once(SITE_LOCATION . '/php/notificationconditiontree.php');
         </div>
     </header>
     <contents>
-    <div id="notificationArea" style="display:<?php echo (($notificationMessage) ? "block" : "none"); ?>;">
+    <div id="notificationArea" style="display:<?php echo (($announcement || $notificationMessage) ? "block" : "none"); ?>;">
         <span id="notificationCloseButton" class="clickable" onclick="document.getElementById('notificationArea').style.display='none';">Close</span>
         <div id="notificationMessage"><?php echo $notificationMessage; ?></div>
+        <div id="announcement" style="margin-top:<?php echo (($announcement && $notificationMessage) ? "15px" : "0"); ?>;"><?php echo $announcement; ?></div>
     </div>
     <div id="leftColumn">
     <form id="wordEntryForm">
@@ -216,9 +218,9 @@ require_once(SITE_LOCATION . '/php/notificationconditiontree.php');
                 <label><span>Public Name <span class="clickable" onclick="ExplainPublicName()" style="font-size:11px;vertical-align:top;background:#e0c19c;padding:4px 7px;">?</span></span>
                     <input type="text" id="accountSettingsPublicNameField" name="publicname" value="<?php echo Get_Public_Name_By_Id($current_user); ?>" />
                 </label>
-                <label><b>Allow Emails</b>
-                    <input type="checkbox" id="accountSettingsAllowEmailsField" name="allowemails" <?php if (Get_Allow_Email_By_Id($current_user) == 1) echo 'checked="checked"'; ?> />
-                </label>
+                <label style="display:inline;"><b>Allow Emails</b>
+			        <input type="checkbox" id="createAccountAllowEmailsField" name="allowemails" checked="checked" />
+			    </label> <span class="clickable" onclick="ExplainAllowEmails()" style="font-size:11px;vertical-align:top;background:#e0c19c;padding:4px 7px;">?</span>
                 <div id="accountSettingsError" style="font-weight:bold;color:red;"></div>
                 <button type="submit" id="accountSettingsSubmitButton" onclick="ValidateAccountSettings(); return false;">Save Settings</button>
                 <br><br>

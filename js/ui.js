@@ -209,8 +209,35 @@ function ExplainPublicName() {
     alert("This is the name we greet you with. It's also the name displayed if you ever decide to share any of your dictionaries.\n\nNote: this is not a username, and as such is not guaranteed to be unique. Use something people will recognize you as to differentiate from other people who might use the same name!");
 }
 
-function CloseUpdateConflictArea() {
+function ExplainAllowEmails() {
+    alert("We'll make sure that you're the first to hear about any new features that get added or if any of our policies change for any reason. We'll never spam you or sell your information, but you may need to mark emails from lexicon.ga as not spam to receive them.\nNOTE: Password reset emails will be sent regardless of your choice.");
+}
+
+function CloseUpdateConflictArea(displayId) {
+    displayId = (typeof displayId !== 'undefined' && displayId != null) ? displayId : false;
+    if (displayId != false) {
+        document.getElementById(displayId).style.display = "block";
+    }
     document.getElementById("updateConflict").style.display = "none";
+    EnableForm();
+}
+
+function DisableForm() {
+    document.getElementById("word").disabled = true;
+    document.getElementById("pronunciation").disabled = true;
+    document.getElementById("partOfSpeech").disabled = true;
+    document.getElementById("simpleDefinition").disabled = true;
+    document.getElementById("longDefinition").disabled = true;
+    document.getElementById("editIndex").disabled = true;
+}
+
+function EnableForm() {
+    document.getElementById("word").disabled = false;
+    document.getElementById("pronunciation").disabled = false;
+    document.getElementById("partOfSpeech").disabled = false;
+    document.getElementById("simpleDefinition").disabled = false;
+    document.getElementById("longDefinition").disabled = false;
+    document.getElementById("editIndex").disabled = false;
 }
 
 function ClearForm() {
@@ -225,6 +252,7 @@ function ClearForm() {
     document.getElementById("editWordButtonArea").style.display = "none";
     document.getElementById("errorMessage").innerHTML = "";
     document.getElementById("updateConflict").style.display = "none";
+    EnableForm();
 }
 
 function ToggleDescription() {
@@ -276,7 +304,7 @@ function ShowAccountSettings(variableName) {
 }
 
 function HideAccountSettings() {
-    If (document.getElementById("accountSettingsScreen"))
+    if (document.getElementById("accountSettingsScreen"))
         document.getElementById("accountSettingsScreen").style.display = "none";
 }
 
@@ -318,6 +346,8 @@ function HideSettingsWhenComplete() {
 function SetPartsOfSpeech () {
     var partsOfSpeechSelect = document.getElementById("partOfSpeech");
     var wordFilterSelect = document.getElementById("wordFilter");
+    var selectedWordFilter = wordFilterSelect.value;
+    var selectedWordStillExists = false;
     if (partsOfSpeechSelect.options.length > 0) {
         for (var i = partsOfSpeechSelect.options.length - 1; i >= 0; i--) {
             partsOfSpeechSelect.removeChild(partsOfSpeechSelect.options[i]);
@@ -335,6 +365,14 @@ function SetPartsOfSpeech () {
         wordFilterOption.appendChild(document.createTextNode(newPartsOfSpeech[j].trim()));
         wordFilterOption.value = newPartsOfSpeech[j].trim();
         wordFilterSelect.appendChild(wordFilterOption);
+
+        if (!selectedWordStillExists && newPartsOfSpeech[j].trim() == selectedWordFilter) {
+            selectedWordStillExists = true;
+        }
+    }
+
+    if (selectedWordStillExists) {
+        wordFilterSelect.value = selectedWordFilter;
     }
 }
 

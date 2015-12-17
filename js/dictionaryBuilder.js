@@ -43,12 +43,14 @@ function AddWord() {
 
         if (editIndex != "") {
             if (WordAtIndexWasChanged(editIndex, word, pronunciation, partOfSpeech, simpleDefinition, longDefinition)) {
+                document.getElementById("editWordButtonArea").style.display = "none";
+                DisableForm();
                 updateConflictArea.style.display = "block";
                 updateConflictArea.innerHTML = "<span id='updateConflictMessage'>Do you really want to change the word \"" + currentDictionary.words[parseInt(editIndex)].name + "\" to what you have set above?</span>";
                 updateConflictArea.innerHTML += '<button type="button" id="updateConfirmButton" \
                                                   onclick="UpdateWord(' + editIndex + ', \'' + htmlEntities(word) + '\', \'' + htmlEntities(pronunciation) + '\', \'' + htmlEntities(partOfSpeech) + '\', \'' + htmlEntities(simpleDefinition) + '\', \'' + htmlEntities(longDefinition) + '\'); \
                                                   return false;">Yes, Update it</button>';
-                updateConflictArea.innerHTML += '<button type="button" id="updateCancelButton" onclick="CloseUpdateConflictArea(); return false;">No, Leave it</button>';
+                updateConflictArea.innerHTML += '<button type="button" id="updateCancelButton" onclick="CloseUpdateConflictArea(\'editWordButtonArea\'); return false;">No, Leave it</button>';
             } else {
                 errorMessage = "No change has been made to \"" + word + "\"";
                 if (currentDictionary.words[parseInt(editIndex)].name != word) {
@@ -57,6 +59,8 @@ function AddWord() {
             }
         } else if (wordIndex >= 0) {
             if (WordAtIndexWasChanged(wordIndex, word, pronunciation, partOfSpeech, simpleDefinition, longDefinition)) {
+                document.getElementById("newWordButtonArea").style.display = "none";
+                DisableForm();
                 updateConflictArea.style.display = "block";
                 
                 var updateConflictText = "<span id='updateConflictMessage'>\"" + word + "\" is already in the dictionary";
@@ -69,7 +73,7 @@ function AddWord() {
                 updateConflictText += '<button type="button" id="updateConfirmButton" \
                                                   onclick="UpdateWord(' + wordIndex + ', \'' + htmlEntities(word) + '\', \'' + htmlEntities(pronunciation) + '\', \'' + htmlEntities(partOfSpeech) + '\', \'' + htmlEntities(simpleDefinition) + '\', \'' + htmlEntities(longDefinition) + '\'); \
                                                   return false;">Yes, Update it</button>';
-                updateConflictText += ' <button type="button" id="updateCancelButton" onclick="CloseUpdateConflictArea(); return false;">No, Leave it</button>';
+                updateConflictText += ' <button type="button" id="updateCancelButton" onclick="CloseUpdateConflictArea(\'newWordButtonArea\'); return false;">No, Leave it</button>';
                 
                 updateConflictArea.innerHTML = updateConflictText;
             } else {
@@ -148,7 +152,7 @@ function SaveAndUpdateDictionary(keepFormContents) {
     if (!keepFormContents) {
         ClearForm();
     }
-    CloseUpdateConflictArea();
+    CloseUpdateConflictArea('newWordButtonArea');
 }
 
 function UpdateWord(wordIndex, word, pronunciation, partOfSpeech, simpleDefinition, longDefinition) {
@@ -560,7 +564,7 @@ function ProcessLoad() {
     HideSettingsWhenComplete();
     
     ShowDictionary();
-    
+
     SetPartsOfSpeech();
     
     if (currentDictionary.settings.isComplete) {
