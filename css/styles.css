@@ -149,7 +149,7 @@ input[type=checkbox] {
     margin: 0 10px 0 0;
 }
 
-#notificationArea {
+#announcementArea, #notificationArea {
     text-align:center;
     padding:10px;
     border-radius:5px;
@@ -341,7 +341,7 @@ searchTerm {
     border: 1px solid black;
 }
 
-#notificationCloseButton,
+#announcementCloseButton, #notificationCloseButton,
 #settingsButton, #settingsScreenCloseButton,
 #settingsSaveButtons button, #infoScreenCloseButton {
     float: right;

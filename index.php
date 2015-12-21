@@ -48,10 +48,13 @@ require_once(SITE_LOCATION . '/php/notificationconditiontree.php');
         </div>
     </header>
     <contents>
-    <div id="notificationArea" style="display:<?php echo (($announcement || $notificationMessage) ? "block" : "none"); ?>;">
+    <div id="announcementArea" style="display:<?php echo (($announcement) ? "block" : "none"); ?>;margin-bottom:10px;">
+        <span id="announcementCloseButton" class="clickable" onclick="document.getElementById('announcementArea').style.display='none';">Close</span>
+        <div id="announcement"><?php echo $announcement; ?></div>
+    </div>
+    <div id="notificationArea" style="display:<?php echo (($notificationMessage) ? "block" : "none"); ?>;">
         <span id="notificationCloseButton" class="clickable" onclick="document.getElementById('notificationArea').style.display='none';">Close</span>
         <div id="notificationMessage"><?php echo $notificationMessage; ?></div>
-        <div id="announcement" style="margin-top:<?php echo (($announcement && $notificationMessage) ? "15px" : "0"); ?>;"><?php echo $announcement; ?></div>
     </div>
     <div id="leftColumn">
     <form id="wordEntryForm">

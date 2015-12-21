@@ -85,6 +85,10 @@ input, textarea, select, option, button {
 	background: #efdfc0;
 }
 
+#announcementArea {
+    background:#a0c066;
+}
+
 #notificationArea {
     background:#c0c088;
 }
