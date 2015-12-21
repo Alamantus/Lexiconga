@@ -13,7 +13,7 @@
 </form></div>
 <div class="settingsCol"><form id="createAccountForm" method="post" action="?createaccount">
     <h2>Create a New Account</h2>
-    <p style="font-size: 12px;">Creating an account allows you to save and switch between as many dictionaries as you need and access them from any device for free!</p>
+    <p style="font-size: 12px;">Creating an account allows you to save and switch between as many dictionaries as you need and access them from any device for free! If you have a dictionary you've been working on loaded already, it will automatically be uploaded to your account when you log in for the first time.</p>
     <p style="font-size: 12px;">Plus if you allow us to send you emails, we'll make sure that you're the first to hear about any new features that get added or if any of our policies change for any  reason. We'll never spam you or sell your information.</p>
     <p style="font-size: 12px;">By creating an account, you are indicating that you agree to the <span class="clickable" onclick="ShowInfo('termsText')" style="font-size:11px;vertical-align:top;background:#e0c19c;padding:4px 7px;">Terms of Service</span> and that you understand Lexiconga's <span class="clickable" onclick="ShowInfo('privacyText')" style="font-size:11px;vertical-align:top;background:#e0c19c;padding:4px 7px;">Privacy Policy</span>.</p>
     <label><span>Email</span>
