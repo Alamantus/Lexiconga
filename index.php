@@ -164,6 +164,11 @@ require_once(SITE_LOCATION . '/php/notificationconditiontree.php');
                         <span class="checkboxlabel">Dictionary is Complete</span>
                         <input type="checkbox" id="dictionaryIsComplete" />
                     </label>
+                    <label class="inline">
+                        <span class="checkboxlabel">Dictionary is Public</span>
+                        <input type="checkbox" id="dictionaryIsPublic" onchange="TogglePublicLink()" />
+                    </label> <span class="helperlink clickable" onclick='alert("If you save your settings with this checked, your dictionary will be viewable by anyone if they have the public link.");'>?</span>
+                    <div id="publicLink"></div>
                 </div>
                 <div class="settingsCol">
                     <label>
@@ -266,6 +271,20 @@ require_once(SITE_LOCATION . '/php/notificationconditiontree.php');
     <script src="js/dictionaryBuilder.js"></script>
     <script src="js/ui.js"></script>
     <?php if ($_GET['adminoverride'] != "noadsortracking") { include_once("php/google/analytics.php"); } ?>
+    <script>
+    var aboutText = termsText = privacyText = loginForm = forgotForm = "Loading...";
+    window.onload = function () {
+        LoadDictionary();
+        ClearForm();
+        LoadUserDictionaries();
+        
+        GetTextFile("README.md", "aboutText", true);
+        GetTextFile("TERMS.md", "termsText", true);
+        GetTextFile("PRIVACY.md", "privacyText", true);
+        GetTextFile("LOGIN.form", "loginForm", false);
+        GetTextFile("FORGOT.form", "forgotForm", false);
+    }
+    </script>
 </body>
 </html>
 <?php

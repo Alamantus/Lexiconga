@@ -354,6 +354,11 @@ searchTerm {
     margin: 0;
 }
 
+#publicLink {
+    font-size:12px;
+    font-style: italic;
+}
+
 #dictionaryDescriptionEdit, #dictionaryPartsOfSpeechEdit {
     width: 100%;
     max-width: 360px;

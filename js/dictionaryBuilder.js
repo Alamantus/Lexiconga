@@ -14,7 +14,8 @@ var currentDictionary = {
         caseSensitive: false,
         partsOfSpeech: "Noun,Adjective,Verb,Adverb,Preposition,Pronoun,Conjunction",
         sortByEquivalent: false,
-        isComplete: false
+        isComplete: false,
+        isPublic: false
     },
     externalID: 0
 }
@@ -176,10 +177,6 @@ function DeleteWord(index) {
     SaveAndUpdateDictionary(true);
 }
 
-function UpdateFilter() {
-    ShowDictionary();
-}
-
 function ShowDictionary() {
     var filter = document.getElementById("wordFilter").value;
     
@@ -245,6 +242,7 @@ function ShowDictionary() {
 }
 
 function DictionaryEntry(itemIndex) {
+    displayPublic = (typeof displayPublic !== 'undefined' && displayPublic != null) ? displayPublic : false;
     var entryText = "<entry><a name='" + currentDictionary.words[itemIndex].wordId + "'></a><a href='#" + currentDictionary.words[itemIndex].wordId + "' class='wordLink clickable'>&#x1f517;</a>";
     
     var searchTerm = document.getElementById("searchBox").value;
@@ -344,6 +342,7 @@ function SaveSettings() {
     currentDictionary.settings.sortByEquivalent = document.getElementById("dictionarySortByEquivalent").checked;
     
     currentDictionary.settings.isComplete = document.getElementById("dictionaryIsComplete").checked;
+    currentDictionary.settings.isPublic = document.getElementById("dictionaryIsPublic").checked;
     
     HideSettingsWhenComplete();
     
@@ -463,7 +462,7 @@ function DataToSend(doSendWords, sendAll) {
     if (currentDictionary.externalID == 0) {
         data = "name=" + encodeURIComponent(currentDictionary.name) + "&description=" + encodeURIComponent(currentDictionary.description) + "&words=" + encodeURIComponent(JSON.stringify(currentDictionary.words));
         data += "&nextwordid=" + currentDictionary.nextWordId + "&allowduplicates=" + ((currentDictionary.settings.allowDuplicates) ? "1" : "0") + "&casesensitive=" + ((currentDictionary.settings.caseSensitive) ? "1" : "0");
-        data += "&partsofspeech=" + encodeURIComponent(currentDictionary.settings.partsOfSpeech) + "&sortbyequivalent=" + ((currentDictionary.settings.sortByEquivalent) ? "1" : "0") + "&iscomplete=" + ((currentDictionary.settings.isComplete) ? "1" : "0") + "&ispublic=0";
+        data += "&partsofspeech=" + encodeURIComponent(currentDictionary.settings.partsOfSpeech) + "&sortbyequivalent=" + ((currentDictionary.settings.sortByEquivalent) ? "1" : "0") + "&iscomplete=" + ((currentDictionary.settings.isComplete) ? "1" : "0") + "&ispublic=" + ((currentDictionary.settings.isPublic) ? "1" : "0") + "";
     } else {
         if (sendAll || currentDictionary.name != previousDictionary.name) {
             data += "name=" + encodeURIComponent(currentDictionary.name);
@@ -492,7 +491,9 @@ function DataToSend(doSendWords, sendAll) {
         if (sendAll || currentDictionary.settings.isComplete != previousDictionary.isComplete) {
             data += ((data=="") ? "" : "&") + "iscomplete=" + ((currentDictionary.settings.isComplete) ? "1" : "0");
         }
-        data += ((data=="") ? "" : "&") + "ispublic=0";
+        if (sendAll || currentDictionary.settings.isPublic != previousDictionary.isPublic) {
+            data += ((data=="") ? "" : "&") + "ispublic=" + ((currentDictionary.settings.isPublic) ? "1" : "0");
+        }
     }
     return data;
 }
@@ -585,7 +586,8 @@ function SavePreviousDictionary () {
         caseSensitive: currentDictionary.settings.caseSensitive,
         partsOfSpeech: currentDictionary.settings.partsOfSpeech,
         sortByEquivalent: currentDictionary.settings.sortByEquivalent,
-        isComplete: currentDictionary.settings.isComplete
+        isComplete: currentDictionary.settings.isComplete,
+        isPublic: currentDictionary.settings.isPublic
     };
 }
 

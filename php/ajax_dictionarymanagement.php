@@ -56,7 +56,7 @@ function Get_Dictionaries($return_list = true) {
 
 function Load_Current_Dictionary() {
     if ($_SESSION['user'] > 0) {
-        $query = "SELECT `d`.`id`, `d`.`name`, `d`.`description`, `u`.`public_name`, `d`.`words`, `d`.`next_word_id`, `d`.`allow_duplicates`, `d`.`case_sensitive`, `d`.`parts_of_speech`, `d`.`sort_by_equivalent`, `d`.`is_complete` ";
+        $query = "SELECT `d`.`id`, `d`.`name`, `d`.`description`, `u`.`public_name`, `d`.`words`, `d`.`next_word_id`, `d`.`allow_duplicates`, `d`.`case_sensitive`, `d`.`parts_of_speech`, `d`.`sort_by_equivalent`, `d`.`is_complete`, `d`.`is_public` ";
         $query .= "FROM `dictionaries` AS `d` LEFT JOIN `users` AS `u` ON `user`=`u`.`id` WHERE `is_current`=1 AND `user`=" . $_SESSION['user'] . ";";
         $dictionary = query($query);
         
@@ -75,7 +75,8 @@ function Load_Current_Dictionary() {
                         $json .= '"caseSensitive":' . (($dict['case_sensitive'] == 1) ? 'true' : 'false') . ',';
                         $json .= '"partsOfSpeech":"' . $dict['parts_of_speech'] . '",';
                         $json .= '"sortByEquivalent":' . (($dict['sort_by_equivalent'] == 1) ? 'true' : 'false') . ',';
-                        $json .= '"isComplete":' . (($dict['is_complete'] == 1) ? 'true' : 'false') . '},';
+                        $json .= '"isComplete":' . (($dict['is_complete'] == 1) ? 'true' : 'false') . ',';
+                        $json .= '"isPublic":' . (($dict['is_public'] == 1) ? 'true' : 'false') . '},';
                         $json .= '"externalID":' . $dict['id'] . '}';
                         echo $json;
                         return true;

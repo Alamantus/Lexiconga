@@ -1,17 +1,3 @@
-var aboutText = termsText = privacyText = loginForm = forgotForm = "Loading...";
-
-window.onload = function () {
-    LoadDictionary();
-    ClearForm();
-    LoadUserDictionaries();
-    
-    GetTextFile("README.md", "aboutText", true);
-    GetTextFile("TERMS.md", "termsText", true);
-    GetTextFile("PRIVACY.md", "privacyText", true);
-    GetTextFile("LOGIN.form", "loginForm", false);
-    GetTextFile("FORGOT.form", "forgotForm", false);
-}
-
 function LoadUserDictionaries() {
     var getDictionariesRequest = new XMLHttpRequest();
     var userDictionariesSelect = document.getElementById("userDictionaries");
@@ -241,18 +227,20 @@ function EnableForm() {
 }
 
 function ClearForm() {
-    document.getElementById("word").value = "";
-    document.getElementById("pronunciation").value = "";
-    document.getElementById("partOfSpeech").value = "";
-    document.getElementById("simpleDefinition").value = "";
-    document.getElementById("longDefinition").value = "";
-    document.getElementById("editIndex").value = "";
-    
-    document.getElementById("newWordButtonArea").style.display = "block";
-    document.getElementById("editWordButtonArea").style.display = "none";
-    document.getElementById("errorMessage").innerHTML = "";
-    document.getElementById("updateConflict").style.display = "none";
-    EnableForm();
+    if (document.getElementById("wordEntryForm")) {
+        document.getElementById("word").value = "";
+        document.getElementById("pronunciation").value = "";
+        document.getElementById("partOfSpeech").value = "";
+        document.getElementById("simpleDefinition").value = "";
+        document.getElementById("longDefinition").value = "";
+        document.getElementById("editIndex").value = "";
+        
+        document.getElementById("newWordButtonArea").style.display = "block";
+        document.getElementById("editWordButtonArea").style.display = "none";
+        document.getElementById("errorMessage").innerHTML = "";
+        document.getElementById("updateConflict").style.display = "none";
+        EnableForm();
+    }
 }
 
 function ToggleDescription() {
@@ -332,14 +320,27 @@ function ShowSettings() {
     document.getElementById("dictionaryCaseSensitive").checked = currentDictionary.settings.caseSensitive;
     document.getElementById("dictionarySortByEquivalent").checked = currentDictionary.settings.sortByEquivalent;
     document.getElementById("dictionaryIsComplete").checked = currentDictionary.settings.isComplete;
+    document.getElementById("dictionaryIsPublic").checked = currentDictionary.settings.isPublic;
+    TogglePublicLink();
     document.getElementById("numberOfWordsInDictionary").innerHTML = currentDictionary.words.length.toString();
 }
 
 function HideSettingsWhenComplete() {
-    if (currentDictionary.settings.isComplete) {
-        document.getElementById("hideIfComplete").style.display = "none";
+    if (document.getElementById("settingsScreen")) {
+        if (currentDictionary.settings.isComplete) {
+            document.getElementById("hideIfComplete").style.display = "none";
+        } else {
+            document.getElementById("hideIfComplete").style.display = "block";
+        }
+    }
+}
+
+function TogglePublicLink() {
+    if (document.getElementById("dictionaryIsPublic").checked) {
+        var publicLink = "http://lexicon.ga/view/?dict=" + currentDictionary.externalID;
+        document.getElementById("publicLink").innerHTML = "<strong>Public Link:</strong><br>" + publicLink;
     } else {
-        document.getElementById("hideIfComplete").style.display = "block";
+        document.getElementById("publicLink").innerHTML = "";
     }
 }
 
