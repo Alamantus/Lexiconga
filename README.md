@@ -20,6 +20,7 @@ If you would like an added layer of accessibility and security (in case you clea
   * [Differences](#differences)
     * [Account Settings](#account-settings)
     * [Dictionary Settings](#dictionary-settings)
+    * [Public Dictionaries](#public-dictionaries)
   * [Forgot Your Password?](#forgot-your-password-)
   * [Lockout](#lockout)
 * [Problems or Requests](#problems-or-requests)
@@ -114,6 +115,8 @@ The "Reset Password" button in the "Reset Your Password" section will allow you 
 #### Dictionary Settings
 Under the Settings menu, you'll see some additional options:
 
+The **Dictionary is Public** checkbox determines whether or not the current dictionary can be viewed by anyone online using the Public Link that appears when checked. Public dictionaries are explained more below.
+
 The **Change Dicitonaries** dropdown box contains the names of all of your created dictionaries. If you have more than one, selecting a different dictionary from the list will immediately download and display that dictionary.
 
 The **Create New Dictionary** button will instantly create and save a new blank dictionary to your account.
@@ -121,6 +124,11 @@ The **Create New Dictionary** button will instantly create and save a new blank 
 The **Import Dictionary** button acts the same as before, but instead of overwriting your dictionary, it imports the dictionary as a new, separate dictionary and saves it to your account. After importing, the imported dictionary will display, and you can use the Change Dictionaries dropdown box to change to a previous one if you desire.
 
 The **Delete Current Dictionary** button will permanently and irretrievably delete the currently loaded dictionary from your account! Be careful with that one. After deleting, you will then be prompted to either select another dictionary to load or create a new one, _or_ if you have no other dictionaries, immediately create a new one for you.
+
+#### Public Dictionaries
+When a dictionary is marked as public, you can share its public link and allow anyone to view its contents without being able to make changes. The dictionary's description and the search/filter area is visible by default, and the viewer can scroll through or search your dictionary without being able to make changes.
+
+To log in or create an account when viewing a dictionary, you need to go back to the main Lexiconga page. You can get there by clicking either the logo or the "Go Home" button.
 
 ### Forgot Your Password?
 If you forget your password, you can request a password reset email by clicking the "Forgot Password" button on the "Log In/Create Account" button entering the email address associated with your account and clicking "Email Password Reset Key". This will send an email (_check your spam_) with a link that will allow you to reset your password. When you go to the link provided, you'll be able to enter a new password that you can log in with.

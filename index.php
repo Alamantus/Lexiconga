@@ -164,18 +164,20 @@ require_once(SITE_LOCATION . '/php/notificationconditiontree.php');
                         <span class="checkboxlabel">Dictionary is Complete</span>
                         <input type="checkbox" id="dictionaryIsComplete" />
                     </label>
-                    <label class="inline">
-                        <span class="checkboxlabel">Dictionary is Public</span>
-                        <input type="checkbox" id="dictionaryIsPublic" onchange="TogglePublicLink()" />
-                    </label> <span class="helperlink clickable" onclick='alert("If you save your settings with this checked, your dictionary will be viewable by anyone if they have the public link.");'>?</span>
-                    <div id="publicLink"></div>
+                    <?php if ($current_user > 0) {  //If logged in, show the log out button. ?>
+                        <label class="inline">
+                            <span class="checkboxlabel">Dictionary is Public</span>
+                            <input type="checkbox" id="dictionaryIsPublic" onchange="TogglePublicLink()" />
+                        </label> <span class="helperlink clickable" onclick='alert("If you save your settings with this checked, your dictionary will be viewable by anyone if they have the public link.");'>?</span>
+                        <div id="publicLink"></div>
+                    <?php } ?>
                 </div>
                 <div class="settingsCol">
                     <label>
                         <b>Total Entries:</b> <i id="numberOfWordsInDictionary"></i>
                     </label>
                     <label><button type="button" onclick="ExportDictionary()" style="cursor:pointer;">Export Current Dictionary</button></label>
-                    <?php if ($current_user > 0) {  //If logged in, show the log out button. ?>
+                    <?php if ($current_user > 0) {  //If logged in, show the special options. ?>
                         <label><span>Change Dictionaries</span>
                             <select id="userDictionaries" onchange="ChangeDictionary();"></select>
                         </label>

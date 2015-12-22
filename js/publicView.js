@@ -136,3 +136,15 @@ function PublicDictionaryEntry(itemIndex) {
 
     return entryText;
 }
+
+function SetPublicPartsOfSpeech () {
+    var wordFilterSelect = document.getElementById("wordFilter");
+
+    var newPartsOfSpeech = htmlEntitiesParse(publicDictionary.settings.partsOfSpeech).trim().split(",");
+    for (var j = 0; j < newPartsOfSpeech.length; j++) {
+        var wordFilterOption = document.createElement('option');
+        wordFilterOption.appendChild(document.createTextNode(newPartsOfSpeech[j].trim()));
+        wordFilterOption.value = newPartsOfSpeech[j].trim();
+        wordFilterSelect.appendChild(wordFilterOption);
+    }
+}

@@ -320,8 +320,10 @@ function ShowSettings() {
     document.getElementById("dictionaryCaseSensitive").checked = currentDictionary.settings.caseSensitive;
     document.getElementById("dictionarySortByEquivalent").checked = currentDictionary.settings.sortByEquivalent;
     document.getElementById("dictionaryIsComplete").checked = currentDictionary.settings.isComplete;
-    document.getElementById("dictionaryIsPublic").checked = currentDictionary.settings.isPublic;
-    TogglePublicLink();
+    if (document.getElementById("dictionaryIsPublic")) {
+        document.getElementById("dictionaryIsPublic").checked = currentDictionary.settings.isPublic;
+        TogglePublicLink();
+    }
     document.getElementById("numberOfWordsInDictionary").innerHTML = currentDictionary.words.length.toString();
 }
 
