@@ -11,6 +11,13 @@ You may use our Service free of charge, and you are free to stop using our Servi
 
 If you stop using our Service, your data will remain unless you request its removal. When data is removed from an Account in our Service, it becomes permanently irretrievable. You agree that you understand the implications of deleting or requesting the deletion of your data and that we are not liable for its loss.
 
+Instructions for use are visible through the "About Lexiconga" button on the site.
+
+### Public Dictionaries
+Any dictionaries created and associated with an Account are private by default and only visible to the owner of the Account. You may make your dictionaries visible to the public at any time by utilizing the appropriate dictionarys setting.
+
+If you utilize the ability to make dictionaries associated with an Account visible to the public, you accept all responsibility for any and all damages that may come as a result of the information you place online and acknowledge that we are not liable in any way. Do not put any personal information online. We cannot protect what you deliberately make publicly visible.
+
 ### Termination
 We may terminate or suspend access to our Service immediately, without prior notice or liability, for any reason whatsoever, including without limitation if you breach the Terms. All provisions of the Terms which by their nature should survive termination shall survive termination, including, without limitation, ownership provisions, warranty disclaimers, indemnity and limitations of liability.
 
@@ -30,4 +37,4 @@ We reserve the right, at our sole discretion, to modify or replace these Terms a
 By continuing to access or use our Service after those revisions become effective, you agree to be bound by the revised terms. If you do not agree to the new terms, please stop using the Service.
 
 ### Contact Us
-If you have any questions about these Terms, please contact us by email at gamedev (at) alamantus (dot) com or follow us on Twitter @alamantus.
+If you have any questions about these Terms, please contact us by email at help (at) lexicon (dot) ga or follow us on Twitter @alamantus.

@@ -9,9 +9,6 @@ $current_user = isset($_SESSION['user']) ? $_SESSION['user'] : 0;
 $dictionary_to_load = (isset($_GET['dict'])) ? intval($_GET['dict']) : 0;
 $the_public_dictionary = '"That dictionary doesn\'t exist."';
 
-$announcement = get_include_contents(SITE_LOCATION . '/announcement.php');
-$notificationMessage = "";
-
 if ($current_user > 0 || !isset($_SESSION['loginfailures']) || (isset($_SESSION['loginlockouttime']) && time() - $_SESSION['loginlockouttime'] >= 3600)) {
     // If logged in, never failed, or more than 1 hour has passed, reset login failures.
     $_SESSION['loginfailures'] = 0;
@@ -45,9 +42,7 @@ try {
         }
     }
 }
-catch (PDOException $ex) {
-    print_r($dbconnection->errorInfo());
-}
+catch (PDOException $ex) {}
 
 ?>
 <!DOCTYPE html>
@@ -70,35 +65,20 @@ catch (PDOException $ex) {
                 <span id="aboutButton" class="clickable" onclick="ShowInfo('aboutText')">About Lexiconga</span>
             </div>
             <div id="loginoutArea" style="font-size:12px;">
-                <?php if ($current_user > 0) {  //If logged in, show the log out button. ?>
-                    <a href="../" class="clickable">Back to My Account</span> <a href="?logout" id="logoutLink" class="clickable">Log Out</a>
-                <?php } elseif (!isset($_SESSION['loginfailures']) || (isset($_SESSION['loginfailures']) && $_SESSION['loginfailures'] < 10)) { ?>
-                    <span id="loginLink" class="clickable" onclick="ShowInfo('loginForm')">Log In/Create Account</span>
-                <?php } else { ?>
-                    <span id="loginLink" class="clickable" title="<?php echo $hoverlockoutmessage; ?>" onclick="alert('<?php echo $alertlockoutmessage; ?>');">Can't Login</span>
-                <?php } ?>
+                <a id="loginLink" class="clickable" href="../" title="Go home to log in or create an account.">Go Home</a>
             </div>
         </div>
     </header>
     <contents>
-    <div id="announcementArea" style="display:<?php echo (($announcement) ? "block" : "none"); ?>;margin-bottom:10px;">
-        <span id="announcementCloseButton" class="clickable" onclick="document.getElementById('announcementArea').style.display='none';">Close</span>
-        <div id="announcement"><?php echo $announcement; ?></div>
-    </div>
-    <div id="notificationArea" style="display:<?php echo (($notificationMessage) ? "block" : "none"); ?>;">
-        <span id="notificationCloseButton" class="clickable" onclick="document.getElementById('notificationArea').style.display='none';">Close</span>
-        <div id="notificationMessage"><?php echo $notificationMessage; ?></div>
-    </div>
-
     <div id="dictionaryContainer">
         <h1 id="dictionaryName"></h1>
         <h4 id="dictionaryBy"></h4>
         
-        <span id="descriptionToggle" class="clickable" onclick="ToggleDescription();">Show Description</span>
-        <div id="dictionaryDescription" style="display:none;"></div>
+        <span id="descriptionToggle" class="clickable" onclick="ToggleDescription();">Hide Description</span>
+        <div id="dictionaryDescription" style="display:block;"></div>
         
-        <span id="searchFilterToggle" class="clickable" onclick="ToggleSearchFilter();">Search/Filter Options</span>
-        <div id="searchFilterArea" style="display:none;">
+        <span id="searchFilterToggle" class="clickable" onclick="ToggleSearchFilter();">Hide Search/Filter Options</span>
+        <div id="searchFilterArea" style="display:block;">
             <div id="searchArea" style="display:block;">
                 <label style="margin-top:10px;">
                     <span>Search</span>
@@ -158,6 +138,7 @@ catch (PDOException $ex) {
     var aboutText = termsText = privacyText = loginForm = forgotForm = "Loading...";
     window.onload = function () {
         ShowPublicDictionary();
+        SetPublicPartsOfSpeech();
         
         GetTextFile("../README.md", "aboutText", true);
         GetTextFile("../TERMS.md", "termsText", true);

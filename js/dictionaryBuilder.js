@@ -342,7 +342,9 @@ function SaveSettings() {
     currentDictionary.settings.sortByEquivalent = document.getElementById("dictionarySortByEquivalent").checked;
     
     currentDictionary.settings.isComplete = document.getElementById("dictionaryIsComplete").checked;
-    currentDictionary.settings.isPublic = document.getElementById("dictionaryIsPublic").checked;
+    if (document.getElementById("dictionaryIsPublic")) {
+        currentDictionary.settings.isPublic = document.getElementById("dictionaryIsPublic").checked;
+    }
     
     HideSettingsWhenComplete();
     
@@ -505,8 +507,9 @@ function LoadDictionary() {
     loadDictionary.onreadystatechange = function() {
         if (loadDictionary.readyState == 4 && loadDictionary.status == 200) {
             if (loadDictionary.responseText == "no dictionaries") {
-                // If there are no dictionaries in the database and there's one in memory, remove the id and send it as a new one.
+                // If there are no dictionaries in the database and there's one in memory, remove the id & public setting and send it as a new one.
                 currentDictionary.externalID = 0;
+                currentDictionary.settings.isPublic = false;
                 SendDictionary(true);
             } else if (loadDictionary.responseText.length < 60) {
                 console.log(loadDictionary.responseText);
@@ -621,6 +624,7 @@ function ImportDictionary() {
                     {
                         currentDictionary = JSON.parse(reader.result);
                         currentDictionary.externalID = 0;   // Reset external id for imported dictionary.
+                        currentDictionary.settings.isPublic = false;   // Reset public setting for imported dictionary.
                         SaveDictionary(true, true);
                         ProcessLoad();
                         HideSettings();
