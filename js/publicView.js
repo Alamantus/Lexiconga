@@ -42,6 +42,11 @@ function ShowPublicDictionary() {
 
         var dictionaryByArea = document.getElementById("dictionaryBy");
         dictionaryByArea.innerHTML = "created by " + htmlEntitiesParse(publicDictionary.createdBy);
+
+        var dictionaryIncompleteArea = document.getElementById("incompleteNotice");
+        if (!publicDictionary.settings.isComplete) {
+            dictionaryIncompleteArea.innerHTML = "<em>Note: This dictionary is not yet complete and is likely to change.</em>";
+        }
         
         var dictionaryDescriptionArea = document.getElementById("dictionaryDescription");
         dictionaryDescriptionArea.innerHTML = marked(htmlEntitiesParse(publicDictionary.description));

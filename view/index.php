@@ -73,6 +73,7 @@ catch (PDOException $ex) {}
     <div id="dictionaryContainer">
         <h1 id="dictionaryName"></h1>
         <h4 id="dictionaryBy"></h4>
+        <div id="incompleteNotice"></div>
         
         <span id="descriptionToggle" class="clickable" onclick="ToggleDescription();">Hide Description</span>
         <div id="dictionaryDescription" style="display:block;"></div>
