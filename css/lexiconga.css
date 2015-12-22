@@ -10,6 +10,15 @@ header {
 	border-bottom: 3px solid #e3bb7d;
 }
 
+/* Smartphones (portrait and landscape) ----------- */
+@media only screen 
+and (min-device-width : 320px) 
+and (max-device-width : 480px) {
+    header {
+        height: 70px;
+    }
+}
+
 tr, thead {
     border-bottom: 1px solid #af8050;
 }
