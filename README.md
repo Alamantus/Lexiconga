@@ -146,6 +146,8 @@ In the future, I'm planning to:
 * ad removal option?
 
 ## Thanks!
+If you like Lexiconga and want to buy me a cup of coffee for the service, you can **[donate throughPaypal](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=MCCSYGQCR5TLY&lc=US&item_name=Lexiconga&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted)** to help keep it online if you want.
+
 I hope you enjoy Lexiconga and that it helps you build some awesome languages.
 
 –Robbie Antenesse
