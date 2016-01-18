@@ -385,7 +385,7 @@ function ShowFilterWordCount(numberOfWords) {
     var wordCounter = document.getElementById("filterWordCount");
 
     if (filter != "" || search != "") {
-        wordCounter.innerHTML = "Showing " + numberOfWords.toString() + " result" + ((numberOfWords > 1) ? "s" : "");
+        wordCounter.innerHTML = "Showing " + numberOfWords.toString() + " result" + ((numberOfWords != 1) ? "s" : "");
     } else {
         wordCounter.innerHTML = "";
     }
