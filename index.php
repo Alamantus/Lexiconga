@@ -118,9 +118,8 @@ require_once(SITE_LOCATION . '/php/notificationconditiontree.php');
                 <option value="">All</option>
             </select>
             </label>
-            
-            <div id="filterWordCount"></div>
         </div>
+        <div id="filterWordCount"></div>
             
         <div id="theDictionary"></div>
     </div>
