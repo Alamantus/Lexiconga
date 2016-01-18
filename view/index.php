@@ -102,6 +102,8 @@ catch (PDOException $ex) {}
                 <option value="">All</option>
             </select>
             </label>
+            
+            <div id="filterWordCount"></div>
         </div>
             
         <div id="theDictionary"></div>

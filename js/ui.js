@@ -379,6 +379,18 @@ function SetPartsOfSpeech () {
     }
 }
 
+function ShowFilterWordCount(numberOfWords) {
+    var filter = document.getElementById("wordFilter").value;
+    var search = htmlEntitiesParseForSearchEntry(document.getElementById("searchBox").value);
+    var wordCounter = document.getElementById("filterWordCount");
+
+    if (filter != "" || search != "") {
+        wordCounter.innerHTML = "Showing " + numberOfWords.toString() + " result" + ((numberOfWords > 1) ? "s" : "");
+    } else {
+        wordCounter.innerHTML = "";
+    }
+}
+
 function HideSettings() {
     document.getElementById("settingsScreen").style.display = "none";
     document.getElementById("wordEntryForm").style.display = (currentDictionary.settings.isComplete) ? "none" : "block";

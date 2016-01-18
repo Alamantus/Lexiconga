@@ -219,6 +219,7 @@ function ShowDictionary() {
     
     var dictionaryArea = document.getElementById("theDictionary");
     var dictionaryText = "";
+    var numberOfWordsDisplayed = 0;
 
     if (currentDictionary.words.length > 0) {
         for (var i = 0; i < currentDictionary.words.length; i++) {
@@ -231,6 +232,7 @@ function ShowDictionary() {
                         currentDictionary.words[i].wordId = i + 1;  //Account for new property
                     }
                     dictionaryText += DictionaryEntry(i);
+                    numberOfWordsDisplayed++;
                 }
             }
         }
@@ -239,6 +241,7 @@ function ShowDictionary() {
     }
 
     dictionaryArea.innerHTML = dictionaryText;
+    ShowFilterWordCount(numberOfWordsDisplayed);
 }
 
 function DictionaryEntry(itemIndex) {

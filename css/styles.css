@@ -204,6 +204,13 @@ input[type=checkbox] {
     margin: 10px 0;
 }
 
+#filterWordCount {
+    margin: 10px 10px;
+    display: block;
+    font-weight: bold;
+    font-style: italic;
+}
+
 entry {
     display: block;
     width: 90%;

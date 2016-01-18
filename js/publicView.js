@@ -53,6 +53,7 @@ function ShowPublicDictionary() {
         
         var dictionaryArea = document.getElementById("theDictionary");
         var dictionaryText = "";
+        var numberOfWordsDisplayed = 0;
 
         if (publicDictionary.words.length > 0) {
             for (var i = 0; i < publicDictionary.words.length; i++) {
@@ -65,6 +66,7 @@ function ShowPublicDictionary() {
                             publicDictionary.words[i].wordId = i + 1;  //Account for new property
                         }
                         dictionaryText += PublicDictionaryEntry(i);
+                        numberOfWordsDisplayed++;
                     }
                 }
             }
@@ -72,6 +74,7 @@ function ShowPublicDictionary() {
             dictionaryText = "There are no entries in the dictionary."
         }
         dictionaryArea.innerHTML = dictionaryText;
+        ShowFilterWordCount(numberOfWordsDisplayed);
     } else {
         document.getElementById("dictionaryContainer").innerHTML = publicDictionary;
     }
