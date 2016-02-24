@@ -209,23 +209,38 @@ function ToggleWordFormLock() {
     var wordForm = document.getElementById("wordEntryForm");
 
     if (wordFormIsLocked()) {  //If it is already locked, change it to Unlocked and get everything working as it needs to.
-        var wordFormWidth = wordForm.offsetWidth - 20;
-        var leftColumnWidth = leftColumn.offsetWidth;
-        var leftColumnHeight = leftColumn.offsetHeight;
-
-        lockButton.innerHTML = "&#128275;";
-        
-        wordForm.style.position = "fixed";
-        wordForm.style.top = document.getElementsByTagName("header")[0].offsetHeight.toString() + "px";
-        wordForm.style.width = wordFormWidth.toString() + "px";
-
-        leftColumn.style.width = leftColumnWidth.toString() + "px";
-        leftColumn.style.height = leftColumnHeight.toString() + "px";
+        UnlockWordForm();
     } else {
-        lockButton.innerHTML = "&#128274;";
-        leftColumn.removeAttribute('style');
-        wordForm.removeAttribute('style');
+        LockWordForm();
     }
+}
+
+function UnlockWordForm() {
+    var lockButton = document.getElementById("formLockButton");
+    var leftColumn = document.getElementById("leftColumn");
+    var wordForm = document.getElementById("wordEntryForm");
+    var wordFormWidth = wordForm.offsetWidth - 20;
+    var leftColumnWidth = leftColumn.offsetWidth;
+    var leftColumnHeight = leftColumn.offsetHeight;
+
+    lockButton.innerHTML = "&#128275;"; // Change to the "Unlocked lock" icon.
+    
+    wordForm.style.position = "fixed";
+    wordForm.style.top = document.getElementsByTagName("header")[0].offsetHeight.toString() + "px";
+    wordForm.style.width = wordFormWidth.toString() + "px";
+
+    leftColumn.style.width = leftColumnWidth.toString() + "px";
+    leftColumn.style.height = leftColumnHeight.toString() + "px";
+}
+
+function LockWordForm() {
+    var lockButton = document.getElementById("formLockButton");
+    var leftColumn = document.getElementById("leftColumn");
+    var wordForm = document.getElementById("wordEntryForm");
+
+    lockButton.innerHTML = "&#128274;"; // Change to the "locked" icon.
+    leftColumn.removeAttribute('style');
+    wordForm.removeAttribute('style');
 }
 
 function CloseUpdateConflictArea(displayId) {
@@ -422,7 +437,13 @@ function ShowFilterWordCount(numberOfWords) {
 
 function HideSettings() {
     document.getElementById("settingsScreen").style.display = "none";
-    document.getElementById("wordEntryForm").style.display = (currentDictionary.settings.isComplete) ? "none" : "block";
+    if (currentDictionary.settings.isComplete) {
+        LockWordForm();
+        document.getElementById("wordEntryForm").style.display = "none";
+    } else {
+        document.getElementById("wordEntryForm").style.display = "block";
+    }
+    
 }
 
 function NewWordNotification(word) {
