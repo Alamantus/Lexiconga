@@ -127,7 +127,9 @@ function SaveScroll() {
 
 function EditWord(index) {
     SaveScroll();
-    window.scroll(0, 0);
+    if (wordFormIsLocked()) {
+        window.scroll(0, 0);
+    }
 
     ClearForm();
 

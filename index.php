@@ -58,6 +58,7 @@ require_once(SITE_LOCATION . '/php/notificationconditiontree.php');
     </div>
     <div id="leftColumn">
     <form id="wordEntryForm">
+        <div id="formLockButton" class="clickable" onclick="ToggleWordFormLock()" title="Lock/lnlock form from the top of the page">&#128274;</div>
         <label><span>Word</span>
             <input type="text" id="word" />
         </label>

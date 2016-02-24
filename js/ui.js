@@ -199,6 +199,35 @@ function ExplainAllowEmails() {
     alert("We'll make sure that you're the first to hear about any new features that get added or if any of our policies change for any reason. We'll never spam you or sell your information, but you may need to mark emails from lexicon.ga as not spam to receive them.\nNOTE: Password reset emails will be sent regardless of your choice.");
 }
 
+function wordFormIsLocked() {
+    return document.getElementById("formLockButton").innerHTML == "\uD83D\uDD12";
+}
+
+function ToggleWordFormLock() {
+    var lockButton = document.getElementById("formLockButton");
+    var leftColumn = document.getElementById("leftColumn");
+    var wordForm = document.getElementById("wordEntryForm");
+
+    if (wordFormIsLocked()) {  //If it is already locked, change it to Unlocked and get everything working as it needs to.
+        var wordFormWidth = wordForm.offsetWidth - 20;
+        var leftColumnWidth = leftColumn.offsetWidth;
+        var leftColumnHeight = leftColumn.offsetHeight;
+
+        lockButton.innerHTML = "&#128275;";
+        
+        wordForm.style.position = "fixed";
+        wordForm.style.top = document.getElementsByTagName("header")[0].offsetHeight.toString() + "px";
+        wordForm.style.width = wordFormWidth.toString() + "px";
+
+        leftColumn.style.width = leftColumnWidth.toString() + "px";
+        leftColumn.style.height = leftColumnHeight.toString() + "px";
+    } else {
+        lockButton.innerHTML = "&#128274;";
+        leftColumn.removeAttribute('style');
+        wordForm.removeAttribute('style');
+    }
+}
+
 function CloseUpdateConflictArea(displayId) {
     displayId = (typeof displayId !== 'undefined' && displayId != null) ? displayId : false;
     if (displayId != false) {
