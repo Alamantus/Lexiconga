@@ -10,6 +10,7 @@ If you would like an added layer of accessibility and security (in case you clea
 ## Table of Contents
 * [How do I use Lexiconga?](#how-do-i-use-lexiconga)
   * [Getting Started](#getting-started)
+  * [Locking/Unlocking the Word Entry Form](#locking-unlocking-the-word-entry-form)
   * [Viewing your Dictionary's Description/Rules](#viewing-your-dictionary-s-description-rules)
   * [Entry Management](#entry-management)
   * [The Settings Menu](#the-settings-menu)
@@ -38,6 +39,9 @@ Enter the word in your language in the "Word" field, the pronunciation of the wo
 The only things to remember while adding new words is that the minimum information that you can enter is the Word itself and either the Equivalent Word OR the Explanation. You can have both of these or just one, but you need at least one. If you do not want to use the Pronunciation or Parts of Speech then you do not need to, though if you leave out Part of Speech, you will miss out on the handy Filter feature of the dictionary.
 
 And that's all you need to get started! Everything else should be pretty self-explanatory, but a full explanation of Dictionary Builder and all of its functions continues below.
+
+### Locking/Unlocking the Word Entry Form
+If you are not viewing Lexiconga from a mobile device, you will see a lock icon (🔒) in a button in the top right corner of the word entry form. If you click the button, the word entry form will be undocked from the top of the dictionary and will scroll down the page with you. If you click the unlocked icon (🔓) after the form has been unlocked, it will lock again and jump back to the top of the page.
 
 ### Viewing your Dictionary's Description/Rules
 After you enter a markdown-formatted description/rules in the Settings menu, you can view the formatted version by clicking the "Show Description" button under your dictionary's name. You can hide it again by clicking "Hide Description" when the description is displayed.
