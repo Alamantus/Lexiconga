@@ -83,7 +83,7 @@ function ShowPublicDictionary() {
 function PublicDictionaryEntry(itemIndex) {
     var entryText = "<entry><a name='" + publicDictionary.words[itemIndex].wordId + "'></a><a href='#" + publicDictionary.words[itemIndex].wordId + "' class='wordLink clickable'>&#x1f517;</a>";
     
-    var searchTerm = document.getElementById("searchBox").value;
+    var searchTerm = regexParseForSearch(document.getElementById("searchBox").value);
     var searchByWord = document.getElementById("searchOptionWord").checked;
     var searchBySimple = document.getElementById("searchOptionSimple").checked;
     var searchByLong = document.getElementById("searchOptionLong").checked;
