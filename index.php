@@ -71,7 +71,7 @@ require_once(SITE_LOCATION . '/php/notificationconditiontree.php');
         <label><span>Equivalent Word(s)</span>
             <input type="text" id="simpleDefinition" />
         </label>
-        <label><span>Explanation/Long Definition</span>
+        <label><span>Explanation/Long Definition <span id="showFullScreenTextbox" class="clickable" onclick="ShowFullScreenTextbox('longDefinition', 'Explanation/Long Definition')">Maximize</span></span>
             <textarea id="longDefinition"></textarea>
         </label>
         <input type="hidden" id="editIndex" />
@@ -141,7 +141,7 @@ require_once(SITE_LOCATION . '/php/notificationconditiontree.php');
                         <span>Dictionary Name</span>
                         <input type="text" id="dictionaryNameEdit" />
                     </label>
-                    <label><span>Dictionary Details <span id="showFullScreenTextbox" class="clickable" onclick="ShowFullScreenTextbox()">Maximize</a></span>
+                    <label><span>Dictionary Details <span id="showFullScreenTextbox" class="clickable" onclick="ShowFullScreenTextbox('dictionaryDescriptionEdit', 'Dictionary Details')">Maximize</span></span>
                         <textarea id="dictionaryDescriptionEdit"></textarea>
                     </label>
 
@@ -211,6 +211,7 @@ require_once(SITE_LOCATION . '/php/notificationconditiontree.php');
         <div id="expandedTextboxId" style="display:none;width:0px;height:0px;"></div>
         <div id="fullScreenTextboxPage">
             <span id="fullScreenTextboxScreenCloseButton" class="clickable" onclick="HideFullScreenTextbox()">Minimize</span>
+            <label><span id="fullScreenTextboxLabel"></span></label>
             <textarea id="fullScreenTextbox"></textarea>
         </div>
     </div>

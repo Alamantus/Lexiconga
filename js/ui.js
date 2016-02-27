@@ -377,16 +377,29 @@ function HideSettingsWhenComplete() {
     }
 }
 
-function ShowFullScreenTextbox(textboxToExpandId) {
+function ShowFullScreenTextbox(textboxToExpandId, labelText) {
+    var sourceTextboxElement = document.getElementById(textboxToExpandId);
+    var targetTextboxElement = document.getElementById("fullScreenTextbox");
+    document.getElementById("fullScreenTextboxLabel").innerHTML = labelText;
+    var selection = getInputSelection(sourceTextboxElement);
+
     document.getElementById("expandedTextboxId").innerHTML = textboxToExpandId;
-    document.getElementById("fullScreenTextbox").value = document.getElementById(textboxToExpandId).value;
+    targetTextboxElement.value = sourceTextboxElement.value;
     document.getElementById("fullScreenTextboxScreen").style.display = "block";
+    
+    setSelectionRange(targetTextboxElement, selection.start, selection.end);
 }
 
 function HideFullScreenTextbox() {
     var expandedTextboxId = document.getElementById("expandedTextboxId").innerHTML;
-    document.getElementById("dictionaryDescriptionEdit").value = document.getElementById("fullScreenTextbox").value;
+    var sourceTextboxElement = document.getElementById("fullScreenTextbox");
+    var targetTextboxElement = document.getElementById(expandedTextboxId);
+    var selection = getInputSelection(sourceTextboxElement);
+
+    targetTextboxElement.value = sourceTextboxElement.value;
     document.getElementById("fullScreenTextboxScreen").style.display = "none";
+    
+    setSelectionRange(targetTextboxElement, selection.start, selection.end);
 }
 
 function ShowDictionaryDeleteMenu(dictionaryList) {
@@ -470,26 +483,51 @@ function FocusAfterAddingNewWord() {
     document.getElementById("word").focus();
 }
 
-function getCaret(element) {
-// Retrieved from http://stackoverflow.com/a/263796/3508346
-    if (element.selectionStart) {
-        return element.selectionStart;
-    } else if (document.selection) {
-        element.focus();
+function getInputSelection(el) {
+// Retrieved from http://stackoverflow.com/a/4207763
+    var start = 0, end = 0, normalizedValue, range,
+        textInputRange, len, endRange;
+    el.focus();
+    if (typeof el.selectionStart == "number" && typeof el.selectionEnd == "number") {
+        start = el.selectionStart;
+        end = el.selectionEnd;
+    } else {
+        range = document.selection.createRange();
 
-        var range = document.selection.createRange();
-        if (range == null) {
-          return 0;
+        if (range && range.parentElement() == el) {
+            len = el.value.length;
+            normalizedValue = el.value.replace(/\r\n/g, "\n");
+
+            // Create a working TextRange that lives only in the input
+            textInputRange = el.createTextRange();
+            textInputRange.moveToBookmark(range.getBookmark());
+
+            // Check if the start and end of the selection are at the very end
+            // of the input, since moveStart/moveEnd doesn't return what we want
+            // in those cases
+            endRange = el.createTextRange();
+            endRange.collapse(false);
+
+            if (textInputRange.compareEndPoints("StartToEnd", endRange) > -1) {
+                start = end = len;
+            } else {
+                start = -textInputRange.moveStart("character", -len);
+                start += normalizedValue.slice(0, start).split("\n").length - 1;
+
+                if (textInputRange.compareEndPoints("EndToEnd", endRange) > -1) {
+                    end = len;
+                } else {
+                    end = -textInputRange.moveEnd("character", -len);
+                    end += normalizedValue.slice(0, end).split("\n").length - 1;
+                }
+            }
         }
-
-        var re = element.createTextRange(),
-            rc = re.duplicate();
-        re.moveToBookmark(range.getBookmark());
-        rc.setEndPoint('EndToStart', re);
-
-        return rc.text.length;
     }
-    return 0; 
+
+    return {
+        start: start,
+        end: end
+    };
 }
 
 function setSelectionRange(input, selectionStart, selectionEnd) {
