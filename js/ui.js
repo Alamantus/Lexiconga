@@ -377,6 +377,16 @@ function HideSettingsWhenComplete() {
     }
 }
 
+function ShowFullScreenTextbox() {
+    document.getElementById("fullScreenTextbox").value = document.getElementById("dictionaryDescriptionEdit").value;
+    document.getElementById("fullScreenTextboxScreen").style.display = "block";
+}
+
+function HideFullScreenTextbox() {
+    document.getElementById("dictionaryDescriptionEdit").value = document.getElementById("fullScreenTextbox").value;
+    document.getElementById("fullScreenTextboxScreen").style.display = "none";
+}
+
 function ShowDictionaryDeleteMenu(dictionaryList) {
     document.getElementById('loadAfterDeleteScreen').style.display = 'block';
     //Parse response into the list that forces you to load one and reload select in settings.

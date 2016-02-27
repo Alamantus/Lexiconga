@@ -141,9 +141,10 @@ require_once(SITE_LOCATION . '/php/notificationconditiontree.php');
                         <span>Dictionary Name</span>
                         <input type="text" id="dictionaryNameEdit" />
                     </label>
-                    <label><span>Dictionary Description/Rules</span>
+                    <label><span>Dictionary Details <span id="showFullScreenTextbox" class="clickable" onclick="ShowFullScreenTextbox()">Maximize</a></span>
                         <textarea id="dictionaryDescriptionEdit"></textarea>
                     </label>
+
                     <label>
                         <span>Parts of Speech</span>
                         <input type="text" id="dictionaryPartsOfSpeechEdit" />
@@ -202,6 +203,14 @@ require_once(SITE_LOCATION . '/php/notificationconditiontree.php');
                     <button type="button" onclick="SaveSettings(); return false;">Save</button>
                 </div>
             </form>
+        </div>
+    </div>
+    
+    <div id="fullScreenTextboxScreen" style="display:none;">
+        <div id="fullScreenTextboxBackgroundFade" onclick="HideFullScreenTextbox()"></div>
+        <div id="fullScreenTextboxPage">
+            <span id="fullScreenTextboxScreenCloseButton" class="clickable" onclick="HideFullScreenTextbox()">Minimize</span>
+            <textarea id="fullScreenTextbox"></textarea>
         </div>
     </div>
     
