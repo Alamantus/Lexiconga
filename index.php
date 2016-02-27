@@ -208,6 +208,7 @@ require_once(SITE_LOCATION . '/php/notificationconditiontree.php');
     
     <div id="fullScreenTextboxScreen" style="display:none;">
         <div id="fullScreenTextboxBackgroundFade" onclick="HideFullScreenTextbox()"></div>
+        <div id="expandedTextboxId" style="display:none;width:0px;height:0px;"></div>
         <div id="fullScreenTextboxPage">
             <span id="fullScreenTextboxScreenCloseButton" class="clickable" onclick="HideFullScreenTextbox()">Minimize</span>
             <textarea id="fullScreenTextbox"></textarea>

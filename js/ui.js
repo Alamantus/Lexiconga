@@ -377,12 +377,14 @@ function HideSettingsWhenComplete() {
     }
 }
 
-function ShowFullScreenTextbox() {
-    document.getElementById("fullScreenTextbox").value = document.getElementById("dictionaryDescriptionEdit").value;
+function ShowFullScreenTextbox(textboxToExpandId) {
+    document.getElementById("expandedTextboxId").innerHTML = textboxToExpandId;
+    document.getElementById("fullScreenTextbox").value = document.getElementById(textboxToExpandId).value;
     document.getElementById("fullScreenTextboxScreen").style.display = "block";
 }
 
 function HideFullScreenTextbox() {
+    var expandedTextboxId = document.getElementById("expandedTextboxId").innerHTML;
     document.getElementById("dictionaryDescriptionEdit").value = document.getElementById("fullScreenTextbox").value;
     document.getElementById("fullScreenTextboxScreen").style.display = "none";
 }
@@ -466,4 +468,41 @@ function NewWordNotification(word) {
 
 function FocusAfterAddingNewWord() {
     document.getElementById("word").focus();
+}
+
+function getCaret(element) {
+// Retrieved from http://stackoverflow.com/a/263796/3508346
+    if (element.selectionStart) {
+        return element.selectionStart;
+    } else if (document.selection) {
+        element.focus();
+
+        var range = document.selection.createRange();
+        if (range == null) {
+          return 0;
+        }
+
+        var re = element.createTextRange(),
+            rc = re.duplicate();
+        re.moveToBookmark(range.getBookmark());
+        rc.setEndPoint('EndToStart', re);
+
+        return rc.text.length;
+    }
+    return 0; 
+}
+
+function setSelectionRange(input, selectionStart, selectionEnd) {
+// Retrieved from http://stackoverflow.com/a/17858641/3508346
+    if (input.setSelectionRange) {
+        input.focus();
+        input.setSelectionRange(selectionStart, selectionEnd);
+    }
+    else if (input.createTextRange) {
+        var range = input.createTextRange();
+        range.collapse(true);
+        range.moveEnd('character', selectionEnd);
+        range.moveStart('character', selectionStart);
+        range.select();
+    }
 }
