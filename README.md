@@ -11,7 +11,8 @@ If you would like an added layer of accessibility and security (in case you clea
 * [How do I use Lexiconga?](#how-do-i-use-lexiconga)
   * [Getting Started](#getting-started)
   * [Locking/Unlocking the Word Entry Form](#locking-unlocking-the-word-entry-form)
-  * [Viewing your Dictionary's Description/Rules](#viewing-your-dictionary-s-description-rules)
+  * [Viewing your Dictionary's Details](#viewing-your-dictionary-s-details)
+  * [Maximizing Large Text Boxes](#maximizing-large-text-boxes)
   * [Entry Management](#entry-management)
   * [The Settings Menu](#the-settings-menu)
   * [Search/Filter](#search-filter)
@@ -32,7 +33,7 @@ If you would like an added layer of accessibility and security (in case you clea
 ## How do I use Lexiconga?
 
 ### Getting Started
-When you have a brand new, empty dictionary, the first thing you'll probably want to do is change the title to whatever your conlang is called and add at least a little description of what your language is like or how to use it. You can do this by clicking on the Settings button, which will open up the settings screen. Here, you will find all the fields you need to update your dictionary's Name and Description/Rules. The Description/Rules text area uses [Markdown](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) to format any text you include, so brush up on how to do basic things in Markdown before you get started _(NOTE: a line break is done by adding 2 or more spaces to the end of the line and then going to the next line!)_. After this, make sure that the Parts of Speech are adequate for your language _(see below for more information about this)_. Update these fields to what you want them to say and click the "Save" button to keep the Settings menu open, or the "Save and Close" button to close the menu and start adding words!
+When you have a brand new, empty dictionary, the first thing you'll probably want to do is change the title to whatever your conlang is called and add at least a little description of what your language is like or how to use it. You can do this by clicking on the Settings button, which will open up the settings screen. Here, you will find all the fields you need to update your dictionary's Name and Details. The Details text area uses [Markdown](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) to format any text you include, so brush up on how to do basic things in Markdown before you get started _(NOTE: a line break is done by adding 2 or more spaces to the end of the line and then going to the next line!)_. After this, make sure that the Parts of Speech are adequate for your language _(see below for more information about this)_. Update these fields to what you want them to say and click the "Save" button to keep the Settings menu open, or the "Save and Close" button to close the menu and start adding words!
 
 To add words, just use the form on the top left side of the window. Hopefully the form is self-explanatory, but if not, here's a little guide:  
 Enter the word in your language in the "Word" field, the pronunciation of the word in the "Pronunciation" field, choose a Part of Speech, enter an equivalent word/short definition in the "Equivalent Word(s)" field and/or a longer definition or fuller explanation of the word using [Markdown](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) in the "Explanation/Long Definition" text area, and click "Add Word". Your word will instantly appear in your dictionary under the dictionary's name! You can add as many words as you want this way.  
@@ -43,8 +44,11 @@ And that's all you need to get started! Everything else should be pretty self-ex
 ### Locking/Unlocking the Word Entry Form
 If you are not viewing Lexiconga from a mobile device, you will see a lock icon (🔒) in a button in the top right corner of the word entry form. If you click the button, the word entry form will be undocked from the top of the dictionary and will scroll down the page with you. If you click the unlocked icon (🔓) after the form has been unlocked, it will lock again and jump back to the top of the page.
 
-### Viewing your Dictionary's Description/Rules
+### Viewing your Dictionary's Details
 After you enter a markdown-formatted description/rules in the Settings menu, you can view the formatted version by clicking the "Show Description" button under your dictionary's name. You can hide it again by clicking "Hide Description" when the description is displayed.
+
+### Maximizing Large Text Boxes
+If you need more space to see what you are entering into a word's Explanation/Long Definition field or your Dictionary Details, clicking the "Maximize" button above each text area will give you a larger view of the text box to enter text in. When you're done writing, click either the "Minimize" button or any of the darker space outside of the larger view, and your text will be in the right place. It will even preserve your cursor position or highlighted text so you don't lose your place moving from the larger view back to the small (and vice-versa)!
 
 ### Entry Management
 After adding some words to your dictionary, you'll notice a link icon (🔗) and an "Edit" and "Delete" button attached to each entry.
@@ -145,9 +149,8 @@ Please report any problems you come across to the [Dictionary Builder Issues pag
 
 ## Future Plans
 In the future, I'm planning to:
-* add the ability to easily share dictionaries by your Public Name, but all dictionaries will be private by default
 * enable account deletion if you lose trust or hope in Lexiconga's services
-* ad removal option?
+* provide an ad removal option?
 
 ## Thanks!
 If you like Lexiconga and want to buy me a cup of coffee for the service, you can **[donate throughPaypal](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=MCCSYGQCR5TLY&lc=US&item_name=Lexiconga&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted)** to help keep it online if you want.
