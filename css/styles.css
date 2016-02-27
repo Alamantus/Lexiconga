@@ -46,29 +46,6 @@ td:last-child, th:last-child {
     display: inline !important;
 }
 
-/* Smartphones (portrait and landscape) ----------- */
-@media only screen 
-and (min-device-width : 320px) 
-and (max-device-width : 480px) {
-    footer {
-        position: relative;
-        clear: both;
-        max-height: 100%;
-    }
-    
-    #dictionaryContainer {
-        margin-bottom: 15px !important;
-    }
-
-    #formLockButton {
-        display: none;
-    }
-
-    #showFullScreenTextbox {
-        display: none;
-    }
-}
-
 #leftColumn {
     float: left;
 }
@@ -407,9 +384,12 @@ searchTerm {
     clear: both;
 }
 #settingsSaveButtons {
+    position: fixed;
+    right: 10%;
+    bottom: 8%;
+    font-size: 14px;
     display: block;
-    clear: both;
-    width: 100%;
+    width: 50%;
 }
 
 .settingsCol {
@@ -419,4 +399,35 @@ searchTerm {
     min-width: 260px;
     max-width: 400px;
     margin: 0 30px 0 0;
+}
+
+/* Smartphones (portrait and landscape) ----------- */
+@media only screen 
+and (min-device-width : 320px) 
+and (max-device-width : 480px) {
+    footer {
+        position: relative;
+        clear: both;
+        max-height: 100%;
+    }
+    
+    #dictionaryContainer {
+        margin-bottom: 15px !important;
+    }
+
+    #formLockButton {
+        display: none;
+    }
+
+    #showFullScreenTextbox {
+        display: none;
+    }
+
+    #settingsSaveButtons {
+        position: relative;
+        right: 0;
+        bottom: 0;
+        clear: both;
+        width: 100%;
+    }
 }
