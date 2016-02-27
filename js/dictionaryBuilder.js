@@ -107,24 +107,6 @@ function AddWord() {
     errorMessageArea.innerHTML = errorMessage;
 }
 
-function WordAtIndexWasChanged(indexString, word, pronunciation, partOfSpeech, simpleDefinition, longDefinition) {
-     return (!currentDictionary.settings.caseSensitive && currentDictionary.words[parseInt(indexString)].name.toLowerCase() != word.toLowerCase()) ||
-            (currentDictionary.settings.caseSensitive && currentDictionary.words[parseInt(indexString)].name != word) ||
-            currentDictionary.words[parseInt(indexString)].pronunciation != pronunciation ||
-            currentDictionary.words[parseInt(indexString)].partOfSpeech != partOfSpeech ||
-            currentDictionary.words[parseInt(indexString)].simpleDefinition != simpleDefinition ||
-            currentDictionary.words[parseInt(indexString)].longDefinition != longDefinition;
-}
-
-function SaveScroll() {
-    var doc = document.documentElement;
-    var left = (window.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0);
-    var top = (window.pageYOffset || doc.scrollTop) - (doc.clientTop || 0);
-
-    savedScroll.x = left;
-    savedScroll.y = top;
-}
-
 function EditWord(index) {
     SaveScroll();
     if (wordFormIsLocked()) {
@@ -142,20 +124,6 @@ function EditWord(index) {
 
     document.getElementById("newWordButtonArea").style.display = "none";
     document.getElementById("editWordButtonArea").style.display = "block";
-}
-
-function SaveAndUpdateDictionary(keepFormContents) {
-    if (!currentDictionary.settings.sortByEquivalent) {
-        currentDictionary.words.sort(dynamicSort("name"));
-    } else {
-        currentDictionary.words.sort(dynamicSort("simpleDefinition"));
-    }
-    SaveDictionary(true, true);
-    ShowDictionary();
-    if (!keepFormContents) {
-        ClearForm();
-    }
-    CloseUpdateConflictArea('newWordButtonArea');
 }
 
 function UpdateWord(wordIndex, word, pronunciation, partOfSpeech, simpleDefinition, longDefinition) {
@@ -357,15 +325,6 @@ function SaveSettings() {
     LoadUserDictionaries();
 }
 
-function CheckForPartsOfSpeechChange() {
-    if (htmlEntities(document.getElementById("dictionaryPartsOfSpeechEdit").value) != currentDictionary.settings.partsOfSpeech) {
-        if (htmlEntities(document.getElementById("dictionaryPartsOfSpeechEdit").value) != "") {
-            currentDictionary.settings.partsOfSpeech = htmlEntities(document.getElementById("dictionaryPartsOfSpeechEdit").value);
-            SetPartsOfSpeech();
-        }
-    }
-}
-
 function EmptyWholeDictionary() {
     if (confirm("This will delete the entire current dictionary. If you do not have a backed up export, you will lose it forever!\n\nDo you still want to delete?")) {
         CreateNewDictionary();
@@ -412,6 +371,20 @@ function DeleteCurrentDictionary() {
 
 function ResetDictionaryToDefault() {
     currentDictionary = JSON.parse(defaultDictionaryJSON);
+}
+
+function SaveAndUpdateDictionary(keepFormContents) {
+    if (!currentDictionary.settings.sortByEquivalent) {
+        currentDictionary.words.sort(dynamicSort("name"));
+    } else {
+        currentDictionary.words.sort(dynamicSort("simpleDefinition"));
+    }
+    SaveDictionary(true, true);
+    ShowDictionary();
+    if (!keepFormContents) {
+        ClearForm();
+    }
+    CloseUpdateConflictArea('newWordButtonArea');
 }
 
 function SaveDictionary(sendToDatabase, sendWords) {
@@ -668,6 +641,33 @@ function WordIndex(word) {
         }
     }
     return -1;
+}
+
+function WordAtIndexWasChanged(indexString, word, pronunciation, partOfSpeech, simpleDefinition, longDefinition) {
+     return (!currentDictionary.settings.caseSensitive && currentDictionary.words[parseInt(indexString)].name.toLowerCase() != word.toLowerCase()) ||
+            (currentDictionary.settings.caseSensitive && currentDictionary.words[parseInt(indexString)].name != word) ||
+            currentDictionary.words[parseInt(indexString)].pronunciation != pronunciation ||
+            currentDictionary.words[parseInt(indexString)].partOfSpeech != partOfSpeech ||
+            currentDictionary.words[parseInt(indexString)].simpleDefinition != simpleDefinition ||
+            currentDictionary.words[parseInt(indexString)].longDefinition != longDefinition;
+}
+
+function CheckForPartsOfSpeechChange() {
+    if (htmlEntities(document.getElementById("dictionaryPartsOfSpeechEdit").value) != currentDictionary.settings.partsOfSpeech) {
+        if (htmlEntities(document.getElementById("dictionaryPartsOfSpeechEdit").value) != "") {
+            currentDictionary.settings.partsOfSpeech = htmlEntities(document.getElementById("dictionaryPartsOfSpeechEdit").value);
+            SetPartsOfSpeech();
+        }
+    }
+}
+
+function SaveScroll() {
+    var doc = document.documentElement;
+    var left = (window.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0);
+    var top = (window.pageYOffset || doc.scrollTop) - (doc.clientTop || 0);
+
+    savedScroll.x = left;
+    savedScroll.y = top;
 }
 
 function htmlEntities(string) {

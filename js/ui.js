@@ -119,18 +119,6 @@ function ValidateAccountSettings() {
     }
 }
 
-function WarnEmailChange() {
-    var emailChangeWarning = document.getElementById("accountSettingsEmailChangeWarning");
-    var emailValue = document.getElementById("accountSettingsEmailField").value;
-    var originalEmailValue = document.getElementById("accountSettingsPreviousEmailField").value;
-
-    if (emailValue != originalEmailValue) {
-        emailChangeWarning.style.display = "block";
-    } else {
-        emailChangeWarning.style.display = "none";
-    }
-}
-
 function ValidateForgotPassword() {
     var errorMessage = document.getElementById("forgotError");
     var emailValue = document.getElementById("forgotEmailField").value;
@@ -171,6 +159,18 @@ function ValidateResetPassword() {
         return false;
     } else {
         document.getElementById("resetPasswordForm").submit();
+    }
+}
+
+function WarnEmailChange() {
+    var emailChangeWarning = document.getElementById("accountSettingsEmailChangeWarning");
+    var emailValue = document.getElementById("accountSettingsEmailField").value;
+    var originalEmailValue = document.getElementById("accountSettingsPreviousEmailField").value;
+
+    if (emailValue != originalEmailValue) {
+        emailChangeWarning.style.display = "block";
+    } else {
+        emailChangeWarning.style.display = "none";
     }
 }
 
@@ -340,21 +340,6 @@ function HideAccountSettings() {
         document.getElementById("accountSettingsScreen").style.display = "none";
 }
 
-function ShowDictionaryDeleteMenu(dictionaryList) {
-    document.getElementById('loadAfterDeleteScreen').style.display = 'block';
-    //Parse response into the list that forces you to load one and reload select in settings.
-    ParseUserDictionariesIntoSelect(document.getElementById("loadAfterDelete"), dictionaryList);
-    ParseUserDictionariesIntoSelect(document.getElementById("userDictionaries"), dictionaryList);
-}
-
-function ToggleCaseSensitiveOption() {
-    if (document.getElementById("dictionaryAllowDuplicates").checked) {
-        document.getElementById("dictionaryCaseSensitive").disabled = true;
-    } else {
-        document.getElementById("dictionaryCaseSensitive").disabled = false;
-    }
-}
-
 function ShowSettings() {
     document.getElementById("settingsScreen").style.display = "block";
     document.getElementById("dictionaryNameEdit").value = htmlEntitiesParse(currentDictionary.name);
@@ -371,6 +356,17 @@ function ShowSettings() {
     document.getElementById("numberOfWordsInDictionary").innerHTML = currentDictionary.words.length.toString();
 }
 
+function HideSettings() {
+    document.getElementById("settingsScreen").style.display = "none";
+    if (currentDictionary.settings.isComplete) {
+        LockWordForm();
+        document.getElementById("wordEntryForm").style.display = "none";
+    } else {
+        document.getElementById("wordEntryForm").style.display = "block";
+    }
+    
+}
+
 function HideSettingsWhenComplete() {
     if (document.getElementById("settingsScreen")) {
         if (currentDictionary.settings.isComplete) {
@@ -378,6 +374,21 @@ function HideSettingsWhenComplete() {
         } else {
             document.getElementById("hideIfComplete").style.display = "block";
         }
+    }
+}
+
+function ShowDictionaryDeleteMenu(dictionaryList) {
+    document.getElementById('loadAfterDeleteScreen').style.display = 'block';
+    //Parse response into the list that forces you to load one and reload select in settings.
+    ParseUserDictionariesIntoSelect(document.getElementById("loadAfterDelete"), dictionaryList);
+    ParseUserDictionariesIntoSelect(document.getElementById("userDictionaries"), dictionaryList);
+}
+
+function ToggleCaseSensitiveOption() {
+    if (document.getElementById("dictionaryAllowDuplicates").checked) {
+        document.getElementById("dictionaryCaseSensitive").disabled = true;
+    } else {
+        document.getElementById("dictionaryCaseSensitive").disabled = false;
     }
 }
 
@@ -433,17 +444,6 @@ function ShowFilterWordCount(numberOfWords) {
     } else {
         wordCounter.innerHTML = "";
     }
-}
-
-function HideSettings() {
-    document.getElementById("settingsScreen").style.display = "none";
-    if (currentDictionary.settings.isComplete) {
-        LockWordForm();
-        document.getElementById("wordEntryForm").style.display = "none";
-    } else {
-        document.getElementById("wordEntryForm").style.display = "block";
-    }
-    
 }
 
 function NewWordNotification(word) {
