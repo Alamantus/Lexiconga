@@ -162,7 +162,6 @@ function ShowDictionary() {
         var searchDictionaryJSON = htmlEntitiesParseForSearch(JSON.stringify(currentDictionary));
         if (searchIgnoreCase) {
             search = search.toLowerCase();
-            //searchDictionaryJSON = searchDictionaryJSON.toLowerCase();
         }
         if (searchIgnoreDiacritics) {
             search = removeDiacritics(search);
@@ -218,7 +217,7 @@ function DictionaryEntry(itemIndex) {
     displayPublic = (typeof displayPublic !== 'undefined' && displayPublic != null) ? displayPublic : false;
     var entryText = "<entry><a name='" + currentDictionary.words[itemIndex].wordId + "'></a><a href='#" + currentDictionary.words[itemIndex].wordId + "' class='wordLink clickable'>&#x1f517;</a>";
     
-    var searchTerm = document.getElementById("searchBox").value;
+    var searchTerm = regexParseForSearch(document.getElementById("searchBox").value);
     var searchByWord = document.getElementById("searchOptionWord").checked;
     var searchBySimple = document.getElementById("searchOptionSimple").checked;
     var searchByLong = document.getElementById("searchOptionLong").checked;
@@ -684,11 +683,15 @@ function stripHtmlEntities(string) {
 }
 
 function htmlEntitiesParseForSearchEntry(string) {
-    return String(string).replace(/"/g, '%%').replace(/'/g, "``");
+    return String(string).replace(/"/g, '%%%%').replace(/'/g, "````");
 }
 
 function htmlEntitiesParseForSearch(string) {
-    return String(string).replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '%%').replace(/&apos;/g, "``");
+    return String(string).replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '%%%%').replace(/&apos;/g, "````");
+}
+
+function regexParseForSearch(string) {
+    return String(string).replace(/([\[\\\^\$\.\|\?\*\+\(\)\{\}\]])/g, "\\$1");
 }
 
 function dynamicSort(property) {
