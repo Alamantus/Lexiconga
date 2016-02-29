@@ -142,7 +142,7 @@ function Update_Current_Dictionary() {
             if (isset($_POST['nextwordid'])) {
                 $query .= "`next_word_id`=" . $_POST['nextwordid'] . ", ";
             }
-            if (isset($_POST['allowDuplicates'])) {
+            if (isset($_POST['allowduplicates'])) {
                 $query .= "`allow_duplicates`=" . $_POST['allowduplicates'] . ", ";
             }
             if (isset($_POST['casesensitive'])) {
