@@ -8,6 +8,8 @@ $current_user = isset($_SESSION['user']) ? $_SESSION['user'] : 0;
 
 $dictionary_to_load = (isset($_GET['dict'])) ? intval($_GET['dict']) : 0;
 $the_public_dictionary = '"That dictionary doesn\'t exist."';
+$dictionary_name = 'ERROR';
+$dictionary_creator = 'nobody';
 
 if ($current_user > 0 || !isset($_SESSION['loginfailures']) || (isset($_SESSION['loginlockouttime']) && time() - $_SESSION['loginlockouttime'] >= 3600)) {
     // If logged in, never failed, or more than 1 hour has passed, reset login failures.
@@ -30,6 +32,8 @@ try {
     if ($queryResults) {
         if (num_rows($queryResults) === 1) {
             while ($dict = fetch($queryResults)) {
+                $dictionary_name = $dict['name'];
+                $dictionary_creator = $dict['public_name'];
                 $the_public_dictionary = '{"name":"' . $dict['name'] . '",';
                 $the_public_dictionary .= '"description":"' . $dict['description'] . '",';
                 $the_public_dictionary .= '"createdBy":"' . $dict['public_name'] . '",';
@@ -51,7 +55,13 @@ catch (PDOException $ex) {}
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
-    <title>Lexiconga Dictionary Builder</title>
+    <title><?php echo $dictionary_name; ?> Dictionary on Lexiconga</title>
+
+    <meta property="og:url" content="http://lexicon.ga/view/?dict=<?php echo $dictionary_to_load; ?>" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="<?php echo $dictionary_name; ?> Dictionary" />
+    <meta property="og:description" content="A Lexiconga dictionary by <?php echo $dictionary_creator; ?>" />
+    <meta property="og:image" content="http://lexicon.ga/images/logo.svg" />
 
     <link href="../css/styles.css" rel="stylesheet" />
     <link href="../css/lexiconga.css" rel="stylesheet" />
