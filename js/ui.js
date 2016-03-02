@@ -204,10 +204,6 @@ function wordFormIsLocked() {
 }
 
 function ToggleWordFormLock() {
-    var lockButton = document.getElementById("formLockButton");
-    var leftColumn = document.getElementById("leftColumn");
-    var wordForm = document.getElementById("wordEntryForm");
-
     if (wordFormIsLocked()) {  //If it is already locked, change it to Unlocked and get everything working as it needs to.
         UnlockWordForm();
     } else {
