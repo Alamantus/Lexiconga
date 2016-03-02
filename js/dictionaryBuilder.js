@@ -374,9 +374,9 @@ function ResetDictionaryToDefault() {
 
 function SaveAndUpdateDictionary(keepFormContents) {
     if (!currentDictionary.settings.sortByEquivalent) {
-        currentDictionary.words.sort(dynamicSort("name"));
+        currentDictionary.words.sort(dynamicSort(['name', 'partOfSpeech']));
     } else {
-        currentDictionary.words.sort(dynamicSort("simpleDefinition"));
+        currentDictionary.words.sort(dynamicSort(['simpleDefinition', 'partOfSpeech']));
     }
     SaveDictionary(true, true);
     ShowDictionary();
@@ -694,18 +694,25 @@ function regexParseForSearch(string) {
     return String(string).replace(/([\[\\\^\$\.\|\?\*\+\(\)\{\}\]])/g, "\\$1");
 }
 
-function dynamicSort(property) {
-    /* Retrieved from http://stackoverflow.com/a/4760279
-       Usage: theArray.sort(dynamicSort("objectProperty"));*/
-    var sortOrder = 1;
-    if (property[0] === "-") {
-        sortOrder = -1;
-        property = property.substr(1);
-    }
+function dynamicSort(propertiesArray) {
+	/* Retrieved from http://stackoverflow.com/a/30446887/3508346
+	   Usage: theArray.sort(dynamicSort(['propertyAscending', '-propertyDescending']));*/
     return function (a, b) {
-        var result = (a[property].toLowerCase() < b[property].toLowerCase()) ? -1 : (a[property].toLowerCase() > b[property].toLowerCase()) ? 1 : 0;
-        return result * sortOrder;
-    }
+        return propertiesArray
+            .map(function (o) {
+                var dir = 1;
+                if (o[0] === '-') {
+                   dir = -1;
+                   o=o.substring(1);
+                }
+                if (removeDiacritics(a[o]) > removeDiacritics(b[o])) return dir;
+                if (removeDiacritics(a[o]) < removeDiacritics(b[o])) return -(dir);
+                return 0;
+            })
+            .reduce(function firstNonZeroValue (p,n) {
+                return p ? p : n;
+            }, 0);
+    };
 }
 
 function download(filename, text) {
