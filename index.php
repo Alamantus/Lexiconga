@@ -279,7 +279,7 @@ require_once(SITE_LOCATION . '/php/notificationconditiontree.php');
     <!-- Markdown Parser -->
     <script src="js/marked.js"></script>
     <!-- JSON Search -->
-    <script src="js/defiant-js/defiant-latest.js"></script>
+    <script src="js/defiant.js"></script>
     <!-- Diacritics Removal for Exports -->
     <script src="js/removeDiacritics.js"></script>
     <!-- Main Script -->
