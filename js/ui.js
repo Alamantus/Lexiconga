@@ -415,7 +415,7 @@ function ToggleCaseSensitiveOption() {
 
 function TogglePublicLink() {
     if (document.getElementById("dictionaryIsPublic").checked) {
-        var publicLink = "http://lexicon.ga/view/?dict=" + currentDictionary.externalID;
+        var publicLink = "http://lexicon.ga/" + currentDictionary.externalID;
         document.getElementById("publicLink").innerHTML = "<strong>Public Link:</strong><br>" + publicLink;
     } else {
         document.getElementById("publicLink").innerHTML = "";

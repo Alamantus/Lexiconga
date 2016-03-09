@@ -32,7 +32,7 @@ require_once(SITE_LOCATION . '/php/notificationconditiontree.php');
 <body>
     <header>
         <div id="headerPadder">
-            <a href="./" id="siteLogo">Lexiconga Dictionary Builder</a>
+            <a href="/" id="siteLogo">Lexiconga Dictionary Builder</a>
             <div style="float:right;margin: 16px 8px;font-size:12px;">
                 <span id="aboutButton" class="clickable" onclick="ShowInfo('aboutText')">About Lexiconga</span>
             </div>
@@ -62,7 +62,7 @@ require_once(SITE_LOCATION . '/php/notificationconditiontree.php');
         <label><span>Word</span>
             <input type="text" id="word" />
         </label>
-        <label><span>Pronunciation <a class="helperlink" href="./ipa_character_picker/" target="_blank" title="IPA Character Picker backed up from http://r12a.github.io/pickers/ipa/">IPA Characters</a></span>
+        <label><span>Pronunciation <a class="helperlink" href="/ipa_character_picker/" target="_blank" title="IPA Character Picker backed up from http://r12a.github.io/pickers/ipa/">IPA Characters</a></span>
             <input type="text" id="pronunciation" />
         </label>
         <label><span>Part of Speech</span>

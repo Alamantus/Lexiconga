@@ -63,19 +63,19 @@ catch (PDOException $ex) {}
     <meta property="og:description" content="A Lexiconga dictionary by <?php echo $dictionary_creator; ?>" />
     <meta property="og:image" content="http://lexicon.ga/images/logo.svg" />
 
-    <link href="../css/styles.css" rel="stylesheet" />
-    <link href="../css/lexiconga.css" rel="stylesheet" />
+    <link href="/css/styles.css" rel="stylesheet" />
+    <link href="/css/lexiconga.css" rel="stylesheet" />
     <script>var publicDictionary = <?php echo $the_public_dictionary; ?></script>
 </head>
 <body>
     <header>
         <div id="headerPadder">
-            <a href="./" id="siteLogo">Lexiconga Dictionary Builder</a>
+            <a href="/" id="siteLogo">Lexiconga Dictionary Builder</a>
             <div style="float:right;margin: 16px 8px;font-size:12px;">
                 <span id="aboutButton" class="clickable" onclick="ShowInfo('aboutText')">About Lexiconga</span>
             </div>
             <div id="loginoutArea" style="font-size:12px;">
-                <a id="loginLink" class="clickable" href="../" title="Go home to log in or create an account.">Go Home</a>
+                <a id="loginLink" class="clickable" href="/" title="Go home to log in or create an account.">Go Home</a>
             </div>
         </div>
     </header>
@@ -137,15 +137,15 @@ catch (PDOException $ex) {}
     </footer>
     
     <!-- Markdown Parser -->
-    <script src="../js/marked.js"></script>
+    <script src="/js/marked.js"></script>
     <!-- JSON Search -->
-    <script src="../js/defiant.js"></script>
+    <script src="/js/defiant.js"></script>
     <!-- Diacritics Removal for Exports -->
-    <script src="../js/removeDiacritics.js"></script>
+    <script src="/js/removeDiacritics.js"></script>
     <!-- Main Script -->
-    <script src="../js/dictionaryBuilder.js"></script>
-    <script src="../js/ui.js"></script>
-    <script src="../js/publicView.js"></script>
+    <script src="/js/dictionaryBuilder.js"></script>
+    <script src="/js/ui.js"></script>
+    <script src="/js/publicView.js"></script>
     <?php if ($_GET['adminoverride'] != "noadsortracking") { include_once("../php/google/analytics.php"); } ?>
     <script>
     var aboutText = termsText = privacyText = loginForm = forgotForm = "Loading...";
@@ -153,11 +153,11 @@ catch (PDOException $ex) {}
         ShowPublicDictionary();
         SetPublicPartsOfSpeech();
         
-        GetTextFile("../README.md", "aboutText", true);
-        GetTextFile("../TERMS.md", "termsText", true);
-        GetTextFile("../PRIVACY.md", "privacyText", true);
-        GetTextFile("../LOGIN.form", "loginForm", false);
-        GetTextFile("../FORGOT.form", "forgotForm", false);
+        GetTextFile("/README.md", "aboutText", true);
+        GetTextFile("/TERMS.md", "termsText", true);
+        GetTextFile("/PRIVACY.md", "privacyText", true);
+        GetTextFile("/LOGIN.form", "loginForm", false);
+        GetTextFile("/FORGOT.form", "forgotForm", false);
     }
     </script>
 </body>
