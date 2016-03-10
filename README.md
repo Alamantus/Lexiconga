@@ -26,6 +26,7 @@ If you would like an added layer of accessibility and security (in case you clea
   * [Forgot Your Password?](#forgot-your-password-)
   * [Lockout](#lockout)
 * [Problems or Requests](#problems-or-requests)
+* [Update Log](#update-log)
 * [Future Plans](#future-plans)
 * [Thanks](#thanks-)
 * [Libraries Used](#libraries-used)
@@ -146,6 +147,10 @@ If you manage to enter your password wrong 10 times, you'll be locked out from l
 
 ## Problems or Requests
 Please report any problems you come across to the [Dictionary Builder Issues page](https://github.com/Alamantus/DictionaryBuilder/issues). You can also submit enhancement requests to the same place if you have any requests for new features.
+
+## Update Log
+You can see all previous updates to Lexiconga here:
+[https://github.com/Alamantus/DictionaryBuilder/releases](https://github.com/Alamantus/DictionaryBuilder/releases/tag/Production)
 
 ## Future Plans
 In the future, I'm planning to:
