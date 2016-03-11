@@ -248,6 +248,18 @@ function CloseUpdateConflictArea(displayId) {
     EnableForm();
 }
 
+function SubmitWordOnCtrlEnter(keypress) {
+    var keyCode = (event.which ? event.which : event.keyCode);
+
+    if (keyCode === 10 || (keyCode == 13 && event.ctrlKey)) { //Windows and Linux Chrome accept ctrl+enter as keyCode 10.
+        AddWord();
+        
+        if (document.getElementById("newWordButtonArea").style.display == "none" && document.getElementById("editWordButtonArea").style.display == "none") {
+            document.getElementById("updateConfirmButton").focus();
+        }
+    }
+}
+
 function DisableForm() {
     document.getElementById("word").disabled = true;
     document.getElementById("pronunciation").disabled = true;

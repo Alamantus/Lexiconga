@@ -60,19 +60,19 @@ require_once(SITE_LOCATION . '/php/notificationconditiontree.php');
     <form id="wordEntryForm">
         <div id="formLockButton" class="clickable" onclick="ToggleWordFormLock()" title="Lock/unlock form from the top of the page">&#128274;</div>
         <label><span>Word</span>
-            <input type="text" id="word" />
+            <input type="text" id="word" onkeydown="SubmitWordOnCtrlEnter(this)" />
         </label>
         <label><span>Pronunciation <a class="helperlink" href="/ipa_character_picker/" target="_blank" title="IPA Character Picker backed up from http://r12a.github.io/pickers/ipa/">IPA Characters</a></span>
-            <input type="text" id="pronunciation" />
+            <input type="text" id="pronunciation" onkeydown="SubmitWordOnCtrlEnter(this)" />
         </label>
         <label><span>Part of Speech</span>
             <select id="partOfSpeech"></select>
         </label>
         <label><span>Equivalent Word(s)</span>
-            <input type="text" id="simpleDefinition" />
+            <input type="text" id="simpleDefinition" onkeydown="SubmitWordOnCtrlEnter(this)" />
         </label>
         <label><span>Explanation/Long Definition <span id="showFullScreenTextbox" class="clickable" onclick="ShowFullScreenTextbox('longDefinition', 'Explanation/Long Definition')">Maximize</span></span>
-            <textarea id="longDefinition"></textarea>
+            <textarea id="longDefinition" onkeydown="SubmitWordOnCtrlEnter(this)"></textarea>
         </label>
         <input type="hidden" id="editIndex" />
         <span id="errorMessage"></span>
