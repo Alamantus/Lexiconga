@@ -132,10 +132,12 @@ function UpdateWord(wordIndex, word, pronunciation, partOfSpeech, simpleDefiniti
     currentDictionary.words[wordIndex].partOfSpeech = partOfSpeech;
     currentDictionary.words[wordIndex].simpleDefinition = simpleDefinition;
     currentDictionary.words[wordIndex].longDefinition = longDefinition;
-    
+
     SaveAndUpdateDictionary();
 
     window.scroll(savedScroll.x, savedScroll.y);
+
+    FocusAfterAddingNewWord();
 }
 
 function DeleteWord(index) {
