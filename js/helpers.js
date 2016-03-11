@@ -6,6 +6,111 @@ function ready(fn) {
     }
 }
 
+// Get Keycode based on key name
+function keyCodeFor(keyName) {
+    if (keyName == "backspace") return 8;
+    else if (keyName == "tab") return 9;
+    else if (keyName == "ctrlEnter") return 10;
+    else if (keyName == "enter") return 13;
+    else if (keyName == "shift") return 16;
+    else if (keyName == "ctrl") return 17;
+    else if (keyName == "alt") return 18;
+    else if (keyName == "pausebreak") return 19;
+    else if (keyName == "capslock") return 20;
+    else if (keyName == "escape") return 27;
+    else if (keyName == "space") return 32;
+    else if (keyName == "pageup") return 33;
+    else if (keyName == "pagedown") return 34;
+    else if (keyName == "end") return 35;
+    else if (keyName == "home") return 36;
+    else if (keyName == "left") return 37;
+    else if (keyName == "up") return 38;
+    else if (keyName == "right") return 39;
+    else if (keyName == "down") return 40;
+    else if (keyName == "insert") return 45;
+    else if (keyName == "del") return 46;
+    else if (keyName == "zero") return 48;
+    else if (keyName == "one") return 49;
+    else if (keyName == "two") return 50;
+    else if (keyName == "three") return 51;
+    else if (keyName == "four") return 52;
+    else if (keyName == "five") return 53;
+    else if (keyName == "six") return 54;
+    else if (keyName == "seven") return 55;
+    else if (keyName == "eight") return 56;
+    else if (keyName == "nine") return 57;
+    else if (keyName == "a") return 65;
+    else if (keyName == "b") return 66;
+    else if (keyName == "c") return 67;
+    else if (keyName == "d") return 68;
+    else if (keyName == "e") return 69;
+    else if (keyName == "f") return 70;
+    else if (keyName == "g") return 71;
+    else if (keyName == "h") return 72;
+    else if (keyName == "i") return 73;
+    else if (keyName == "j") return 74;
+    else if (keyName == "k") return 75;
+    else if (keyName == "l") return 76;
+    else if (keyName == "m") return 77;
+    else if (keyName == "n") return 78;
+    else if (keyName == "o") return 79;
+    else if (keyName == "p") return 80;
+    else if (keyName == "q") return 81;
+    else if (keyName == "r") return 82;
+    else if (keyName == "s") return 83;
+    else if (keyName == "t") return 84;
+    else if (keyName == "u") return 85;
+    else if (keyName == "v") return 86;
+    else if (keyName == "w") return 87;
+    else if (keyName == "x") return 88;
+    else if (keyName == "y") return 89;
+    else if (keyName == "z") return 90;
+    else if (keyName == "leftwinkey") return 91;
+    else if (keyName == "rightwinkey") return 92;
+    else if (keyName == "selectkey") return 93;
+    else if (keyName == "numpad_0") return 96;
+    else if (keyName == "numpad_1") return 97;
+    else if (keyName == "numpad_2") return 98;
+    else if (keyName == "numpad_3") return 99;
+    else if (keyName == "numpad_4") return 100;
+    else if (keyName == "numpad_5") return 101;
+    else if (keyName == "numpad_6") return 102;
+    else if (keyName == "numpad_7") return 103;
+    else if (keyName == "numpad_8") return 104;
+    else if (keyName == "numpad_9") return 105;
+    else if (keyName == "numpad_asterisk") return 106;
+    else if (keyName == "numpad_plus") return 107;
+    else if (keyName == "numpad_dash") return 109;
+    else if (keyName == "numpad_period") return 110;
+    else if (keyName == "numpad_slash") return 111;
+    else if (keyName == "f1") return 112;
+    else if (keyName == "f2") return 113;
+    else if (keyName == "f3") return 114;
+    else if (keyName == "f4") return 115;
+    else if (keyName == "f5") return 116;
+    else if (keyName == "f6") return 117;
+    else if (keyName == "f7") return 118;
+    else if (keyName == "f8") return 119;
+    else if (keyName == "f9") return 120;
+    else if (keyName == "f10") return 121;
+    else if (keyName == "f11") return 122;
+    else if (keyName == "f12") return 123;
+    else if (keyName == "numlock") return 144;
+    else if (keyName == "scrolllock") return 145;
+    else if (keyName == "semicolon") return 186;
+    else if (keyName == "equal") return 187;
+    else if (keyName == "comma") return 188;
+    else if (keyName == "dash") return 189;
+    else if (keyName == "period") return 190;
+    else if (keyName == "slash") return 191;
+    else if (keyName == "grave") return 192;
+    else if (keyName == "openbracket") return 219;
+    else if (keyName == "backslash") return 220;
+    else if (keyName == "closebraket") return 221;
+    else if (keyName == "quote") return 222;
+    else return false;
+}
+
 function getInputSelection(el) {
 // Retrieved from http://stackoverflow.com/a/4207763
     var start = 0, end = 0, normalizedValue, range,

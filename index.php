@@ -66,7 +66,7 @@ require_once(SITE_LOCATION . '/php/notificationconditiontree.php');
             <input type="text" id="pronunciation" onkeydown="SubmitWordOnCtrlEnter(this)" />
         </label>
         <label><span>Part of Speech</span>
-            <select id="partOfSpeech"></select>
+            <select id="partOfSpeech" onkeydown="SubmitWordOnCtrlEnter(this)"></select>
         </label>
         <label><span>Equivalent Word(s)</span>
             <input type="text" id="simpleDefinition" onkeydown="SubmitWordOnCtrlEnter(this)" />

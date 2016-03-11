@@ -8,6 +8,124 @@ function Initialize() {
     GetTextFile("PRIVACY.md", "privacyText", true);
     GetTextFile("LOGIN.form", "loginForm", false);
     GetTextFile("FORGOT.form", "forgotForm", false);
+
+    SetKeyboardShortcuts();
+}
+
+function SetKeyboardShortcuts() {
+    document.addEventListener("keydown", function(e) {
+        var keyCode = (e.which ? e.which : e.keyCode);
+
+        if (keyCode == keyCodeFor("escape")) {
+            if (document.getElementById("infoScreen").style.display == "block") {
+                HideInfo();
+            }
+            else if (document.getElementById("fullScreenTextboxScreen").style.display == "block") {
+                HideFullScreenTextbox();
+            }
+            else if (document.getElementById("settingsScreen").style.display == "block") {
+                HideSettings();
+            }
+            else if (document.getElementById("accountSettingsScreen") && document.getElementById("accountSettingsScreen").style.display == "block") {
+                HideAccountSettings();
+            }
+        }
+        else if (e.ctrlKey) {
+            // Only allow shortcuts if not currently using fullscreen textbox
+            if (document.getElementById("fullScreenTextboxScreen").style.display == "none") {
+                if (keyCode == keyCodeFor("m")) {
+                    if (document.activeElement.id == "longDefinition") {
+                        e.preventDefault();
+                        ShowFullScreenTextbox('longDefinition', 'Explanation/Long Definition');
+                    }
+                    else if (document.activeElement.id == "dictionaryDescriptionEdit") {
+                        e.preventDefault();
+                        ShowFullScreenTextbox('dictionaryDescriptionEdit', 'Dictionary Details');
+                    }
+                    else if (document.activeElement.id == "fullScreenTextbox") {
+                        e.preventDefault();
+                        HideFullScreenTextbox();
+                    }
+                }
+                else if (keyCode == keyCodeFor("u")) {
+                    e.preventDefault();
+                    ToggleWordFormLock();
+                }
+                else if (keyCode == keyCodeFor("d")) {
+                    e.preventDefault();
+                    ToggleDescription();
+                }
+                else if ((e.shiftKey && keyCode == keyCodeFor("s")) || keyCode == keyCodeFor("e")) {
+                    e.preventDefault();
+                    ExportDictionary();
+                }
+                else if (keyCode == keyCodeFor("s")) {
+                    e.preventDefault();
+                    //ToggleSearchFilter();
+                    var searchFilterToggle = document.getElementById("searchFilterToggle");
+                    var searchFilterArea = document.getElementById("searchFilterArea");
+                    
+                    if (searchFilterArea.style.display == "none") {
+                        searchFilterArea.style.display = "block";
+                        searchFilterToggle.innerHTML = "Hide Search/Filter Options";
+                    }
+                    document.getElementById("searchBox").focus();
+                }
+                else if (keyCode == keyCodeFor("h")) {
+                    e.preventDefault();
+                    ShowInfo('aboutText');
+                }
+            }
+            else {  //If the fullscreen editor *is* open, just prevent the others for consistent behavior.
+                if (keyCode == keyCodeFor("m")) {
+                    e.preventDefault();
+                    HideFullScreenTextbox();
+                }
+                else if (keyCode == keyCodeFor("u")) {
+                    e.preventDefault();
+                }
+                else if (keyCode == keyCodeFor("d")) {
+                    e.preventDefault();
+                }
+                else if ((e.shiftKey && keyCode == keyCodeFor("s")) || keyCode == keyCodeFor("e")) {
+                    e.preventDefault();
+                }
+                else if (keyCode == keyCodeFor("s")) {
+                    e.preventDefault();
+                }
+                else if (keyCode == keyCodeFor("h")) {
+                    e.preventDefault();
+                }
+            }
+        }
+        else if (e.altKey) {
+            // Only toggle screens if not currently using fullscreen textbox
+            if (document.getElementById("fullScreenTextboxScreen").style.display == "none") {
+                if (keyCode == keyCodeFor("s")) {
+                    e.preventDefault();
+                    ToggleSettingsScreen(true);
+                }
+                else if (keyCode == keyCodeFor("a")) {
+                    e.preventDefault();
+                    ToggleAccountSettings();
+                }
+            }
+        }
+    }, false);
+}
+
+function SubmitWordOnCtrlEnter(keypress) {
+    var keyCode = (event.which ? event.which : event.keyCode);
+
+    if (keyCode === keyCodeFor("ctrlEnter") || (keyCode == keyCodeFor("enter") && event.ctrlKey)) { //Windows and Linux Chrome accept ctrl+enter as keyCode 10.
+        event.preventDefault();
+
+        AddWord();
+        
+        if (document.getElementById("newWordButtonArea").style.display == "none" && document.getElementById("editWordButtonArea").style.display == "none") {
+            document.getElementById("updateConfirmButton").focus();
+        }
+    }
 }
 
 function LoadUserDictionaries() {
@@ -260,18 +378,6 @@ function CloseUpdateConflictArea(displayId) {
     EnableForm();
 }
 
-function SubmitWordOnCtrlEnter(keypress) {
-    var keyCode = (event.which ? event.which : event.keyCode);
-
-    if (keyCode === 10 || (keyCode == 13 && event.ctrlKey)) { //Windows and Linux Chrome accept ctrl+enter as keyCode 10.
-        AddWord();
-        
-        if (document.getElementById("newWordButtonArea").style.display == "none" && document.getElementById("editWordButtonArea").style.display == "none") {
-            document.getElementById("updateConfirmButton").focus();
-        }
-    }
-}
-
 function DisableForm() {
     document.getElementById("word").disabled = true;
     document.getElementById("pronunciation").disabled = true;
@@ -350,14 +456,41 @@ function HideInfo() {
     document.getElementById("infoScreen").style.display = "none";
 }
 
+function ToggleAccountSettings() {
+    if (document.getElementById("accountSettingsScreen")) {
+        var accountScreen = document.getElementById("accountSettingsScreen");
+
+        if (accountScreen.style.display == "block") {
+            HideAccountSettings();
+        } else {
+            ShowAccountSettings();
+        }
+    }
+}
+
 function ShowAccountSettings(variableName) {
-    document.getElementById("accountSettingsScreen").style.display = "block";
+    if (document.getElementById("accountSettingsScreen"))
+        document.getElementById("accountSettingsScreen").style.display = "block";
+    
     HideInfo();
 }
 
 function HideAccountSettings() {
     if (document.getElementById("accountSettingsScreen"))
         document.getElementById("accountSettingsScreen").style.display = "none";
+}
+
+function ToggleSettingsScreen(doSave) {
+    var settingsScreen = document.getElementById("settingsScreen");
+
+    if (settingsScreen.style.display == "block") {
+        if (doSave) {
+            SaveSettings();
+        }
+        HideSettings();
+    } else {
+        ShowSettings();
+    }
 }
 
 function ShowSettings() {
