@@ -1,14 +1,7 @@
-## What is Lexiconga Dictionary Builder?
-Lexiconga is a tool intended to help you build constructed language (conlang) dictionaries/lexicons.
-
-You can enter words and definitions, and they will appear nicely formatted and in alphabetical order under your dictionary's title, where you can also sort them by part of speech. If the default parts of speech are not adequate for your conlang, you can change them to whatever parts of speech you might need. You can even enter a description or full set of language rules that you can toggle on and off below the dictionary's title!
-
-It accepts Unicode characters so you can utilize whatever typable characters you might need and [Markdown](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) for formatting long text entries, and if you want to share or even just make a backup of your dictionary, you can export it to a single convenient file that can be easily re-imported. Your dictionary is saved to your browser's localStorage every time you make a change, which means as long as you use the same browser and don't deliberately delete it (by clearing your cache), your dictionary will always be there when you come back.
-
-If you would like an added layer of accessibility and security (in case you clear your browser cache frequently), you can create an account, where you can store and switch between as many dictionaries as you need. Having an account will also allow you to access your dictionaries from any browser by logging in. (Just be careful you don't overwrite dictionaries by logging in and saving from separate locations!)
-
+# Lexiconga Dictionary Builder Help
 ## Table of Contents
-* [How do I use Lexiconga?](#how-do-i-use-lexiconga)
+* [What is Lexiconga Dictionary Builder?](#what-is-lexiconga-dictionary-builder-)
+* [How do I use Lexiconga?](#how-do-i-use-lexiconga-)
   * [Getting Started](#getting-started)
   * [Locking/Unlocking the Word Entry Form](#locking-unlocking-the-word-entry-form)
   * [Viewing your Dictionary's Details](#viewing-your-dictionary-s-details)
@@ -16,6 +9,7 @@ If you would like an added layer of accessibility and security (in case you clea
   * [Entry Management](#entry-management)
   * [The Settings Menu](#the-settings-menu)
   * [Search/Filter](#search-filter)
+  * [Keyboard Shortcuts](#keyboard-shortcuts)
 * [Accounts](#accounts)
   * [Creating An Account](#creating-an-account)
   * [Logging In](#logging-in)
@@ -30,6 +24,15 @@ If you would like an added layer of accessibility and security (in case you clea
 * [Future Plans](#future-plans)
 * [Thanks](#thanks-)
 * [Libraries Used](#libraries-used)
+
+## What is Lexiconga Dictionary Builder?
+Lexiconga is a tool intended to help you build constructed language (conlang) dictionaries/lexicons.
+
+You can enter words and definitions, and they will appear nicely formatted and in alphabetical order under your dictionary's title, where you can also sort them by part of speech. If the default parts of speech are not adequate for your conlang, you can change them to whatever parts of speech you might need. You can even enter a description or full set of language rules that you can toggle on and off below the dictionary's title!
+
+It accepts Unicode characters so you can utilize whatever typable characters you might need and [Markdown](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) for formatting long text entries, and if you want to share or even just make a backup of your dictionary, you can export it to a single convenient file that can be easily re-imported. Your dictionary is saved to your browser's localStorage every time you make a change, which means as long as you use the same browser and don't deliberately delete it (by clearing your cache), your dictionary will always be there when you come back.
+
+If you would like an added layer of accessibility and security (in case you clear your browser cache frequently), you can create an account, where you can store and switch between as many dictionaries as you need. Having an account will also allow you to access your dictionaries from any browser by logging in. (Just be careful you don't overwrite dictionaries by logging in and saving from separate locations!)
 
 ## How do I use Lexiconga?
 
@@ -95,6 +98,23 @@ You can refine your search by using the checkboxes below the search box:
 * **Ignore Diacritics/Accents**: When checked, Lexiconga will ignore accented letters and diacritics and identify them as their equivalent unaccented letter and vice-versa, in case you want to find a word with a diacritic without entering the diacritic in the search box. When unchecked, it will only find diacritics and accented letters if they are specifically entered in the search box.
 
 The "Filter Words" drop-down box allows you to filter your dictionary by part of speech. To display the whole dictionary again after setting a filter, reset the filter option to "All".
+
+### Keyboard Shortcuts
+**Esc** : Exits a window (i.e. Dictionary Settings, Account Settings, this about page, etc.) without saving.
+
+**Ctrl/Command +**
+
+* **D** : Toggle Dictionary Description visibility.
+* **E** : Export current dictionary. (Also Ctrl+Shift+S does this.)
+* **H** : Open this help window.
+* **M** : Maximize/Minimize Full Screen textbox when typing in the boxes that have the Maximize button.
+* **S** : Jump to Search box.
+* **U** : Toggle Word Form lock.
+
+**Alt/Option +**
+
+* **A** : Toggle Account Settings window (if logged in).
+* **S** : Toggle Dicitonary Settings window. Saves & Closes if it's alraedy open.
 
 ## Accounts
 If you are using an account with Lexiconga, your experience should remain essentially the same, but you will see some additional options in the Settings menu and you might notice some slight changes in performance as it saves to and loads from the database.
