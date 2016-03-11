@@ -282,34 +282,18 @@ require_once(SITE_LOCATION . '/php/notificationconditiontree.php');
     <script src="js/defiant.js"></script>
     <!-- Diacritics Removal for Exports -->
     <script src="js/removeDiacritics.js"></script>
-    <!-- Main Script -->
+    <!-- Helper Functions -->
+    <script src="js/helpers.js"></script>
+    <!-- Main Functions -->
     <script src="js/dictionaryBuilder.js"></script>
+    <!-- UI Functions -->
     <script src="js/ui.js"></script>
     <?php if ($_GET['adminoverride'] != "noadsortracking") { include_once("php/google/analytics.php"); } ?>
     <script>
     var aboutText = termsText = privacyText = loginForm = forgotForm = "Loading...";
-    window.onload = function () {
-        LoadDictionary();
-        ClearForm();
-        LoadUserDictionaries();
-        
-        GetTextFile("README.md", "aboutText", true);
-        GetTextFile("TERMS.md", "termsText", true);
-        GetTextFile("PRIVACY.md", "privacyText", true);
-        GetTextFile("LOGIN.form", "loginForm", false);
-        GetTextFile("FORGOT.form", "forgotForm", false);
-    }
+    ready(function() {
+        Initialize();
+    });
     </script>
 </body>
 </html>
-<?php
-
-function get_include_contents($filename) {
-    if (is_file($filename)) {
-        ob_start();
-        include $filename;
-        return ob_get_clean();
-    }
-    return false;
-}
-?>

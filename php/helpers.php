@@ -33,6 +33,15 @@ function fetch ($query_results) {
     }
 }
 
+function get_include_contents($filename) {
+    if (is_file($filename)) {
+        ob_start();
+        include $filename;
+        return ob_get_clean();
+    }
+    return false;
+}
+
 function ordinal($number) {
     // Retrieved from http://stackoverflow.com/a/3110033/3508346
     $ends = array('th','st','nd','rd','th','th','th','th','th','th');
