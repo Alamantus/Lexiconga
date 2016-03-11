@@ -574,11 +574,15 @@ function SavePreviousDictionary () {
 }
 
 function ExportDictionary() {
-    var downloadName = removeDiacritics(stripHtmlEntities(currentDictionary.name)).replace(/\W/g, '');
-    if (downloadName == "") {
-        downloadName = "export";
+    if (currentDictionary.words.length > 0) {
+        var downloadName = removeDiacritics(stripHtmlEntities(currentDictionary.name)).replace(/\W/g, '');
+        if (downloadName == "") {
+            downloadName = "export";
+        }
+        download(downloadName + ".dict", localStorage.getItem('dictionary'));
+    } else {
+        alert("Dictionary must have at least 1 word to export.")
     }
-    download(downloadName + ".dict", localStorage.getItem('dictionary'));
 }
 
 function ImportDictionary() {
