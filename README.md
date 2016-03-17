@@ -102,8 +102,9 @@ The "Filter Words" drop-down box allows you to filter your dictionary by part of
 ### Keyboard Shortcuts
 **Esc** : Exits a window (i.e. Dictionary Settings, Account Settings, this about page, etc.) without saving.
 
-**Ctrl/Command +**
+**Ctrl/Control +**
 
+* **Enter/Return** : Submit Word (when typing in Word Form)
 * **D** : Toggle Dictionary Description visibility.
 * **E** : Export current dictionary. (Also Ctrl+Shift+S does this.)
 * **H** : Open this help window.
@@ -114,7 +115,7 @@ The "Filter Words" drop-down box allows you to filter your dictionary by part of
 **Alt/Option +**
 
 * **A** : Toggle Account Settings window (if logged in).
-* **S** : Toggle Dicitonary Settings window. Saves & Closes if it's alraedy open.
+* **S** : Toggle Dicitonary Settings window. Saves & Closes if it's already open.
 
 ## Accounts
 If you are using an account with Lexiconga, your experience should remain essentially the same, but you will see some additional options in the Settings menu and you might notice some slight changes in performance as it saves to and loads from the database.
