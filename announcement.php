@@ -1,1 +1,2 @@
-You can now unlock the Word Entry Form so it scrolls next to the dictionary as you scroll. No need to scramble up and down the screen to add words!
+You can now use Keyboard Shortcuts! Check About Lexiconga (Ctrl+H) to find out what they are!<br>
+Check the <a href="https://github.com/Alamantus/DictionaryBuilder/releases" target="_blank">update log</a> for other changes.
