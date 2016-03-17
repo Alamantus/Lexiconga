@@ -142,9 +142,13 @@ catch (PDOException $ex) {}
     <script src="/js/defiant.js"></script>
     <!-- Diacritics Removal for Exports -->
     <script src="/js/removeDiacritics.js"></script>
-    <!-- Main Script -->
+    <!-- Helper Functions -->
+    <script src="/js/helpers.js"></script>
+    <!-- Main Functions -->
     <script src="/js/dictionaryBuilder.js"></script>
+    <!-- UI Functions -->
     <script src="/js/ui.js"></script>
+    <!-- Public View Functions -->
     <script src="/js/publicView.js"></script>
     <?php if ($_GET['adminoverride'] != "noadsortracking") { include_once("../php/google/analytics.php"); } ?>
     <script>
