@@ -137,7 +137,9 @@ function UpdateWord(wordIndex, word, pronunciation, partOfSpeech, simpleDefiniti
 
     window.scroll(savedScroll.x, savedScroll.y);
 
-    FocusAfterAddingNewWord();
+    if (!wordFormIsLocked()) {
+        FocusAfterAddingNewWord();
+    }
 }
 
 function DeleteWord(index) {
