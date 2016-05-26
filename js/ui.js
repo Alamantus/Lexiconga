@@ -581,43 +581,71 @@ function TogglePublicLink() {
 
 function SetPartsOfSpeech () {
     var partsOfSpeechSelect = document.getElementById("partOfSpeech");
-    var wordFilterSelect = document.getElementById("wordFilter");
-    var selectedWordFilter = wordFilterSelect.value;
-    var selectedWordStillExists = false;
+
+    var wordFilterOptions = document.getElementById("filterOptions");
+    var wordFiltersSelected = GetSelectedFilters();
+
+    // Clear parts of speech.
     if (partsOfSpeechSelect.options.length > 0) {
         for (var i = partsOfSpeechSelect.options.length - 1; i >= 0; i--) {
             partsOfSpeechSelect.removeChild(partsOfSpeechSelect.options[i]);
-            wordFilterSelect.removeChild(wordFilterSelect.options[i + 1]);
         }
+        wordFilterOptions.innerHTML = "";
     }
+
+    // Rebuild parts of speech
     var newPartsOfSpeech = htmlEntitiesParse(currentDictionary.settings.partsOfSpeech).trim().split(",");
     for (var j = 0; j < newPartsOfSpeech.length; j++) {
+        var thePartOfSpeech = newPartsOfSpeech[j].trim();
+
         var partOfSpeechOption = document.createElement('option');
-        partOfSpeechOption.appendChild(document.createTextNode(newPartsOfSpeech[j].trim()));
-        partOfSpeechOption.value = newPartsOfSpeech[j].trim();
+        partOfSpeechOption.appendChild(document.createTextNode(thePartOfSpeech));
+        partOfSpeechOption.value = thePartOfSpeech;
         partsOfSpeechSelect.appendChild(partOfSpeechOption);
-        
-        var wordFilterOption = document.createElement('option');
-        wordFilterOption.appendChild(document.createTextNode(newPartsOfSpeech[j].trim()));
-        wordFilterOption.value = newPartsOfSpeech[j].trim();
-        wordFilterSelect.appendChild(wordFilterOption);
 
-        if (!selectedWordStillExists && newPartsOfSpeech[j].trim() == selectedWordFilter) {
-            selectedWordStillExists = true;
-        }
-    }
-
-    if (selectedWordStillExists) {
-        wordFilterSelect.value = selectedWordFilter;
+        var wordFilterLabel = document.createElement('label');
+        wordFilterLabel.appendChild(document.createTextNode(thePartOfSpeech + " "));
+        wordFilterLabel['part-of-speech'] = thePartOfSpeech;
+        wordFilterLabel.className = 'filterOption';
+        var wordFilterCheckbox = document.createElement('input');
+        wordFilterCheckbox.type = 'checkbox';
+        wordFilterCheckbox.onchange = function(){ShowDictionary()};
+        if (wordFiltersSelected.indexOf(thePartOfSpeech) > -1) wordFilterCheckbox.checked = true;
+        wordFilterLabel.appendChild(wordFilterCheckbox);
+        wordFilterOptions.appendChild(wordFilterLabel);
     }
 }
 
+function GetSelectedFilters() {
+    var wordFilterOptions = document.getElementById("filterOptions");
+    var wordFiltersSelected = [];
+
+    for (var i = 0; i < wordFilterOptions.children.length; i++) {
+        var filterOption = wordFilterOptions.children[i];
+        if (filterOption.children[0].checked) {
+            wordFiltersSelected.push(filterOption['part-of-speech']);
+        }
+    }
+
+    return wordFiltersSelected;
+}
+
+function ToggleAllFilters(doCheck) {
+    var wordFilterOptions = document.getElementById("filterOptions");
+
+    for (var i = 0; i < wordFilterOptions.children.length; i++) {
+        wordFilterOptions.children[i].children[0].checked = doCheck;
+    }
+    
+    ShowDictionary();
+}
+
 function ShowFilterWordCount(numberOfWords) {
-    var filter = document.getElementById("wordFilter").value;
+    var filters = GetSelectedFilters();
     var search = htmlEntitiesParseForSearchEntry(document.getElementById("searchBox").value);
     var wordCounter = document.getElementById("filterWordCount");
 
-    if (filter != "" || search != "") {
+    if (filters.length > 0 || search != "") {
         wordCounter.innerHTML = "Showing " + numberOfWords.toString() + " result" + ((numberOfWords != 1) ? "s" : "");
     } else {
         wordCounter.innerHTML = "";

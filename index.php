@@ -104,21 +104,22 @@ require_once(SITE_LOCATION . '/php/notificationconditiontree.php');
                         <input type="text" id="searchBox" onclick="this.select();" onchange="ShowDictionary()" style="display:inline;" />&nbsp;
                         <span style="display:inline;cursor:pointer;font-size:10px;font-weight:bold;" onclick="document.getElementById('searchBox').value='';ShowDictionary();">Clear Search</span>
                     </div>
-                    <div id="searchOptions" style="font-size:12px;">
-                        <label style="display:inline;margin:0;">Word <input type="checkbox" id="searchOptionWord" checked="checked" onchange="ShowDictionary()" /></label>&nbsp;&nbsp;
-                        <label style="display:inline;margin:0;">Equivalent <input type="checkbox" id="searchOptionSimple" checked="checked" onchange="ShowDictionary()" /></label>&nbsp;&nbsp;
-                        <label style="display:inline;margin:0;">Explanation <input type="checkbox" id="searchOptionLong" checked="checked" onchange="ShowDictionary()" /></label>
+                    <div id="searchOptions">
+                        <label class="searchOption">Word <input type="checkbox" id="searchOptionWord" checked="checked" onchange="ShowDictionary()" /></label>
+                        <label class="searchOption">Equivalent <input type="checkbox" id="searchOptionSimple" checked="checked" onchange="ShowDictionary()" /></label>
+                        <label class="searchOption">Explanation <input type="checkbox" id="searchOptionLong" checked="checked" onchange="ShowDictionary()" /></label>
                         <br />
-                        <label style="display:inline;margin:0;">Search Case-Sensitive <input type="checkbox" id="searchCaseSensitive" onchange="ShowDictionary()" /></label>
-                        <label style="display:inline;margin:0;" title="Note: Matching diacritics will appear but may not highlight.">Ignore Diacritics/Accents <input type="checkbox" id="searchIgnoreDiacritics" onchange="ShowDictionary()" /></label>
+                        <label class="searchOption">Search Case-Sensitive <input type="checkbox" id="searchCaseSensitive" onchange="ShowDictionary()" /></label>
+                        <label class="searchOption" title="Note: Matching diacritics will appear but may not highlight.">Ignore Diacritics/Accents <input type="checkbox" id="searchIgnoreDiacritics" onchange="ShowDictionary()" /></label>
                     </div>
                 </label>
             </div>
             
-            <label style="display:block;"><b>Filter Words </b><select id="wordFilter" onchange="ShowDictionary()">
-                <option value="">All</option>
-            </select>
-            </label>
+            <label style="display:block;margin-bottom:0;"><b>Filter Words</b></label>
+            <div id="filterOptions" style="display:block"></div>
+            <div style="display:block;">
+                <span style="display:inline;cursor:pointer;font-size:12px;font-weight:bold;" onclick="ToggleAllFilters(true)">Check All</span>&nbsp;/&nbsp;<span style="display:inline;cursor:pointer;font-size:12px;font-weight:bold;" onclick="ToggleAllFilters(false)">Uncheck All</span>
+            </div>
         </div>
         <div id="filterWordCount"></div>
             

@@ -1,2 +1,1 @@
-You can now use Keyboard Shortcuts! Check About Lexiconga (Ctrl+H) to find out what they are!<br>
-Check the <a href="https://github.com/Alamantus/DictionaryBuilder/releases" target="_blank">update log</a> for other changes.
+The Filter system has been updated—you can now filter on as many parts of speech as you want!

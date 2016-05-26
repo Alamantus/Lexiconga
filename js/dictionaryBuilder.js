@@ -152,7 +152,7 @@ function DeleteWord(index) {
 }
 
 function ShowDictionary() {
-    var filter = document.getElementById("wordFilter").value;
+    var filters = GetSelectedFilters();
     
     var searchResults = [];
     var search = htmlEntitiesParseForSearchEntry(document.getElementById("searchBox").value);
@@ -196,7 +196,7 @@ function ShowDictionary() {
 
     if (currentDictionary.words.length > 0) {
         for (var i = 0; i < currentDictionary.words.length; i++) {
-            if (filter == "" || (filter != "" && currentDictionary.words[i].partOfSpeech == filter)) {
+            if (filters.length == 0 || (filters.length > 0 && filters.indexOf(currentDictionary.words[i].partOfSpeech) > -1)) {
                 if (search == "" || (search != "" && (searchByWord || searchBySimple || searchByLong) && searchResults.indexOf(currentDictionary.words[i].wordId) >= 0)) {
                     if (!currentDictionary.words[i].hasOwnProperty("pronunciation")) {
                         currentDictionary.words[i].pronunciation = "";  //Account for new property

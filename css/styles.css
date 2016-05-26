@@ -189,6 +189,12 @@ input[type=checkbox] {
     cursor: pointer;
 }
 
+.searchOption, .filterOption {
+    font-size:12px;
+    display: inline-block;
+    margin: 0 8px 0 0;
+}
+
 #wordFilter {
     margin: 10px 0;
 }
