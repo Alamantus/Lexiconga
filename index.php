@@ -118,7 +118,7 @@ require_once(SITE_LOCATION . '/php/notificationconditiontree.php');
             <label style="display:block;margin-bottom:0;"><b>Filter Words</b></label>
             <div id="filterOptions" style="display:block"></div>
             <div style="display:block;">
-                <span style="display:inline;cursor:pointer;font-size:12px;font-weight:bold;" onclick="ToggleAllFilters(true)">Check All</span>&nbsp;/&nbsp;<span style="display:inline;cursor:pointer;font-size:12px;font-weight:bold;" onclick="ToggleAllFilters(false)">Uncheck All</span>
+                <span style="display:inline;cursor:pointer;font-size:12px;font-weight:bold;" onclick="ToggleAllFilters(true);ShowDictionary();">Check All</span>&nbsp;/&nbsp;<span style="display:inline;cursor:pointer;font-size:12px;font-weight:bold;" onclick="ToggleAllFilters(false);ShowDictionary();">Uncheck All</span>
             </div>
         </div>
         <div id="filterWordCount"></div>

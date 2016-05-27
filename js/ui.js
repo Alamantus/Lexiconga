@@ -636,8 +636,6 @@ function ToggleAllFilters(doCheck) {
     for (var i = 0; i < wordFilterOptions.children.length; i++) {
         wordFilterOptions.children[i].children[0].checked = doCheck;
     }
-    
-    ShowDictionary();
 }
 
 function ShowFilterWordCount(numberOfWords) {

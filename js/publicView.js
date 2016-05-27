@@ -4,7 +4,7 @@ function IsValidPublicDicitonary() {
 
 function ShowPublicDictionary() {
     if (IsValidPublicDicitonary()) {
-        var filter = document.getElementById("wordFilter").value;
+        var filters = GetSelectedFilters();
         
         var searchResults = [];
         var search = htmlEntitiesParseForSearchEntry(document.getElementById("searchBox").value);
@@ -57,7 +57,7 @@ function ShowPublicDictionary() {
 
         if (publicDictionary.words.length > 0) {
             for (var i = 0; i < publicDictionary.words.length; i++) {
-                if (filter == "" || (filter != "" && publicDictionary.words[i].partOfSpeech == filter)) {
+                if (filters.length == 0 || (filters.length > 0 && filters.indexOf(publicDictionary.words[i].partOfSpeech) > -1)) {
                     if (search == "" || (search != "" && (searchByWord || searchBySimple || searchByLong) && searchResults.indexOf(publicDictionary.words[i].wordId) >= 0)) {
                         if (!publicDictionary.words[i].hasOwnProperty("pronunciation")) {
                             publicDictionary.words[i].pronunciation = "";  //Account for new property
@@ -146,13 +146,20 @@ function PublicDictionaryEntry(itemIndex) {
 }
 
 function SetPublicPartsOfSpeech () {
-    var wordFilterSelect = document.getElementById("wordFilter");
+    var wordFilterOptions = document.getElementById("filterOptions");
 
     var newPartsOfSpeech = htmlEntitiesParse(publicDictionary.settings.partsOfSpeech).trim().split(",");
     for (var j = 0; j < newPartsOfSpeech.length; j++) {
-        var wordFilterOption = document.createElement('option');
-        wordFilterOption.appendChild(document.createTextNode(newPartsOfSpeech[j].trim()));
-        wordFilterOption.value = newPartsOfSpeech[j].trim();
-        wordFilterSelect.appendChild(wordFilterOption);
+        var thePartOfSpeech = newPartsOfSpeech[j].trim();
+
+        var wordFilterLabel = document.createElement('label');
+        wordFilterLabel.appendChild(document.createTextNode(thePartOfSpeech + " "));
+        wordFilterLabel['part-of-speech'] = thePartOfSpeech;
+        wordFilterLabel.className = 'filterOption';
+        var wordFilterCheckbox = document.createElement('input');
+        wordFilterCheckbox.type = 'checkbox';
+        wordFilterCheckbox.onchange = function(){ShowPublicDictionary()};
+        wordFilterLabel.appendChild(wordFilterCheckbox);
+        wordFilterOptions.appendChild(wordFilterLabel);
     }
 }

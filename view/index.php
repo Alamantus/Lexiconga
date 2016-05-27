@@ -108,10 +108,11 @@ catch (PDOException $ex) {}
                 </label>
             </div>
             
-            <label style="display:block;"><b>Filter Words </b><select id="wordFilter" onchange="ShowPublicDictionary()">
-                <option value="">All</option>
-            </select>
-            </label>
+            <label style="display:block;margin-bottom:0;"><b>Filter Words</b></label>
+            <div id="filterOptions" style="display:block"></div>
+            <div style="display:block;">
+                <span style="display:inline;cursor:pointer;font-size:12px;font-weight:bold;" onclick="ToggleAllFilters(true);ShowPublicDictionary();">Check All</span>&nbsp;/&nbsp;<span style="display:inline;cursor:pointer;font-size:12px;font-weight:bold;" onclick="ToggleAllFilters(false);ShowPublicDictionary();">Uncheck All</span>
+            </div>
         </div>
         
         <div id="filterWordCount"></div>
