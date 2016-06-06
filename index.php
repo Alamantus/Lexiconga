@@ -4,6 +4,16 @@ require_once('required.php');
 session_start();
 $current_user = isset($_SESSION['user']) ? $_SESSION['user'] : 0;
 
+$dictionary_to_load = (isset($_GET['dict'])) ? intval($_GET['dict']) : 0;
+$the_public_dictionary = '"That dictionary doesn\'t exist."';
+$dictionary_name = 'ERROR';
+$dictionary_creator = 'nobody';
+$is_viewing = $dictionary_to_load > 0;
+
+$word_to_load = (isset($_GET['word'])) ? intval($_GET['word']) : 0;
+$the_public_word = '"That word doesn\'t exist."';
+$word_name = 'ERROR';
+
 $announcement = get_include_contents(SITE_LOCATION . '/announcement.php');
 $notificationMessage = "";
 
@@ -17,6 +27,37 @@ if ($current_user > 0 || !isset($_SESSION['loginfailures']) || (isset($_SESSION[
 
 require_once(SITE_LOCATION . '/php/notificationconditiontree.php');
 
+if ($is_viewing) {
+    $query = "SELECT `d`.`id`, `d`.`name`, `d`.`description`, `u`.`public_name`, `d`.`words`, `d`.`parts_of_speech`, `d`.`is_complete` ";
+    $query .= "FROM `dictionaries` AS `d` LEFT JOIN `users` AS `u` ON `d`.`user`=`u`.`id` WHERE `d`.`is_public`=1 AND `d`.`id`=" . $dictionary_to_load . ";";
+
+    $dbconnection = new PDO('mysql:host=' . DATABASE_SERVERNAME . ';dbname=' . DATABASE_NAME . ';charset=utf8', DATABASE_USERNAME, DATABASE_PASSWORD);
+    $dbconnection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $dbconnection->setAttribute(PDO::ATTR_EMULATE_PREPARES, true);
+    $dbconnection->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+    try {
+        $queryResults = $dbconnection->prepare($query);
+        $queryResults->execute();
+        if ($queryResults) {
+            if (num_rows($queryResults) === 1) {
+                while ($dict = fetch($queryResults)) {
+                    $dictionary_name = $dict['name'];
+                    $dictionary_creator = $dict['public_name'];
+                    $the_public_dictionary = '{"name":"' . $dict['name'] . '",';
+                    $the_public_dictionary .= '"description":"' . $dict['description'] . '",';
+                    $the_public_dictionary .= '"createdBy":"' . $dict['public_name'] . '",';
+                    $the_public_dictionary .= '"words":' . $dict['words'] . ',';
+                    $the_public_dictionary .= '"settings":{';
+                    $the_public_dictionary .= '"partsOfSpeech":"' . $dict['parts_of_speech'] . '",';
+                    $the_public_dictionary .= '"isComplete":' . (($dict['is_complete'] == 1) ? 'true' : 'false') . '},';
+                    $the_public_dictionary .= '}';
+                }
+            }
+        }
+    }
+    catch (PDOException $ex) {}
+}
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -24,7 +65,17 @@ require_once(SITE_LOCATION . '/php/notificationconditiontree.php');
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
-    <title>Lexiconga Dictionary Builder</title>
+    <?php if ($is_viewing) { ?>
+        <title><?php echo $dictionary_name; ?> Dictionary on Lexiconga</title>
+        <meta property="og:url" content="http://lexicon.ga/view/?dict=<?php echo $dictionary_to_load; ?>" />
+        <meta property="og:type" content="article" />
+        <meta property="og:title" content="<?php echo $dictionary_name; ?> Dictionary" />
+        <meta property="og:description" content="A Lexiconga dictionary by <?php echo $dictionary_creator; ?>" />
+        <meta property="og:image" content="http://lexicon.ga/images/logo.svg" />
+        <script>var publicDictionary = <?php echo $the_public_dictionary; ?></script>
+    <?php } else { ?>
+        <title>Lexiconga Dictionary Builder</title>
+    <?php } ?>
 
     <link href="css/styles.css" rel="stylesheet" />
     <link href="css/lexiconga.css" rel="stylesheet" />
@@ -48,6 +99,7 @@ require_once(SITE_LOCATION . '/php/notificationconditiontree.php');
         </div>
     </header>
     <contents>
+    <?php if (!$is_viewing) { ?>
     <div id="announcementArea" style="display:<?php echo (($announcement) ? "block" : "none"); ?>;margin-bottom:10px;">
         <span id="announcementCloseButton" class="clickable" onclick="document.getElementById('announcementArea').style.display='none';">Close</span>
         <div id="announcement"><?php echo $announcement; ?></div>
@@ -57,60 +109,68 @@ require_once(SITE_LOCATION . '/php/notificationconditiontree.php');
         <div id="notificationMessage"><?php echo $notificationMessage; ?></div>
     </div>
     <div id="leftColumn">
-    <form id="wordEntryForm">
-        <div id="formLockButton" class="clickable" onclick="ToggleWordFormLock()" title="Lock/unlock form from the top of the page">&#128274;</div>
-        <label><span>Word</span>
-            <input type="text" id="word" onkeydown="SubmitWordOnCtrlEnter(this)" />
-        </label>
-        <label><span>Pronunciation <a class="helperlink" href="/ipa_character_picker/" target="_blank" title="IPA Character Picker backed up from http://r12a.github.io/pickers/ipa/">IPA Characters</a></span>
-            <input type="text" id="pronunciation" onkeydown="SubmitWordOnCtrlEnter(this)" />
-        </label>
-        <label><span>Part of Speech</span>
-            <select id="partOfSpeech" onkeydown="SubmitWordOnCtrlEnter(this)"></select>
-        </label>
-        <label><span>Equivalent Word(s)</span>
-            <input type="text" id="simpleDefinition" onkeydown="SubmitWordOnCtrlEnter(this)" />
-        </label>
-        <label><span>Explanation/Long Definition <span id="showFullScreenTextbox" class="clickable" onclick="ShowFullScreenTextbox('longDefinition', 'Explanation/Long Definition')">Maximize</span></span>
-            <textarea id="longDefinition" onkeydown="SubmitWordOnCtrlEnter(this)"></textarea>
-        </label>
-        <input type="hidden" id="editIndex" />
-        <span id="errorMessage"></span>
-        <div id="newWordButtonArea" style="display: block;">
-            <button type="button" onclick="AddWord(); return false;">Add Word</button>
-        </div>
-        <div id="editWordButtonArea" style="display: none;">
-            <button type="button" onclick="AddWord(); return false;">Edit Word</button> <button type="button" onclick="ClearForm(); window.scroll(savedScroll.x, savedScroll.y); return false;">Cancel</button>
-        </div>
-        <div id="updateConflict" style="display: none;"></div>
-    </form>
-    
+
+        <form id="wordEntryForm">
+            <div id="formLockButton" class="clickable" onclick="ToggleWordFormLock()" title="Lock/unlock form from the top of the page">&#128274;</div>
+            <label><span>Word</span>
+                <input type="text" id="word" onkeydown="SubmitWordOnCtrlEnter(this)" />
+            </label>
+            <label><span>Pronunciation <a class="helperlink" href="/ipa_character_picker/" target="_blank" title="IPA Character Picker backed up from http://r12a.github.io/pickers/ipa/">IPA Characters</a></span>
+                <input type="text" id="pronunciation" onkeydown="SubmitWordOnCtrlEnter(this)" />
+            </label>
+            <label><span>Part of Speech</span>
+                <select id="partOfSpeech" onkeydown="SubmitWordOnCtrlEnter(this)"></select>
+            </label>
+            <label><span>Equivalent Word(s)</span>
+                <input type="text" id="simpleDefinition" onkeydown="SubmitWordOnCtrlEnter(this)" />
+            </label>
+            <label><span>Explanation/Long Definition <span id="showFullScreenTextbox" class="clickable" onclick="ShowFullScreenTextbox('longDefinition', 'Explanation/Long Definition')">Maximize</span></span>
+                <textarea id="longDefinition" onkeydown="SubmitWordOnCtrlEnter(this)"></textarea>
+            </label>
+            <input type="hidden" id="editIndex" />
+            <span id="errorMessage"></span>
+            <div id="newWordButtonArea" style="display: block;">
+                <button type="button" onclick="AddWord(); return false;">Add Word</button>
+            </div>
+            <div id="editWordButtonArea" style="display: none;">
+                <button type="button" onclick="AddWord(); return false;">Edit Word</button> <button type="button" onclick="ClearForm(); window.scroll(savedScroll.x, savedScroll.y); return false;">Cancel</button>
+            </div>
+            <div id="updateConflict" style="display: none;"></div>
+        </form>
+
     </div>
+    <?php } ?>
 
     <div id="dictionaryContainer">
+        <?php if (!$is_viewing) { ?>
         <span id="settingsButton" class="clickable" onclick="ShowSettings()">Settings</span>
-
+        <?php } ?>
         <h1 id="dictionaryName"></h1>
+
+        <?php if ($is_viewing) { ?>
+        <h4 id="dictionaryBy"></h4>
+        <div id="incompleteNotice"></div>
+        <?php } ?>
         
-        <span id="descriptionToggle" class="clickable" onclick="ToggleDescription();">Show Description</span>
-        <div id="dictionaryDescription" style="display:none;"></div>
+        <span id="descriptionToggle" class="clickable" onclick="ToggleDescription();"><?php if ($is_viewing) { ?>Hide<?php } else { ?>Show<?php } ?> Description</span>
+        <div id="dictionaryDescription" style="display:<?php if ($is_viewing) { ?>block<?php } else { ?>none<?php } ?>;"></div>
         
-        <span id="searchFilterToggle" class="clickable" onclick="ToggleSearchFilter();">Search/Filter Options</span>
-        <div id="searchFilterArea" style="display:none;">
+        <span id="searchFilterToggle" class="clickable" onclick="ToggleSearchFilter();"><?php if ($is_viewing) { ?>Hide <?php } ?>Search/Filter Options</span>
+        <div id="searchFilterArea" style="display:<?php if ($is_viewing) { ?>block<?php } else { ?>none<?php } ?>;">
             <div id="searchArea" style="display:block;">
                 <label style="margin-top:10px;">
                     <span>Search</span>
                     <div style="display:block;">
-                        <input type="text" id="searchBox" onclick="this.select();" onchange="ShowDictionary()" style="display:inline;" />&nbsp;
-                        <span style="display:inline;cursor:pointer;font-size:10px;font-weight:bold;" onclick="document.getElementById('searchBox').value='';ShowDictionary();">Clear Search</span>
+                        <input type="text" id="searchBox" onclick="this.select();" onchange="<?php Show_Dictionary_Function($is_viewing) ?>" style="display:inline;" />&nbsp;
+                        <span style="display:inline;cursor:pointer;font-size:10px;font-weight:bold;" onclick="document.getElementById('searchBox').value='';<?php Show_Dictionary_Function($is_viewing) ?>;">Clear Search</span>
                     </div>
                     <div id="searchOptions">
-                        <label class="searchOption">Word <input type="checkbox" id="searchOptionWord" checked="checked" onchange="ShowDictionary()" /></label>
-                        <label class="searchOption">Equivalent <input type="checkbox" id="searchOptionSimple" checked="checked" onchange="ShowDictionary()" /></label>
-                        <label class="searchOption">Explanation <input type="checkbox" id="searchOptionLong" checked="checked" onchange="ShowDictionary()" /></label>
+                        <label class="searchOption">Word <input type="checkbox" id="searchOptionWord" checked="checked" onchange="<?php Show_Dictionary_Function($is_viewing) ?>" /></label>
+                        <label class="searchOption">Equivalent <input type="checkbox" id="searchOptionSimple" checked="checked" onchange="<?php Show_Dictionary_Function($is_viewing) ?>" /></label>
+                        <label class="searchOption">Explanation <input type="checkbox" id="searchOptionLong" checked="checked" onchange="<?php Show_Dictionary_Function($is_viewing) ?>" /></label>
                         <br />
-                        <label class="searchOption">Search Case-Sensitive <input type="checkbox" id="searchCaseSensitive" onchange="ShowDictionary()" /></label>
-                        <label class="searchOption" title="Note: Matching diacritics will appear but may not highlight.">Ignore Diacritics/Accents <input type="checkbox" id="searchIgnoreDiacritics" onchange="ShowDictionary()" /></label>
+                        <label class="searchOption">Search Case-Sensitive <input type="checkbox" id="searchCaseSensitive" onchange="<?php Show_Dictionary_Function($is_viewing) ?>" /></label>
+                        <label class="searchOption" title="Note: Matching diacritics will appear but may not highlight.">Ignore Diacritics/Accents <input type="checkbox" id="searchIgnoreDiacritics" onchange="<?php Show_Dictionary_Function($is_viewing) ?>" /></label>
                     </div>
                 </label>
             </div>
@@ -118,7 +178,7 @@ require_once(SITE_LOCATION . '/php/notificationconditiontree.php');
             <label style="display:block;margin-bottom:0;"><b>Filter Words</b></label>
             <div id="filterOptions" style="display:block"></div>
             <div style="display:block;">
-                <span style="display:inline;cursor:pointer;font-size:12px;font-weight:bold;" onclick="ToggleAllFilters(true);ShowDictionary();">Check All</span>&nbsp;/&nbsp;<span style="display:inline;cursor:pointer;font-size:12px;font-weight:bold;" onclick="ToggleAllFilters(false);ShowDictionary();">Uncheck All</span>
+                <span style="display:inline;cursor:pointer;font-size:12px;font-weight:bold;" onclick="ToggleAllFilters(true);<?php Show_Dictionary_Function($is_viewing) ?>;">Check All</span>&nbsp;/&nbsp;<span style="display:inline;cursor:pointer;font-size:12px;font-weight:bold;" onclick="ToggleAllFilters(false);<?php Show_Dictionary_Function($is_viewing) ?>;">Uncheck All</span>
             </div>
         </div>
         <div id="filterWordCount"></div>
@@ -129,6 +189,8 @@ require_once(SITE_LOCATION . '/php/notificationconditiontree.php');
     <div id="rightColumn" class="googleads" style="float:right;width:20%;max-width:300px;min-width:200px;overflow:hidden;">
         <?php if ($_GET['adminoverride'] != "noadsortracking") { include_once("php/google/adsense.php"); } ?>
     </div>
+
+    <?php if (!$is_viewing) { ?>
 
     <div id="settingsScreen" style="display:none;">
         <div id="settingsBackgroundFade" onclick="HideSettings()"></div>
@@ -216,6 +278,8 @@ require_once(SITE_LOCATION . '/php/notificationconditiontree.php');
             <textarea id="fullScreenTextbox"></textarea>
         </div>
     </div>
+
+    <?php } ?>
     
     <div id="infoScreen" style="display:none;">
         <div id="infoBackgroundFade" onclick="HideInfo()"></div>
@@ -258,6 +322,7 @@ require_once(SITE_LOCATION . '/php/notificationconditiontree.php');
         }
     ?>
 
+    <?php if (!$is_viewing) { ?>
     <div id="loadAfterDeleteScreen" style="display:none;">
         <div id="loadAfterDeleteFade"></div>
         <div id="loadAfterDeletePage">
@@ -271,6 +336,7 @@ require_once(SITE_LOCATION . '/php/notificationconditiontree.php');
             </div>
         </div>
     </div>
+    <?php } ?>
 
     </contents>
     <footer>
@@ -289,12 +355,29 @@ require_once(SITE_LOCATION . '/php/notificationconditiontree.php');
     <script src="js/dictionaryBuilder.js"></script>
     <!-- UI Functions -->
     <script src="js/ui.js"></script>
+    <?php if ($is_viewing) { ?>
+    <!-- Public View Functions -->
+    <script src="js/publicView.js"></script>
+    <?php } ?>
     <?php if ($_GET['adminoverride'] != "noadsortracking") { include_once("php/google/analytics.php"); } ?>
     <script>
     var aboutText = termsText = privacyText = loginForm = forgotForm = "Loading...";
+    <?php if ($is_viewing) { ?>
+    window.onload = function () {
+        ShowPublicDictionary();
+        SetPublicPartsOfSpeech();
+        
+        GetTextFile("README.md", "aboutText", true);
+        GetTextFile("TERMS.md", "termsText", true);
+        GetTextFile("PRIVACY.md", "privacyText", true);
+        GetTextFile("LOGIN.form", "loginForm", false);
+        GetTextFile("FORGOT.form", "forgotForm", false);
+    }
+    <?php } else { ?>
     ready(function() {
         Initialize();
-    });
+    });    
+    <?php } ?>
     </script>
 </body>
 </html>
