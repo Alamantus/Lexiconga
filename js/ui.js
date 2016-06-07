@@ -369,12 +369,12 @@ function LockWordForm() {
     wordForm.removeAttribute('style');
 }
 
-function CloseUpdateConflictArea(displayId) {
+function CloseUpdateConflictArea(displayId, hideId) {
     displayId = (typeof displayId !== 'undefined' && displayId != null) ? displayId : false;
     if (displayId != false) {
         document.getElementById(displayId).style.display = "block";
     }
-    document.getElementById("updateConflict").style.display = "none";
+    document.getElementById(hideId).style.display = "none";
     EnableForm();
 }
 
@@ -579,19 +579,18 @@ function TogglePublicLink() {
     }
 }
 
-function SetPartsOfSpeech () {
-    var partsOfSpeechSelect = document.getElementById("partOfSpeech");
+function SetPartsOfSpeech (selectId) {
+    selectId = (typeof selectId !== 'undefined') ? selectId : "partOfSpeech";
+    var partsOfSpeechSelect = document.getElementById(selectId);
 
     var wordFilterOptions = document.getElementById("filterOptions");
     var wordFiltersSelected = GetSelectedFilters();
 
     // Clear parts of speech.
-    if (partsOfSpeechSelect.options.length > 0) {
-        for (var i = partsOfSpeechSelect.options.length - 1; i >= 0; i--) {
-            partsOfSpeechSelect.removeChild(partsOfSpeechSelect.options[i]);
-        }
-        wordFilterOptions.innerHTML = "";
+    for (var i = partsOfSpeechSelect.options.length - 1; i >= 0; i--) {
+        partsOfSpeechSelect.removeChild(partsOfSpeechSelect.options[i]);
     }
+    wordFilterOptions.innerHTML = "";
 
     // Rebuild parts of speech
     var newPartsOfSpeech = htmlEntitiesParse(currentDictionary.settings.partsOfSpeech).trim().split(",");

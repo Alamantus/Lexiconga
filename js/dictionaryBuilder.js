@@ -34,7 +34,7 @@ function AddWord() {
     var partOfSpeech = htmlEntities(document.getElementById("partOfSpeech").value).trim();
     var simpleDefinition = htmlEntities(document.getElementById("simpleDefinition").value).trim();
     var longDefinition = htmlEntities(document.getElementById("longDefinition").value);
-    var editIndex = htmlEntities(document.getElementById("editIndex").value);
+    // var editIndex = htmlEntities(document.getElementById("editIndex").value);
     var errorMessageArea = document.getElementById("errorMessage");
     var errorMessage = "";
     var updateConflictArea = document.getElementById("updateConflict");
@@ -42,23 +42,7 @@ function AddWord() {
     if (word != "" && (simpleDefinition != "" || longDefinition != "")) {
         var wordIndex = (!currentDictionary.settings.allowDuplicates) ? WordIndex(word) : -1;
 
-        if (editIndex != "") {
-            if (WordAtIndexWasChanged(editIndex, word, pronunciation, partOfSpeech, simpleDefinition, longDefinition)) {
-                document.getElementById("editWordButtonArea").style.display = "none";
-                DisableForm();
-                updateConflictArea.style.display = "block";
-                updateConflictArea.innerHTML = "<span id='updateConflictMessage'>Do you really want to change the word \"" + currentDictionary.words[parseInt(editIndex)].name + "\" to what you have set above?</span>";
-                updateConflictArea.innerHTML += '<button type="button" id="updateConfirmButton" \
-                                                  onclick="UpdateWord(' + editIndex + ', \'' + htmlEntities(word) + '\', \'' + htmlEntities(pronunciation) + '\', \'' + htmlEntities(partOfSpeech) + '\', \'' + htmlEntities(simpleDefinition) + '\', \'' + htmlEntities(longDefinition) + '\'); \
-                                                  return false;">Yes, Update it</button>';
-                updateConflictArea.innerHTML += '<button type="button" id="updateCancelButton" onclick="CloseUpdateConflictArea(\'editWordButtonArea\'); return false;">No, Leave it</button>';
-            } else {
-                errorMessage = "No change has been made to \"" + word + "\"";
-                if (currentDictionary.words[parseInt(editIndex)].name != word) {
-                    errorMessage += ". (Your dictionary is currently set to ignore case.)"
-                }
-            }
-        } else if (wordIndex >= 0) {
+        if (wordIndex >= 0) {
             if (WordAtIndexWasChanged(wordIndex, word, pronunciation, partOfSpeech, simpleDefinition, longDefinition)) {
                 document.getElementById("newWordButtonArea").style.display = "none";
                 DisableForm();
@@ -74,7 +58,7 @@ function AddWord() {
                 updateConflictText += '<button type="button" id="updateConfirmButton" \
                                                   onclick="UpdateWord(' + wordIndex + ', \'' + htmlEntities(word) + '\', \'' + htmlEntities(pronunciation) + '\', \'' + htmlEntities(partOfSpeech) + '\', \'' + htmlEntities(simpleDefinition) + '\', \'' + htmlEntities(longDefinition) + '\'); \
                                                   return false;">Yes, Update it</button>';
-                updateConflictText += ' <button type="button" id="updateCancelButton" onclick="CloseUpdateConflictArea(\'newWordButtonArea\'); return false;">No, Leave it</button>';
+                updateConflictText += ' <button type="button" id="updateCancelButton" onclick="CloseUpdateConflictArea(\'newWordButtonArea\', \'updateConflict\'); return false;">No, Leave it</button>';
                 
                 updateConflictArea.innerHTML = updateConflictText;
             } else {
@@ -107,23 +91,70 @@ function AddWord() {
     errorMessageArea.innerHTML = errorMessage;
 }
 
-function EditWord(index) {
-    SaveScroll();
-    if (wordFormIsLocked()) {
-        window.scroll(0, 0);
+function ShowWordEditForm(index) {
+    var indexString = index.toString(); // Variable for reduced processing
+    var word = currentDictionary.words[index];  // Reference for easier reading
+    var editForm = '<form id="editForm' + indexString + '">\
+                <h2>Editing ' + htmlEntitiesParse(word.name) + '</h2>\
+                <label><span>Word</span>\
+                    <input type="text" id="word' + indexString + '" value="' + htmlEntitiesParse(word.name) + '" onkeydown="SubmitWordOnCtrlEnter(this)" />\
+                </label>\
+                <label><span>Pronunciation <a class="helperlink" href="/ipa_character_picker/" target="_blank" title="IPA Character Picker backed up from http://r12a.github.io/pickers/ipa/">IPA Characters</a></span>\
+                    <input type="text" id="pronunciation' + indexString + '" value="' + htmlEntitiesParse(word.pronunciation) + '" onkeydown="SubmitWordOnCtrlEnter(this)" />\
+                </label>\
+                <label><span>Part of Speech</span>\
+                    <select id="partOfSpeech' + indexString + '" value="' + htmlEntitiesParse(word.partOfSpeech) + '" onkeydown="SubmitWordOnCtrlEnter(this)"></select>\
+                </label>\
+                <label><span>Equivalent Word(s)</span>\
+                    <input type="text" id="simpleDefinition' + indexString + '" value="' + htmlEntitiesParse(word.simpleDefinition) + '" onkeydown="SubmitWordOnCtrlEnter(this)" />\
+                </label>\
+                <label><span>Explanation/Long Definition <span id="showFullScreenTextbox" class="clickable" onclick="ShowFullScreenTextbox(\'longDefinition' + indexString + '\', \'Explanation/Long Definition\')">Maximize</span></span>\
+                    <textarea id="longDefinition' + indexString + '" onkeydown="SubmitWordOnCtrlEnter(this)">' + htmlEntitiesParse(word.longDefinition) + '</textarea>\
+                </label>\
+                <span id="errorMessage' + indexString + '"></span>\
+                <div id="editWordButtonArea' + indexString + '" style="display: block;">\
+                    <button type="button" onclick="EditWord(\'' + indexString + '\'); return false;">Edit Word</button> <button type="button" onclick="CancelEditForm(' + indexString + '); return false;">Cancel</button>\
+                </div>\
+                <div id="updateConflict' + indexString + '" style="display: none;"></div>\
+            </form>';
+
+    document.getElementById("entry" + indexString).innerHTML = editForm;
+
+    SetPartsOfSpeech("partOfSpeech" + indexString);
+}
+
+function CancelEditForm(index) {
+    document.getElementById("entry" + index.toString()).innerHTML = DictionaryEntry(index).replace("<entry id='entry" + index.toString() + "'>", "").replace("</entry>", "");
+}
+
+function EditWord(indexString) {
+    var word = htmlEntities(document.getElementById("word" + indexString).value).trim();
+    var pronunciation = htmlEntities(document.getElementById("pronunciation" + indexString).value).trim();
+    var partOfSpeech = htmlEntities(document.getElementById("partOfSpeech" + indexString).value).trim();
+    var simpleDefinition = htmlEntities(document.getElementById("simpleDefinition" + indexString).value).trim();
+    var longDefinition = htmlEntities(document.getElementById("longDefinition" + indexString).value);
+    // var editIndex = htmlEntities(document.getElementById("editIndex").value);
+    var errorMessageArea = document.getElementById("errorMessage" + indexString);
+    var errorMessage = "";
+    var updateConflictArea = document.getElementById("updateConflict" + indexString);
+
+    if (WordAtIndexWasChanged(indexString, word, pronunciation, partOfSpeech, simpleDefinition, longDefinition)) {
+        document.getElementById("editWordButtonArea" + indexString).style.display = "none";
+        DisableForm();
+        updateConflictArea.style.display = "block";
+        updateConflictArea.innerHTML = "<span id='updateConflictMessage" + indexString + "'>Do you really want to change the word \"" + currentDictionary.words[parseInt(indexString)].name + "\" to what you have set above?</span>";
+        updateConflictArea.innerHTML += '<button type="button" id="updateConfirmButton' + indexString + '" \
+                                          onclick="UpdateWord(' + indexString + ', \'' + htmlEntities(word) + '\', \'' + htmlEntities(pronunciation) + '\', \'' + htmlEntities(partOfSpeech) + '\', \'' + htmlEntities(simpleDefinition) + '\', \'' + htmlEntities(longDefinition) + '\'); \
+                                          return false;">Yes, Update it</button>';
+        updateConflictArea.innerHTML += '<button type="button" id="updateCancelButton' + indexString + '" onclick="CloseUpdateConflictArea(\'editWordButtonArea' + indexString + '\',\'updateConflict' + indexString + '\'); return false;">No, Leave it</button>';
+    } else {
+        errorMessage = "No change has been made to \"" + word + "\"";
+        if (currentDictionary.words[parseInt(indexString)].name != word) {
+            errorMessage += ". (Your dictionary is currently set to ignore case.)";
+        }
     }
 
-    ClearForm();
-
-    document.getElementById("editIndex").value = index.toString();
-    document.getElementById("word").value = htmlEntitiesParse(currentDictionary.words[index].name);
-    document.getElementById("pronunciation").value = htmlEntitiesParse(currentDictionary.words[index].pronunciation);
-    document.getElementById("partOfSpeech").value = htmlEntitiesParse(currentDictionary.words[index].partOfSpeech);
-    document.getElementById("simpleDefinition").value = htmlEntitiesParse(currentDictionary.words[index].simpleDefinition);
-    document.getElementById("longDefinition").value = htmlEntitiesParse(currentDictionary.words[index].longDefinition);
-
-    document.getElementById("newWordButtonArea").style.display = "none";
-    document.getElementById("editWordButtonArea").style.display = "block";
+    errorMessageArea.innerHTML = errorMessage;
 }
 
 function UpdateWord(wordIndex, word, pronunciation, partOfSpeech, simpleDefinition, longDefinition) {
@@ -219,7 +250,7 @@ function ShowDictionary() {
 
 function DictionaryEntry(itemIndex) {
     displayPublic = (typeof displayPublic !== 'undefined' && displayPublic != null) ? displayPublic : false;
-    var entryText = "<entry><a name='" + currentDictionary.words[itemIndex].wordId + "'></a><a href='#" + currentDictionary.words[itemIndex].wordId + "' class='wordLink clickable'>&#x1f517;</a>";
+    var entryText = "<entry id='entry" + itemIndex.toString() + "'><a name='" + currentDictionary.words[itemIndex].wordId + "'></a><a href='#" + currentDictionary.words[itemIndex].wordId + "' class='wordLink clickable'>&#x1f517;</a>";
     
     var searchTerm = regexParseForSearch(document.getElementById("searchBox").value);
     var searchByWord = document.getElementById("searchOptionWord").checked;
@@ -290,7 +321,7 @@ function DictionaryEntry(itemIndex) {
 function ManagementArea(itemIndex) {
     var managementHTML = "<div class='management'>";
 
-    managementHTML += "<span class='clickable editButton' onclick='EditWord(" + itemIndex + ")'>Edit</span>";
+    managementHTML += "<span class='clickable editButton' onclick='ShowWordEditForm(" + itemIndex + ")'>Edit</span>";
     managementHTML += "<span class='clickable deleteButton' onclick='document.getElementById(\"delete" + itemIndex + "Confirm\").style.display = \"block\";'>Delete</span>";
 
     managementHTML += "<div class='deleteConfirm' id='delete" + itemIndex + "Confirm' style='display:none;'>Are you sure you want to delete this entry?<br><br>";
@@ -387,7 +418,7 @@ function SaveAndUpdateDictionary(keepFormContents) {
     if (!keepFormContents) {
         ClearForm();
     }
-    CloseUpdateConflictArea('newWordButtonArea');
+    CloseUpdateConflictArea('newWordButtonArea', 'updateConflict');
 }
 
 function SaveDictionary(sendToDatabase, sendWords) {
