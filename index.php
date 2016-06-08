@@ -269,7 +269,7 @@ if ($is_viewing) {
                 <div id="settingsSaveButtons">
                     <span id="settingsErrorMessage"></span><br>
                     <button type="button" onclick="SaveSettings(); HideSettings(); return false;">Save and Close</button>
-                    <button type="button" onclick="SaveSettings(); return false;">Save</button>
+                    <button type="button" onclick="SaveSettings(); return false;" style="margin-right:2px;">Save</button>
                 </div>
             </form>
         </div>

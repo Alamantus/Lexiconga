@@ -1,11 +1,11 @@
 body {
-	background: #f2c057;
+	background: #e6cfaa;
 }
 
 header {
 	height: 50px;
 	width: 100%;
-	background: #607aac;
+	background: #eacc9d;
 	margin-bottom: 10px;
 	border: none;
 	-webkit-box-shadow: 3px 3px 10px -1px rgba(0,0,0,0.75);
@@ -30,9 +30,8 @@ td, th {
 }
 
 a {
-	text-decoration: none;
-	color: #2d4262;
-	font-weight: bold;
+	text-decoration: underline;
+	color: #a01000;
 }
 
 #siteLogo {
@@ -97,19 +96,19 @@ and (max-device-width : 480px) {
 }
 
 input, textarea, select, option {
-	background: #ffeb94;
+	background: #efdfc0;
 }
 
 #announcementArea {
-    background: #a2c523;
+    background: #a0c066;
 }
 
 #notificationArea {
-    background: #86ac41;
+    background: #c0c088;
 }
 
 #dictionaryContainer {
-	background: #cb6318;
+	background: #bd7251;
 	padding: 15px;
 	border: none;
 	-webkit-box-shadow: 5px 5px 7px 0px rgba(0,0,0,0.75);
@@ -118,7 +117,7 @@ input, textarea, select, option {
 }
 
 #settingsOptions, #infoPage, #loadAfterDeletePage, #accountSettingsPage, #fullScreenTextboxPage {
-	background: #c9a66b;
+	background: #f2d5b2;
 }
 
 .management {
@@ -132,15 +131,15 @@ input, textarea, select, option {
 
 #dictionaryDescription {
 	width: 90%;
-	background: #f4cc70;
+	background: #f2d5b2;
 }
 
 #loginLink, #logoutLink, #descriptionToggle, #searchFilterToggle, #settingsButton, .deleteCancelButton, .deleteConfirmButton, #settingsScreenCloseButton, #infoScreenCloseButton, .clickable, button {
-	background: #fbcd4b;
+	background: #dcb078;
 }
 
 entry {
-	background: #f4cc70;
+	background: #d7ad7d;
 	border: none;
 	-webkit-box-shadow: 3px 3px 10px -1px rgba(0,0,0,0.75);
 	-moz-box-shadow: 3px 3px 10px -1px rgba(0,0,0,0.75);
