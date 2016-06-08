@@ -309,12 +309,12 @@ if ($is_viewing) {
                     <input type="hidden" id="accountSettingsPreviousEmailField" name="previousemail" value="<?php echo $user_email; ?>" />
                 </label>
                 <div id="accountSettingsEmailChangeWarning" style="display:none;font-weight:bold;color:#dd5500;font-size:11px;margin-bottom:10px;">If you change your email address, please note that you will no longer be able to log in with your old email address, <?php echo $user_email; ?>.<br>Change it back unless you are completely sure that you want to change your email address!</div>
-                <label><span>Public Name <span class="clickable" onclick="ExplainPublicName()" style="font-size:11px;vertical-align:top;background:#e0c19c;padding:4px 7px;">?</span></span>
+                <label><span>Public Name <span class="clickable inline-button" onclick="ExplainPublicName()">?</span></span>
                     <input type="text" id="accountSettingsPublicNameField" name="publicname" value="<?php echo Get_Public_Name_By_Id($current_user); ?>" />
                 </label>
                 <label style="display:inline;"><b>Allow Emails</b>
 			        <input type="checkbox" id="createAccountAllowEmailsField" name="allowemails" checked="checked" />
-			    </label> <span class="clickable" onclick="ExplainAllowEmails()" style="font-size:11px;vertical-align:top;background:#e0c19c;padding:4px 7px;">?</span>
+			    </label> <span class="clickable inline-button" onclick="ExplainAllowEmails()">?</span>
                 <div id="accountSettingsError" style="font-weight:bold;color:red;"></div>
                 <button type="submit" id="accountSettingsSubmitButton" onclick="ValidateAccountSettings(); return false;">Save Settings</button>
                 <br><br>
@@ -338,7 +338,7 @@ if ($is_viewing) {
                     <select id="loadAfterDelete" onchange="ChangeDictionary(this);document.getElementById('loadAfterDeleteScreen').style.display = 'none';"></select>
                 </label>
                 <p>Or</p>
-                <label><button type="button" onclick="CreateNewDictionary();document.getElementById('loadAfterDeleteScreen').style.display = 'none';" style="cursor:pointer;">Create a New Dictionary</button></label>
+                <label><button type="button" onclick="CreateNewDictionary();document.getElementById('loadAfterDeleteScreen').style.display = 'none';">Create a New Dictionary</button></label>
             </div>
         </div>
     </div>

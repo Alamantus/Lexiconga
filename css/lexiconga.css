@@ -1,11 +1,11 @@
 body {
-	background: #ecf0f1;
+	background: #f2c057;
 }
 
 header {
 	height: 50px;
 	width: 100%;
-	background: #8e44ad;
+	background: #607aac;
 	margin-bottom: 10px;
 	border: none;
 	-webkit-box-shadow: 3px 3px 10px -1px rgba(0,0,0,0.75);
@@ -31,7 +31,7 @@ td, th {
 
 a {
 	text-decoration: none;
-	color: #2980b9;
+	color: #2d4262;
 	font-weight: bold;
 }
 
@@ -46,7 +46,6 @@ a {
 }
 
 #aboutButton {
-	background: #f1c40f;
 }
 
 #loginoutArea {
@@ -90,7 +89,7 @@ and (max-device-width : 480px) {
 }
 
 #wordEntryForm {
-	background: #e74c3c;
+	background: #ba5536;
 	-webkit-box-shadow: 5px 5px 7px 0px rgba(0,0,0,0.75);
 	-moz-box-shadow: 5px 5px 7px 0px rgba(0,0,0,0.75);
 	box-shadow: 5px 5px 7px 0px rgba(0,0,0,0.75);
@@ -98,19 +97,19 @@ and (max-device-width : 480px) {
 }
 
 input, textarea, select, option {
-	background: #ecf0f1;
+	background: #ffeb94;
 }
 
 #announcementArea {
-    background: #2ecc71;
+    background: #a2c523;
 }
 
 #notificationArea {
-    background:#c0c088;
+    background: #86ac41;
 }
 
 #dictionaryContainer {
-	background: #e67e22;
+	background: #cb6318;
 	padding: 15px;
 	border: none;
 	-webkit-box-shadow: 5px 5px 7px 0px rgba(0,0,0,0.75);
@@ -118,8 +117,8 @@ input, textarea, select, option {
 	box-shadow: 5px 5px 7px 0px rgba(0,0,0,0.75);
 }
 
-#dictionaryDescription, #settingsOptions, #infoPage, #loadAfterDeletePage, #accountSettingsPage, #fullScreenTextboxPage {
-	background: #bdc3c7;
+#settingsOptions, #infoPage, #loadAfterDeletePage, #accountSettingsPage, #fullScreenTextboxPage {
+	background: #c9a66b;
 }
 
 .management {
@@ -133,14 +132,15 @@ input, textarea, select, option {
 
 #dictionaryDescription {
 	width: 90%;
+	background: #f4cc70;
 }
 
 #loginLink, #logoutLink, #descriptionToggle, #searchFilterToggle, #settingsButton, .deleteCancelButton, .deleteConfirmButton, #settingsScreenCloseButton, #infoScreenCloseButton, .clickable, button {
-	background: #f1c40f;
+	background: #fbcd4b;
 }
 
 entry {
-	background: #bdc3c7;
+	background: #f4cc70;
 	border: none;
 	-webkit-box-shadow: 3px 3px 10px -1px rgba(0,0,0,0.75);
 	-moz-box-shadow: 3px 3px 10px -1px rgba(0,0,0,0.75);
@@ -148,15 +148,15 @@ entry {
 }
 
 .editButton {
-	background: #2ecc71;
+	background: #86ac41;
 }
 
 .deleteButton {
-	background: #e74c3c;
+	background: #ba5536;
 }
 
 footer {
-	background: #e67e22;
+	background: #cb6318;
 	border: none;
 	-webkit-box-shadow: 0px -3px 7px -1px rgba(0,0,0,0.75);
 	-moz-box-shadow: 0px -3px 7px -1px rgba(0,0,0,0.75);
