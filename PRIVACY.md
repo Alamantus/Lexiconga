@@ -42,7 +42,7 @@ Some of the ads may be served by Google. Google's use of the DART cookie enables
 ### Changes to this privacy policy
 Lexiconga Dictionary Builder has the discretion to update this privacy policy at any time. When we do, we will post a notification on the main page of our Site. We encourage Users to frequently check this page for any changes to stay informed about how we are helping to protect the personal information we collect. You acknowledge and agree that it is your responsibility to review this privacy policy periodically and become aware of modifications.
 
-###Your acceptance of these terms
+### Your acceptance of these terms
 By using this Site, you signify your acceptance of this policy. If you do not agree to this policy, please do not use our Site. Your continued use of the Site following the posting of changes to this policy will be deemed your acceptance of those changes. This policy was originally generated using PrivacyPolicies.com and modified for our use.
 
 ### Contacting us

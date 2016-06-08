@@ -256,9 +256,7 @@ if ($is_viewing) {
                         <label><button type="button" onclick="CreateNewDictionary()" style="cursor:pointer;">Create a New Dictionary</button></label>
                     <?php } ?>
                     <label>
-                        <span>Import Dictionary</span>
-                        <input type="file" id="importFile" />
-                        <button type="button" onclick="ImportDictionary(); return false;">Import</button>
+                        <button type="button" onclick="ShowInfo('importForm')">Import...</button>
                     </label>
                     <?php if ($current_user > 0) {  //If logged in, show the log out button. ?>
                         <label><button type="button" onclick="DeleteCurrentDictionary()" style="cursor:pointer;">Delete Current Dictionary</button></label>
@@ -353,6 +351,8 @@ if ($is_viewing) {
     <script src="js/marked.js"></script>
     <!-- JSON Search -->
     <script src="js/defiant.js"></script>
+    <!-- CSV Parser -->
+    <script src="js/papaparse.js"></script>
     <!-- Diacritics Removal for Exports -->
     <script src="js/removeDiacritics.js"></script>
     <!-- Helper Functions -->
@@ -367,7 +367,7 @@ if ($is_viewing) {
     <?php } ?>
     <?php if ($_GET['adminoverride'] != "noadsortracking") { include_once("php/google/analytics.php"); } ?>
     <script>
-    var aboutText = termsText = privacyText = loginForm = forgotForm = "Loading...";
+    var aboutText = termsText = privacyText = loginForm = forgotForm = importForm = "Loading...";
     <?php if ($is_viewing) { ?>
     window.onload = function () {
         ShowPublicDictionary();
@@ -378,6 +378,7 @@ if ($is_viewing) {
         GetTextFile("PRIVACY.md", "privacyText", true);
         GetTextFile("LOGIN.form", "loginForm", false);
         GetTextFile("FORGOT.form", "forgotForm", false);
+        GetTextFile("IMPORT.form", "importForm", false);
     }
     <?php } else { ?>
     ready(function() {

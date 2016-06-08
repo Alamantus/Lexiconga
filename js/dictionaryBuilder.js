@@ -670,6 +670,40 @@ function ImportDictionary() {
     }
 }
 
+function ImportWords() {
+    if (currentDictionary.externalID > 0 || confirm("This will add words in a correctly formatted CSV file to your currently loaded dictionary. Do you still want to import?")) {
+        if (!window.FileReader) {
+            alert('Your browser is not supported');
+            return false;
+        }
+
+        if (document.getElementById("importWordsCSV").files.length > 0) {
+            var file = document.getElementById("importWordsCSV").files[0];
+
+            var resultsArea = document.getElementById("importOptions");
+            resultsArea.innerHTML = "";
+
+            Papa.parse(file, {
+                header: true,
+                step: function(row, parser) {
+                    if (row.errors.length == 0) {
+                        currentDictionary.words.push({name: row.data["word"], pronunciation: row.data["pronunciation"], partOfSpeech: row.data["part of speech"], simpleDefinition: row.data["equivalent"], longDefinition: row.data["explanation"], wordId: currentDictionary.nextWordId++});
+                        resultsArea.innerHTML += "<p>Imported \"" + row.data["word"] + " successfully</p>";
+                    } else {
+                        resultsArea.innerHTML += "<p>Error on row " + row.error.row + ": " + row.error.message + "</p>";
+                    }
+                },
+                complete: function(results) {
+                    SaveAndUpdateDictionary();
+                    resultsArea.innerHTML += "<p>The file has finished importing.</p>";
+                }
+            });
+        } else {
+            alert("You must add a file to import.");
+        }
+    }
+}
+
 function WordIndex(word) {
     for (var i = 0; i < currentDictionary.words.length; i++)
     {

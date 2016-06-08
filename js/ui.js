@@ -8,6 +8,7 @@ function Initialize() {
     GetTextFile("PRIVACY.md", "privacyText", true);
     GetTextFile("LOGIN.form", "loginForm", false);
     GetTextFile("FORGOT.form", "forgotForm", false);
+    GetTextFile("IMPORT.form", "importForm", false);
 
     SetKeyboardShortcuts();
 }

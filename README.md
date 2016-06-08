@@ -188,4 +188,5 @@ I hope you enjoy Lexiconga and that it helps you build some awesome languages.
 ## Libraries Used
 * [Marked.js](https://github.com/chjj/marked) by Christopher Jeffrey (JJ) (a.k.a. chjj)
 * [Defiant.js](http://defiantjs.com) by Hakan Bilgin (a.k.a. hbi99)
+* [Papa Parse](http://papaparse.com/) by Matt Holt (a.k.a. mholt)
 * [removeDiacritics.js](http://stackoverflow.com/a/18391901/3508346) by [rdllopes](http://meta.stackoverflow.com/users/1879686/rdllopes)
