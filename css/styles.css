@@ -1,8 +1,8 @@
-﻿body {
+body {
     padding: 0;
     margin: 0;
     border: none;
-    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-family: "Helvetica", Arial, sans-serif;
 }
 
 contents {
@@ -18,7 +18,7 @@ footer {
     bottom: 0px;
     left: 0px;
     background: #aaaaaa;
-    padding: 6px;
+    padding: 8px;
     max-height: 32px;   /* Update Dictionary Container's bottom margin to account for footer */
 }
 
@@ -70,10 +70,6 @@ label {
 label span {
     display: block;
     font-weight: bold;
-}
-
-label span .helperlink {
-    font-size: 10px;
 }
 
 label label {
@@ -141,17 +137,19 @@ input[type=checkbox] {
 #announcementArea, #notificationArea {
     text-align:center;
     padding:10px;
-    border-radius:5px;
     margin:0 auto;
     width:50%;
     min-width:200px;
+    -webkit-box-shadow: 5px 5px 7px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 5px 5px 7px 0px rgba(0,0,0,0.75);
+    box-shadow: 5px 5px 7px 0px rgba(0,0,0,0.75);
 }
 
 #dictionaryContainer {
     margin: 15px 0 36px 15px;    /* bottom margin must clear footer */
     width: 60%;
     min-width: 260px;
-    max-width: 600px;
+    max-width: 800px;
     float: left;
 }
 
@@ -168,17 +166,22 @@ input[type=checkbox] {
     margin: 10px;
 }
 
-.clickable, .helperlink {
+.clickable, button {
     display: inline;
     font-weight: bold;
     font-size: 13px;
     padding: 4px;
+    border: none;
     background: #dddddd;
-    border-radius: 5px;
 }
 
-.clickable {
+.clickable, button {
     cursor: pointer;
+}
+
+.inline-button {
+    font-size: 11px;
+    padding: 2px 4px;
 }
 
 #descriptionToggle, #searchFilterToggle {
@@ -323,8 +326,8 @@ searchTerm {
     left: 0;
     width: 100%;
     height: 100%;
-    background: #aaaaaa;
-    opacity: 0.75;
+    background: #000000;
+    opacity: 0.6;
 }
 
 #settingsOptions, #infoPage, #loadAfterDeletePage,
@@ -341,8 +344,10 @@ searchTerm {
     overflow-x: hidden;
     background: #ffffff;
     opacity: 1;
-    border-radius: 5px;
-    border: 1px solid black;
+    border: none;
+    -webkit-box-shadow: 5px 5px 7px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 5px 5px 7px 0px rgba(0,0,0,0.75);
+    box-shadow: 5px 5px 7px 0px rgba(0,0,0,0.75);
 }
 
 #announcementCloseButton, #notificationCloseButton,

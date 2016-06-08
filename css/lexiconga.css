@@ -1,13 +1,16 @@
 body {
-	background: #e6cfaa;
+	background: #ecf0f1;
 }
 
 header {
 	height: 50px;
 	width: 100%;
-	background: #eacc9d;
-	margin-bottom: 3px;
-	border-bottom: 3px solid #e3bb7d;
+	background: #8e44ad;
+	margin-bottom: 10px;
+	border: none;
+	-webkit-box-shadow: 3px 3px 10px -1px rgba(0,0,0,0.75);
+	-moz-box-shadow: 3px 3px 10px -1px rgba(0,0,0,0.75);
+	box-shadow: 3px 3px 10px -1px rgba(0,0,0,0.75);
 }
 
 /* Smartphones (portrait and landscape) ----------- */
@@ -27,8 +30,9 @@ td, th {
 }
 
 a {
-	text-decoration: underline;
-	color: #a01000;
+	text-decoration: none;
+	color: #2980b9;
+	font-weight: bold;
 }
 
 #siteLogo {
@@ -42,7 +46,7 @@ a {
 }
 
 #aboutButton {
-	background: #dcb078;
+	background: #f1c40f;
 }
 
 #loginoutArea {
@@ -86,16 +90,19 @@ and (max-device-width : 480px) {
 }
 
 #wordEntryForm {
-	background: #c05d5d;
-	border-color: #c08d8d #b00d0d #b00d0d #c08d8d;
+	background: #e74c3c;
+	-webkit-box-shadow: 5px 5px 7px 0px rgba(0,0,0,0.75);
+	-moz-box-shadow: 5px 5px 7px 0px rgba(0,0,0,0.75);
+	box-shadow: 5px 5px 7px 0px rgba(0,0,0,0.75);
+	border: none;
 }
 
-input, textarea, select, option, button {
-	background: #efdfc0;
+input, textarea, select, option {
+	background: #ecf0f1;
 }
 
 #announcementArea {
-    background:#a0c066;
+    background: #2ecc71;
 }
 
 #notificationArea {
@@ -103,20 +110,21 @@ input, textarea, select, option, button {
 }
 
 #dictionaryContainer {
-	background: #bd7251;
+	background: #e67e22;
 	padding: 15px;
-	border: outset;
-	border-color: #d09b84 #915237 #915237 #d09b84;
+	border: none;
+	-webkit-box-shadow: 5px 5px 7px 0px rgba(0,0,0,0.75);
+	-moz-box-shadow: 5px 5px 7px 0px rgba(0,0,0,0.75);
+	box-shadow: 5px 5px 7px 0px rgba(0,0,0,0.75);
 }
 
-#dictionaryDescription, .management, #settingsOptions, #infoPage, #loadAfterDeletePage,
-#accountSettingsPage, #fullScreenTextboxPage {
-	background: #f2d5b2;
+#dictionaryDescription, #settingsOptions, #infoPage, #loadAfterDeletePage, #accountSettingsPage, #fullScreenTextboxPage {
+	background: #bdc3c7;
 }
 
 .management {
 	border-width: 2px;
-	border-color: #ebbe87 #f9ecdd #f9ecdd #ebbe87;
+	border: none;
 }
 
 #dictionaryName {
@@ -127,28 +135,30 @@ input, textarea, select, option, button {
 	width: 90%;
 }
 
-#loginLink, #logoutLink,
-#descriptionToggle, #searchFilterToggle, #settingsButton,
-.deleteCancelButton, .deleteConfirmButton,
-#settingsScreenCloseButton, #infoScreenCloseButton,
-.clickable, .helperlink {
-	background: #e0c19c;
+#loginLink, #logoutLink, #descriptionToggle, #searchFilterToggle, #settingsButton, .deleteCancelButton, .deleteConfirmButton, #settingsScreenCloseButton, #infoScreenCloseButton, .clickable, button {
+	background: #f1c40f;
 }
 
 entry {
-	background: #d7ad7d;
-	border-color: #e7cfb3 #c78b47 #c78b47 #e7cfb3;
+	background: #bdc3c7;
+	border: none;
+	-webkit-box-shadow: 3px 3px 10px -1px rgba(0,0,0,0.75);
+	-moz-box-shadow: 3px 3px 10px -1px rgba(0,0,0,0.75);
+	box-shadow: 3px 3px 10px -1px rgba(0,0,0,0.75);
 }
 
 .editButton {
-	background: #89cb89;
+	background: #2ecc71;
 }
 
 .deleteButton {
-	background: #cc8888;
+	background: #e74c3c;
 }
 
 footer {
-	background: #d69c42;
-	border-top: 3px solid #e3bb7d;
+	background: #e67e22;
+	border: none;
+	-webkit-box-shadow: 0px -3px 7px -1px rgba(0,0,0,0.75);
+	-moz-box-shadow: 0px -3px 7px -1px rgba(0,0,0,0.75);
+	box-shadow: 0px -3px 7px -1px rgba(0,0,0,0.75);
 }

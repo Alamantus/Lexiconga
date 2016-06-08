@@ -15,7 +15,7 @@
     <h2>Create a New Account</h2>
     <p style="font-size: 12px;">Creating an account allows you to save and switch between as many dictionaries as you need and access them from any device for free! If you have a dictionary you've been working on loaded already, it will automatically be uploaded to your account when you log in for the first time.</p>
     <p style="font-size: 12px;">Plus if you allow us to send you emails, we'll make sure that you're the first to hear about any new features that get added or if any of our policies change for any  reason. We'll never spam you or sell your information.</p>
-    <p style="font-size: 12px;">By creating an account, you are indicating that you agree to the <span class="clickable" onclick="ShowInfo('termsText')" style="font-size:11px;vertical-align:top;background:#e0c19c;padding:4px 7px;">Terms of Service</span> and that you understand Lexiconga's <span class="clickable" onclick="ShowInfo('privacyText')" style="font-size:11px;vertical-align:top;background:#e0c19c;padding:4px 7px;">Privacy Policy</span>.</p>
+    <p style="font-size: 12px;">By creating an account, you are indicating that you agree to the <span class="clickable inline-button" onclick="ShowInfo('termsText')">Terms of Service</span> and that you understand Lexiconga's <span class="clickable inline-button" onclick="ShowInfo('privacyText')">Privacy Policy</span>.</p>
     <label><span>Email</span>
         <input type="email" id="createAccountEmailField" name="email" />
     </label>
@@ -25,12 +25,12 @@
     <label><span>Confirm Password</span>
         <input type="password" id="createAccountPasswordConfirmField" name="confirmpassword" />
     </label>
-    <label><span>Public Name <span class="clickable" onclick="ExplainPublicName()" style="font-size:11px;vertical-align:top;background:#e0c19c;padding:4px 7px;">?</span></span>
+    <label><span>Public Name <span class="clickable inline-button" onclick="ExplainPublicName()">?</span></span>
         <input type="text" id="createAccountPublicNameField" name="publicname" />
     </label>
     <label style="display:inline;"><b>Allow Emails</b>
         <input type="checkbox" id="createAccountAllowEmailsField" name="allowemails" checked="checked" />
-    </label> <span class="clickable" onclick="ExplainAllowEmails()" style="font-size:11px;vertical-align:top;background:#e0c19c;padding:4px 7px;">?</span>
+    </label> <span class="clickable inline-button" onclick="ExplainAllowEmails()">?</span>
     <div id="createAccountError" style="font-weight:bold;color:red;"></div>
     <button type="submit" id="createAccountSubmitButton" onclick="ValidateCreateAccount(); return false;">Create Account</button>
 </form></div>

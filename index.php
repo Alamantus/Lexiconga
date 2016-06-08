@@ -115,7 +115,7 @@ if ($is_viewing) {
             <label><span>Word</span>
                 <input type="text" id="word" onkeydown="SubmitWordOnCtrlEnter(this)" />
             </label>
-            <label><span>Pronunciation <a class="helperlink" href="/ipa_character_picker/" target="_blank" title="IPA Character Picker backed up from http://r12a.github.io/pickers/ipa/">IPA Characters</a></span>
+            <label><span>Pronunciation <a class="clickable inline-button" href="/ipa_character_picker/" target="_blank" title="IPA Character Picker backed up from http://r12a.github.io/pickers/ipa/">IPA Characters</a></span>
                 <input type="text" id="pronunciation" onkeydown="SubmitWordOnCtrlEnter(this)" />
             </label>
             <label><span>Part of Speech</span>
@@ -124,7 +124,7 @@ if ($is_viewing) {
             <label><span>Equivalent Word(s)</span>
                 <input type="text" id="simpleDefinition" onkeydown="SubmitWordOnCtrlEnter(this)" />
             </label>
-            <label><span>Explanation/Long Definition <span id="showFullScreenTextbox" class="clickable" onclick="ShowFullScreenTextbox('longDefinition', 'Explanation/Long Definition')">Maximize</span></span>
+            <label><span>Explanation/Long Definition <span id="showFullScreenTextbox" class="clickable inline-button" onclick="ShowFullScreenTextbox('longDefinition', 'Explanation/Long Definition')">Maximize</span></span>
                 <textarea id="longDefinition" onkeydown="SubmitWordOnCtrlEnter(this)"></textarea>
             </label>
             <input type="hidden" id="editIndex" />
@@ -162,7 +162,7 @@ if ($is_viewing) {
                     <span>Search</span>
                     <div style="display:block;">
                         <input type="text" id="searchBox" onclick="this.select();" onchange="<?php Show_Dictionary_Function($is_viewing) ?>" style="display:inline;" />&nbsp;
-                        <span style="display:inline;cursor:pointer;font-size:10px;font-weight:bold;" onclick="document.getElementById('searchBox').value='';<?php Show_Dictionary_Function($is_viewing) ?>;">Clear Search</span>
+                        <span class="clickable inline-button" onclick="document.getElementById('searchBox').value='';<?php Show_Dictionary_Function($is_viewing) ?>;">Clear Search</span>
                     </div>
                     <div id="searchOptions">
                         <label class="searchOption">Word <input type="checkbox" id="searchOptionWord" checked="checked" onchange="<?php Show_Dictionary_Function($is_viewing) ?>" /></label>
@@ -178,7 +178,13 @@ if ($is_viewing) {
             <label style="display:block;margin-bottom:0;"><b>Filter Words</b></label>
             <div id="filterOptions" style="display:block"></div>
             <div style="display:block;">
-                <span style="display:inline;cursor:pointer;font-size:12px;font-weight:bold;" onclick="ToggleAllFilters(true);<?php Show_Dictionary_Function($is_viewing) ?>;">Check All</span>&nbsp;/&nbsp;<span style="display:inline;cursor:pointer;font-size:12px;font-weight:bold;" onclick="ToggleAllFilters(false);<?php Show_Dictionary_Function($is_viewing) ?>;">Uncheck All</span>
+                <span  class="clickable inline-button" onclick="ToggleAllFilters(true);<?php Show_Dictionary_Function($is_viewing) ?>;">
+                    Check All
+                </span>
+                &nbsp;
+                <span  class="clickable inline-button" onclick="ToggleAllFilters(false);<?php Show_Dictionary_Function($is_viewing) ?>;">
+                    Uncheck All
+                </span>
             </div>
         </div>
         <div id="filterWordCount"></div>
@@ -204,7 +210,7 @@ if ($is_viewing) {
                         <span>Dictionary Name</span>
                         <input type="text" id="dictionaryNameEdit" />
                     </label>
-                    <label><span>Dictionary Details <span id="showFullScreenTextbox" class="clickable" onclick="ShowFullScreenTextbox('dictionaryDescriptionEdit', 'Dictionary Details')">Maximize</span></span>
+                    <label><span>Dictionary Details <span id="showFullScreenTextbox" class="clickable inline-button" onclick="ShowFullScreenTextbox('dictionaryDescriptionEdit', 'Dictionary Details')">Maximize</span></span>
                         <textarea id="dictionaryDescriptionEdit"></textarea>
                     </label>
 
@@ -223,7 +229,7 @@ if ($is_viewing) {
                     <label class="inline">
                         <span class="checkboxlabel">Sort by Equivalent Word</span>
                         <input type="checkbox" id="dictionarySortByEquivalent" />
-                    </label> <span class="helperlink clickable" onclick='alert("By default, your dictionary is organized alphabetically by word. Checking this box will organize it by the \"Equivalent Word\" field instead");'>?</span>
+                    </label> <span class="clickable inline-button" onclick='alert("By default, your dictionary is organized alphabetically by word. Checking this box will organize it by the \"Equivalent Word\" field instead");'>?</span>
                     </div>
                     <br>
                     <label>
@@ -234,7 +240,7 @@ if ($is_viewing) {
                         <label class="inline">
                             <span class="checkboxlabel">Dictionary is Public</span>
                             <input type="checkbox" id="dictionaryIsPublic" onchange="TogglePublicLink()" />
-                        </label> <span class="helperlink clickable" onclick='alert("If you save your settings with this checked, your dictionary will be viewable by anyone if they have the public link.");'>?</span>
+                        </label> <span class="clickable inline-button" onclick='alert("If you save your settings with this checked, your dictionary will be viewable by anyone if they have the public link.");'>?</span>
                         <div id="publicLink"></div>
                     <?php } ?>
                 </div>
