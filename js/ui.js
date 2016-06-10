@@ -588,10 +588,16 @@ function SetPartsOfSpeech (selectId) {
     var wordFiltersSelected = GetSelectedFilters();
 
     // Clear parts of speech.
-    for (var i = partsOfSpeechSelect.options.length - 1; i >= 0; i--) {
+    for (var i = partsOfSpeechSelect.options.length; i > 0; i--) {
         partsOfSpeechSelect.removeChild(partsOfSpeechSelect.options[i]);
     }
     wordFilterOptions.innerHTML = "";
+
+    // Insert blank part of speech as first dropdown option.
+    var blankpartOfSpeechOption = document.createElement('option');
+    blankpartOfSpeechOption.appendChild(document.createTextNode(""));
+    blankpartOfSpeechOption.value = " ";
+    partsOfSpeechSelect.appendChild(blankpartOfSpeechOption);
 
     // Rebuild parts of speech
     var newPartsOfSpeech = htmlEntitiesParse(currentDictionary.settings.partsOfSpeech).trim().split(",");
@@ -614,6 +620,18 @@ function SetPartsOfSpeech (selectId) {
         wordFilterLabel.appendChild(wordFilterCheckbox);
         wordFilterOptions.appendChild(wordFilterLabel);
     }
+
+    // Insert blank part of speech as last filter option
+    var blankwordFilterLabel = document.createElement('label');
+    blankwordFilterLabel.appendChild(document.createTextNode("Blanks "));
+    blankwordFilterLabel['part-of-speech'] = " ";
+    blankwordFilterLabel.className = 'filterOption';
+    var blankwordFilterCheckbox = document.createElement('input');
+    blankwordFilterCheckbox.type = 'checkbox';
+    blankwordFilterCheckbox.onchange = function(){ShowDictionary()};
+    if (wordFiltersSelected.indexOf(" ") > -1) blankwordFilterCheckbox.checked = true;
+    blankwordFilterLabel.appendChild(blankwordFilterCheckbox);
+    wordFilterOptions.appendChild(blankwordFilterLabel);
 }
 
 function GetSelectedFilters() {

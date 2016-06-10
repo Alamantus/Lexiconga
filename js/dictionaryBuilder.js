@@ -68,7 +68,7 @@ function AddWord() {
                 }
             }
         } else {
-            currentDictionary.words.push({name: word, pronunciation: pronunciation, partOfSpeech: partOfSpeech, simpleDefinition: simpleDefinition, longDefinition: longDefinition, wordId: currentDictionary.nextWordId++});
+            currentDictionary.words.push({name: word, pronunciation: pronunciation, partOfSpeech: ((partOfSpeech.length > 0) ? partOfSpeech : " "), simpleDefinition: simpleDefinition, longDefinition: longDefinition, wordId: currentDictionary.nextWordId++});
             FocusAfterAddingNewWord();
             NewWordNotification(word);
             SaveAndUpdateDictionary(false);
@@ -103,7 +103,7 @@ function ShowWordEditForm(index) {
                     <input type="text" id="pronunciation' + indexString + '" value="' + htmlEntitiesParse(word.pronunciation) + '" onkeydown="SubmitWordOnCtrlEnter(this)" />\
                 </label>\
                 <label><span>Part of Speech</span>\
-                    <select id="partOfSpeech' + indexString + '" value="' + htmlEntitiesParse(word.partOfSpeech) + '" onkeydown="SubmitWordOnCtrlEnter(this)"></select>\
+                    <select id="partOfSpeech' + indexString + '" onkeydown="SubmitWordOnCtrlEnter(this)"></select>\
                 </label>\
                 <label><span>Equivalent Word(s)</span>\
                     <input type="text" id="simpleDefinition' + indexString + '" value="' + htmlEntitiesParse(word.simpleDefinition) + '" onkeydown="SubmitWordOnCtrlEnter(this)" />\
@@ -121,6 +121,7 @@ function ShowWordEditForm(index) {
     document.getElementById("entry" + indexString).innerHTML = editForm;
 
     SetPartsOfSpeech("partOfSpeech" + indexString);
+    document.getElementById("partOfSpeech" + indexString).value = htmlEntitiesParse(word.partOfSpeech);
 }
 
 function CancelEditForm(index) {
@@ -160,7 +161,7 @@ function EditWord(indexString) {
 function UpdateWord(wordIndex, word, pronunciation, partOfSpeech, simpleDefinition, longDefinition) {
     currentDictionary.words[wordIndex].name = word;
     currentDictionary.words[wordIndex].pronunciation = pronunciation;
-    currentDictionary.words[wordIndex].partOfSpeech = partOfSpeech;
+    currentDictionary.words[wordIndex].partOfSpeech = ((partOfSpeech.length > 0) ? partOfSpeech : " ");
     currentDictionary.words[wordIndex].simpleDefinition = simpleDefinition;
     currentDictionary.words[wordIndex].longDefinition = longDefinition;
 
@@ -690,13 +691,17 @@ function ImportWords() {
                 header: true,
                 step: function(row, parser) {
                     currentRow++;
-                    if (row.errors.length == 0) {
-                        currentDictionary.words.push({name: htmlEntities(row.data[0]["word"]).trim(), pronunciation: htmlEntities(row.data[0]["pronunciation"]).trim(), partOfSpeech: htmlEntities(row.data[0]["part of speech"]).trim(), simpleDefinition: htmlEntities(row.data[0]["equivalent"]).trim(), longDefinition: htmlEntities(row.data[0]["explanation"]).trim(), wordId: currentDictionary.nextWordId++});
+                    // If there are no errors OR the word and either equivalent or explanation contain data, then import it.
+                    if ((row.data[0].word.trim().length > 0 && (row.data[0].equivalent.trim().length > 0 || row.data[0].explanation.trim().length > 0)) || row.errors.length == 0) {
+                        currentDictionary.words.push({name: htmlEntities(row.data[0]["word"]).trim(), pronunciation: htmlEntities(row.data[0]["pronunciation"]).trim(), partOfSpeech: ((htmlEntities(row.data[0]["part of speech"]).trim().length > 0) ? htmlEntities(row.data[0]["part of speech"]).trim() : " "), simpleDefinition: htmlEntities(row.data[0]["equivalent"]).trim(), longDefinition: htmlEntities(row.data[0]["explanation"]).trim(), wordId: currentDictionary.nextWordId++});
                         resultsArea.innerHTML += "<p>Imported \"" + htmlEntitiesParse(htmlEntities(row.data[0]["word"])).trim() + "\" successfully</p>";
                         rowsImported++;
                     } else {
-                        for (var i = 0; i < row.errors.length; i++) {
-                            resultsArea.innerHTML += "<p>Error on record #" + currentRow.toString() + ": " + row.errors[i].message + "</p>";
+                        // If it's not just an empty line, give an error.
+                        if (row.data[0].word.trim().length > 0) {
+                            for (var i = 0; i < row.errors.length; i++) {
+                                resultsArea.innerHTML += "<p>Error on record #" + currentRow.toString() + ": " + row.errors[i].message + "</p>";
+                            }
                         }
                     }
                     // Scroll to the bottom.

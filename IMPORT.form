@@ -1,15 +1,17 @@
-<div class="settingsCol">
-    <h2>Import</h2>
-    <div id="importOptions">
+<h2>Import</h2>
+<div id="importOptions">
+    <div class="settingsCol">
         <label>
             <span>Word List</span>
         </label>
-            <p style="font-size:12px;">This process imports words in a CSV format to the currently loaded dictionary. <small>(You can save an Excel file as a CSV)</small></p>
-            <p style="font-size:12px;">The CSV file must have a header line in this order: word,pronunciation,part of speech,equivalent,explanation. Your words must be formatted in the appropriate order.</p>
-            <p style="font-size:12px;">Make sure the parts of speech for each word correspond to your dictionary's parts of speech or else it will be lost if you edit the word. If a part of speech is left blank, you can find the blanks using the "Blank" option in the Filter.</p>
-            <p style="font-size:12px;">At a minimum, all of your words <em>must</em> have the "word" field <em>and</em> either the "equivalent" or "explanation" field filled out in the CSV file.</p>
-            <input type="file" id="importWordsCSV" />
-            <button type="button" onclick="ImportWords(); return false;">Import Words</button>
+        <p style="font-size:12px;">This process imports words in a CSV format to the currently loaded dictionary. <small>(Note: You can save an Excel file as a CSV)</small></p>
+        <p style="font-size:12px;">The CSV file must have a header line in this order: word,pronunciation,part of speech,equivalent,explanation. Your word data must be in the appropriate order according to the headers. You can use <span class="clickable inline-button" onclick="download('import_template.csv','word,pronunciation,part of speech,equivalent,explanation\n');">this CSV as a template</span> if you need help.</p>
+        <p style="font-size:12px;">Make sure the parts of speech for each word correspond to your dictionary's parts of speech or else you won't be able to find it using a filter. If a part of speech is left blank, you can find the blanks using the "Blank" option in the Filter so you can clean up.</p>
+        <p style="font-size:12px;">At a minimum, all of your words <em>must</em> have the "word" field <em>and</em> either the "equivalent" or "explanation" field filled out in the CSV file.</p>
+        <input type="file" id="importWordsCSV" />
+        <button type="button" onclick="ImportWords(); return false;">Import Words</button>
+    </div>
+    <div class="settingsCol">
         <label>
             <span>Full Dictionary</span>
             <p style="font-size:12px;">This process imports a full dictionary previously exported from Lexiconga in a .dict format.</p>
