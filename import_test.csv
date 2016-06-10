@@ -1,4 +1,6 @@
-word,pronunciation,part of speech,equivalent,explanation
-"test","[tehst]","noun","an example, per se!","no explanation required."
-"test","[tehst]","verb","to test, i.e. to try to see if something works","no explanation required."
-"tested","[tehst-ehd]","adjective","of or relating to an example","no explanation required."
+"word","pronunciation","part of speech","equivalent","explanation"
+"test","[tehst]","Noun","an example, per se!","no explanation required."
+test,"[tehst]","Verb","to test, i.e. to ""try to see"" if something works","no explanation required."
+"tested","[tehst-ehd]",Adjective,"of or relating to an example","no explanation required."
+
+"testable","[tehst-uh-bull]","Adjective","Able to be have ""tests"" run on","explanation"

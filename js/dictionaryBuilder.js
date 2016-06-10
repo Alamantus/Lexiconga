@@ -683,19 +683,31 @@ function ImportWords() {
             var resultsArea = document.getElementById("importOptions");
             resultsArea.innerHTML = "";
 
+            var currentRow = 0; // Because of the header, the first row of data is always on line 2.
+            var rowsImported = 0;
+
             Papa.parse(file, {
                 header: true,
                 step: function(row, parser) {
+                    currentRow++;
                     if (row.errors.length == 0) {
-                        currentDictionary.words.push({name: row.data["word"], pronunciation: row.data["pronunciation"], partOfSpeech: row.data["part of speech"], simpleDefinition: row.data["equivalent"], longDefinition: row.data["explanation"], wordId: currentDictionary.nextWordId++});
-                        resultsArea.innerHTML += "<p>Imported \"" + row.data["word"] + " successfully</p>";
+                        currentDictionary.words.push({name: htmlEntities(row.data[0]["word"]).trim(), pronunciation: htmlEntities(row.data[0]["pronunciation"]).trim(), partOfSpeech: htmlEntities(row.data[0]["part of speech"]).trim(), simpleDefinition: htmlEntities(row.data[0]["equivalent"]).trim(), longDefinition: htmlEntities(row.data[0]["explanation"]).trim(), wordId: currentDictionary.nextWordId++});
+                        resultsArea.innerHTML += "<p>Imported \"" + htmlEntitiesParse(htmlEntities(row.data[0]["word"])).trim() + "\" successfully</p>";
+                        rowsImported++;
                     } else {
-                        resultsArea.innerHTML += "<p>Error on row " + row.error.row + ": " + row.error.message + "</p>";
+                        for (var i = 0; i < row.errors.length; i++) {
+                            resultsArea.innerHTML += "<p>Error on record #" + currentRow.toString() + ": " + row.errors[i].message + "</p>";
+                        }
                     }
+                    // Scroll to the bottom.
+                    document.getElementById("importOptions").scrollTop = document.getElementById("importOptions").scrollHeight;
                 },
                 complete: function(results) {
                     SaveAndUpdateDictionary();
-                    resultsArea.innerHTML += "<p>The file has finished importing.</p>";
+                    resultsArea.innerHTML += "<p>The file has finished importing " + rowsImported.toString() + " words.</p>";
+                    // Scroll to the bottom.
+                    document.getElementById("importOptions").scrollTop = document.getElementById("importOptions").scrollHeight;
+                    document.getElementById("numberOfWordsInDictionary").innerHTML = currentDictionary.words.length.toString();
                 }
             });
         } else {

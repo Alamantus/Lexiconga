@@ -349,10 +349,10 @@ if ($is_viewing) {
     
     <!-- Markdown Parser -->
     <script src="js/marked.js"></script>
-    <!-- JSON Search -->
-    <script src="js/defiant.js"></script>
     <!-- CSV Parser -->
     <script src="js/papaparse.js"></script>
+    <!-- JSON Search -->
+    <script src="js/defiant.js"></script>
     <!-- Diacritics Removal for Exports -->
     <script src="js/removeDiacritics.js"></script>
     <!-- Helper Functions -->
