@@ -588,9 +588,7 @@ function SetPartsOfSpeech (selectId) {
     var wordFiltersSelected = GetSelectedFilters();
 
     // Clear parts of speech.
-    for (var i = partsOfSpeechSelect.options.length; i > 0; i--) {
-        partsOfSpeechSelect.removeChild(partsOfSpeechSelect.options[i]);
-    }
+    partsOfSpeechSelect.innerHTML = "";
     wordFilterOptions.innerHTML = "";
 
     // Insert blank part of speech as first dropdown option.
