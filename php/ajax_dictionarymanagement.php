@@ -57,7 +57,7 @@ function Get_Dictionaries($return_list = true) {
 function Load_Current_Dictionary() {
     if ($_SESSION['user'] > 0) {
         $query = "SELECT `d`.`id`, `d`.`name`, `d`.`description`, `u`.`public_name`, `d`.`words`, `d`.`next_word_id`, `d`.`allow_duplicates`, `d`.`case_sensitive`, `d`.`parts_of_speech`, `d`.`sort_by_equivalent`, `d`.`is_complete`, `d`.`is_public` ";
-        $query .= "FROM `dictionaries` AS `d` LEFT JOIN `users` AS `u` ON `user`=`u`.`id` WHERE `is_current`=1 AND `user`=" . $_SESSION['user'] . ";";
+        $query .= "FROM `dictionaries` AS `d` LEFT JOIN `users` AS `u` ON `user`=`u`.`id` WHERE `d`.`id`=`u`.`current_dictionary` AND `user`=" . $_SESSION['user'] . ";";
         $dictionary = query($query);
         
         if ($dictionary) {
@@ -103,8 +103,8 @@ function Save_Current_DictionaryAsNew() {
         $dbconnection->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
         $dbconnection->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 
-        $query = "INSERT INTO `dictionaries`(`user`, `is_current`, `name`, `description`, `words`, `next_word_id`, `allow_duplicates`, `case_sensitive`, `parts_of_speech`, `sort_by_equivalent`, `is_complete`, `is_public`) ";
-        $query .= "VALUES (" . $_SESSION['user'] . ",0,'" . $_POST['name'] . "','" . $_POST['description'] . "','" . $_POST['words'] . "'," . $_POST['nextwordid'] . "," . $_POST['allowduplicates'] . "," . $_POST['casesensitive'] . ",'" . $_POST['partsofspeech'] . "'," . $_POST['sortbyequivalent'] . "," . $_POST['iscomplete'] . "," . $_POST['ispublic'] . ")";
+        $query = "INSERT INTO `dictionaries`(`user`, `name`, `description`, `words`, `next_word_id`, `allow_duplicates`, `case_sensitive`, `parts_of_speech`, `sort_by_equivalent`, `is_complete`, `is_public`) ";
+        $query .= "VALUES (" . $_SESSION['user'] . ",'" . $_POST['name'] . "','" . $_POST['description'] . "','" . $_POST['words'] . "'," . $_POST['nextwordid'] . "," . $_POST['allowduplicates'] . "," . $_POST['casesensitive'] . ",'" . $_POST['partsofspeech'] . "'," . $_POST['sortbyequivalent'] . "," . $_POST['iscomplete'] . "," . $_POST['ispublic'] . ")";
         
         try {
             $update = $dbconnection->prepare($query);
@@ -185,8 +185,7 @@ function Switch_Current_Dictionary($newdictionaryid, $returndictionary = true) {
         if (isset($newdictionaryid)) {
             if (in_array($newdictionaryid, $_SESSION['dictionaries'])) {
                 //Clear is_current from all user's dictionaries and then update the one they chose, only if the chosen dictionary is valid.
-                $query = "UPDATE `dictionaries` SET `is_current`=0 WHERE `user`=" . $_SESSION['user'] . ";";
-                $query .= "UPDATE `dictionaries` SET `is_current`=1 WHERE `id`=" . $newdictionaryid . " AND `user`=" . $_SESSION['user'] . ";";
+                $query .= "UPDATE `users` SET `current_dictionary`=" . $newdictionaryid . " WHERE `id`=" . $_SESSION['user'] . ";";
                 $update = query($query);
                 
                 if ($update) {
