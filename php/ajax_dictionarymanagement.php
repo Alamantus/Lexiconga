@@ -239,7 +239,7 @@ function Save_New_Word($multiple = false) {
 
 function Update_Word() {
     if (isset($_SESSION['dictionary'])) {
-        $worddata = json_decode(file_get_contents("php://input"));
+        $worddata = json_decode(file_get_contents("php://input"), true);
 
         $query = "UPDATE `words` SET ";
         

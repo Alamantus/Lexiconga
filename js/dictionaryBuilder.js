@@ -45,7 +45,7 @@ function AddWord() {
         if (wordIndex >= 0) {
             if (WordAtIndexWasChanged(wordIndex, word, pronunciation, partOfSpeech, simpleDefinition, longDefinition)) {
                 document.getElementById("newWordButtonArea").style.display = "none";
-                DisableForm();
+                DisableForm(wordIndex.toString());
                 updateConflictArea.style.display = "block";
                 
                 var updateConflictText = "<span id='updateConflictMessage'>\"" + word + "\" is already in the dictionary";
@@ -58,7 +58,7 @@ function AddWord() {
                 updateConflictText += '<button type="button" id="updateConfirmButton" \
                                                   onclick="UpdateWord(' + wordIndex + ', \'' + htmlEntities(word) + '\', \'' + htmlEntities(pronunciation) + '\', \'' + htmlEntities(partOfSpeech) + '\', \'' + htmlEntities(simpleDefinition) + '\', \'' + htmlEntities(longDefinition) + '\'); \
                                                   return false;">Yes, Update it</button>';
-                updateConflictText += ' <button type="button" id="updateCancelButton" onclick="CloseUpdateConflictArea(\'newWordButtonArea\', \'updateConflict\'); return false;">No, Leave it</button>';
+                updateConflictText += ' <button type="button" id="updateCancelButton" onclick="CloseUpdateConflictArea(\'\'); return false;">No, Leave it</button>';
                 
                 updateConflictArea.innerHTML = updateConflictText;
             } else {
@@ -135,20 +135,20 @@ function EditWord(indexString) {
     var partOfSpeech = htmlEntities(document.getElementById("partOfSpeech" + indexString).value).trim();
     var simpleDefinition = htmlEntities(document.getElementById("simpleDefinition" + indexString).value).trim();
     var longDefinition = htmlEntities(document.getElementById("longDefinition" + indexString).value);
-    // var editIndex = htmlEntities(document.getElementById("editIndex").value);
+
     var errorMessageArea = document.getElementById("errorMessage" + indexString);
     var errorMessage = "";
     var updateConflictArea = document.getElementById("updateConflict" + indexString);
 
     if (WordAtIndexWasChanged(indexString, word, pronunciation, partOfSpeech, simpleDefinition, longDefinition)) {
         document.getElementById("editWordButtonArea" + indexString).style.display = "none";
-        DisableForm();
+        DisableForm(indexString);
         updateConflictArea.style.display = "block";
-        updateConflictArea.innerHTML = "<span id='updateConflictMessage" + indexString + "'>Do you really want to change the word \"" + currentDictionary.words[parseInt(indexString)].name + "\" to what you have set above?</span>";
+        updateConflictArea.innerHTML = "<span id='updateConflictMessage" + indexString + "'>Do you really want to change the word \"" + currentDictionary.words[parseInt(indexString)].name + "\" to what you have set above?</span><br>";
         updateConflictArea.innerHTML += '<button type="button" id="updateConfirmButton' + indexString + '" \
                                           onclick="UpdateWord(' + indexString + ', \'' + htmlEntities(word) + '\', \'' + htmlEntities(pronunciation) + '\', \'' + htmlEntities(partOfSpeech) + '\', \'' + htmlEntities(simpleDefinition) + '\', \'' + htmlEntities(longDefinition) + '\'); \
                                           return false;">Yes, Update it</button>';
-        updateConflictArea.innerHTML += '<button type="button" id="updateCancelButton' + indexString + '" onclick="CloseUpdateConflictArea(\'editWordButtonArea' + indexString + '\',\'updateConflict' + indexString + '\'); return false;">No, Leave it</button>';
+        updateConflictArea.innerHTML += '<button type="button" id="updateCancelButton' + indexString + '" onclick="CloseUpdateConflictArea(\'' + indexString + '\'); return false;">No, Leave it</button>';
     } else {
         errorMessage = "No change has been made to \"" + word + "\"";
         if (currentDictionary.words[parseInt(indexString)].name != word) {
@@ -428,13 +428,12 @@ function SaveAndUpdateWords(action, wordIndex) {
     sendWords.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
     sendWords.onreadystatechange = function() {
         if (sendWords.readyState == 4 && sendWords.status == 200) {
-            if (sendWords.responseText == "sent successfully") {
+            if (sendWords.responseText == "updated successfully") {
+                // If updated successfully, then reload the dictionary from server.
                 console.log(sendWords.responseText);
                 LoadUserDictionaries();
                 ProcessLoad();
-            } else if (isNaN(parseInt(sendWords.responseText))) {
-                console.log(sendWords.responseText);
-            } else {    // It will only be a number if it is a new dictionary.
+            } else {    // Otherwise it is creating (a) new word(s).
                 currentDictionary.externalID = parseInt(sendWords.responseText);
                 LoadUserDictionaries();
                 ProcessLoad();
@@ -459,7 +458,7 @@ function SaveAndUpdateDictionary(keepFormContents) {
     if (!keepFormContents) {
         ClearForm();
     }
-    CloseUpdateConflictArea('newWordButtonArea', 'updateConflict');
+    CloseUpdateConflictArea('');
 }
 
 function SaveDictionary(sendToDatabase) {

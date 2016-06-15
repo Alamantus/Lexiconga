@@ -370,31 +370,30 @@ function LockWordForm() {
     wordForm.removeAttribute('style');
 }
 
-function CloseUpdateConflictArea(displayId, hideId) {
-    displayId = (typeof displayId !== 'undefined' && displayId != null) ? displayId : false;
-    if (displayId != false) {
-        document.getElementById(displayId).style.display = "block";
-    }
-    document.getElementById(hideId).style.display = "none";
-    EnableForm();
+function CloseUpdateConflictArea(wordIndexString) {// displayId, hideId) {
+    // displayId = (typeof displayId !== 'undefined' && displayId != null) ? displayId : false;
+    // if (displayId != false) {
+    document.getElementById("editWordButtonArea" + wordIndexString).style.display = "block";
+    // }
+    document.getElementById("updateConflict" + wordIndexString).style.display = "none";
+    EnableForm(wordIndexString);
 }
 
-function DisableForm() {
-    document.getElementById("word").disabled = true;
-    document.getElementById("pronunciation").disabled = true;
-    document.getElementById("partOfSpeech").disabled = true;
-    document.getElementById("simpleDefinition").disabled = true;
-    document.getElementById("longDefinition").disabled = true;
-    document.getElementById("editIndex").disabled = true;
+function DisableForm(wordIndexString) {
+    document.getElementById("word" + wordIndexString).disabled = true;
+    document.getElementById("pronunciation" + wordIndexString).disabled = true;
+    document.getElementById("partOfSpeech" + wordIndexString).disabled = true;
+    document.getElementById("simpleDefinition" + wordIndexString).disabled = true;
+    document.getElementById("longDefinition" + wordIndexString).disabled = true;
 }
 
-function EnableForm() {
-    document.getElementById("word").disabled = false;
-    document.getElementById("pronunciation").disabled = false;
-    document.getElementById("partOfSpeech").disabled = false;
-    document.getElementById("simpleDefinition").disabled = false;
-    document.getElementById("longDefinition").disabled = false;
-    document.getElementById("editIndex").disabled = false;
+function EnableForm(wordIndexString) {
+    document.getElementById("word" + wordIndexString).disabled = false;
+    document.getElementById("pronunciation" + wordIndexString).disabled = false;
+    document.getElementById("partOfSpeech" + wordIndexString).disabled = false;
+    document.getElementById("simpleDefinition" + wordIndexString).disabled = false;
+    document.getElementById("longDefinition" + wordIndexString).disabled = false;
+    // document.getElementById("editIndex").disabled = false;
 }
 
 function ClearForm() {
@@ -410,7 +409,7 @@ function ClearForm() {
         document.getElementById("editWordButtonArea").style.display = "none";
         document.getElementById("errorMessage").innerHTML = "";
         document.getElementById("updateConflict").style.display = "none";
-        EnableForm();
+        EnableForm("");
     }
 }
 
