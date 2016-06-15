@@ -69,6 +69,7 @@ function AddWord() {
             }
         } else {
             currentDictionary.words.push({name: word, pronunciation: pronunciation, partOfSpeech: ((partOfSpeech.length > 0) ? partOfSpeech : " "), simpleDefinition: simpleDefinition, longDefinition: longDefinition, wordId: currentDictionary.nextWordId++});
+            SaveAndUpdateWords("new", wordIndex);
             FocusAfterAddingNewWord();
             NewWordNotification(word);
             SaveAndUpdateDictionary(false);
@@ -165,7 +166,8 @@ function UpdateWord(wordIndex, word, pronunciation, partOfSpeech, simpleDefiniti
     currentDictionary.words[wordIndex].simpleDefinition = simpleDefinition;
     currentDictionary.words[wordIndex].longDefinition = longDefinition;
 
-    SaveAndUpdateDictionary();
+    SaveAndUpdateWords("update", wordIndex);
+    // SaveAndUpdateDictionary();
 
     window.scroll(savedScroll.x, savedScroll.y);
 
@@ -408,6 +410,44 @@ function ResetDictionaryToDefault() {
     currentDictionary = JSON.parse(defaultDictionaryJSON);
 }
 
+function SaveAndUpdateWords(action, wordIndex) {
+    var dataToSend = "";
+    if (action == "all") {
+        // For dictionaries not already in the db. Send all the words to database.
+        dataToSend = JSON.stringify(currentDictionary.words);
+    } else if (action == "update") {
+        // Only send the specified word to update.
+        dataToSend = JSON.stringify(currentDictionary.words[wordIndex]);
+    } else if (action == "new") {
+        // Send the last word pushed to the words array before it's sorted.
+        dataToSend = JSON.stringify(currentDictionary.words[currentDictionary.words.length - 1]);
+    }
+
+    var sendWords = new XMLHttpRequest();
+    sendWords.open('POST', "php/ajax_dictionarymanagement.php?action=word" + action);
+    sendWords.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
+    sendWords.onreadystatechange = function() {
+        if (sendWords.readyState == 4 && sendWords.status == 200) {
+            if (sendWords.responseText == "sent successfully") {
+                console.log(sendWords.responseText);
+                LoadUserDictionaries();
+                ProcessLoad();
+            } else if (isNaN(parseInt(sendWords.responseText))) {
+                console.log(sendWords.responseText);
+            } else {    // It will only be a number if it is a new dictionary.
+                currentDictionary.externalID = parseInt(sendWords.responseText);
+                LoadUserDictionaries();
+                ProcessLoad();
+                console.log("saved successfully");
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+    sendWords.send(dataToSend);
+}
+
 function SaveAndUpdateDictionary(keepFormContents) {
     if (!currentDictionary.settings.sortByEquivalent) {
         currentDictionary.words.sort(dynamicSort(['name', 'partOfSpeech']));
@@ -422,28 +462,26 @@ function SaveAndUpdateDictionary(keepFormContents) {
     CloseUpdateConflictArea('newWordButtonArea', 'updateConflict');
 }
 
-function SaveDictionary(sendToDatabase, sendWords) {
+function SaveDictionary(sendToDatabase) {
     localStorage.setItem('dictionary', JSON.stringify(currentDictionary));
     
     //Always save local copy of current dictionary, but if logged in also send to database.
     if (sendToDatabase) {
-        sendWords = (typeof sendWords !== 'undefined') ? sendWords : false;
-        SendDictionary(sendWords);
+        SendDictionary();
     }
     
     SavePreviousDictionary();
 }
 
-function SendDictionary(sendWords) {
-    sendWords = (typeof sendWords !== 'undefined') ? sendWords : false;
+function SendDictionary() {
     var action = "";
     var postString = "";
     if (currentDictionary.externalID > 0) {
         action = "update";
-        postString = DataToSend(sendWords);
+        postString = DataToSend(false);
     } else {
         action = "new";
-        postString = DataToSend(true, true);
+        postString = DataToSend(true);
     }
 
     var sendDictionary = new XMLHttpRequest();
@@ -459,6 +497,7 @@ function SendDictionary(sendWords) {
                 console.log(sendDictionary.responseText);
             } else {    // It will only be a number if it is a new dictionary.
                 currentDictionary.externalID = parseInt(sendDictionary.responseText);
+                SaveAndUpdateWords("all");
                 LoadUserDictionaries();
                 ProcessLoad();
                 console.log("saved successfully");
@@ -471,7 +510,7 @@ function SendDictionary(sendWords) {
     sendDictionary.send(postString);
 }
 
-function DataToSend(doSendWords, sendAll) {
+function DataToSend(sendAll) {
     sendAll = (typeof sendAll !== 'undefined' && sendAll != null) ? sendAll : false;
     var data = "";
     if (currentDictionary.externalID == 0) {
@@ -484,9 +523,6 @@ function DataToSend(doSendWords, sendAll) {
         }
         if (sendAll || currentDictionary.description != previousDictionary.description) {
             data += ((data=="") ? "" : "&") + "description=" + encodeURIComponent(currentDictionary.description);
-        }
-        if (sendAll || doSendWords) {
-            data += ((data=="") ? "" : "&") + "words=" + encodeURIComponent(JSON.stringify(currentDictionary.words));
         }
         if (sendAll || currentDictionary.nextWordId != previousDictionary.nextWordId) {
             data += ((data=="") ? "" : "&") + "nextwordid=" + currentDictionary.nextWordId;
