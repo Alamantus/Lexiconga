@@ -45,7 +45,7 @@ function AddWord() {
         if (wordIndex >= 0) {
             if (WordAtIndexWasChanged(wordIndex, word, pronunciation, partOfSpeech, simpleDefinition, longDefinition)) {
                 document.getElementById("newWordButtonArea").style.display = "none";
-                DisableForm(wordIndex.toString());
+                DisableForm('');
                 updateConflictArea.style.display = "block";
                 
                 var updateConflictText = "<span id='updateConflictMessage'>\"" + word + "\" is already in the dictionary";
@@ -69,10 +69,9 @@ function AddWord() {
             }
         } else {
             currentDictionary.words.push({name: word, pronunciation: pronunciation, partOfSpeech: ((partOfSpeech.length > 0) ? partOfSpeech : " "), simpleDefinition: simpleDefinition, longDefinition: longDefinition, wordId: currentDictionary.nextWordId++});
-            SaveAndUpdateWords("new", wordIndex);
+            SaveAndUpdateWords("new");
             FocusAfterAddingNewWord();
             NewWordNotification(word);
-            SaveAndUpdateDictionary(false);
         }
 
         errorMessageArea.innerHTML = "";
@@ -167,7 +166,7 @@ function UpdateWord(wordIndex, word, pronunciation, partOfSpeech, simpleDefiniti
     currentDictionary.words[wordIndex].longDefinition = longDefinition;
 
     SaveAndUpdateWords("update", wordIndex);
-    // SaveAndUpdateDictionary();
+    ClearForm();
 
     window.scroll(savedScroll.x, savedScroll.y);
 
@@ -177,12 +176,27 @@ function UpdateWord(wordIndex, word, pronunciation, partOfSpeech, simpleDefiniti
 }
 
 function DeleteWord(index) {
-    if (document.getElementById("editIndex").value != "")
-        ClearForm();
+    var deleteWord = new XMLHttpRequest();
+    deleteWord.open('POST', "php/ajax_dictionarymanagement.php?action=worddelete");
+    deleteWord.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    deleteWord.onreadystatechange = function() {
+        if (deleteWord.readyState == 4 && deleteWord.status == 200) {
+            if (deleteWord.responseText == "deleted successfully") {
+                // If updated successfully, then reload the dictionary from server.
+                if (document.getElementById("editIndex").value != "")
+                    ClearForm();
 
-    currentDictionary.words.splice(index, 1);
-    
-    SaveAndUpdateDictionary(true);
+                currentDictionary.words.splice(index, 1);
+                
+                SaveAndUpdateDictionary(true);
+            }
+            console.log(deleteWord.responseText);
+            return true;
+        } else {
+            return false;
+        }
+    }
+    deleteWord.send("word=" + currentDictionary.words[index].wordId.toString());
 }
 
 function ShowDictionary() {
@@ -373,6 +387,8 @@ function CreateNewDictionary() {
     SaveAndUpdateDictionary(false);
     SetPartsOfSpeech();
     HideSettings();
+    ShowSettings();
+    document.getElementById("dictionaryNameEdit").focus();
 }
 
 function DeleteCurrentDictionary() {
@@ -424,21 +440,17 @@ function SaveAndUpdateWords(action, wordIndex) {
     }
 
     var sendWords = new XMLHttpRequest();
-    sendWords.open('POST', "php/ajax_dictionarymanagement.php?action=word" + action);
+    sendWords.open('POST', "php/ajax_dictionarymanagement.php?action=word" + action + "&nextwordid=" + currentDictionary.nextWordId.toString());
     sendWords.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
     sendWords.onreadystatechange = function() {
         if (sendWords.readyState == 4 && sendWords.status == 200) {
-            if (sendWords.responseText == "updated successfully") {
-                // If updated successfully, then reload the dictionary from server.
-                console.log(sendWords.responseText);
-                LoadUserDictionaries();
-                ProcessLoad();
-            } else {    // Otherwise it is creating (a) new word(s).
-                currentDictionary.externalID = parseInt(sendWords.responseText);
-                LoadUserDictionaries();
-                ProcessLoad();
-                console.log("saved successfully");
+            if (!currentDictionary.settings.sortByEquivalent) {
+                currentDictionary.words.sort(dynamicSort(['name', 'partOfSpeech']));
+            } else {
+                currentDictionary.words.sort(dynamicSort(['simpleDefinition', 'partOfSpeech']));
             }
+            ProcessLoad();
+            console.log(sendWords.responseText);
             return true;
         } else {
             return false;
@@ -448,12 +460,12 @@ function SaveAndUpdateWords(action, wordIndex) {
 }
 
 function SaveAndUpdateDictionary(keepFormContents) {
-    if (!currentDictionary.settings.sortByEquivalent) {
-        currentDictionary.words.sort(dynamicSort(['name', 'partOfSpeech']));
-    } else {
-        currentDictionary.words.sort(dynamicSort(['simpleDefinition', 'partOfSpeech']));
-    }
-    SaveDictionary(true, true);
+    // if (!currentDictionary.settings.sortByEquivalent) {
+    //     currentDictionary.words.sort(dynamicSort(['name', 'partOfSpeech']));
+    // } else {
+    //     currentDictionary.words.sort(dynamicSort(['simpleDefinition', 'partOfSpeech']));
+    // }
+    SaveDictionary(true);
     ShowDictionary();
     if (!keepFormContents) {
         ClearForm();
@@ -462,12 +474,12 @@ function SaveAndUpdateDictionary(keepFormContents) {
 }
 
 function SaveDictionary(sendToDatabase) {
-    localStorage.setItem('dictionary', JSON.stringify(currentDictionary));
-    
     //Always save local copy of current dictionary, but if logged in also send to database.
     if (sendToDatabase) {
         SendDictionary();
     }
+    
+    localStorage.setItem('dictionary', JSON.stringify(currentDictionary));
     
     SavePreviousDictionary();
 }
@@ -496,10 +508,12 @@ function SendDictionary() {
                 console.log(sendDictionary.responseText);
             } else {    // It will only be a number if it is a new dictionary.
                 currentDictionary.externalID = parseInt(sendDictionary.responseText);
-                SaveAndUpdateWords("all");
+                if (currentDictionary.words.length > 0) {
+                    SaveAndUpdateWords("all");
+                }
                 LoadUserDictionaries();
                 ProcessLoad();
-                console.log("saved successfully");
+                console.log("saved " + parseInt(sendDictionary.responseText).toString() + " successfully");
             }
             return true;
         } else {
@@ -563,7 +577,7 @@ function LoadDictionary() {
                 console.log(loadDictionary.responseText);
             } else {
                 currentDictionary = JSON.parse(loadDictionary.responseText);
-                SaveDictionary(false, false);
+                SaveDictionary(false);
             }
         }
         ProcessLoad();
@@ -587,7 +601,7 @@ function ChangeDictionary(userDictionariesSelect) {
                     console.log(changeDictionaryRequest.responseText);
                 } else {
                     currentDictionary = JSON.parse(changeDictionaryRequest.responseText);
-                    SaveDictionary(false, false);
+                    SaveDictionary(false);
                     ProcessLoad();
                     LoadUserDictionaries();
                     HideSettings();
@@ -677,7 +691,7 @@ function ImportDictionary() {
                         currentDictionary = JSON.parse(reader.result);
                         currentDictionary.externalID = 0;   // Reset external id for imported dictionary.
                         currentDictionary.settings.isPublic = false;   // Reset public setting for imported dictionary.
-                        SaveDictionary(true, true);
+                        SaveDictionary(true);
                         ProcessLoad();
                         HideSettings();
                         document.getElementById("importFile").value = "";

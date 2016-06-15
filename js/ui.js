@@ -373,7 +373,11 @@ function LockWordForm() {
 function CloseUpdateConflictArea(wordIndexString) {// displayId, hideId) {
     // displayId = (typeof displayId !== 'undefined' && displayId != null) ? displayId : false;
     // if (displayId != false) {
-    document.getElementById("editWordButtonArea" + wordIndexString).style.display = "block";
+    if (wordIndexString == "") {
+        document.getElementById("newWordButtonArea").style.display = "block";
+    } else {
+        document.getElementById("editWordButtonArea" + wordIndexString).style.display = "block";
+    }
     // }
     document.getElementById("updateConflict" + wordIndexString).style.display = "none";
     EnableForm(wordIndexString);
