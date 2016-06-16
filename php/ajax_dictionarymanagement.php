@@ -214,8 +214,8 @@ function Save_New_Word($multiple = false) {
     $dbconnection->setAttribute(PDO::ATTR_EMULATE_PREPARES, true);
     $dbconnection->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 
-    $query = "UPDATE `dictionaries` SET `next_word_id`=" . $_GET['nextwordid'] . " WHERE `id`=" . $_SESSION['dictionary'] . "; ";
-    $query .= "INSERT INTO `words`(`dictionary`, `word_id`, `name`, `pronunciation`, `part_of_speech`, `simple_definition`, `long_definition`) ";
+    $query = "UPDATE `dictionaries` SET `next_word_id`=" . $_GET['nextwordid'] . ", `last_updated`='" . date("Y-m-d H:i:s") . "' WHERE `id`=" . $_SESSION['dictionary'] . "; ";
+    $query .= "INSERT IGNORE INTO `words`(`dictionary`, `word_id`, `name`, `pronunciation`, `part_of_speech`, `simple_definition`, `long_definition`) ";
     $query .= "VALUES ";
     if ($multiple) {
         for ($i = 0; $i < count($worddata); $i++) {

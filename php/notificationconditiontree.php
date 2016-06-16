@@ -103,6 +103,7 @@ elseif (isset($_GET['login']) && $current_user <= 0) {
             if (EmailExists($_POST['email'])) {
                 if (Validate_Login($_POST['email'], $_POST['password'])) {
                     $_SESSION['user'] = Get_User_Id($_POST['email']);
+                    query("UPDATE `users` SET `last_login`='" . date("Y-m-d H:i:s") . "' WHERE `id`=" . $_SESSION['user'] . ";");
                 } else {
                     $_SESSION['current_status'] = "loginfailed";
                 }

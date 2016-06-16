@@ -166,7 +166,6 @@ function UpdateWord(wordIndex, word, pronunciation, partOfSpeech, simpleDefiniti
     currentDictionary.words[wordIndex].longDefinition = longDefinition;
 
     SaveAndUpdateWords("update", wordIndex);
-    ClearForm();
 
     window.scroll(savedScroll.x, savedScroll.y);
 
@@ -181,14 +180,14 @@ function DeleteWord(index) {
     deleteWord.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     deleteWord.onreadystatechange = function() {
         if (deleteWord.readyState == 4 && deleteWord.status == 200) {
-            if (deleteWord.responseText == "deleted successfully") {
+            if (deleteWord.responseText == "deleted successfully" || deleteWord.responseText == "not signed in") {
                 // If updated successfully, then reload the dictionary from server.
-                if (document.getElementById("editIndex").value != "")
-                    ClearForm();
+                // if (document.getElementById("editIndex").value != "")
+                //     ClearForm();
 
                 currentDictionary.words.splice(index, 1);
                 
-                SaveAndUpdateDictionary(true);
+                SaveWords(false);
             }
             console.log(deleteWord.responseText);
             return true;
@@ -444,12 +443,8 @@ function SaveAndUpdateWords(action, wordIndex) {
     sendWords.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
     sendWords.onreadystatechange = function() {
         if (sendWords.readyState == 4 && sendWords.status == 200) {
-            if (!currentDictionary.settings.sortByEquivalent) {
-                currentDictionary.words.sort(dynamicSort(['name', 'partOfSpeech']));
-            } else {
-                currentDictionary.words.sort(dynamicSort(['simpleDefinition', 'partOfSpeech']));
-            }
-            ProcessLoad();
+            SaveWords();
+            ClearForm();
             console.log(sendWords.responseText);
             return true;
         } else {
@@ -457,6 +452,16 @@ function SaveAndUpdateWords(action, wordIndex) {
         }
     }
     sendWords.send(dataToSend);
+}
+
+function SaveWords() {
+    if (!currentDictionary.settings.sortByEquivalent) {
+        currentDictionary.words.sort(dynamicSort(['name', 'partOfSpeech']));
+    } else {
+        currentDictionary.words.sort(dynamicSort(['simpleDefinition', 'partOfSpeech']));
+    }
+    SaveDictionary(false);
+    ProcessLoad();
 }
 
 function SaveAndUpdateDictionary(keepFormContents) {
@@ -697,7 +702,7 @@ function ImportDictionary() {
                         document.getElementById("importFile").value = "";
                     } else {
                         var errorString = "File is missing:";
-                        if (!tmpDicitonary.hasOwnProperty("name"))
+                        if (!tmpDicitonary.hasOwnProperty("name")) 
                             errorString += " name";
                         if (!tmpDicitonary.hasOwnProperty("description"))
                             errorString += " description";
@@ -757,7 +762,7 @@ function ImportWords() {
                     document.getElementById("importOptions").scrollTop = document.getElementById("importOptions").scrollHeight;
                 },
                 complete: function(results) {
-                    SaveAndUpdateDictionary();
+                    SaveAndUpdateWords("all");
                     resultsArea.innerHTML += "<p>The file has finished importing " + rowsImported.toString() + " words.</p>";
                     // Scroll to the bottom.
                     document.getElementById("importOptions").scrollTop = document.getElementById("importOptions").scrollHeight;
