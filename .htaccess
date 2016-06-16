@@ -7,3 +7,7 @@ RewriteRule    ^([0-9]+)/([0-9]+)/?$    index.php?dict=$1&word=$2    [NC,L]    #
 RewriteRule    ^view/([0-9]+)/?$    index.php?dict=$1    [NC,L]    # Handle dictionary ids.
 
 RewriteRule    ^([0-9]+)/?$    index.php?dict=$1    [NC,L]    # Handle dictionary ids.
+
+RewriteRule ^issues/?$ https://github.com/Alamantus/DictionaryBuilder/issues [R=301,L] # Shorten issues url.
+
+RewriteRule ^updates/?$ https://github.com/Alamantus/DictionaryBuilder/releases [R=301,L] # Shorten updates url.

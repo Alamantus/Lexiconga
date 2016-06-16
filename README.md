@@ -167,16 +167,11 @@ If you forget your password, you can request a password reset email by clicking 
 If you manage to enter your password wrong 10 times, you'll be locked out from logging in for an hour. Use this time to try to remember your password or something. You can get an idea of how long you've waited by refreshing the page and clicking the unfortunate "Can't Login" button. After an hour has passed, refresh the page again and you'll get another 10 tries.
 
 ## Problems or Requests
-Please report any problems you come across to the [Dictionary Builder Issues page](https://github.com/Alamantus/DictionaryBuilder/issues). You can also submit enhancement requests to the same place if you have any requests for new features.
+Please report any problems you come across to the [Dictionary Builder Issues page](/issues). You can also submit enhancement requests to the same place if you have any requests for new features.
 
 ## Update Log
 You can see all previous updates to Lexiconga here:
-[https://github.com/Alamantus/DictionaryBuilder/releases](https://github.com/Alamantus/DictionaryBuilder/releases/tag/Production)
-
-## Future Plans
-In the future, I'm planning to:
-* enable account deletion if you lose trust or hope in Lexiconga's services
-* provide an ad removal option?
+[http://lexicon.ga/updates](/updates)
 
 ## Thanks!
 If you like Lexiconga and want to buy me a cup of coffee for the service, you can **[donate throughPaypal](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=MCCSYGQCR5TLY&lc=US&item_name=Lexiconga&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted)** to help keep it online if you want.

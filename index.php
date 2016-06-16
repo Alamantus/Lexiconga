@@ -344,7 +344,7 @@ if ($is_viewing) {
 
     </contents>
     <footer>
-        Dictionary Builder only guaranteed to work with most up-to-date HTML5 browsers. <a href="https://github.com/Alamantus/DictionaryBuilder/issues" target="_blank">Report a Problem</a> | <span class="clickable" onclick="ShowInfo('termsText')" style="font-size:12px;">Terms</span> <span class="clickable" onclick="ShowInfo('privacyText')" style="font-size:12px;">Privacy</span>
+        Dictionary Builder only guaranteed to work with most up-to-date HTML5 browsers. <a href="/issues" class="clickable" target="_blank">Issues</a> <a href="/updates" class="clickable" target="_blank">Updates</a> | <span class="clickable" onclick="ShowInfo('termsText')" style="font-size:12px;">Terms</span> <span class="clickable" onclick="ShowInfo('privacyText')" style="font-size:12px;">Privacy</span>
     </footer>
     
     <!-- Markdown Parser -->
