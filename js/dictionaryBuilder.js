@@ -339,7 +339,13 @@ function DictionaryEntryTemplate(wordObject, managementIndex) {
         // If there's a managementIndex, append index number to the element id.
         entryText += managementIndex.toString();
     }
-    entryText += "'><a href='#" + wordObject.wordId + "' class='wordLink clickable'>&#x1f517;</a>";
+    entryText += "'><a name='" + wordObject.wordId + "'></a>";
+
+    if (currentDictionary.settings.isPublic) {
+        entryText += "<a href='/" + currentDictionary.externalID + "/" + wordObject.wordId + "' class='wordLink clickable' title='Share Word' style='margin-left:5px;'>&#10150;</a>";
+    }
+
+    entryText += "<a href='#" + wordObject.wordId + "' class='wordLink clickable' title='Link Within Page'>&#x1f517;</a>";
     
     entryText += "<word>" + wordObject.name + "</word>";
     
@@ -613,28 +619,34 @@ function LoadDictionary() {
 function ChangeDictionary(userDictionariesSelect) {
     userDictionariesSelect = (typeof userDictionariesSelect !== 'undefined' && userDictionariesSelect != null) ? userDictionariesSelect : document.getElementById("userDictionaries");
     if (currentDictionary.externalID != userDictionariesSelect.value && userDictionariesSelect.options.length > 0) {
-        var changeDictionaryRequest = new XMLHttpRequest();
-        changeDictionaryRequest.open('POST', "/php/ajax_dictionarymanagement.php?action=switch");
-        changeDictionaryRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        var postString = "newdictionaryid=" + userDictionariesSelect.value.toString();
-        changeDictionaryRequest.onreadystatechange = function() {
-            if (changeDictionaryRequest.readyState == 4 && changeDictionaryRequest.status == 200) {
-                if (changeDictionaryRequest.responseText == "no dictionaries") {
-                    console.log(changeDictionaryRequest.responseText);
+        ChangeDictionaryToId(userDictionariesSelect.value, function(response) {
+            if (response == "no dictionaries") {
+                    console.log(response);
                     SendDictionary(false);
-                } else if (changeDictionaryRequest.responseText.length < 60) {
-                    console.log(changeDictionaryRequest.responseText);
+                } else if (response.length < 60) {
+                    console.log(response);
                 } else {
-                    currentDictionary = JSON.parse(changeDictionaryRequest.responseText);
+                    currentDictionary = JSON.parse(response);
                     SaveDictionary(false);
                     ProcessLoad();
                     LoadUserDictionaries();
                     HideSettings();
                 }
+        });
+    }
+}
+
+function ChangeDictionaryToId(dictionaryId, callbackFunction) {
+    var changeDictionaryRequest = new XMLHttpRequest();
+        changeDictionaryRequest.open('POST', "/php/ajax_dictionarymanagement.php?action=switch");
+        changeDictionaryRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        var postString = "newdictionaryid=" + dictionaryId.toString();
+        changeDictionaryRequest.onreadystatechange = function() {
+            if (changeDictionaryRequest.readyState == 4 && changeDictionaryRequest.status == 200) {
+                callbackFunction(changeDictionaryRequest.responseText);
             }
         }
         changeDictionaryRequest.send(postString);
-    }
 }
 
 function LoadLocalDictionary() {

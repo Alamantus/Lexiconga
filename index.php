@@ -13,6 +13,8 @@ $word_to_load = (isset($_GET['word'])) ? intval($_GET['word']) : 0;
 $the_public_word = '"That word doesn\'t exist."';
 $word_name = 'ERROR';
 
+$is_owner = false;
+
 $display_mode = ($dictionary_to_load > 0) ? (($word_to_load > 0) ? "word" : "view") : "build";
 
 $announcement = get_include_contents(SITE_LOCATION . '/announcement.php');
@@ -34,60 +36,62 @@ if ($display_mode != "build") {
     $dbconnection->setAttribute(PDO::ATTR_EMULATE_PREPARES, true);
     $dbconnection->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 
-    if ($display_mode == "word") {
-        // only query for specific word.
-        $query = "SELECT `d`.`name` AS `dname`, `u`.`public_name`, `w`.`word_id`, `w`.`name`, `w`.`pronunciation`, `w`.`part_of_speech`, `w`.`simple_definition`, `w`.`long_definition` ";
-        $query .= "FROM `words` AS `w` LEFT JOIN `dictionaries` AS `d` ON `w`.`dictionary`=`d`.`id` ";
-        $query .= "LEFT JOIN `users` AS `u` ON `d`.`user`=`u`.`id` ";
-        $query .= "WHERE `d`.`is_public`=1 AND `w`.`dictionary`=" . $dictionary_to_load . " AND `w`.`word_id`=" . $dictionary_to_load . ";";
-        
-        try {
-            $queryResults = $dbconnection->prepare($query);
-            $queryResults->execute();
-            if ($queryResults) {
-                if (num_rows($queryResults) === 1) {
-                    while ($word = fetch($queryResults)) {
-                        $dictionary_name = $word['dname'];
-                        $dictionary_creator = $word['public_name'];
-                        $the_public_word = '{"name":"' . $word['name'] . '",';
-                        $the_public_word .= '"pronunciation":"' . $word['pronunciation'] . '",';
-                        $the_public_word .= '"partOfSpeech":"' . $word['part_of_speech'] . '",';
-                        $the_public_word .= '"simpleDefinition":"' . $word['simple_definition'] . '",';
-                        $the_public_word .= '"longDefinition":"' . $word['long_definition'] . '",';
-                        $the_public_word .= '"wordId":"' . $word['word_id'] . '"';
-                        $the_public_word .= '}';
-                    }
-                }
-            }
-        }
-        catch (PDOException $ex) {}
-    } else {
-        // Otherwise, grab everything.
-        $query = "SELECT `d`.`id`, `d`.`name`, `d`.`description`, `u`.`public_name`, `d`.`parts_of_speech`, `d`.`is_complete` ";
-        $query .= "FROM `dictionaries` AS `d` LEFT JOIN `users` AS `u` ON `d`.`user`=`u`.`id` WHERE `d`.`is_public`=1 AND `d`.`id`=" . $dictionary_to_load . ";";
+    $dictionary_query = "SELECT `d`.`id`, `d`.`user`, `d`.`name`, `d`.`description`, `u`.`public_name`, `d`.`parts_of_speech`, `d`.`is_complete` ";
+    $dictionary_query .= "FROM `dictionaries` AS `d` LEFT JOIN `users` AS `u` ON `d`.`user`=`u`.`id`";
+    $dictionary_query .= "WHERE `d`.`is_public`=1 AND `d`.`id`=" . $dictionary_to_load . ";";
 
-        try {
-            $queryResults = $dbconnection->prepare($query);
-            $queryResults->execute();
-            if ($queryResults) {
-                if (num_rows($queryResults) === 1) {
-                    while ($dict = fetch($queryResults)) {
-                        $dictionary_name = $dict['name'];
-                        $dictionary_creator = $dict['public_name'];
-                        $the_public_dictionary = '{"name":"' . $dict['name'] . '",';
-                        $the_public_dictionary .= '"description":"' . $dict['description'] . '",';
-                        $the_public_dictionary .= '"createdBy":"' . $dict['public_name'] . '",';
-                        $the_public_dictionary .= '"words":' . Get_Dictionary_Words($dictionary_to_load) . ',';
-                        $the_public_dictionary .= '"settings":{';
-                        $the_public_dictionary .= '"partsOfSpeech":"' . $dict['parts_of_speech'] . '",';
-                        $the_public_dictionary .= '"isComplete":' . (($dict['is_complete'] == 1) ? 'true' : 'false') . '},';
-                        $the_public_dictionary .= '}';
+    $word_query = "SELECT `w`.`word_id`, `w`.`name`, `w`.`pronunciation`, `w`.`part_of_speech`, `w`.`simple_definition`, `w`.`long_definition` ";
+    $word_query .= "FROM `words` AS `w` LEFT JOIN `dictionaries` AS `d` ON `w`.`dictionary`=`d`.`id` ";
+    $word_query .= "WHERE `d`.`is_public`=1 AND `w`.`dictionary`=" . $dictionary_to_load . (($display_mode == "word") ? " AND `w`.`word_id`=" . $word_to_load : "") . " ";
+    $word_query .= "ORDER BY IF(`d`.`sort_by_equivalent`, `w`.`simple_definition`, `w`.`name`) COLLATE utf8_unicode_ci;";
+
+    try {
+        $dictionary_results = $dbconnection->prepare($dictionary_query);
+        $dictionary_results->execute();
+        if ($dictionary_results) {
+            $word_results = $dbconnection->prepare($word_query);
+            $word_results->execute();
+            $dictionary_words = "[";
+            if ($word_results) {
+                $words_counted = 0;
+                $words_total = num_rows($word_results);
+                while ($word = fetch($word_results)) {
+                    $words_counted++;
+                    $word_name = $word['name'];
+                    $dictionary_words .= '{"name":"' . $word['name'] . '",';
+                    $dictionary_words .= '"pronunciation":"' . $word['pronunciation'] . '",';
+                    $dictionary_words .= '"partOfSpeech":"' . $word['part_of_speech'] . '",';
+                    $dictionary_words .= '"simpleDefinition":"' . $word['simple_definition'] . '",';
+                    $dictionary_words .= '"longDefinition":"' . $word['long_definition'] . '",';
+                    $dictionary_words .= '"wordId":"' . $word['word_id'] . '"';
+                    $dictionary_words .= '}';
+
+                    if ($words_counted < $words_total) {
+                        $dictionary_words .= ',';
                     }
                 }
             }
+            $dictionary_words .= "]";
+
+            if (num_rows($dictionary_results) === 1) {
+                while ($dict = fetch($dictionary_results)) {
+                    $dictionary_name = $dict['name'];
+                    $dictionary_creator = $dict['public_name'];
+                    $is_owner = $current_user == $dict['user'];
+                    $the_public_dictionary = '{"name":"' . $dict['name'] . '",';
+                    $the_public_dictionary .= '"description":"' . $dict['description'] . '",';
+                    $the_public_dictionary .= '"createdBy":"' . $dict['public_name'] . '",';
+                    $the_public_dictionary .= '"words":' . $dictionary_words . ',';
+                    $the_public_dictionary .= '"settings":{';
+                    $the_public_dictionary .= '"partsOfSpeech":"' . $dict['parts_of_speech'] . '",';
+                    $the_public_dictionary .= '"isComplete":' . (($dict['is_complete'] == 1) ? 'true' : 'false') . '},';
+                    $the_public_dictionary .= '"id":"' . $dictionary_to_load . '"';
+                    $the_public_dictionary .= '}';
+                }
+            }
         }
-        catch (PDOException $ex) {}
     }
+    catch (PDOException $ex) {}
 }
 
 ?>
@@ -104,12 +108,8 @@ if ($display_mode != "build") {
         <meta property="og:title" content="<?php echo (($display_mode == "word") ? ("\"" . $word_name . "\" in the ") : "") . $dictionary_name; ?> Dictionary" />
         <meta property="og:description" content="A Lexiconga dictionary by <?php echo $dictionary_creator; ?>" />
         <meta property="og:image" content="http://lexicon.ga/images/logo.svg" />
-        <?php if (isset($the_public_word)) { ?>
-            <script>var publicWord = <?php echo $the_public_word; ?></script>
-        <?php } else { ?>
-            <script>var publicDictionary = <?php echo $the_public_dictionary; ?></script>
-    <?php }
-    } else { ?>
+        <script>var publicDictionary = <?php echo $the_public_dictionary; ?></script>
+    <?php } else { ?>
         <title>Lexiconga Dictionary Builder</title>
         <meta property="og:url" content="http://lexicon.ga" />
         <meta property="og:type" content="website" />
@@ -129,13 +129,22 @@ if ($display_mode != "build") {
                 <span id="aboutButton" class="clickable" onclick="ShowInfo('aboutText')">About Lexiconga</span>
             </div>
             <div id="loginoutArea" style="font-size:12px;">
+            <?php if ($display_mode == "build") { ?>
                 <?php if ($current_user > 0) {  //If logged in, show the log out button. ?>
                     <span id="accountSettings" class="clickable" onclick="ShowAccountSettings()">Account Settings</span> <a href="?logout" id="logoutLink" class="clickable">Log Out</a>
                 <?php } elseif (!isset($_SESSION['loginfailures']) || (isset($_SESSION['loginfailures']) && $_SESSION['loginfailures'] < 10)) { ?>
                     <span id="loginLink" class="clickable" onclick="ShowInfo('loginForm')">Log In/Create Account</span>
                 <?php } else { ?>
                     <span id="loginLink" class="clickable" title="<?php echo $hoverlockoutmessage; ?>" onclick="alert('<?php echo $alertlockoutmessage; ?>');">Can't Login</span>
-                <?php } ?>
+                <?php }
+            } else { ?>
+                <h3 style="display:inline; margin:0 5px;">Viewing</h3>
+                <?php if ($is_owner) { ?>
+                <span class="clickable" onclick="ChangeDictionaryToId(<?php echo $dictionary_to_load; ?>, function(response) {if (response.length >= 60) window.location.href = '/';});">&laquo; Edit Dictionary</span>
+                <?php } else { ?>
+                <a class="clickable" href="/">&laquo; Go Home to Lexiconga</a>
+                <?php }?>
+            <?php } ?>
             </div>
         </div>
     </header>
@@ -188,11 +197,14 @@ if ($display_mode != "build") {
         <?php } ?>
         <h1 id="dictionaryName"></h1>
 
-        <?php if ($display_mode == "view") { ?>
+        <?php if ($display_mode != "build") { ?>
         <h4 id="dictionaryBy"></h4>
         <div id="incompleteNotice"></div>
         <?php } ?>
         
+        <?php if ($display_mode == "word") { ?>
+        <a class="clickable" href="/<?php echo $dictionary_to_load; ?>">View Full Dictionary</a>
+        <?php } ?>
         <span id="descriptionToggle" class="clickable" onclick="ToggleDescription();"><?php if ($display_mode == "view") { ?>Hide<?php } else { ?>Show<?php } ?> Description</span>
         <div id="dictionaryDescription" style="display:<?php if ($display_mode == "view") { ?>block<?php } else { ?>none<?php } ?>;"></div>
         
@@ -232,9 +244,7 @@ if ($display_mode != "build") {
         <div id="filterWordCount"></div>
         <?php } ?>
             
-        <div id="theDictionary">
-            <?php if ($display_mode == "word") { echo "<script>document.write(DictionaryEntryTemplate(" . $the_public_word . "));</script>"; } ?>
-        </div>
+        <div id="theDictionary"></div>
     </div>
     
     <div id="rightColumn" class="googleads" style="float:right;width:20%;max-width:300px;min-width:200px;overflow:hidden;">
@@ -406,24 +416,27 @@ if ($display_mode != "build") {
     <script src="/js/dictionaryBuilder.js"></script>
     <!-- UI Functions -->
     <script src="/js/ui.js"></script>
-    <?php if ($display_mode == "view") { ?>
+    <?php if ($display_mode != "build") { ?>
     <!-- Public View Functions -->
     <script src="/js/publicView.js"></script>
     <?php } ?>
     <?php if ($_GET['adminoverride'] != "noadsortracking") { include_once("php/google/analytics.php"); } ?>
     <script>
     var aboutText = termsText = privacyText = loginForm = forgotForm = importForm = "Loading...";
-    <?php if ($display_mode == "view") { ?>
+    <?php if ($display_mode != "build") { ?>
     window.onload = function () {
-        ShowPublicDictionary();
-        SetPublicPartsOfSpeech();
+        ShowPublicDictionary(<?php if ($display_mode == "word") echo "true"; ?>);
+        <?php
+        if ($display_mode != "word") {    // don't try to set the filters
+            echo "SetPublicPartsOfSpeech()";
+        } ?>
         
-        GetTextFile("README.md", "aboutText", true);
-        GetTextFile("TERMS.md", "termsText", true);
-        GetTextFile("PRIVACY.md", "privacyText", true);
-        GetTextFile("LOGIN.form", "loginForm", false);
-        GetTextFile("FORGOT.form", "forgotForm", false);
-        GetTextFile("IMPORT.form", "importForm", false);
+        GetTextFile("/README.md", "aboutText", true);
+        GetTextFile("/TERMS.md", "termsText", true);
+        GetTextFile("/PRIVACY.md", "privacyText", true);
+        GetTextFile("/LOGIN.form", "loginForm", false);
+        GetTextFile("/FORGOT.form", "forgotForm", false);
+        GetTextFile("/IMPORT.form", "importForm", false);
     }
     <?php } else { ?>
     ready(function() {
