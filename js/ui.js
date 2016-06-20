@@ -3,12 +3,12 @@ function Initialize() {
     ClearForm();
     LoadUserDictionaries();
     
-    GetTextFile("README.md", "aboutText", true);
-    GetTextFile("TERMS.md", "termsText", true);
-    GetTextFile("PRIVACY.md", "privacyText", true);
-    GetTextFile("LOGIN.form", "loginForm", false);
-    GetTextFile("FORGOT.form", "forgotForm", false);
-    GetTextFile("IMPORT.form", "importForm", false);
+    GetTextFile("/README.md", "aboutText", true);
+    GetTextFile("/TERMS.md", "termsText", true);
+    GetTextFile("/PRIVACY.md", "privacyText", true);
+    GetTextFile("/LOGIN.form", "loginForm", false);
+    GetTextFile("/FORGOT.form", "forgotForm", false);
+    GetTextFile("/IMPORT.form", "importForm", false);
 
     SetKeyboardShortcuts();
 }
@@ -133,7 +133,7 @@ function LoadUserDictionaries() {
     var getDictionariesRequest = new XMLHttpRequest();
     var userDictionariesSelect = document.getElementById("userDictionaries");
     if (userDictionariesSelect != null) {
-        getDictionariesRequest.open('GET', "php/ajax_dictionarymanagement.php?action=getall");
+        getDictionariesRequest.open('GET', "/php/ajax_dictionarymanagement.php?action=getall");
         getDictionariesRequest.onreadystatechange = function() {
             if (getDictionariesRequest.readyState == 4 && getDictionariesRequest.status == 200) {
                 ParseUserDictionariesIntoSelect(userDictionariesSelect, getDictionariesRequest.responseText);
@@ -216,7 +216,7 @@ function ValidateCreateAccount() {
         return false;
     } else {
         var emailCheck = new XMLHttpRequest();
-        emailCheck.open('GET', "php/ajax_createaccountemailcheck.php?email=" + emailValue);
+        emailCheck.open('GET', "/php/ajax_createaccountemailcheck.php?email=" + emailValue);
         emailCheck.onreadystatechange = function() {
             if (emailCheck.readyState == 4 && emailCheck.status == 200) {
                 if (emailCheck.responseText != "ok") {
@@ -262,7 +262,7 @@ function ValidateForgotPassword() {
         return false;
     } else {
         var emailCheck = new XMLHttpRequest();
-        emailCheck.open('GET', "php/ajax_passwordresetemailcheck.php?email=" + emailValue);
+        emailCheck.open('GET', "/php/ajax_passwordresetemailcheck.php?email=" + emailValue);
         emailCheck.onreadystatechange = function() {
             if (emailCheck.readyState == 4 && emailCheck.status == 200) {
                 if (emailCheck.responseText != "email exists") {
@@ -307,7 +307,7 @@ function WarnEmailChange() {
 
 function LoggedInResetPassword() {
     var resetPasswordRequest = new XMLHttpRequest();
-    resetPasswordRequest.open('GET', "php/ajax_setnewpassword.php");
+    resetPasswordRequest.open('GET', "/php/ajax_setnewpassword.php");
     resetPasswordRequest.onreadystatechange = function() {
         if (resetPasswordRequest.readyState == 4 && resetPasswordRequest.status == 200) {
             if (resetPasswordRequest.responseText != "done") {

@@ -8,11 +8,12 @@ $dictionary_to_load = (isset($_GET['dict'])) ? intval($_GET['dict']) : 0;
 $the_public_dictionary = '"That dictionary doesn\'t exist."';
 $dictionary_name = 'ERROR';
 $dictionary_creator = 'nobody';
-$is_viewing = $dictionary_to_load > 0;
 
 $word_to_load = (isset($_GET['word'])) ? intval($_GET['word']) : 0;
 $the_public_word = '"That word doesn\'t exist."';
 $word_name = 'ERROR';
+
+$display_mode = ($dictionary_to_load > 0) ? (($word_to_load > 0) ? "word" : "view") : "build";
 
 $announcement = get_include_contents(SITE_LOCATION . '/announcement.php');
 $notificationMessage = "";
@@ -27,35 +28,66 @@ if ($current_user > 0 || !isset($_SESSION['loginfailures']) || (isset($_SESSION[
 
 require_once(SITE_LOCATION . '/php/notificationconditiontree.php');
 
-if ($is_viewing) {
-    $query = "SELECT `d`.`id`, `d`.`name`, `d`.`description`, `u`.`public_name`, `d`.`words`, `d`.`parts_of_speech`, `d`.`is_complete` ";
-    $query .= "FROM `dictionaries` AS `d` LEFT JOIN `users` AS `u` ON `d`.`user`=`u`.`id` WHERE `d`.`is_public`=1 AND `d`.`id`=" . $dictionary_to_load . ";";
-
+if ($display_mode != "build") {
     $dbconnection = new PDO('mysql:host=' . DATABASE_SERVERNAME . ';dbname=' . DATABASE_NAME . ';charset=utf8', DATABASE_USERNAME, DATABASE_PASSWORD);
     $dbconnection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $dbconnection->setAttribute(PDO::ATTR_EMULATE_PREPARES, true);
     $dbconnection->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-    try {
-        $queryResults = $dbconnection->prepare($query);
-        $queryResults->execute();
-        if ($queryResults) {
-            if (num_rows($queryResults) === 1) {
-                while ($dict = fetch($queryResults)) {
-                    $dictionary_name = $dict['name'];
-                    $dictionary_creator = $dict['public_name'];
-                    $the_public_dictionary = '{"name":"' . $dict['name'] . '",';
-                    $the_public_dictionary .= '"description":"' . $dict['description'] . '",';
-                    $the_public_dictionary .= '"createdBy":"' . $dict['public_name'] . '",';
-                    $the_public_dictionary .= '"words":' . $dict['words'] . ',';
-                    $the_public_dictionary .= '"settings":{';
-                    $the_public_dictionary .= '"partsOfSpeech":"' . $dict['parts_of_speech'] . '",';
-                    $the_public_dictionary .= '"isComplete":' . (($dict['is_complete'] == 1) ? 'true' : 'false') . '},';
-                    $the_public_dictionary .= '}';
+
+    if ($display_mode == "word") {
+        // only query for specific word.
+        $query = "SELECT `d`.`name` AS `dname`, `u`.`public_name`, `w`.`word_id`, `w`.`name`, `w`.`pronunciation`, `w`.`part_of_speech`, `w`.`simple_definition`, `w`.`long_definition` ";
+        $query .= "FROM `words` AS `w` LEFT JOIN `dictionaries` AS `d` ON `w`.`dictionary`=`d`.`id` ";
+        $query .= "LEFT JOIN `users` AS `u` ON `d`.`user`=`u`.`id` ";
+        $query .= "WHERE `d`.`is_public`=1 AND `w`.`dictionary`=" . $dictionary_to_load . " AND `w`.`word_id`=" . $dictionary_to_load . ";";
+        
+        try {
+            $queryResults = $dbconnection->prepare($query);
+            $queryResults->execute();
+            if ($queryResults) {
+                if (num_rows($queryResults) === 1) {
+                    while ($word = fetch($queryResults)) {
+                        $dictionary_name = $word['dname'];
+                        $dictionary_creator = $word['public_name'];
+                        $the_public_word = '{"name":"' . $word['name'] . '",';
+                        $the_public_word .= '"pronunciation":"' . $word['pronunciation'] . '",';
+                        $the_public_word .= '"partOfSpeech":"' . $word['part_of_speech'] . '",';
+                        $the_public_word .= '"simpleDefinition":"' . $word['simple_definition'] . '",';
+                        $the_public_word .= '"longDefinition":"' . $word['long_definition'] . '",';
+                        $the_public_word .= '"wordId":"' . $word['word_id'] . '"';
+                        $the_public_word .= '}';
+                    }
                 }
             }
         }
+        catch (PDOException $ex) {}
+    } else {
+        // Otherwise, grab everything.
+        $query = "SELECT `d`.`id`, `d`.`name`, `d`.`description`, `u`.`public_name`, `d`.`parts_of_speech`, `d`.`is_complete` ";
+        $query .= "FROM `dictionaries` AS `d` LEFT JOIN `users` AS `u` ON `d`.`user`=`u`.`id` WHERE `d`.`is_public`=1 AND `d`.`id`=" . $dictionary_to_load . ";";
+
+        try {
+            $queryResults = $dbconnection->prepare($query);
+            $queryResults->execute();
+            if ($queryResults) {
+                if (num_rows($queryResults) === 1) {
+                    while ($dict = fetch($queryResults)) {
+                        $dictionary_name = $dict['name'];
+                        $dictionary_creator = $dict['public_name'];
+                        $the_public_dictionary = '{"name":"' . $dict['name'] . '",';
+                        $the_public_dictionary .= '"description":"' . $dict['description'] . '",';
+                        $the_public_dictionary .= '"createdBy":"' . $dict['public_name'] . '",';
+                        $the_public_dictionary .= '"words":' . Get_Dictionary_Words($dictionary_to_load) . ',';
+                        $the_public_dictionary .= '"settings":{';
+                        $the_public_dictionary .= '"partsOfSpeech":"' . $dict['parts_of_speech'] . '",';
+                        $the_public_dictionary .= '"isComplete":' . (($dict['is_complete'] == 1) ? 'true' : 'false') . '},';
+                        $the_public_dictionary .= '}';
+                    }
+                }
+            }
+        }
+        catch (PDOException $ex) {}
     }
-    catch (PDOException $ex) {}
 }
 
 ?>
@@ -65,20 +97,29 @@ if ($is_viewing) {
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
-    <?php if ($is_viewing) { ?>
-        <title><?php echo $dictionary_name; ?> Dictionary on Lexiconga</title>
-        <meta property="og:url" content="http://lexicon.ga/view/?dict=<?php echo $dictionary_to_load; ?>" />
+    <?php if ($display_mode != "build") { ?>
+        <title><?php echo (($display_mode == "word") ? ($word_name . " | ") : "") . $dictionary_name; ?> Dictionary on Lexiconga</title>
+        <meta property="og:url" content="http://lexicon.ga/<?php echo $dictionary_to_load . (($display_mode == "word") ? ("/" . $word_to_load) : ""); ?>" />
         <meta property="og:type" content="article" />
-        <meta property="og:title" content="<?php echo $dictionary_name; ?> Dictionary" />
+        <meta property="og:title" content="<?php echo (($display_mode == "word") ? ("\"" . $word_name . "\" in the ") : "") . $dictionary_name; ?> Dictionary" />
         <meta property="og:description" content="A Lexiconga dictionary by <?php echo $dictionary_creator; ?>" />
         <meta property="og:image" content="http://lexicon.ga/images/logo.svg" />
-        <script>var publicDictionary = <?php echo $the_public_dictionary; ?></script>
-    <?php } else { ?>
+        <?php if (isset($the_public_word)) { ?>
+            <script>var publicWord = <?php echo $the_public_word; ?></script>
+        <?php } else { ?>
+            <script>var publicDictionary = <?php echo $the_public_dictionary; ?></script>
+    <?php }
+    } else { ?>
         <title>Lexiconga Dictionary Builder</title>
+        <meta property="og:url" content="http://lexicon.ga" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Lexiconga Dictionary Builder" />
+        <meta property="og:description" content="Build lexicons for contructed languages or anything that you can think of!" />
+        <meta property="og:image" content="http://lexicon.ga/images/logo.svg" />
     <?php } ?>
 
-    <link href="css/styles.css" rel="stylesheet" />
-    <link href="css/lexiconga.css" rel="stylesheet" />
+    <link href="/css/styles.css" rel="stylesheet" />
+    <link href="/css/lexiconga.css" rel="stylesheet" />
 </head>
 <body>
     <header>
@@ -99,7 +140,7 @@ if ($is_viewing) {
         </div>
     </header>
     <contents>
-    <?php if (!$is_viewing) { ?>
+    <?php if ($display_mode == "build") { ?>
     <div id="announcementArea" style="display:<?php echo (($announcement) ? "block" : "none"); ?>;margin-bottom:10px;">
         <span id="announcementCloseButton" class="clickable" onclick="document.getElementById('announcementArea').style.display='none';">Close</span>
         <div id="announcement"><?php echo $announcement; ?></div>
@@ -142,35 +183,36 @@ if ($is_viewing) {
     <?php } ?>
 
     <div id="dictionaryContainer">
-        <?php if (!$is_viewing) { ?>
+        <?php if ($display_mode == "build") { ?>
         <span id="settingsButton" class="clickable" onclick="ShowSettings()">Settings</span>
         <?php } ?>
         <h1 id="dictionaryName"></h1>
 
-        <?php if ($is_viewing) { ?>
+        <?php if ($display_mode == "view") { ?>
         <h4 id="dictionaryBy"></h4>
         <div id="incompleteNotice"></div>
         <?php } ?>
         
-        <span id="descriptionToggle" class="clickable" onclick="ToggleDescription();"><?php if ($is_viewing) { ?>Hide<?php } else { ?>Show<?php } ?> Description</span>
-        <div id="dictionaryDescription" style="display:<?php if ($is_viewing) { ?>block<?php } else { ?>none<?php } ?>;"></div>
+        <span id="descriptionToggle" class="clickable" onclick="ToggleDescription();"><?php if ($display_mode == "view") { ?>Hide<?php } else { ?>Show<?php } ?> Description</span>
+        <div id="dictionaryDescription" style="display:<?php if ($display_mode == "view") { ?>block<?php } else { ?>none<?php } ?>;"></div>
         
-        <span id="searchFilterToggle" class="clickable" onclick="ToggleSearchFilter();"><?php if ($is_viewing) { ?>Hide <?php } ?>Search/Filter Options</span>
-        <div id="searchFilterArea" style="display:<?php if ($is_viewing) { ?>block<?php } else { ?>none<?php } ?>;">
+        <?php if ($display_mode != "word") { ?>
+        <span id="searchFilterToggle" class="clickable" onclick="ToggleSearchFilter();"><?php if ($display_mode == "view") { ?>Hide <?php } ?>Search/Filter Options</span>
+        <div id="searchFilterArea" style="display:<?php if ($display_mode == "view") { ?>block<?php } else { ?>none<?php } ?>;">
             <div id="searchArea" style="display:block;">
                 <label style="margin-top:10px;">
                     <span>Search</span>
                     <div style="display:block;">
-                        <input type="text" id="searchBox" onclick="this.select();" onchange="<?php Show_Dictionary_Function($is_viewing) ?>" style="display:inline;" />&nbsp;
-                        <span class="clickable inline-button" onclick="document.getElementById('searchBox').value='';<?php Show_Dictionary_Function($is_viewing) ?>;">Clear Search</span>
+                        <input type="text" id="searchBox" onclick="this.select();" onchange="<?php Show_Dictionary_Function($display_mode == "view") ?>" style="display:inline;" />&nbsp;
+                        <span class="clickable inline-button" onclick="document.getElementById('searchBox').value='';<?php Show_Dictionary_Function($display_mode == "view") ?>;">Clear Search</span>
                     </div>
                     <div id="searchOptions">
-                        <label class="searchOption">Word <input type="checkbox" id="searchOptionWord" checked="checked" onchange="<?php Show_Dictionary_Function($is_viewing) ?>" /></label>
-                        <label class="searchOption">Equivalent <input type="checkbox" id="searchOptionSimple" checked="checked" onchange="<?php Show_Dictionary_Function($is_viewing) ?>" /></label>
-                        <label class="searchOption">Explanation <input type="checkbox" id="searchOptionLong" checked="checked" onchange="<?php Show_Dictionary_Function($is_viewing) ?>" /></label>
+                        <label class="searchOption">Word <input type="checkbox" id="searchOptionWord" checked="checked" onchange="<?php Show_Dictionary_Function($display_mode == "view") ?>" /></label>
+                        <label class="searchOption">Equivalent <input type="checkbox" id="searchOptionSimple" checked="checked" onchange="<?php Show_Dictionary_Function($display_mode == "view") ?>" /></label>
+                        <label class="searchOption">Explanation <input type="checkbox" id="searchOptionLong" checked="checked" onchange="<?php Show_Dictionary_Function($display_mode == "view") ?>" /></label>
                         <br />
-                        <label class="searchOption">Search Case-Sensitive <input type="checkbox" id="searchCaseSensitive" onchange="<?php Show_Dictionary_Function($is_viewing) ?>" /></label>
-                        <label class="searchOption" title="Note: Matching diacritics will appear but may not highlight.">Ignore Diacritics/Accents <input type="checkbox" id="searchIgnoreDiacritics" onchange="<?php Show_Dictionary_Function($is_viewing) ?>" /></label>
+                        <label class="searchOption">Search Case-Sensitive <input type="checkbox" id="searchCaseSensitive" onchange="<?php Show_Dictionary_Function($display_mode == "view") ?>" /></label>
+                        <label class="searchOption" title="Note: Matching diacritics will appear but may not highlight.">Ignore Diacritics/Accents <input type="checkbox" id="searchIgnoreDiacritics" onchange="<?php Show_Dictionary_Function($display_mode == "view") ?>" /></label>
                     </div>
                 </label>
             </div>
@@ -178,25 +220,28 @@ if ($is_viewing) {
             <label style="display:block;margin-bottom:0;"><b>Filter Words</b></label>
             <div id="filterOptions" style="display:block"></div>
             <div style="display:block;">
-                <span  class="clickable inline-button" onclick="ToggleAllFilters(true);<?php Show_Dictionary_Function($is_viewing) ?>;">
+                <span  class="clickable inline-button" onclick="ToggleAllFilters(true);<?php Show_Dictionary_Function($display_mode == "view") ?>;">
                     Check All
                 </span>
                 &nbsp;
-                <span  class="clickable inline-button" onclick="ToggleAllFilters(false);<?php Show_Dictionary_Function($is_viewing) ?>;">
+                <span  class="clickable inline-button" onclick="ToggleAllFilters(false);<?php Show_Dictionary_Function($display_mode == "view") ?>;">
                     Uncheck All
                 </span>
             </div>
         </div>
         <div id="filterWordCount"></div>
+        <?php } ?>
             
-        <div id="theDictionary"></div>
+        <div id="theDictionary">
+            <?php if ($display_mode == "word") { echo "<script>document.write(DictionaryEntryTemplate(" . $the_public_word . "));</script>"; } ?>
+        </div>
     </div>
     
     <div id="rightColumn" class="googleads" style="float:right;width:20%;max-width:300px;min-width:200px;overflow:hidden;">
         <?php if ($_GET['adminoverride'] != "noadsortracking") { include_once("php/google/adsense.php"); } ?>
     </div>
 
-    <?php if (!$is_viewing) { ?>
+    <?php if ($display_mode == "build") { ?>
 
     <div id="settingsScreen" style="display:none;">
         <div id="settingsBackgroundFade" onclick="HideSettings()"></div>
@@ -326,7 +371,7 @@ if ($is_viewing) {
         }
     ?>
 
-    <?php if (!$is_viewing) { ?>
+    <?php if ($display_mode == "build") { ?>
     <div id="loadAfterDeleteScreen" style="display:none;">
         <div id="loadAfterDeleteFade"></div>
         <div id="loadAfterDeletePage">
@@ -348,27 +393,27 @@ if ($is_viewing) {
     </footer>
     
     <!-- Markdown Parser -->
-    <script src="js/marked.js"></script>
+    <script src="/js/marked.js"></script>
     <!-- CSV Parser -->
-    <script src="js/papaparse.js"></script>
+    <script src="/js/papaparse.js"></script>
     <!-- JSON Search -->
-    <script src="js/defiant.js"></script>
+    <script src="/js/defiant.js"></script>
     <!-- Diacritics Removal for Exports -->
-    <script src="js/removeDiacritics.js"></script>
+    <script src="/js/removeDiacritics.js"></script>
     <!-- Helper Functions -->
-    <script src="js/helpers.js"></script>
+    <script src="/js/helpers.js"></script>
     <!-- Main Functions -->
-    <script src="js/dictionaryBuilder.js"></script>
+    <script src="/js/dictionaryBuilder.js"></script>
     <!-- UI Functions -->
-    <script src="js/ui.js"></script>
-    <?php if ($is_viewing) { ?>
+    <script src="/js/ui.js"></script>
+    <?php if ($display_mode == "view") { ?>
     <!-- Public View Functions -->
-    <script src="js/publicView.js"></script>
+    <script src="/js/publicView.js"></script>
     <?php } ?>
     <?php if ($_GET['adminoverride'] != "noadsortracking") { include_once("php/google/analytics.php"); } ?>
     <script>
     var aboutText = termsText = privacyText = loginForm = forgotForm = importForm = "Loading...";
-    <?php if ($is_viewing) { ?>
+    <?php if ($display_mode == "view") { ?>
     window.onload = function () {
         ShowPublicDictionary();
         SetPublicPartsOfSpeech();

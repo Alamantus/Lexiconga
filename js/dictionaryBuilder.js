@@ -176,7 +176,7 @@ function UpdateWord(wordIndex, word, pronunciation, partOfSpeech, simpleDefiniti
 
 function DeleteWord(index) {
     var deleteWord = new XMLHttpRequest();
-    deleteWord.open('POST', "php/ajax_dictionarymanagement.php?action=worddelete");
+    deleteWord.open('POST', "/php/ajax_dictionarymanagement.php?action=worddelete");
     deleteWord.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     deleteWord.onreadystatechange = function() {
         if (deleteWord.readyState == 4 && deleteWord.status == 200) {
@@ -265,9 +265,6 @@ function ShowDictionary() {
 }
 
 function DictionaryEntry(itemIndex) {
-    displayPublic = (typeof displayPublic !== 'undefined' && displayPublic != null) ? displayPublic : false;
-    var entryText = "<entry id='entry" + itemIndex.toString() + "'><a name='" + currentDictionary.words[itemIndex].wordId + "'></a><a href='#" + currentDictionary.words[itemIndex].wordId + "' class='wordLink clickable'>&#x1f517;</a>";
-    
     var searchTerm = regexParseForSearch(document.getElementById("searchBox").value);
     var searchByWord = document.getElementById("searchOptionWord").checked;
     var searchBySimple = document.getElementById("searchOptionSimple").checked;
@@ -277,61 +274,46 @@ function DictionaryEntry(itemIndex) {
     
     var searchRegEx = new RegExp("(" + ((searchIgnoreDiacritics) ? removeDiacritics(searchTerm) + "|" + searchTerm : searchTerm) + ")", "g" + ((searchIgnoreCase) ? "i" : ""));
 
-    entryText += "<word>";
+    var wordName = wordPronunciation = wordPartOfSpeech = wordSimpleDefinition = wordLongDefinition = "";
 
     if (searchTerm != "" && searchByWord) {
-        entryText += htmlEntitiesParse(currentDictionary.words[itemIndex].name).replace(searchRegEx, "<searchTerm>$1</searchterm>");
+        wordName += htmlEntitiesParse(currentDictionary.words[itemIndex].name).replace(searchRegEx, "<searchTerm>$1</searchterm>");
     } else {
-        entryText += currentDictionary.words[itemIndex].name;
+        wordName += currentDictionary.words[itemIndex].name.toString(); // Use toString() to prevent using a reference instead of the value.
     }
     
-    entryText += "</word>";
-    
     if (currentDictionary.words[itemIndex].pronunciation != "") {
-        entryText += "<pronunciation>";
-        entryText += marked(htmlEntitiesParse(currentDictionary.words[itemIndex].pronunciation)).replace("<p>","").replace("</p>","");
-        entryText += "</pronunciation>";
+        wordPronunciation += marked(htmlEntitiesParse(currentDictionary.words[itemIndex].pronunciation)).replace("<p>","").replace("</p>","");
     }
     
     if (currentDictionary.words[itemIndex].partOfSpeech != "") {
-        entryText += "<partofspeech>";
-        entryText += currentDictionary.words[itemIndex].partOfSpeech;
-        entryText += "</partofspeech>";
+        wordPartOfSpeech += currentDictionary.words[itemIndex].partOfSpeech.toString();
     }
 
-    entryText += "<br>";
-
-    if (currentDictionary.words[itemIndex].simpleDefinition != "") {
-        entryText += "<simpledefinition>";
-        
+    if (currentDictionary.words[itemIndex].simpleDefinition != "") {        
         if (searchTerm != "" && searchBySimple) {
-            entryText += htmlEntitiesParse(currentDictionary.words[itemIndex].simpleDefinition).replace(searchRegEx, "<searchTerm>$1</searchterm>");
+            wordSimpleDefinition += htmlEntitiesParse(currentDictionary.words[itemIndex].simpleDefinition).replace(searchRegEx, "<searchTerm>$1</searchterm>");
         } else {
-            entryText += currentDictionary.words[itemIndex].simpleDefinition;
+            wordSimpleDefinition += currentDictionary.words[itemIndex].simpleDefinition.toString();
         }
-
-        entryText += "</simpledefinition>";
     }
 
     if (currentDictionary.words[itemIndex].longDefinition != "") {
-        entryText += "<longdefinition>";
-
         if (searchTerm != "" && searchByLong) {
-            entryText += marked(htmlEntitiesParse(currentDictionary.words[itemIndex].longDefinition).replace(searchRegEx, "<searchTerm>$1</searchterm>"));
+            wordLongDefinition += marked(htmlEntitiesParse(currentDictionary.words[itemIndex].longDefinition).replace(searchRegEx, "<searchTerm>$1</searchterm>"));
         } else {
-            entryText += marked(htmlEntitiesParse(currentDictionary.words[itemIndex].longDefinition));
+            wordLongDefinition += marked(htmlEntitiesParse(currentDictionary.words[itemIndex].longDefinition));
         }
-
-        entryText += "</longdefinition>";
     }
 
-    if (!currentDictionary.settings.isComplete) {
-        entryText += ManagementArea(itemIndex);
-    }
-
-    entryText += "</entry>";
-
-    return entryText;
+    return DictionaryEntryTemplate({
+        name : wordName,
+        pronunciation : wordPronunciation,
+        partOfSpeech : wordPartOfSpeech,
+        simpleDefinition : wordSimpleDefinition,
+        longDefinition : wordLongDefinition,
+        wordId : currentDictionary.words[itemIndex].wordId.toString()
+    }, (!currentDictionary.settings.isComplete) ? itemIndex : false);
 }
 
 function ManagementArea(itemIndex) {
@@ -348,6 +330,44 @@ function ManagementArea(itemIndex) {
     managementHTML += "</div>";
 
     return managementHTML;
+}
+
+function DictionaryEntryTemplate(wordObject, managementIndex) {
+    managementIndex = (typeof managementIndex !== 'undefined') ? managementIndex : false;
+    var entryText = "<entry id='entry";
+    if (managementIndex !== false) {
+        // If there's a managementIndex, append index number to the element id.
+        entryText += managementIndex.toString();
+    }
+    entryText += "'><a href='#" + wordObject.wordId + "' class='wordLink clickable'>&#x1f517;</a>";
+    
+    entryText += "<word>" + wordObject.name + "</word>";
+    
+    if (wordObject.pronunciation != "") {
+        entryText += "<pronunciation>" + wordObject.pronunciation + "</pronunciation>";
+    }
+    
+    if (wordObject.partOfSpeech != "") {
+        entryText += "<partofspeech>" + wordObject.partOfSpeech + "</partofspeech>";
+    }
+
+    entryText += "<br>";
+
+    if (wordObject.simpleDefinition != "") {
+        entryText += "<simpledefinition>" + wordObject.simpleDefinition + "</simpledefinition>";
+    }
+
+    if (wordObject.longDefinition != "") {
+        entryText += "<longdefinition>" + wordObject.longDefinition + "</longdefinition>";
+    }
+
+    if (managementIndex !== false) {
+        entryText += ManagementArea(managementIndex);
+    }
+
+    entryText += "</entry>";
+
+    return entryText;
 }
 
 function SaveSettings() {
@@ -395,7 +415,7 @@ function DeleteCurrentDictionary() {
         ResetDictionaryToDefault();
         
         var deleteDictionary = new XMLHttpRequest();
-        deleteDictionary.open('POST', "php/ajax_dictionarymanagement.php?action=delete");
+        deleteDictionary.open('POST', "/php/ajax_dictionarymanagement.php?action=delete");
         deleteDictionary.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         deleteDictionary.onreadystatechange = function() {
             if (deleteDictionary.readyState == 4 && deleteDictionary.status == 200) {
@@ -439,7 +459,7 @@ function SaveAndUpdateWords(action, wordIndex) {
     }
 
     var sendWords = new XMLHttpRequest();
-    sendWords.open('POST', "php/ajax_dictionarymanagement.php?action=word" + action + "&nextwordid=" + currentDictionary.nextWordId.toString());
+    sendWords.open('POST', "/php/ajax_dictionarymanagement.php?action=word" + action + "&nextwordid=" + currentDictionary.nextWordId.toString());
     sendWords.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
     sendWords.onreadystatechange = function() {
         if (sendWords.readyState == 4 && sendWords.status == 200) {
@@ -501,7 +521,7 @@ function SendDictionary() {
     }
 
     var sendDictionary = new XMLHttpRequest();
-    sendDictionary.open('POST', "php/ajax_dictionarymanagement.php?action=" + action);
+    sendDictionary.open('POST', "/php/ajax_dictionarymanagement.php?action=" + action);
     sendDictionary.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     sendDictionary.onreadystatechange = function() {
         if (sendDictionary.readyState == 4 && sendDictionary.status == 200) {
@@ -570,7 +590,7 @@ function DataToSend(sendAll) {
 function LoadDictionary() {
     LoadLocalDictionary();
     var loadDictionary = new XMLHttpRequest();
-    loadDictionary.open('GET', "php/ajax_dictionarymanagement.php?action=load");
+    loadDictionary.open('GET', "/php/ajax_dictionarymanagement.php?action=load");
     loadDictionary.onreadystatechange = function() {
         if (loadDictionary.readyState == 4 && loadDictionary.status == 200) {
             if (loadDictionary.responseText == "no dictionaries") {
@@ -594,7 +614,7 @@ function ChangeDictionary(userDictionariesSelect) {
     userDictionariesSelect = (typeof userDictionariesSelect !== 'undefined' && userDictionariesSelect != null) ? userDictionariesSelect : document.getElementById("userDictionaries");
     if (currentDictionary.externalID != userDictionariesSelect.value && userDictionariesSelect.options.length > 0) {
         var changeDictionaryRequest = new XMLHttpRequest();
-        changeDictionaryRequest.open('POST', "php/ajax_dictionarymanagement.php?action=switch");
+        changeDictionaryRequest.open('POST', "/php/ajax_dictionarymanagement.php?action=switch");
         changeDictionaryRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         var postString = "newdictionaryid=" + userDictionariesSelect.value.toString();
         changeDictionaryRequest.onreadystatechange = function() {
@@ -775,11 +795,13 @@ function ImportWords() {
     }
 }
 
-function WordIndex(word) {
+function WordIndex(word, byId) {
+// Use byId = true to enter word id number instead of string.
     for (var i = 0; i < currentDictionary.words.length; i++)
     {
-        if ((!currentDictionary.settings.caseSensitive && currentDictionary.words[i].name.toLowerCase() == word.toLowerCase()) ||
-            (currentDictionary.settings.caseSensitive && currentDictionary.words[i].name == word)) {
+        if ((!byId && (!currentDictionary.settings.caseSensitive && currentDictionary.words[i].name.toLowerCase() == word.toLowerCase()) ||
+                (currentDictionary.settings.caseSensitive && currentDictionary.words[i].name == word)) ||
+            (byId && currentDictionary.words[i].wordId == word)) {
             return i;
         }
     }
