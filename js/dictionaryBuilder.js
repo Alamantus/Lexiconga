@@ -273,8 +273,10 @@ function DictionaryEntry(itemIndex) {
     var wordName = wordPronunciation = wordPartOfSpeech = wordSimpleDefinition = wordLongDefinition = "";
 
     if (searchTerm != "" && searchByWord) {
+        // Parse HTML Entities while searching so the regex can search actual characters instead of HTML.
         wordName += htmlEntitiesParse(currentDictionary.words[itemIndex].name).replace(searchRegEx, "<searchTerm>$1</searchterm>");
     } else {
+        // Don't need to parse if not searching because HTML displays correctly anyway!
         wordName += currentDictionary.words[itemIndex].name.toString(); // Use toString() to prevent using a reference instead of the value.
     }
     
@@ -282,7 +284,7 @@ function DictionaryEntry(itemIndex) {
         wordPronunciation += marked(htmlEntitiesParse(currentDictionary.words[itemIndex].pronunciation)).replace("<p>","").replace("</p>","");
     }
     
-    if (currentDictionary.words[itemIndex].partOfSpeech != "") {
+    if (currentDictionary.words[itemIndex].partOfSpeech != " " && currentDictionary.words[itemIndex].partOfSpeech != "") {
         wordPartOfSpeech += currentDictionary.words[itemIndex].partOfSpeech.toString();
     }
 
@@ -706,17 +708,17 @@ function ExportWords() {
 
         var wordsCSV = "word,pronunciation,part of speech,equivalent,explanation\n";
         for (var i = 0; i < currentDictionary.words.length; i++) {
-            var word = htmlEntities(currentDictionary.words[i].name).trim();
-            var pronunciation = htmlEntities(currentDictionary.words[i].pronunciation).trim();
-            var partOfSpeech = htmlEntities(currentDictionary.words[i].partOfSpeech).trim();
-            var simpleDefinition = htmlEntities(currentDictionary.words[i].simpleDefinition).trim();
-            var longDefinition = htmlEntities(currentDictionary.words[i].longDefinition);
+            var word = "\"" + htmlEntitiesParse(currentDictionary.words[i].name).trim().replace(/\"/g, "\"\"") + "\"";
+            var pronunciation = "\"" + htmlEntitiesParse(currentDictionary.words[i].pronunciation).trim().replace(/\"/g, "\"\"") + "\"";
+            var partOfSpeech = "\"" + htmlEntitiesParse(currentDictionary.words[i].partOfSpeech).trim().replace(/\"/g, "\"\"") + "\"";
+            var simpleDefinition = "\"" + htmlEntitiesParse(currentDictionary.words[i].simpleDefinition).trim().replace(/\"/g, "\"\"") + "\"";
+            var longDefinition = "\"" + htmlEntitiesParse(currentDictionary.words[i].longDefinition).replace(/\"/g, "\"\"") + "\"";
             wordsCSV += word + "," + pronunciation + "," + partOfSpeech + "," + simpleDefinition + "," + longDefinition + "\n";
         }
 
         download(downloadName + ".csv", wordsCSV);
     } else {
-        alert("Dictionary must have at least 1 word to export.")
+        alert("Dictionary must have at least 1 word to export.");
     }
 }
 
@@ -785,7 +787,7 @@ function ImportWords() {
             var file = document.getElementById("importWordsCSV").files[0];
 
             var resultsArea = document.getElementById("importOptions");
-            resultsArea.innerHTML = "";
+            resultsArea.innerHTML = "<h3>Importing Words...</h3>";
 
             var currentRow = 0; // Because of the header, the first row of data is always on line 2.
             var rowsImported = 0;
@@ -818,7 +820,7 @@ function ImportWords() {
                         }
                     }
                     // Scroll to the bottom.
-                    document.getElementById("importOptions").scrollTop = document.getElementById("importOptions").scrollHeight;
+                    document.getElementById("infoPage").scrollTop = document.getElementById("infoPage").scrollHeight;
                 },
                 complete: function(results) {
                     SaveAndUpdateWords("all");
