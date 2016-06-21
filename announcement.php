@@ -1,1 +1,1 @@
-The Filter system has been updated—you can now filter on as many parts of speech as you want!
+<i><small>June 21, 2016</small></i> — So much has been updated! Check the <a href="http://test.lexicon.ga/updates" target="_blank">Updates page</a> to see all the changes!

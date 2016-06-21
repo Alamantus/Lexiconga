@@ -8,6 +8,7 @@ function Initialize() {
     GetTextFile("/PRIVACY.md", "privacyText", true);
     GetTextFile("/LOGIN.form", "loginForm", false);
     GetTextFile("/FORGOT.form", "forgotForm", false);
+    GetTextFile("/EXPORT.form", "exportForm", false);
     GetTextFile("/IMPORT.form", "importForm", false);
 
     SetKeyboardShortcuts();
@@ -444,16 +445,20 @@ function ToggleSearchFilter() {
 }
 
 function ShowInfo(variableName) {
-    document.getElementById("infoText").innerHTML = window[variableName];
+    ShowInfoWithText(window[variableName]);
     if (variableName == "loginForm") {
         // document.getElementById("infoText").innerHTML = loginForm;
         if (currentDictionary.words.length > 0 || currentDictionary.name != "New" || currentDictionary.description != "A new dictionary.") {
             document.getElementById("dictionaryWarn").innerHTML = "If your current dictionary is not already saved to your account, be sure to <span class='exportWarnText' onclick='ExportDictionary()'>export it before logging in</span> so you don't lose anything!";
         }
     }
-    HideAccountSettings();
-    document.getElementById("infoPage").scrollTop = 0;
+}
+
+function ShowInfoWithText(text) {
+    document.getElementById("infoText").innerHTML = text;
     document.getElementById("infoScreen").style.display = "block";
+    document.getElementById("infoPage").scrollTop = 0;
+    HideAccountSettings();
 }
 
 function HideInfo() {
@@ -670,11 +675,15 @@ function ShowFilterWordCount(numberOfWords) {
 }
 
 function NewWordNotification(word) {
+    var wordId = currentDictionary.nextWordId - 1;
+    NewNotification("New Word Added: <a href='#" + wordId.toString() + "'>" + word + "</a>");
+}
+
+function NewNotification(message) {
     var notificationArea = document.getElementById("notificationArea");
     var notificationMessage = document.getElementById("notificationMessage");
-    var wordId = currentDictionary.nextWordId - 1;
     notificationArea.style.display = "block";
-    notificationMessage.innerHTML = "New Word Added: <a href='#" + wordId.toString() + "'>" + word + "</a>";
+    notificationMessage.innerHTML = message;
 }
 
 function FocusAfterAddingNewWord() {

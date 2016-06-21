@@ -342,7 +342,7 @@ function DictionaryEntryTemplate(wordObject, managementIndex) {
     entryText += "'><a name='" + wordObject.wordId + "'></a>";
 
     if (currentDictionary.settings.isPublic) {
-        entryText += "<a href='/" + currentDictionary.externalID + "/" + wordObject.wordId + "' class='wordLink clickable' title='Share Word' style='margin-left:5px;'>&#10150;</a>";
+        entryText += "<a href='/" + currentDictionary.externalID + "/" + wordObject.wordId + "' target='_blank' class='wordLink clickable' title='Share Word' style='margin-left:5px;'>&#10150;</a>";
     }
 
     entryText += "<a href='#" + wordObject.wordId + "' class='wordLink clickable' title='Link Within Page'>&#x1f517;</a>";
@@ -619,6 +619,10 @@ function LoadDictionary() {
 function ChangeDictionary(userDictionariesSelect) {
     userDictionariesSelect = (typeof userDictionariesSelect !== 'undefined' && userDictionariesSelect != null) ? userDictionariesSelect : document.getElementById("userDictionaries");
     if (currentDictionary.externalID != userDictionariesSelect.value && userDictionariesSelect.options.length > 0) {
+        // Show the info page with loading screen and hide settings and stuff.
+        ShowInfoWithText("<h1>Loading " + userDictionariesSelect.options[userDictionariesSelect.selectedIndex].text + "...</h1>");
+        HideSettings();
+
         ChangeDictionaryToId(userDictionariesSelect.value, function(response) {
             if (response == "no dictionaries") {
                     console.log(response);
@@ -630,7 +634,7 @@ function ChangeDictionary(userDictionariesSelect) {
                     SaveDictionary(false);
                     ProcessLoad();
                     LoadUserDictionaries();
-                    HideSettings();
+                    HideInfo(); // Hide the loading screen.
                 }
         });
     }
@@ -694,12 +698,32 @@ function SavePreviousDictionary () {
 }
 
 function ExportDictionary() {
+    var downloadName = removeDiacritics(stripHtmlEntities(currentDictionary.name)).replace(/\W/g, '');
+    if (downloadName == "") {
+        downloadName = "export";
+    }
+    download(downloadName + ".dict", localStorage.getItem('dictionary'));
+}
+
+function ExportWords() {
     if (currentDictionary.words.length > 0) {
         var downloadName = removeDiacritics(stripHtmlEntities(currentDictionary.name)).replace(/\W/g, '');
         if (downloadName == "") {
             downloadName = "export";
         }
-        download(downloadName + ".dict", localStorage.getItem('dictionary'));
+        downloadName += "_words";
+
+        var wordsCSV = "word,pronunciation,part of speech,equivalent,explanation\n";
+        for (var i = 0; i < currentDictionary.words.length; i++) {
+            var word = htmlEntities(currentDictionary.words[i].name).trim();
+            var pronunciation = htmlEntities(currentDictionary.words[i].pronunciation).trim();
+            var partOfSpeech = htmlEntities(currentDictionary.words[i].partOfSpeech).trim();
+            var simpleDefinition = htmlEntities(currentDictionary.words[i].simpleDefinition).trim();
+            var longDefinition = htmlEntities(currentDictionary.words[i].longDefinition);
+            wordsCSV += word + "," + pronunciation + "," + partOfSpeech + "," + simpleDefinition + "," + longDefinition + "\n";
+        }
+
+        download(downloadName + ".csv", wordsCSV);
     } else {
         alert("Dictionary must have at least 1 word to export.")
     }
@@ -730,8 +754,10 @@ function ImportDictionary() {
                         currentDictionary.settings.isPublic = false;   // Reset public setting for imported dictionary.
                         SaveDictionary(true);
                         ProcessLoad();
+                        HideInfo();
                         HideSettings();
                         document.getElementById("importFile").value = "";
+                        NewNotification("Successfully Imported the \"" + currentDictionary.name + "\" Dictionary.");
                     } else {
                         var errorString = "File is missing:";
                         if (!tmpDicitonary.hasOwnProperty("name")) 
@@ -779,8 +805,18 @@ function ImportWords() {
                     currentRow++;
                     // If there are no errors OR the word and either equivalent or explanation contain data, then import it.
                     if ((row.data[0].word.trim().length > 0 && (row.data[0].equivalent.trim().length > 0 || row.data[0].explanation.trim().length > 0)) || row.errors.length == 0) {
-                        currentDictionary.words.push({name: htmlEntities(row.data[0]["word"]).trim(), pronunciation: htmlEntities(row.data[0]["pronunciation"]).trim(), partOfSpeech: ((htmlEntities(row.data[0]["part of speech"]).trim().length > 0) ? htmlEntities(row.data[0]["part of speech"]).trim() : " "), simpleDefinition: htmlEntities(row.data[0]["equivalent"]).trim(), longDefinition: htmlEntities(row.data[0]["explanation"]).trim(), wordId: currentDictionary.nextWordId++});
-                        resultsArea.innerHTML += "<p>Imported \"" + htmlEntitiesParse(htmlEntities(row.data[0]["word"])).trim() + "\" successfully</p>";
+                        var wordName = htmlEntities(row.data[0]["word"]).trim(),
+                            wordPronunciation = htmlEntities(row.data[0]["pronunciation"]).trim(),
+                            wordPartOfSpeech = ((htmlEntities(row.data[0]["part of speech"]).trim().length > 0) ? htmlEntities(row.data[0]["part of speech"]).trim() : " "),
+                            wordSimpleDefinition = htmlEntities(row.data[0]["equivalent"]).trim(),
+                            wordLongDefinition = htmlEntities(row.data[0]["explanation"]).trim(),
+                            wordId = currentDictionary.nextWordId++;
+
+                        currentDictionary.words.push({name: wordName, pronunciation: wordPronunciation, partOfSpeech: wordPartOfSpeech, simpleDefinition: wordSimpleDefinition, longDefinition: wordLongDefinition, wordId: wordId});
+
+                        var wordEntry = DictionaryEntryTemplate(currentDictionary.words[currentDictionary.words.length - 1]);
+                        resultsArea.innerHTML += wordEntry;
+
                         rowsImported++;
                     } else {
                         // If it's not just an empty line, give an error.
@@ -796,6 +832,7 @@ function ImportWords() {
                 complete: function(results) {
                     SaveAndUpdateWords("all");
                     resultsArea.innerHTML += "<p>The file has finished importing " + rowsImported.toString() + " words.</p>";
+                    NewNotification("Imported " + rowsImported.toString() + " words.");
                     // Scroll to the bottom.
                     document.getElementById("importOptions").scrollTop = document.getElementById("importOptions").scrollHeight;
                     document.getElementById("numberOfWordsInDictionary").innerHTML = currentDictionary.words.length.toString();

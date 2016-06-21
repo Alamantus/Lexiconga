@@ -303,16 +303,17 @@ if ($display_mode != "build") {
                     <label>
                         <b>Total Entries:</b> <i id="numberOfWordsInDictionary"></i>
                     </label>
-                    <label><button type="button" onclick="ExportDictionary()" style="cursor:pointer;">Export Current Dictionary</button></label>
+                    <br>
                     <?php if ($current_user > 0) {  //If logged in, show the special options. ?>
                         <label><span>Change Dictionaries</span>
                             <select id="userDictionaries" onchange="ChangeDictionary();"></select>
                         </label>
+                        <br>
                         <label><button type="button" onclick="CreateNewDictionary()" style="cursor:pointer;">Create a New Dictionary</button></label>
                     <?php } ?>
-                    <label>
-                        <button type="button" onclick="ShowInfo('importForm')">Import...</button>
-                    </label>
+                    <label style="display:inline-block;margin-right:8px;"><button type="button" onclick="ShowInfo('exportForm')">Export...</button></label>
+                    <label style="display:inline-block;"><button type="button" onclick="ShowInfo('importForm')">Import...</button></label>
+                    <br><br>
                     <?php if ($current_user > 0) {  //If logged in, show the log out button. ?>
                         <label><button type="button" onclick="DeleteCurrentDictionary()" style="cursor:pointer;">Delete Current Dictionary</button></label>
                     <?php } else {  //If logged in, show the log out button. ?>
@@ -422,7 +423,7 @@ if ($display_mode != "build") {
     <?php } ?>
     <?php if ($_GET['adminoverride'] != "noadsortracking") { include_once("php/google/analytics.php"); } ?>
     <script>
-    var aboutText = termsText = privacyText = loginForm = forgotForm = importForm = "Loading...";
+    var aboutText = termsText = privacyText = loginForm = forgotForm = exportForm = importForm = "Loading...";
     <?php if ($display_mode != "build") { ?>
     window.onload = function () {
         ShowPublicDictionary(<?php if ($display_mode == "word") echo "true"; ?>);
@@ -436,6 +437,7 @@ if ($display_mode != "build") {
         GetTextFile("/PRIVACY.md", "privacyText", true);
         GetTextFile("/LOGIN.form", "loginForm", false);
         GetTextFile("/FORGOT.form", "forgotForm", false);
+        GetTextFile("/EXPORT.form", "exportForm", false);
         GetTextFile("/IMPORT.form", "importForm", false);
     }
     <?php } else { ?>

@@ -15,6 +15,7 @@
         <label>
             <span>Full Dictionary</span>
             <p style="font-size:12px;">This process imports a full dictionary previously exported from Lexiconga in a .dict format.</p>
+            <p style="font-size:12px;">All imported dictionaries are set to not be public by default, even if the source dictionary was public. Be sure to check the settings after importing to make sure everything is how you want it after importing.</p>
             <input type="file" id="importFile" />
             <button type="button" onclick="ImportDictionary(); return false;">Import Dictionary</button>
         </label>
