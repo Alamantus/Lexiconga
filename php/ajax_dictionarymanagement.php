@@ -207,42 +207,48 @@ function Update_Current_Dictionary() {
 }
 
 function Save_New_Word($multiple = false) {
-    $worddata = json_decode(file_get_contents("php://input"), true);
+    if (in_array($_GET['dict'], $_SESSION['dictionaries'])) {   // Make sure that the given dictionary is valid before using it in the query.
+        // Allows users to update previously open dictionaries if they accidentally change dictionaries while in another window and go back.
+        $worddata = json_decode(file_get_contents("php://input"), true);
 
-    $dbconnection = new PDO('mysql:host=' . DATABASE_SERVERNAME . ';dbname=' . DATABASE_NAME . ';charset=utf8', DATABASE_USERNAME, DATABASE_PASSWORD);
-    $dbconnection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $dbconnection->setAttribute(PDO::ATTR_EMULATE_PREPARES, true);
-    $dbconnection->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+        $dbconnection = new PDO('mysql:host=' . DATABASE_SERVERNAME . ';dbname=' . DATABASE_NAME . ';charset=utf8', DATABASE_USERNAME, DATABASE_PASSWORD);
+        $dbconnection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $dbconnection->setAttribute(PDO::ATTR_EMULATE_PREPARES, true);
+        $dbconnection->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 
-    $query = "UPDATE `dictionaries` SET `next_word_id`=" . $_GET['nextwordid'] . ", `last_updated`='" . date("Y-m-d H:i:s") . "' WHERE `id`=" . $_SESSION['dictionary'] . "; ";
-    $query .= "INSERT IGNORE INTO `words`(`dictionary`, `word_id`, `name`, `pronunciation`, `part_of_speech`, `simple_definition`, `long_definition`) ";
-    $query .= "VALUES ";
-    if ($multiple) {
-        for ($i = 0; $i < count($worddata); $i++) {
-            if ($i > 0) {
-                $query .= ", ";
+        $query = "UPDATE `dictionaries` SET `next_word_id`=" . $_GET['nextwordid'] . ", `last_updated`='" . date("Y-m-d H:i:s") . "' WHERE `id`=" . $_GET['dict'] . "; ";
+        $query .= "INSERT IGNORE INTO `words`(`dictionary`, `word_id`, `name`, `pronunciation`, `part_of_speech`, `simple_definition`, `long_definition`) ";
+        $query .= "VALUES ";
+        if ($multiple) {
+            for ($i = 0; $i < count($worddata); $i++) {
+                if ($i > 0) {
+                    $query .= ", ";
+                }
+                $query .= "(" . $_GET['dict'] . "," . $worddata[$i]['wordId'] . ",'" . $worddata[$i]['name'] . "','" . $worddata[$i]['pronunciation'] . "','" . $worddata[$i]['partOfSpeech'] . "','" . $worddata[$i]['simpleDefinition'] . "','" . $worddata[$i]['longDefinition'] . "')";
             }
-            $query .= "(" . $_SESSION['dictionary'] . "," . $worddata[$i]['wordId'] . ",'" . $worddata[$i]['name'] . "','" . $worddata[$i]['pronunciation'] . "','" . $worddata[$i]['partOfSpeech'] . "','" . $worddata[$i]['simpleDefinition'] . "','" . $worddata[$i]['longDefinition'] . "')";
+        } else {
+            $query .= "(" . $_GET['dict'] . "," . $worddata['wordId'] . ",'" . $worddata['name'] . "','" . $worddata['pronunciation'] . "','" . $worddata['partOfSpeech'] . "','" . $worddata['simpleDefinition'] . "','" . $worddata['longDefinition'] . "')";
+        }
+        $query .= ";";
+        
+        try {
+            $update = $dbconnection->prepare($query);
+            $update->execute();
+            echo "added successfully";
+            return true;
+        }
+        catch (PDOException $ex) {
+            echo "could not update:\n" . $ex->getMessage() . "\n" . $query;
         }
     } else {
-        $query .= "(" . $_SESSION['dictionary'] . "," . $worddata['wordId'] . ",'" . $worddata['name'] . "','" . $worddata['pronunciation'] . "','" . $worddata['partOfSpeech'] . "','" . $worddata['simpleDefinition'] . "','" . $worddata['longDefinition'] . "')";
-    }
-    $query .= ";";
-    
-    try {
-        $update = $dbconnection->prepare($query);
-        $update->execute();
-        echo "added successfully";
-        return true;
-    }
-    catch (PDOException $ex) {
-        echo "could not update:\n" . $ex->getMessage() . "\n" . $query;
+        echo "specified dictionary is not owned by user";
     }
     return false;
 }
 
 function Update_Word() {
-    if (isset($_SESSION['dictionary'])) {
+    if (in_array($_GET['dict'], $_SESSION['dictionaries'])) {   // Make sure that the given dictionary is valid before using it in the query.
+        // Allows users to update previously open dictionaries if they accidentally change dictionaries while in another window and go back.
         $worddata = json_decode(file_get_contents("php://input"), true);
 
         $query = "UPDATE `words` SET ";
@@ -253,7 +259,7 @@ function Update_Word() {
         $query .= "`simple_definition`='" . $worddata['simpleDefinition'] . "', ";
         $query .= "`long_definition`='" . $worddata['longDefinition'] . "', ";
         $query .= "`last_updated`='" . date("Y-m-d H:i:s") . "'";
-        $query .= " WHERE `dictionary`=" . $_SESSION['dictionary'] . " AND `word_id`=" . $worddata['wordId'] . ";";
+        $query .= " WHERE `dictionary`=" . $_GET['dict'] . " AND `word_id`=" . $worddata['wordId'] . ";";
         $update = query($query);
         
         if ($update) {
@@ -262,6 +268,8 @@ function Update_Word() {
         } else {
             echo "could not update";
         }
+    } else {
+        echo "specified dictionary is not owned by user";
     }
     return false;
 }
@@ -315,15 +323,16 @@ function Delete_Current_Dictionary() {
 
 function Delete_Word() {
     if (isset($_SESSION['dictionary'])) {
-        if (in_array($_SESSION['dictionary'], $_SESSION['dictionaries'])) {
+        if (in_array($_POST['dict'], $_SESSION['dictionaries'])) {   // Make sure that the given dictionary is valid before using it in the query.
+        // Allows users to update previously open dictionaries if they accidentally change dictionaries while in another window and go back.
             //Clear is_current from all user's dictionaries and then update the one they chose, only if the chosen dictionary is valid.
-            $query = "DELETE FROM `words` WHERE `dictionary`=" . $_SESSION['dictionary'] . " AND `word_id`=" . $_POST['word'] . ";";
+            $query = "DELETE FROM `words` WHERE `dictionary`=" . $_POST['dict'] . " AND `word_id`=" . $_POST['word'] . ";";
             $update = query($query);
             
             if ($update) {
                 echo "deleted successfully";
             } else {
-                echo "could not delete: " . $_SESSION['dictionary'] . "-" . $_POST['word'] . " caused a problem";
+                echo "could not delete: " . $_POST['dict'] . "-" . $_POST['word'] . " caused a problem";
             }
         } else {
             echo "invalid dictionary";

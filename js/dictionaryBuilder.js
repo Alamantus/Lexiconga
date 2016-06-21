@@ -181,10 +181,6 @@ function DeleteWord(index) {
     deleteWord.onreadystatechange = function() {
         if (deleteWord.readyState == 4 && deleteWord.status == 200) {
             if (deleteWord.responseText == "deleted successfully" || deleteWord.responseText == "not signed in") {
-                // If updated successfully, then reload the dictionary from server.
-                // if (document.getElementById("editIndex").value != "")
-                //     ClearForm();
-
                 currentDictionary.words.splice(index, 1);
                 
                 SaveWords(false);
@@ -195,7 +191,7 @@ function DeleteWord(index) {
             return false;
         }
     }
-    deleteWord.send("word=" + currentDictionary.words[index].wordId.toString());
+    deleteWord.send("dict=" + currentDictionary.externalID.toString() + "&word=" + currentDictionary.words[index].wordId.toString());
 }
 
 function ShowDictionary() {
@@ -465,7 +461,7 @@ function SaveAndUpdateWords(action, wordIndex) {
     }
 
     var sendWords = new XMLHttpRequest();
-    sendWords.open('POST', "/php/ajax_dictionarymanagement.php?action=word" + action + "&nextwordid=" + currentDictionary.nextWordId.toString());
+    sendWords.open('POST', "/php/ajax_dictionarymanagement.php?action=word" + action + "&dict=" + currentDictionary.externalID.toString() + "&nextwordid=" + currentDictionary.nextWordId.toString());
     sendWords.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
     sendWords.onreadystatechange = function() {
         if (sendWords.readyState == 4 && sendWords.status == 200) {
@@ -491,11 +487,6 @@ function SaveWords() {
 }
 
 function SaveAndUpdateDictionary(keepFormContents) {
-    // if (!currentDictionary.settings.sortByEquivalent) {
-    //     currentDictionary.words.sort(dynamicSort(['name', 'partOfSpeech']));
-    // } else {
-    //     currentDictionary.words.sort(dynamicSort(['simpleDefinition', 'partOfSpeech']));
-    // }
     SaveDictionary(true);
     ShowDictionary();
     if (!keepFormContents) {
