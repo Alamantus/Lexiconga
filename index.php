@@ -203,13 +203,13 @@ if ($display_mode != "build") {
         <?php } ?>
         
         <?php if ($display_mode == "word") { ?>
-        <a class="clickable" href="/<?php echo $dictionary_to_load; ?>">View Full Dictionary</a>
+        <a class="clickable toggleButton" href="/<?php echo $dictionary_to_load; ?>">View Full Dictionary</a>
         <?php } ?>
-        <span id="descriptionToggle" class="clickable" onclick="ToggleDescription();"><?php if ($display_mode == "view") { ?>Hide<?php } else { ?>Show<?php } ?> Description</span>
+        <span id="descriptionToggle" class="clickable toggleButton" onclick="ToggleDescription();"><?php if ($display_mode == "view") { ?>Hide<?php } else { ?>Show<?php } ?> Description</span>
         <div id="dictionaryDescription" style="display:<?php if ($display_mode == "view") { ?>block<?php } else { ?>none<?php } ?>;"></div>
         
         <?php if ($display_mode != "word") { ?>
-        <span id="searchFilterToggle" class="clickable" onclick="ToggleSearchFilter();"><?php if ($display_mode == "view") { ?>Hide <?php } ?>Search/Filter Options</span>
+        <span id="searchFilterToggle" class="clickable toggleButton" onclick="ToggleSearchFilter();"><?php if ($display_mode == "view") { ?>Hide <?php } ?>Search/Filter Options</span>
         <div id="searchFilterArea" style="display:<?php if ($display_mode == "view") { ?>block<?php } else { ?>none<?php } ?>;">
             <div id="searchArea" style="display:block;">
                 <label style="margin-top:10px;">
@@ -371,11 +371,14 @@ if ($display_mode != "build") {
 			    </label> <span class="clickable inline-button" onclick="ExplainAllowEmails()">?</span>
                 <div id="accountSettingsError" style="font-weight:bold;color:red;"></div>
                 <button type="submit" id="accountSettingsSubmitButton" onclick="ValidateAccountSettings(); return false;">Save Settings</button>
-                <br><br>
+                <br>
+            </form></div>
+            <div class="settingsCol">
+                <br>
                 <h2>Reset Your Password</h2>
                 <p style="font-size: 12px;">Click the button below to reload the page and show the Reset Password form. Filling out this form will instantly change your password, and you will need to log in using the new password from that point forward.</p>
                 <span id="resetPassword" class="clickable" onclick="this.innerHTML='Loading...';LoggedInResetPassword();" style="margin-top:20px;">Reset Password</span>
-            </form></div>
+            </div>
         </div>
     </div>
     <?php
@@ -445,6 +448,7 @@ if ($display_mode != "build") {
         Initialize();
     });    
     <?php } ?>
+    var loggedIn = <?php echo ($current_user > 0) ? "true" : "false"; ?>;
     </script>
 </body>
 </html>

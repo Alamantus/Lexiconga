@@ -229,6 +229,9 @@ function ShowDictionary() {
     
     var dictionaryNameArea = document.getElementById("dictionaryName");
     dictionaryNameArea.innerHTML = htmlEntitiesParse(currentDictionary.name) + " Dictionary";
+    if (loggedIn && currentDictionary.settings.isPublic) {
+        dictionaryNameArea.innerHTML += "<a href='/" + currentDictionary.externalID + "' target='_blank' id='dictionaryShareLink' class='clickable' title='Share Dictionary'>&#10150;</a>";
+    }
     
     var dictionaryDescriptionArea = document.getElementById("dictionaryDescription");
     dictionaryDescriptionArea.innerHTML = marked(htmlEntitiesParse(currentDictionary.description));
@@ -339,7 +342,7 @@ function DictionaryEntryTemplate(wordObject, managementIndex) {
     }
     entryText += "'><a name='" + wordObject.wordId + "'></a>";
 
-    if (currentDictionary.settings.isPublic) {
+    if (loggedIn && currentDictionary.settings.isPublic) {
         entryText += "<a href='/" + currentDictionary.externalID + "/" + wordObject.wordId + "' target='_blank' class='wordLink clickable' title='Share Word' style='margin-left:5px;'>&#10150;</a>";
     }
 

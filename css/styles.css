@@ -159,6 +159,11 @@ input[type=checkbox] {
     margin: 0 0 5px;
 }
 
+#dictionaryShareLink {
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
 #dictionaryDescription {
     width: 100%;
     max-height: 400px;
@@ -186,12 +191,11 @@ input[type=checkbox] {
     padding: 2px 4px;
 }
 
-#descriptionToggle, #searchFilterToggle {
+.toggleButton {
     display: inline-block;
     margin: 8px;
     font-weight: bold;
     font-size: 12px;
-    cursor: pointer;
 }
 
 .searchOption, .filterOption {
@@ -353,7 +357,7 @@ searchTerm {
 }
 
 #announcementCloseButton, #notificationCloseButton,
-#settingsButton, #settingsScreenCloseButton,
+#settingsButton, #settingsScreenCloseButton, #accountSettingsScreenCloseButton,
 #settingsSaveButtons button, #infoScreenCloseButton,
 #fullScreenTextboxScreenCloseButton {
     float: right;

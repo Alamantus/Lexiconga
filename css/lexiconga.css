@@ -129,6 +129,10 @@ input, textarea, select, option {
 	text-shadow: 2px 2px 2px #915337;
 }
 
+#dictionaryShareLink {
+	text-shadow: none;
+}
+
 #dictionaryDescription {
 	width: 90%;
 	background: #f2d5b2;
