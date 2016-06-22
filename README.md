@@ -60,7 +60,7 @@ After adding some words to your dictionary, you'll notice a link icon (🔗) and
 
 The link icon (🔗) is a link to that word. These links only work when there is nothing entered in the search box and no filters are set. Also note that the links are only intended for linking within the same dictionary and will only work properly when your dictionary is loaded, so only share them with friends if your friends also have your dictionary imported.
 
-The **Edit** button will scroll to the top of the screen and fill the Word form with the current details of the word you edited. You can make any changes you want and click the "Edit Word" button. You will be asked to confirm your changes, and once you do, your word will be saved. If you do not want to make changes, just click the "Cancel" button.
+The **Edit** button will cause a form with the current details of the word you edited to display in the same space that the word previously appeared. You can make any changes you want and click the "Edit Word" button. You will be asked to confirm your changes, and once you do, your word will be saved. If you do not want to make changes, just click the "Cancel" button.
 
 The **Delete** button will ask you to confirm that you want to delete the entry, and if you say yes, the word will be _permanently deleted and **cannot be retrieved**_.
 
@@ -172,9 +172,9 @@ The **Import Dictionary** button acts the same as before, but instead of overwri
 The **Delete Current Dictionary** button will permanently and irretrievably delete the currently loaded dictionary from your account! Be careful with that one. After deleting, you will then be prompted to either select another dictionary to load or create a new one, _or_ if you have no other dictionaries, immediately create a new one for you.
 
 #### Public Dictionaries
-When a dictionary is marked as public, you can share its public link and allow anyone to view its contents without being able to make changes. The dictionary's description and the search/filter area is visible by default, and the viewer can scroll through or search your dictionary without being able to make changes.
+When a dictionary is marked as public, you can share its public link and allow anyone to view its contents without being able to make changes. The dictionary's description and the search/filter area is visible by default, and the viewer can scroll through or search your dictionary without being able to make changes. Public dictionaries also have the ability to share specific word entries using the "➦" buttons in each word box. When viewing a word, the search/filter options are not available, but anyone can still read the dictionary's description.
 
-To log in or create an account when viewing a dictionary, you need to go back to the main Lexiconga page. You can get there by clicking either the logo or the "Go Home" button.
+To log in or create an account when viewing a dictionary, you need to go back to the main Lexiconga page. You can get there by clicking either the logo or the "Go Home" button. Or, if you are the owner of the dictionary and are currently logged in, the "Go Home" button will be replaced with an "Edit Dictionary" button, and you can click that to change your current dictionary adn start editing it.
 
 ### Forgot Your Password?
 If you forget your password, you can request a password reset email by clicking the "Forgot Password" button on the "Log In/Create Account" button entering the email address associated with your account and clicking "Email Password Reset Key". This will send an email (_check your spam_) with a link that will allow you to reset your password. When you go to the link provided, you'll be able to enter a new password that you can log in with.
@@ -183,11 +183,11 @@ If you forget your password, you can request a password reset email by clicking 
 If you manage to enter your password wrong 10 times, you'll be locked out from logging in for an hour. Use this time to try to remember your password or something. You can get an idea of how long you've waited by refreshing the page and clicking the unfortunate "Can't Login" button. After an hour has passed, refresh the page again and you'll get another 10 tries.
 
 ## Problems or Requests
-Please report any problems you come across to the [Dictionary Builder Issues page](/issues). You can also submit enhancement requests to the same place if you have any requests for new features.
+Please report any problems you come across to the [Dictionary Builder Issues page](http://lexicon.ga/issues). You can also submit enhancement requests to the same place if you have any requests for new features.
 
 ## Update Log
 You can see all previous updates to Lexiconga here:
-[http://lexicon.ga/updates](/updates)
+[http://lexicon.ga/updates](http://lexicon.ga/updates)
 
 ## Thanks!
 If you like Lexiconga and want to buy me a cup of coffee for the service, you can **[donate throughPaypal](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=MCCSYGQCR5TLY&lc=US&item_name=Lexiconga&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted)** to help keep it online if you want.

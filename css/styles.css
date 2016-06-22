@@ -162,6 +162,7 @@ input[type=checkbox] {
 #dictionaryShareLink {
     margin-left: 10px;
     vertical-align: middle;
+    text-decoration: none;
 }
 
 #dictionaryDescription {
