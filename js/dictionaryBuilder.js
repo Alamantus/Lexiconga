@@ -99,7 +99,7 @@ function ShowWordEditForm(index) {
                 <label><span>Word</span>\
                     <input type="text" id="word' + indexString + '" value="' + htmlEntitiesParse(word.name) + '" onkeydown="SubmitWordOnCtrlEnter(this)" />\
                 </label>\
-                <label><span>Pronunciation <a class="helperlink" href="/ipa_character_picker/" target="_blank" title="IPA Character Picker backed up from http://r12a.github.io/pickers/ipa/">IPA Characters</a></span>\
+                <label><span>Pronunciation <a class="clickable inline-button" href="/ipa_character_picker/" target="_blank" title="IPA Character Picker backed up from http://r12a.github.io/pickers/ipa/">IPA Characters</a></span>\
                     <input type="text" id="pronunciation' + indexString + '" value="' + htmlEntitiesParse(word.pronunciation) + '" onkeydown="SubmitWordOnCtrlEnter(this)" />\
                 </label>\
                 <label><span>Part of Speech</span>\
@@ -108,8 +108,8 @@ function ShowWordEditForm(index) {
                 <label><span>Equivalent Word(s)</span>\
                     <input type="text" id="simpleDefinition' + indexString + '" value="' + htmlEntitiesParse(word.simpleDefinition) + '" onkeydown="SubmitWordOnCtrlEnter(this)" />\
                 </label>\
-                <label><span>Explanation/Long Definition <span id="showFullScreenTextbox" class="clickable" onclick="ShowFullScreenTextbox(\'longDefinition' + indexString + '\', \'Explanation/Long Definition\')">Maximize</span></span>\
-                    <textarea id="longDefinition' + indexString + '" onkeydown="SubmitWordOnCtrlEnter(this)">' + htmlEntitiesParse(word.longDefinition) + '</textarea>\
+                <label><span>Explanation/Long Definition <span id="showFullScreenTextbox" class="clickable inline-button" onclick="ShowFullScreenTextbox(\'longDefinition' + indexString + '\', \'Explanation/Long Definition\')">Maximize</span></span>\
+                    <textarea id="longDefinition' + indexString + '" class="longDefinition" onkeydown="SubmitWordOnCtrlEnter(this)">' + htmlEntitiesParse(word.longDefinition) + '</textarea>\
                 </label>\
                 <span id="errorMessage' + indexString + '"></span>\
                 <div id="editWordButtonArea' + indexString + '" style="display: block;">\

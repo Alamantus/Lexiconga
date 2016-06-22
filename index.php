@@ -175,7 +175,7 @@ if ($display_mode != "build") {
                 <input type="text" id="simpleDefinition" onkeydown="SubmitWordOnCtrlEnter(this)" />
             </label>
             <label><span>Explanation/Long Definition <span id="showFullScreenTextbox" class="clickable inline-button" onclick="ShowFullScreenTextbox('longDefinition', 'Explanation/Long Definition')">Maximize</span></span>
-                <textarea id="longDefinition" onkeydown="SubmitWordOnCtrlEnter(this)"></textarea>
+                <textarea id="longDefinition" class="longDefinition" onkeydown="SubmitWordOnCtrlEnter(this)"></textarea>
             </label>
             <input type="hidden" id="editIndex" />
             <span id="errorMessage"></span>
