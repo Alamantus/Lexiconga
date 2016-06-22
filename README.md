@@ -10,6 +10,7 @@
   * [The Settings Menu](#the-settings-menu)
   * [Search/Filter](#search-filter)
   * [Keyboard Shortcuts](#keyboard-shortcuts)
+  * [Importing and Exporting](#importing-and-exporting)
 * [Accounts](#accounts)
   * [Creating An Account](#creating-an-account)
   * [Logging In](#logging-in)
@@ -78,9 +79,7 @@ The **Dictionary is Complete** checkbox will make the word add/edit form go away
 
 The **Total Entries** label is just a live tally of how many words you have added to the current dictionary.
 
-The **Export Current Dictionary** button will immediately do exactly that. Your browser will start downloading a file with your dictionary's name in a ".dict" format. Please note that this may not work as expected on mobile platforms. This export can be a personal backup for your own uses, to work on multiple dictionaries at a time (i.e. export one dictionary and import the other to work on the one you'd like), or you can share it with friends to view it.
-
-The **Import Dictionary** form allows you to upload and view any previously-exported ".dict" files. After selecting your ".dict" file, click the "Import" button to _overwrite your current dictionary_ and view the imported one. Again, please note that this import process will _**permanently overwrite your current dictionary**_, so please be sure to export your dictionary _before_ you import a new one.
+The **Export...** and **Import...** buttons are discussed in the [Importing and Exporting](#importing-and-exporting) section below.
 
 The **Empty Current Dictionary** should only be used if you want to completely start over from scratch. It will ask you to confirm that you want to delete, and if you confirm, your dictionary will be gone forever. If you have not exported your dictionary before emptying it, there will be absolutely no way to get it back. Please be careful with this!
 
@@ -116,6 +115,23 @@ The "Filter Words" drop-down box allows you to filter your dictionary by part of
 
 * **A** : Toggle Account Settings window (if logged in).
 * **S** : Toggle Dicitonary Settings window. Saves & Closes if it's already open.
+
+### Importing and Exporting
+In the Settings screen, you may notice the buttons labeled "**Export...**" and "**Import...**". If you click on either of these, the respective Export and Import page will appear.
+
+#### Exporting
+Clicking the **"Export Words"** button will start a download of all of the words in the currently loaded dictionary into a convenient CSV file format that you can use to re-import into another Lexiconga dictionary or otherwise use as you need it! All of the data is wrapped in double quotes (`"`) to comply with standard CSV format.
+
+Clicking the **"Export Dictionary"** button will start a download of a file with your dictionary's name in a ".dict" format. _Please note that this may not work as expected on mobile platforms._ This export can be a personal backup for your own uses, to work on multiple dictionaries at a time (i.e. export one dictionary and import the other to work on the one you'd like), or you can share it with friends to view it. The .dict file contains your whole dictionary in a JSON format, and is mainly only useful for importing back into Lexiconga.
+
+#### Importing
+Clicking the **"Import Words"** button after choosing a file allows you to import a correctly-formatted CSV list of words into your currently loaded dictionary. This can either be a previously-exported list of words from another Lexiconga dictionary or a list created in Excel with the correct column headers that has been saved as a CSV file. You can download a CSV file as a template from the Import page as an example to help you format and save your Excel lists properly.
+
+Please note that when importing words, you must make sure that the parts of speech specified in the parts of speech column are written _exactly as they are in your dictionary settings_ (capitalized, spelled correctly, or any other details). If they are not the same, then you will not be able to use the filters to find the words! So if you import a word with the part of speech set to "adj" or "adjective", but the part of speech in your dictionary's settings is "Adjective", then you will not be able to find the word using the filters!
+
+If you import a word _without_ a part of speech, you _can_ use the filter's "Blanks" option to find any words with empty parts of speech to help you clean up after the import.
+
+Clicking the **"Import Dictionary"** button after choosing a file allows you to upload and view any previously-exported ".dict" files. After selecting your ".dict" file, click the "Import Dictionary" button to _overwrite your current dictionary_ and view the imported one. Again, please note that if you are not logged in, this import process will _**permanently overwrite your current dictionary**_, so please be sure to export your dictionary _before_ you import a new one!
 
 ## Accounts
 If you are using an account with Lexiconga, your experience should remain essentially the same, but you will see some additional options in the Settings menu and you might notice some slight changes in performance as it saves to and loads from the database.
