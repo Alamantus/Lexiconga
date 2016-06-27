@@ -8,6 +8,6 @@ RewriteRule    ^view/([0-9]+)/?$    index.php?dict=$1    [NC,L]    # Handle dict
 
 RewriteRule    ^([0-9]+)/?$    index.php?dict=$1    [NC,L]    # Handle dictionary ids.
 
-RewriteRule ^issues/?$ https://github.com/Alamantus/DictionaryBuilder/issues [R=301,L] # Shorten issues url.
+RewriteRule ^issues/?$ https://github.com/Alamantus/Lexiconga/issues [R=301,L] # Shorten issues url.
 
-RewriteRule ^updates/?$ https://github.com/Alamantus/DictionaryBuilder/releases [R=301,L] # Shorten updates url.
+RewriteRule ^updates/?$ https://github.com/Alamantus/Lexiconga/releases [R=301,L] # Shorten updates url.
