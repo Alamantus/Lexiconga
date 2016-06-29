@@ -105,7 +105,7 @@ function ShowWordEditForm(index) {
                 <label><span>Part of Speech</span>\
                     <select id="partOfSpeech' + indexString + '" onkeydown="SubmitWordOnCtrlEnter(this)"></select>\
                 </label>\
-                <label><span>Equivalent Word(s)</span>\
+                <label><span>Definition/Equivalent Word(s)</span>\
                     <input type="text" id="simpleDefinition' + indexString + '" value="' + htmlEntitiesParse(word.simpleDefinition) + '" onkeydown="SubmitWordOnCtrlEnter(this)" />\
                 </label>\
                 <label><span>Explanation/Long Definition <span id="showFullScreenTextbox" class="clickable inline-button" onclick="ShowFullScreenTextbox(\'longDefinition' + indexString + '\', \'Explanation/Long Definition\')">Maximize</span></span>\
@@ -709,7 +709,7 @@ function ExportWords() {
         }
         downloadName += "_words";
 
-        var wordsCSV = "word,pronunciation,part of speech,equivalent,explanation\n";
+        var wordsCSV = "word,pronunciation,part of speech,definition,explanation\n";
         for (var i = 0; i < currentDictionary.words.length; i++) {
             var word = "\"" + htmlEntitiesParse(currentDictionary.words[i].name).trim().replace(/\"/g, "\"\"") + "\"";
             var pronunciation = "\"" + htmlEntitiesParse(currentDictionary.words[i].pronunciation).trim().replace(/\"/g, "\"\"") + "\"";
@@ -799,12 +799,12 @@ function ImportWords() {
                 header: true,
                 step: function(row, parser) {
                     currentRow++;
-                    // If there are no errors OR the word and either equivalent or explanation contain data, then import it.
-                    if ((row.data[0].word.trim().length > 0 && (row.data[0].equivalent.trim().length > 0 || row.data[0].explanation.trim().length > 0)) || row.errors.length == 0) {
+                    // If there are no errors OR the word and either definition or explanation contain data, then import it.
+                    if ((row.data[0].word.trim().length > 0 && (row.data[0].definition.trim().length > 0 || row.data[0].explanation.trim().length > 0)) || row.errors.length == 0) {
                         var wordName = htmlEntities(row.data[0]["word"]).trim(),
                             wordPronunciation = htmlEntities(row.data[0]["pronunciation"]).trim(),
                             wordPartOfSpeech = ((htmlEntities(row.data[0]["part of speech"]).trim().length > 0) ? htmlEntities(row.data[0]["part of speech"]).trim() : " "),
-                            wordSimpleDefinition = htmlEntities(row.data[0]["equivalent"]).trim(),
+                            wordSimpleDefinition = htmlEntities(row.data[0]["definition"]).trim(),
                             wordLongDefinition = htmlEntities(row.data[0]["explanation"]).trim(),
                             wordId = currentDictionary.nextWordId++;
 
