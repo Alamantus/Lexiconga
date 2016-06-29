@@ -10,6 +10,7 @@
   * [The Settings Menu](#the-settings-menu)
   * [Search/Filter](#search-filter)
   * [Keyboard Shortcuts](#keyboard-shortcuts)
+  * [Importing and Exporting](#importing-and-exporting)
 * [Accounts](#accounts)
   * [Creating An Account](#creating-an-account)
   * [Logging In](#logging-in)
@@ -59,7 +60,7 @@ After adding some words to your dictionary, you'll notice a link icon (🔗) and
 
 The link icon (🔗) is a link to that word. These links only work when there is nothing entered in the search box and no filters are set. Also note that the links are only intended for linking within the same dictionary and will only work properly when your dictionary is loaded, so only share them with friends if your friends also have your dictionary imported.
 
-The **Edit** button will scroll to the top of the screen and fill the Word form with the current details of the word you edited. You can make any changes you want and click the "Edit Word" button. You will be asked to confirm your changes, and once you do, your word will be saved. If you do not want to make changes, just click the "Cancel" button.
+The **Edit** button will cause a form with the current details of the word you edited to display in the same space that the word previously appeared. You can make any changes you want and click the "Edit Word" button. You will be asked to confirm your changes, and once you do, your word will be saved. If you do not want to make changes, just click the "Cancel" button.
 
 The **Delete** button will ask you to confirm that you want to delete the entry, and if you say yes, the word will be _permanently deleted and **cannot be retrieved**_.
 
@@ -78,9 +79,7 @@ The **Dictionary is Complete** checkbox will make the word add/edit form go away
 
 The **Total Entries** label is just a live tally of how many words you have added to the current dictionary.
 
-The **Export Current Dictionary** button will immediately do exactly that. Your browser will start downloading a file with your dictionary's name in a ".dict" format. Please note that this may not work as expected on mobile platforms. This export can be a personal backup for your own uses, to work on multiple dictionaries at a time (i.e. export one dictionary and import the other to work on the one you'd like), or you can share it with friends to view it.
-
-The **Import Dictionary** form allows you to upload and view any previously-exported ".dict" files. After selecting your ".dict" file, click the "Import" button to _overwrite your current dictionary_ and view the imported one. Again, please note that this import process will _**permanently overwrite your current dictionary**_, so please be sure to export your dictionary _before_ you import a new one.
+The **Export...** and **Import...** buttons are discussed in the [Importing and Exporting](#importing-and-exporting) section below.
 
 The **Empty Current Dictionary** should only be used if you want to completely start over from scratch. It will ask you to confirm that you want to delete, and if you confirm, your dictionary will be gone forever. If you have not exported your dictionary before emptying it, there will be absolutely no way to get it back. Please be careful with this!
 
@@ -116,6 +115,23 @@ The "Filter Words" drop-down box allows you to filter your dictionary by part of
 
 * **A** : Toggle Account Settings window (if logged in).
 * **S** : Toggle Dicitonary Settings window. Saves & Closes if it's already open.
+
+### Importing and Exporting
+In the Settings screen, you may notice the buttons labeled "**Export...**" and "**Import...**". If you click on either of these, the respective Export and Import page will appear.
+
+#### Exporting
+Clicking the **"Export Words"** button will start a download of all of the words in the currently loaded dictionary into a convenient CSV file format that you can use to re-import into another Lexiconga dictionary or otherwise use as you need it! All of the data is wrapped in double quotes (`"`) to comply with standard CSV format.
+
+Clicking the **"Export Dictionary"** button will start a download of a file with your dictionary's name in a ".dict" format. _Please note that this may not work as expected on mobile platforms._ This export can be a personal backup for your own uses, to work on multiple dictionaries at a time (i.e. export one dictionary and import the other to work on the one you'd like), or you can share it with friends to view it. The .dict file contains your whole dictionary in a JSON format, and is mainly only useful for importing back into Lexiconga.
+
+#### Importing
+Clicking the **"Import Words"** button after choosing a file allows you to import a correctly-formatted CSV list of words into your currently loaded dictionary. This can either be a previously-exported list of words from another Lexiconga dictionary or a list created in Excel with the correct column headers that has been saved as a CSV file. You can download a CSV file as a template from the Import page as an example to help you format and save your Excel lists properly.
+
+Please note that when importing words, you must make sure that the parts of speech specified in the parts of speech column are written _exactly as they are in your dictionary settings_ (capitalized, spelled correctly, or any other details). If they are not the same, then you will not be able to use the filters to find the words! So if you import a word with the part of speech set to "adj" or "adjective", but the part of speech in your dictionary's settings is "Adjective", then you will not be able to find the word using the filters!
+
+If you import a word _without_ a part of speech, you _can_ use the filter's "Blanks" option to find any words with empty parts of speech to help you clean up after the import.
+
+Clicking the **"Import Dictionary"** button after choosing a file allows you to upload and view any previously-exported ".dict" files. After selecting your ".dict" file, click the "Import Dictionary" button to _overwrite your current dictionary_ and view the imported one. Again, please note that if you are not logged in, this import process will _**permanently overwrite your current dictionary**_, so please be sure to export your dictionary _before_ you import a new one!
 
 ## Accounts
 If you are using an account with Lexiconga, your experience should remain essentially the same, but you will see some additional options in the Settings menu and you might notice some slight changes in performance as it saves to and loads from the database.
@@ -156,9 +172,9 @@ The **Import Dictionary** button acts the same as before, but instead of overwri
 The **Delete Current Dictionary** button will permanently and irretrievably delete the currently loaded dictionary from your account! Be careful with that one. After deleting, you will then be prompted to either select another dictionary to load or create a new one, _or_ if you have no other dictionaries, immediately create a new one for you.
 
 #### Public Dictionaries
-When a dictionary is marked as public, you can share its public link and allow anyone to view its contents without being able to make changes. The dictionary's description and the search/filter area is visible by default, and the viewer can scroll through or search your dictionary without being able to make changes.
+When a dictionary is marked as public, you can share its public link and allow anyone to view its contents without being able to make changes. The dictionary's description and the search/filter area is visible by default, and the viewer can scroll through or search your dictionary without being able to make changes. Public dictionaries also have the ability to share specific word entries using the "➦" buttons in each word box. When viewing a word, the search/filter options are not available, but anyone can still read the dictionary's description.
 
-To log in or create an account when viewing a dictionary, you need to go back to the main Lexiconga page. You can get there by clicking either the logo or the "Go Home" button.
+To log in or create an account when viewing a dictionary, you need to go back to the main Lexiconga page. You can get there by clicking either the logo or the "Go Home" button. Or, if you are the owner of the dictionary and are currently logged in, the "Go Home" button will be replaced with an "Edit Dictionary" button, and you can click that to change your current dictionary adn start editing it.
 
 ### Forgot Your Password?
 If you forget your password, you can request a password reset email by clicking the "Forgot Password" button on the "Log In/Create Account" button entering the email address associated with your account and clicking "Email Password Reset Key". This will send an email (_check your spam_) with a link that will allow you to reset your password. When you go to the link provided, you'll be able to enter a new password that you can log in with.
@@ -167,16 +183,11 @@ If you forget your password, you can request a password reset email by clicking 
 If you manage to enter your password wrong 10 times, you'll be locked out from logging in for an hour. Use this time to try to remember your password or something. You can get an idea of how long you've waited by refreshing the page and clicking the unfortunate "Can't Login" button. After an hour has passed, refresh the page again and you'll get another 10 tries.
 
 ## Problems or Requests
-Please report any problems you come across to the [Dictionary Builder Issues page](https://github.com/Alamantus/DictionaryBuilder/issues). You can also submit enhancement requests to the same place if you have any requests for new features.
+Please report any problems you come across to the [Dictionary Builder Issues page](http://lexicon.ga/issues). You can also submit enhancement requests to the same place if you have any requests for new features.
 
 ## Update Log
 You can see all previous updates to Lexiconga here:
-[https://github.com/Alamantus/DictionaryBuilder/releases](https://github.com/Alamantus/DictionaryBuilder/releases/tag/Production)
-
-## Future Plans
-In the future, I'm planning to:
-* enable account deletion if you lose trust or hope in Lexiconga's services
-* provide an ad removal option?
+[http://lexicon.ga/updates](http://lexicon.ga/updates)
 
 ## Thanks!
 If you like Lexiconga and want to buy me a cup of coffee for the service, you can **[donate throughPaypal](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=MCCSYGQCR5TLY&lc=US&item_name=Lexiconga&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted)** to help keep it online if you want.
@@ -188,4 +199,5 @@ I hope you enjoy Lexiconga and that it helps you build some awesome languages.
 ## Libraries Used
 * [Marked.js](https://github.com/chjj/marked) by Christopher Jeffrey (JJ) (a.k.a. chjj)
 * [Defiant.js](http://defiantjs.com) by Hakan Bilgin (a.k.a. hbi99)
+* [Papa Parse](http://papaparse.com/) by Matt Holt (a.k.a. mholt)
 * [removeDiacritics.js](http://stackoverflow.com/a/18391901/3508346) by [rdllopes](http://meta.stackoverflow.com/users/1879686/rdllopes)

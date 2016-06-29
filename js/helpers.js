@@ -218,8 +218,8 @@ function dynamicSort(propertiesArray) {
                    dir = -1;
                    o=o.substring(1);
                 }
-                if (removeDiacritics(a[o]) > removeDiacritics(b[o])) return dir;
-                if (removeDiacritics(a[o]) < removeDiacritics(b[o])) return -(dir);
+                if (removeDiacritics(a[o]).toLowerCase() > removeDiacritics(b[o]).toLowerCase()) return dir;
+                if (removeDiacritics(a[o]).toLowerCase() < removeDiacritics(b[o]).toLowerCase()) return -(dir);
                 return 0;
             })
             .reduce(function firstNonZeroValue (p,n) {

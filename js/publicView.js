@@ -2,18 +2,20 @@ function IsValidPublicDicitonary() {
     return typeof publicDictionary !== 'string';
 }
 
-function ShowPublicDictionary() {
+function ShowPublicDictionary(ignoreFilters) {
+    ignoreFilters = (typeof ignoreFilters !== 'undefined') ? ignoreFilters : false;
+
     if (IsValidPublicDicitonary()) {
-        var filters = GetSelectedFilters();
+        var filters = (ignoreFilters) ? [] : GetSelectedFilters();
         
         var searchResults = [];
-        var search = htmlEntitiesParseForSearchEntry(document.getElementById("searchBox").value);
-        var searchByWord = document.getElementById("searchOptionWord").checked;
-        var searchBySimple = document.getElementById("searchOptionSimple").checked;
-        var searchByLong = document.getElementById("searchOptionLong").checked;
-        var searchIgnoreCase = !document.getElementById("searchCaseSensitive").checked; //It's easier to negate case here instead of negating it every use since ignore case is default.
-        var searchIgnoreDiacritics = document.getElementById("searchIgnoreDiacritics").checked;
-        if (search != "" && (searchByWord || searchBySimple || searchByLong)) {
+        var search = (ignoreFilters) ? "" : htmlEntitiesParseForSearchEntry(document.getElementById("searchBox").value);
+        var searchByWord = (ignoreFilters) ? null : document.getElementById("searchOptionWord").checked;
+        var searchBySimple = (ignoreFilters) ? null : document.getElementById("searchOptionSimple").checked;
+        var searchByLong = (ignoreFilters) ? null : document.getElementById("searchOptionLong").checked;
+        var searchIgnoreCase = (ignoreFilters) ? null : !document.getElementById("searchCaseSensitive").checked; //It's easier to negate case here instead of negating it every use since ignore case is default.
+        var searchIgnoreDiacritics = (ignoreFilters) ? null : document.getElementById("searchIgnoreDiacritics").checked;
+        if (!ignoreFilters && search != "" && (searchByWord || searchBySimple || searchByLong)) {
             var xpath = [];
             var searchDictionaryJSON = htmlEntitiesParseForSearch(JSON.stringify(publicDictionary));
             if (searchIgnoreCase) {
@@ -65,7 +67,7 @@ function ShowPublicDictionary() {
                         if (!publicDictionary.words[i].hasOwnProperty("wordId")) {
                             publicDictionary.words[i].wordId = i + 1;  //Account for new property
                         }
-                        dictionaryText += PublicDictionaryEntry(i);
+                        dictionaryText += PublicDictionaryEntry(i, ignoreFilters);
                         numberOfWordsDisplayed++;
                     }
                 }
@@ -74,70 +76,97 @@ function ShowPublicDictionary() {
             dictionaryText = "There are no entries in the dictionary."
         }
         dictionaryArea.innerHTML = dictionaryText;
-        ShowFilterWordCount(numberOfWordsDisplayed);
+        if (!ignoreFilters) {
+            ShowFilterWordCount(numberOfWordsDisplayed);
+        }
     } else {
         document.getElementById("dictionaryContainer").innerHTML = publicDictionary;
     }
 }
 
-function PublicDictionaryEntry(itemIndex) {
-    var entryText = "<entry><a name='" + publicDictionary.words[itemIndex].wordId + "'></a><a href='#" + publicDictionary.words[itemIndex].wordId + "' class='wordLink clickable'>&#x1f517;</a>";
-    
-    var searchTerm = regexParseForSearch(document.getElementById("searchBox").value);
-    var searchByWord = document.getElementById("searchOptionWord").checked;
-    var searchBySimple = document.getElementById("searchOptionSimple").checked;
-    var searchByLong = document.getElementById("searchOptionLong").checked;
-    var searchIgnoreCase = !document.getElementById("searchCaseSensitive").checked; //It's easier to negate case here instead of negating it every use since ignore case is default.
-    var searchIgnoreDiacritics = document.getElementById("searchIgnoreDiacritics").checked;
+function PublicDictionaryEntry(itemIndex, ignoreFilters) {
+    var searchTerm = (ignoreFilters) ? "" : regexParseForSearch(document.getElementById("searchBox").value);
+    var searchByWord = (ignoreFilters) ? false : document.getElementById("searchOptionWord").checked;
+    var searchBySimple = (ignoreFilters) ? false : document.getElementById("searchOptionSimple").checked;
+    var searchByLong = (ignoreFilters) ? false : document.getElementById("searchOptionLong").checked;
+    var searchIgnoreCase = (ignoreFilters) ? false : !document.getElementById("searchCaseSensitive").checked; //It's easier to negate case here instead of negating it every use since ignore case is default.
+    var searchIgnoreDiacritics = (ignoreFilters) ? false : document.getElementById("searchIgnoreDiacritics").checked;
     
     var searchRegEx = new RegExp("(" + ((searchIgnoreDiacritics) ? removeDiacritics(searchTerm) + "|" + searchTerm : searchTerm) + ")", "g" + ((searchIgnoreCase) ? "i" : ""));
 
-    entryText += "<word>";
+    var wordName = wordPronunciation = wordPartOfSpeech = wordSimpleDefinition = wordLongDefinition = "";
 
     if (searchTerm != "" && searchByWord) {
-        entryText += htmlEntitiesParse(publicDictionary.words[itemIndex].name).replace(searchRegEx, "<searchTerm>$1</searchterm>");
+        wordName += htmlEntitiesParse(publicDictionary.words[itemIndex].name).replace(searchRegEx, "<searchTerm>$1</searchterm>");
     } else {
-        entryText += publicDictionary.words[itemIndex].name;
+        wordName += publicDictionary.words[itemIndex].name.toString(); // Use toString() to prevent using a reference instead of the value.
     }
     
-    entryText += "</word>";
-    
     if (publicDictionary.words[itemIndex].pronunciation != "") {
-        entryText += "<pronunciation>";
-        entryText += marked(htmlEntitiesParse(publicDictionary.words[itemIndex].pronunciation)).replace("<p>","").replace("</p>","");
-        entryText += "</pronunciation>";
+        wordPronunciation += marked(htmlEntitiesParse(publicDictionary.words[itemIndex].pronunciation)).replace("<p>","").replace("</p>","");
     }
     
     if (publicDictionary.words[itemIndex].partOfSpeech != "") {
-        entryText += "<partofspeech>";
-        entryText += publicDictionary.words[itemIndex].partOfSpeech;
-        entryText += "</partofspeech>";
+        wordPartOfSpeech += publicDictionary.words[itemIndex].partOfSpeech.toString();
+    }
+
+    if (publicDictionary.words[itemIndex].simpleDefinition != "") {        
+        if (searchTerm != "" && searchBySimple) {
+            wordSimpleDefinition += htmlEntitiesParse(publicDictionary.words[itemIndex].simpleDefinition).replace(searchRegEx, "<searchTerm>$1</searchterm>");
+        } else {
+            wordSimpleDefinition += publicDictionary.words[itemIndex].simpleDefinition.toString();
+        }
+    }
+
+    if (publicDictionary.words[itemIndex].longDefinition != "") {
+        if (searchTerm != "" && searchByLong) {
+            wordLongDefinition += marked(htmlEntitiesParse(publicDictionary.words[itemIndex].longDefinition).replace(searchRegEx, "<searchTerm>$1</searchterm>"));
+        } else {
+            wordLongDefinition += marked(htmlEntitiesParse(publicDictionary.words[itemIndex].longDefinition));
+        }
+    }
+
+    return PublicDictionaryEntryTemplate({
+        name : wordName,
+        pronunciation : wordPronunciation,
+        partOfSpeech : wordPartOfSpeech,
+        simpleDefinition : wordSimpleDefinition,
+        longDefinition : wordLongDefinition,
+        wordId : publicDictionary.words[itemIndex].wordId.toString()
+    }, false);
+}
+
+function PublicDictionaryEntryTemplate(wordObject, managementIndex) {
+    managementIndex = (typeof managementIndex !== 'undefined') ? managementIndex : false;
+    var entryText = "<entry id='entry";
+    if (managementIndex !== false) {
+        // If there's a managementIndex, append index number to the element id.
+        entryText += managementIndex.toString();
+    }
+    entryText += "'><a href='/" + publicDictionary.id + "/" + wordObject.wordId + "' class='wordLink clickable' title='Share Word'>&#10150;</a>";
+    
+    entryText += "<word>" + wordObject.name + "</word>";
+    
+    if (wordObject.pronunciation != "") {
+        entryText += "<pronunciation>" + wordObject.pronunciation + "</pronunciation>";
+    }
+    
+    if (wordObject.partOfSpeech != "") {
+        entryText += "<partofspeech>" + wordObject.partOfSpeech + "</partofspeech>";
     }
 
     entryText += "<br>";
 
-    if (publicDictionary.words[itemIndex].simpleDefinition != "") {
-        entryText += "<simpledefinition>";
-        
-        if (searchTerm != "" && searchBySimple) {
-            entryText += htmlEntitiesParse(publicDictionary.words[itemIndex].simpleDefinition).replace(searchRegEx, "<searchTerm>$1</searchterm>");
-        } else {
-            entryText += publicDictionary.words[itemIndex].simpleDefinition;
-        }
-
-        entryText += "</simpledefinition>";
+    if (wordObject.simpleDefinition != "") {
+        entryText += "<simpledefinition>" + wordObject.simpleDefinition + "</simpledefinition>";
     }
 
-    if (publicDictionary.words[itemIndex].longDefinition != "") {
-        entryText += "<longdefinition>";
+    if (wordObject.longDefinition != "") {
+        entryText += "<longdefinition>" + wordObject.longDefinition + "</longdefinition>";
+    }
 
-        if (searchTerm != "" && searchByLong) {
-            entryText += marked(htmlEntitiesParse(publicDictionary.words[itemIndex].longDefinition).replace(searchRegEx, "<searchTerm>$1</searchterm>"));
-        } else {
-            entryText += marked(htmlEntitiesParse(publicDictionary.words[itemIndex].longDefinition));
-        }
-
-        entryText += "</longdefinition>";
+    if (managementIndex !== false) {
+        entryText += ManagementArea(managementIndex);
     }
 
     entryText += "</entry>";

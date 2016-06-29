@@ -1,0 +1,18 @@
+<h2>Export</h2>
+<div id="exportOptions">
+    <div class="settingsCol">
+        <label>
+            <span>Word List</span>
+        </label>
+        <p style="font-size:12px;">This process exports all of the words in the dictionary as a CSV format file.</p>
+        <p style="font-size:12px;">You can either use the exported file to re-import them into a different dictionary in Lexiconga, or taken and used somewhere else you might need them!</p>
+        <button type="button" onclick="ExportWords(); return false;">Export Words</button>
+    </div>
+    <div class="settingsCol">
+        <label>
+            <span>Full Dictionary</span>
+            <p style="font-size:12px;">This process exports the full dictionary, words and all information, in a ".dict" format to be re-imported back into Lexiconga as a new dictionary.</p>
+            <button type="button" onclick="ExportDictionary(); return false;">Export Dictionary</button>
+        </label>
+    </div>
+</div>

@@ -3,11 +3,13 @@ function Initialize() {
     ClearForm();
     LoadUserDictionaries();
     
-    GetTextFile("README.md", "aboutText", true);
-    GetTextFile("TERMS.md", "termsText", true);
-    GetTextFile("PRIVACY.md", "privacyText", true);
-    GetTextFile("LOGIN.form", "loginForm", false);
-    GetTextFile("FORGOT.form", "forgotForm", false);
+    GetTextFile("/README.md", "aboutText", true);
+    GetTextFile("/TERMS.md", "termsText", true);
+    GetTextFile("/PRIVACY.md", "privacyText", true);
+    GetTextFile("/LOGIN.form", "loginForm", false);
+    GetTextFile("/FORGOT.form", "forgotForm", false);
+    GetTextFile("/EXPORT.form", "exportForm", false);
+    GetTextFile("/IMPORT.form", "importForm", false);
 
     SetKeyboardShortcuts();
 }
@@ -132,7 +134,7 @@ function LoadUserDictionaries() {
     var getDictionariesRequest = new XMLHttpRequest();
     var userDictionariesSelect = document.getElementById("userDictionaries");
     if (userDictionariesSelect != null) {
-        getDictionariesRequest.open('GET', "php/ajax_dictionarymanagement.php?action=getall");
+        getDictionariesRequest.open('GET', "/php/ajax_dictionarymanagement.php?action=getall");
         getDictionariesRequest.onreadystatechange = function() {
             if (getDictionariesRequest.readyState == 4 && getDictionariesRequest.status == 200) {
                 ParseUserDictionariesIntoSelect(userDictionariesSelect, getDictionariesRequest.responseText);
@@ -215,7 +217,7 @@ function ValidateCreateAccount() {
         return false;
     } else {
         var emailCheck = new XMLHttpRequest();
-        emailCheck.open('GET', "php/ajax_createaccountemailcheck.php?email=" + emailValue);
+        emailCheck.open('GET', "/php/ajax_createaccountemailcheck.php?email=" + emailValue);
         emailCheck.onreadystatechange = function() {
             if (emailCheck.readyState == 4 && emailCheck.status == 200) {
                 if (emailCheck.responseText != "ok") {
@@ -261,7 +263,7 @@ function ValidateForgotPassword() {
         return false;
     } else {
         var emailCheck = new XMLHttpRequest();
-        emailCheck.open('GET', "php/ajax_passwordresetemailcheck.php?email=" + emailValue);
+        emailCheck.open('GET', "/php/ajax_passwordresetemailcheck.php?email=" + emailValue);
         emailCheck.onreadystatechange = function() {
             if (emailCheck.readyState == 4 && emailCheck.status == 200) {
                 if (emailCheck.responseText != "email exists") {
@@ -306,7 +308,7 @@ function WarnEmailChange() {
 
 function LoggedInResetPassword() {
     var resetPasswordRequest = new XMLHttpRequest();
-    resetPasswordRequest.open('GET', "php/ajax_setnewpassword.php");
+    resetPasswordRequest.open('GET', "/php/ajax_setnewpassword.php");
     resetPasswordRequest.onreadystatechange = function() {
         if (resetPasswordRequest.readyState == 4 && resetPasswordRequest.status == 200) {
             if (resetPasswordRequest.responseText != "done") {
@@ -369,31 +371,34 @@ function LockWordForm() {
     wordForm.removeAttribute('style');
 }
 
-function CloseUpdateConflictArea(displayId) {
-    displayId = (typeof displayId !== 'undefined' && displayId != null) ? displayId : false;
-    if (displayId != false) {
-        document.getElementById(displayId).style.display = "block";
+function CloseUpdateConflictArea(wordIndexString) {// displayId, hideId) {
+    // displayId = (typeof displayId !== 'undefined' && displayId != null) ? displayId : false;
+    // if (displayId != false) {
+    if (wordIndexString == "") {
+        document.getElementById("newWordButtonArea").style.display = "block";
+    } else {
+        document.getElementById("editWordButtonArea" + wordIndexString).style.display = "block";
     }
-    document.getElementById("updateConflict").style.display = "none";
-    EnableForm();
+    // }
+    document.getElementById("updateConflict" + wordIndexString).style.display = "none";
+    EnableForm(wordIndexString);
 }
 
-function DisableForm() {
-    document.getElementById("word").disabled = true;
-    document.getElementById("pronunciation").disabled = true;
-    document.getElementById("partOfSpeech").disabled = true;
-    document.getElementById("simpleDefinition").disabled = true;
-    document.getElementById("longDefinition").disabled = true;
-    document.getElementById("editIndex").disabled = true;
+function DisableForm(wordIndexString) {
+    document.getElementById("word" + wordIndexString).disabled = true;
+    document.getElementById("pronunciation" + wordIndexString).disabled = true;
+    document.getElementById("partOfSpeech" + wordIndexString).disabled = true;
+    document.getElementById("simpleDefinition" + wordIndexString).disabled = true;
+    document.getElementById("longDefinition" + wordIndexString).disabled = true;
 }
 
-function EnableForm() {
-    document.getElementById("word").disabled = false;
-    document.getElementById("pronunciation").disabled = false;
-    document.getElementById("partOfSpeech").disabled = false;
-    document.getElementById("simpleDefinition").disabled = false;
-    document.getElementById("longDefinition").disabled = false;
-    document.getElementById("editIndex").disabled = false;
+function EnableForm(wordIndexString) {
+    document.getElementById("word" + wordIndexString).disabled = false;
+    document.getElementById("pronunciation" + wordIndexString).disabled = false;
+    document.getElementById("partOfSpeech" + wordIndexString).disabled = false;
+    document.getElementById("simpleDefinition" + wordIndexString).disabled = false;
+    document.getElementById("longDefinition" + wordIndexString).disabled = false;
+    // document.getElementById("editIndex").disabled = false;
 }
 
 function ClearForm() {
@@ -409,7 +414,7 @@ function ClearForm() {
         document.getElementById("editWordButtonArea").style.display = "none";
         document.getElementById("errorMessage").innerHTML = "";
         document.getElementById("updateConflict").style.display = "none";
-        EnableForm();
+        EnableForm("");
     }
 }
 
@@ -440,16 +445,20 @@ function ToggleSearchFilter() {
 }
 
 function ShowInfo(variableName) {
-    document.getElementById("infoText").innerHTML = window[variableName];
+    ShowInfoWithText(window[variableName]);
     if (variableName == "loginForm") {
         // document.getElementById("infoText").innerHTML = loginForm;
         if (currentDictionary.words.length > 0 || currentDictionary.name != "New" || currentDictionary.description != "A new dictionary.") {
             document.getElementById("dictionaryWarn").innerHTML = "If your current dictionary is not already saved to your account, be sure to <span class='exportWarnText' onclick='ExportDictionary()'>export it before logging in</span> so you don't lose anything!";
         }
     }
-    HideAccountSettings();
-    document.getElementById("infoPage").scrollTop = 0;
+}
+
+function ShowInfoWithText(text) {
+    document.getElementById("infoText").innerHTML = text;
     document.getElementById("infoScreen").style.display = "block";
+    document.getElementById("infoPage").scrollTop = 0;
+    HideAccountSettings();
 }
 
 function HideInfo() {
@@ -579,19 +588,22 @@ function TogglePublicLink() {
     }
 }
 
-function SetPartsOfSpeech () {
-    var partsOfSpeechSelect = document.getElementById("partOfSpeech");
+function SetPartsOfSpeech (selectId) {
+    selectId = (typeof selectId !== 'undefined') ? selectId : "partOfSpeech";
+    var partsOfSpeechSelect = document.getElementById(selectId);
 
     var wordFilterOptions = document.getElementById("filterOptions");
     var wordFiltersSelected = GetSelectedFilters();
 
     // Clear parts of speech.
-    if (partsOfSpeechSelect.options.length > 0) {
-        for (var i = partsOfSpeechSelect.options.length - 1; i >= 0; i--) {
-            partsOfSpeechSelect.removeChild(partsOfSpeechSelect.options[i]);
-        }
-        wordFilterOptions.innerHTML = "";
-    }
+    partsOfSpeechSelect.innerHTML = "";
+    wordFilterOptions.innerHTML = "";
+
+    // Insert blank part of speech as first dropdown option.
+    var blankpartOfSpeechOption = document.createElement('option');
+    blankpartOfSpeechOption.appendChild(document.createTextNode(""));
+    blankpartOfSpeechOption.value = " ";
+    partsOfSpeechSelect.appendChild(blankpartOfSpeechOption);
 
     // Rebuild parts of speech
     var newPartsOfSpeech = htmlEntitiesParse(currentDictionary.settings.partsOfSpeech).trim().split(",");
@@ -614,6 +626,18 @@ function SetPartsOfSpeech () {
         wordFilterLabel.appendChild(wordFilterCheckbox);
         wordFilterOptions.appendChild(wordFilterLabel);
     }
+
+    // Insert blank part of speech as last filter option
+    var blankwordFilterLabel = document.createElement('label');
+    blankwordFilterLabel.appendChild(document.createTextNode("Blanks "));
+    blankwordFilterLabel['part-of-speech'] = " ";
+    blankwordFilterLabel.className = 'filterOption';
+    var blankwordFilterCheckbox = document.createElement('input');
+    blankwordFilterCheckbox.type = 'checkbox';
+    blankwordFilterCheckbox.onchange = function(){ShowDictionary()};
+    if (wordFiltersSelected.indexOf(" ") > -1) blankwordFilterCheckbox.checked = true;
+    blankwordFilterLabel.appendChild(blankwordFilterCheckbox);
+    wordFilterOptions.appendChild(blankwordFilterLabel);
 }
 
 function GetSelectedFilters() {
@@ -651,11 +675,15 @@ function ShowFilterWordCount(numberOfWords) {
 }
 
 function NewWordNotification(word) {
+    var wordId = currentDictionary.nextWordId - 1;
+    NewNotification("New Word Added: <a href='#" + wordId.toString() + "'>" + word + "</a>");
+}
+
+function NewNotification(message) {
     var notificationArea = document.getElementById("notificationArea");
     var notificationMessage = document.getElementById("notificationMessage");
-    var wordId = currentDictionary.nextWordId - 1;
     notificationArea.style.display = "block";
-    notificationMessage.innerHTML = "New Word Added: <a href='#" + wordId.toString() + "'>" + word + "</a>";
+    notificationMessage.innerHTML = message;
 }
 
 function FocusAfterAddingNewWord() {
