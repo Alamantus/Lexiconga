@@ -171,7 +171,7 @@ if ($display_mode != "build") {
             <label><span>Part of Speech</span>
                 <select id="partOfSpeech" onkeydown="SubmitWordOnCtrlEnter(this)"></select>
             </label>
-            <label><span>Equivalent Word(s)</span>
+            <label><span>Definition/Equivalent Word(s)</span>
                 <input type="text" id="simpleDefinition" onkeydown="SubmitWordOnCtrlEnter(this)" />
             </label>
             <label><span>Explanation/Long Definition <span id="showFullScreenTextbox" class="clickable inline-button" onclick="ShowFullScreenTextbox('longDefinition', 'Explanation/Long Definition')">Maximize</span></span>
@@ -220,7 +220,7 @@ if ($display_mode != "build") {
                     </div>
                     <div id="searchOptions">
                         <label class="searchOption">Word <input type="checkbox" id="searchOptionWord" checked="checked" onchange="<?php Show_Dictionary_Function($display_mode == "view") ?>" /></label>
-                        <label class="searchOption">Equivalent <input type="checkbox" id="searchOptionSimple" checked="checked" onchange="<?php Show_Dictionary_Function($display_mode == "view") ?>" /></label>
+                        <label class="searchOption">Definition <input type="checkbox" id="searchOptionSimple" checked="checked" onchange="<?php Show_Dictionary_Function($display_mode == "view") ?>" /></label>
                         <label class="searchOption">Explanation <input type="checkbox" id="searchOptionLong" checked="checked" onchange="<?php Show_Dictionary_Function($display_mode == "view") ?>" /></label>
                         <br />
                         <label class="searchOption">Search Case-Sensitive <input type="checkbox" id="searchCaseSensitive" onchange="<?php Show_Dictionary_Function($display_mode == "view") ?>" /></label>
@@ -282,9 +282,9 @@ if ($display_mode != "build") {
                         </label>
                     </label>
                     <label class="inline">
-                        <span class="checkboxlabel">Sort by Equivalent Word</span>
+                        <span class="checkboxlabel">Sort by Definition/Equivalent Word</span>
                         <input type="checkbox" id="dictionarySortByEquivalent" />
-                    </label> <span class="clickable inline-button" onclick='alert("By default, your dictionary is organized alphabetically by word. Checking this box will organize it by the \"Equivalent Word\" field instead");'>?</span>
+                    </label> <span class="clickable inline-button" onclick='alert("By default, your dictionary is organized alphabetically by word. Checking this box will organize it by the \"Definition/Equivalent Word\" field instead");'>?</span>
                     </div>
                     <br>
                     <label>
