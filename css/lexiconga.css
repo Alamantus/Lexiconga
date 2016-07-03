@@ -3,23 +3,7 @@ body {
 }
 
 header {
-	height: 50px;
-	width: 100%;
 	background: #eacc9d;
-	margin-bottom: 10px;
-	border: none;
-	-webkit-box-shadow: 3px 3px 10px -1px rgba(0,0,0,0.75);
-	-moz-box-shadow: 3px 3px 10px -1px rgba(0,0,0,0.75);
-	box-shadow: 3px 3px 10px -1px rgba(0,0,0,0.75);
-}
-
-/* Smartphones (portrait and landscape) ----------- */
-@media only screen 
-and (min-device-width : 320px) 
-and (max-device-width : 480px) {
-    header {
-        height: 70px;
-    }
 }
 
 tr, thead {
@@ -70,7 +54,6 @@ and (min-device-width : 481px) {
 
 /* Smartphones (portrait and landscape) ----------- */
 @media only screen 
-and (min-device-width : 320px) 
 and (max-device-width : 480px) {
 	#siteLogo {
 		display: block;

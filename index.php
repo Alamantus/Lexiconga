@@ -119,6 +119,7 @@ if ($display_mode != "build") {
     <?php } ?>
 
     <link href="/css/styles.css" rel="stylesheet" />
+    <link href="/css/mobile.css" rel="stylesheet" />
     <link href="/css/lexiconga.css" rel="stylesheet" />
 </head>
 <body>
@@ -150,7 +151,7 @@ if ($display_mode != "build") {
     </header>
     <contents>
     <?php if ($display_mode == "build") { ?>
-    <div id="announcementArea" style="display:<?php echo (($announcement) ? "block" : "none"); ?>;margin-bottom:10px;">
+    <div id="announcementArea" style="display:<?php echo (($announcement) ? "block" : "none"); ?>;">
         <span id="announcementCloseButton" class="clickable" onclick="document.getElementById('announcementArea').style.display='none';">Close</span>
         <div id="announcement"><?php echo $announcement; ?></div>
     </div>
@@ -171,10 +172,10 @@ if ($display_mode != "build") {
             <label><span>Part of Speech</span>
                 <select id="partOfSpeech" onkeydown="SubmitWordOnCtrlEnter(this)"></select>
             </label>
-            <label><span>Definition/Equivalent Word(s)</span>
+            <label><span>Definition/<wbr><b class=wbr></b>Equivalent Word(s)</span>
                 <input type="text" id="simpleDefinition" onkeydown="SubmitWordOnCtrlEnter(this)" />
             </label>
-            <label><span>Explanation/Long Definition <span id="showFullScreenTextbox" class="clickable inline-button" onclick="ShowFullScreenTextbox('longDefinition', 'Explanation/Long Definition')">Maximize</span></span>
+            <label><span>Explanation/<wbr><b class=wbr></b>Long Definition <span id="showFullScreenTextbox" class="clickable inline-button" onclick="ShowFullScreenTextbox('longDefinition', 'Explanation/Long Definition')">Maximize</span></span>
                 <textarea id="longDefinition" class="longDefinition" onkeydown="SubmitWordOnCtrlEnter(this)"></textarea>
             </label>
             <input type="hidden" id="editIndex" />
@@ -403,7 +404,9 @@ if ($display_mode != "build") {
 
     </contents>
     <footer>
+        <div id="footer-content">
         Dictionary Builder only guaranteed to work with most up-to-date HTML5 browsers. <a href="/issues" class="clickable" target="_blank">Issues</a> <a href="/updates" class="clickable" target="_blank">Updates</a> | <span class="clickable" onclick="ShowInfo('termsText')" style="font-size:12px;">Terms</span> <span class="clickable" onclick="ShowInfo('privacyText')" style="font-size:12px;">Privacy</span>
+        </div>
     </footer>
     
     <!-- Markdown Parser -->
