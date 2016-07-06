@@ -12,6 +12,7 @@ function Initialize() {
     GetTextFile("/IMPORT.form", "importForm", false);
 
     SetKeyboardShortcuts();
+    SetWindowListeners();
 }
 
 function SetKeyboardShortcuts() {
@@ -114,6 +115,25 @@ function SetKeyboardShortcuts() {
             }
         }
     }, false);
+}
+
+function SetWindowListeners() {
+    window.addEventListener("scroll", function() {
+        var doc = document.documentElement;
+        var top = (window.pageYOffset || doc.scrollTop)  - (doc.clientTop || 0);
+        var dictionaryColumn = document.getElementById("dictionaryColumn");
+        var wordPullout = document.getElementById("mobileWordFormPullout");
+
+        if (top > dictionaryColumn.offsetTop) {
+            wordPullout.style.display = "block";
+        } else {
+            wordPullout.style.display = "none";
+            if (wordPullout.innerHTML != "+") {
+                LockWordForm();
+                wordPullout.innerHTML = "+";
+            }
+        }
+    });
 }
 
 function SubmitWordOnCtrlEnter(keypress) {
@@ -335,26 +355,36 @@ function wordFormIsLocked() {
     return document.getElementById("formLockButton").innerHTML == "\uD83D\uDD12";
 }
 
-function ToggleWordFormLock() {
+function MobileToggleWordForm() {
+    var pullout = document.getElementById("mobileWordFormPullout");
+    ToggleWordFormLock("7%");
+    if (pullout.innerHTML == "+") {
+        pullout.innerHTML = "✕";
+    } else {
+        pullout.innerHTML = "+";
+    }
+}
+
+function ToggleWordFormLock(topValue) {
     if (wordFormIsLocked()) {  //If it is already locked, change it to Unlocked and get everything working as it needs to.
-        UnlockWordForm();
+        UnlockWordForm(topValue);
     } else {
         LockWordForm();
     }
 }
 
-function UnlockWordForm() {
+function UnlockWordForm(topValue) {
     var lockButton = document.getElementById("formLockButton");
     var leftColumn = document.getElementById("leftColumn");
     var wordForm = document.getElementById("wordEntryForm");
-    var wordFormWidth = wordForm.offsetWidth - 20;
+    var wordFormWidth = wordForm.offsetWidth;
     var leftColumnWidth = leftColumn.offsetWidth;
     var leftColumnHeight = leftColumn.offsetHeight;
 
     lockButton.innerHTML = "&#128275;"; // Change to the "Unlocked lock" icon.
     
     wordForm.style.position = "fixed";
-    wordForm.style.top = document.getElementsByTagName("header")[0].offsetHeight.toString() + "px";
+    wordForm.style.top = (typeof topValue !== 'undefined') ? topValue : document.getElementById("dictionaryColumn").offsetTop.toString() + "px";
     wordForm.style.width = wordFormWidth.toString() + "px";
 
     leftColumn.style.width = leftColumnWidth.toString() + "px";

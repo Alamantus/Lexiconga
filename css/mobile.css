@@ -63,6 +63,23 @@ and (max-device-width : 910px) {
         height: 30px;
         margin: 0px auto;
     }
+
+    #mobileWordFormPullout {
+        position: fixed;
+        top: 7%;
+        left: 0;
+        width: 32px;
+        height: 32px;
+        font-size: 20px;
+        font-weight: bold;
+        text-align: center;
+        padding: 6px;
+        background: #86ac41;
+        -webkit-box-shadow: 5px 5px 7px 0px rgba(0,0,0,0.75);
+        -moz-box-shadow: 5px 5px 7px 0px rgba(0,0,0,0.75);
+        box-shadow: 5px 5px 7px 0px rgba(0,0,0,0.75);
+        border: none;
+    }
     
     #dictionaryColumn {
         width: 100%;

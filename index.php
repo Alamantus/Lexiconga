@@ -190,6 +190,8 @@ if ($display_mode != "build") {
         </form>
 
     </div>
+
+    <div id="mobileWordFormPullout" onclick="MobileToggleWordForm();" style="display:none;">+</div>
     <?php } ?>
 
     <div id="dictionaryColumn"><div id="dictionaryContent">
