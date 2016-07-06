@@ -78,7 +78,7 @@ td:last-child, th:last-child {
 
 #leftColumn {
     float: left;
-    width: 30%;
+    width: 25%;
     margin: 15px 0 15px 15px;
 }
 
@@ -181,7 +181,7 @@ input[type=checkbox] {
 }
 
 #dictionaryColumn {
-    width: 60%;
+    width: 50%;
     margin: 15px 0 36px 15px;    /* bottom margin must clear footer */
     padding: 0;
     float: left;
