@@ -40,10 +40,10 @@ function ShowPublicDictionary(ignoreFilters) {
         }
         
         var dictionaryNameArea = document.getElementById("dictionaryName");
-        dictionaryNameArea.innerHTML = htmlEntitiesParse(publicDictionary.name) + " Dictionary";
+        dictionaryNameArea.innerHTML = publicDictionary.name + " Dictionary";
 
         var dictionaryByArea = document.getElementById("dictionaryBy");
-        dictionaryByArea.innerHTML = "created by " + htmlEntitiesParse(publicDictionary.createdBy);
+        dictionaryByArea.innerHTML = "created by " + publicDictionary.createdBy;
 
         var dictionaryIncompleteArea = document.getElementById("incompleteNotice");
         if (!publicDictionary.settings.isComplete) {
@@ -51,7 +51,7 @@ function ShowPublicDictionary(ignoreFilters) {
         }
         
         var dictionaryDescriptionArea = document.getElementById("dictionaryDescription");
-        dictionaryDescriptionArea.innerHTML = marked(htmlEntitiesParse(publicDictionary.description));
+        dictionaryDescriptionArea.innerHTML = marked(publicDictionary.description);
         
         var dictionaryArea = document.getElementById("theDictionary");
         var dictionaryText = "";
@@ -97,13 +97,13 @@ function PublicDictionaryEntry(itemIndex, ignoreFilters) {
     var wordName = wordPronunciation = wordPartOfSpeech = wordSimpleDefinition = wordLongDefinition = "";
 
     if (searchTerm != "" && searchByWord) {
-        wordName += htmlEntitiesParse(publicDictionary.words[itemIndex].name).replace(searchRegEx, "<searchTerm>$1</searchterm>");
+        wordName += htmlEntities(htmlEntitiesParse(publicDictionary.words[itemIndex].name).replace(searchRegEx, "<searchTerm>$1</searchterm>"));
     } else {
         wordName += publicDictionary.words[itemIndex].name.toString(); // Use toString() to prevent using a reference instead of the value.
     }
     
     if (publicDictionary.words[itemIndex].pronunciation != "") {
-        wordPronunciation += marked(htmlEntitiesParse(publicDictionary.words[itemIndex].pronunciation)).replace("<p>","").replace("</p>","");
+        wordPronunciation += marked(publicDictionary.words[itemIndex].pronunciation).replace("<p>","").replace("</p>","");
     }
     
     if (publicDictionary.words[itemIndex].partOfSpeech != "") {
@@ -112,7 +112,7 @@ function PublicDictionaryEntry(itemIndex, ignoreFilters) {
 
     if (publicDictionary.words[itemIndex].simpleDefinition != "") {        
         if (searchTerm != "" && searchBySimple) {
-            wordSimpleDefinition += htmlEntitiesParse(publicDictionary.words[itemIndex].simpleDefinition).replace(searchRegEx, "<searchTerm>$1</searchterm>");
+            wordSimpleDefinition += htmlEntities(htmlEntitiesParse(publicDictionary.words[itemIndex].simpleDefinition).replace(searchRegEx, "<searchTerm>$1</searchterm>"));
         } else {
             wordSimpleDefinition += publicDictionary.words[itemIndex].simpleDefinition.toString();
         }
@@ -120,9 +120,9 @@ function PublicDictionaryEntry(itemIndex, ignoreFilters) {
 
     if (publicDictionary.words[itemIndex].longDefinition != "") {
         if (searchTerm != "" && searchByLong) {
-            wordLongDefinition += marked(htmlEntitiesParse(publicDictionary.words[itemIndex].longDefinition).replace(searchRegEx, "<searchTerm>$1</searchterm>"));
+            wordLongDefinition += marked(htmlEntities(htmlEntitiesParse(publicDictionary.words[itemIndex].longDefinition).replace(searchRegEx, "<searchTerm>$1</searchterm>")));
         } else {
-            wordLongDefinition += marked(htmlEntitiesParse(publicDictionary.words[itemIndex].longDefinition));
+            wordLongDefinition += marked(publicDictionary.words[itemIndex].longDefinition);
         }
     }
 

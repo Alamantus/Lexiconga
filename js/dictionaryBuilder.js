@@ -95,7 +95,7 @@ function ShowWordEditForm(index) {
     var indexString = index.toString(); // Variable for reduced processing
     var word = currentDictionary.words[index];  // Reference for easier reading
     var editForm = '<form id="editForm' + indexString + '">\
-                <h2>Editing ' + htmlEntitiesParse(word.name) + '</h2>\
+                <h2>Editing ' + word.name + '</h2>\
                 <label><span>Word</span>\
                     <input type="text" id="word' + indexString + '" value="' + htmlEntitiesParse(word.name) + '" onkeydown="SubmitWordOnCtrlEnter(this)" />\
                 </label>\
@@ -228,13 +228,13 @@ function ShowDictionary() {
     }
     
     var dictionaryNameArea = document.getElementById("dictionaryName");
-    dictionaryNameArea.innerHTML = htmlEntitiesParse(currentDictionary.name) + " Dictionary";
+    dictionaryNameArea.innerHTML = currentDictionary.name + " Dictionary";
     if (loggedIn && currentDictionary.settings.isPublic) {
         dictionaryNameArea.innerHTML += "<a href='/" + currentDictionary.externalID + "' target='_blank' id='dictionaryShareLink' class='clickable' title='Share Dictionary'>&#10150;</a>";
     }
     
     var dictionaryDescriptionArea = document.getElementById("dictionaryDescription");
-    dictionaryDescriptionArea.innerHTML = marked(htmlEntitiesParse(currentDictionary.description));
+    dictionaryDescriptionArea.innerHTML = marked(currentDictionary.description);
     
     var dictionaryArea = document.getElementById("theDictionary");
     var dictionaryText = "";
@@ -277,14 +277,14 @@ function DictionaryEntry(itemIndex) {
 
     if (searchTerm != "" && searchByWord) {
         // Parse HTML Entities while searching so the regex can search actual characters instead of HTML.
-        wordName += htmlEntitiesParse(currentDictionary.words[itemIndex].name).replace(searchRegEx, "<searchTerm>$1</searchterm>");
+        wordName += htmlEntities(htmlEntitiesParse(currentDictionary.words[itemIndex].name).replace(searchRegEx, "<searchTerm>$1</searchterm>"));
     } else {
         // Don't need to parse if not searching because HTML displays correctly anyway!
         wordName += currentDictionary.words[itemIndex].name.toString(); // Use toString() to prevent using a reference instead of the value.
     }
     
     if (currentDictionary.words[itemIndex].pronunciation != "") {
-        wordPronunciation += marked(htmlEntitiesParse(currentDictionary.words[itemIndex].pronunciation)).replace("<p>","").replace("</p>","");
+        wordPronunciation += marked(currentDictionary.words[itemIndex].pronunciation).replace("<p>","").replace("</p>","");
     }
     
     if (currentDictionary.words[itemIndex].partOfSpeech != " " && currentDictionary.words[itemIndex].partOfSpeech != "") {
@@ -293,7 +293,7 @@ function DictionaryEntry(itemIndex) {
 
     if (currentDictionary.words[itemIndex].simpleDefinition != "") {        
         if (searchTerm != "" && searchBySimple) {
-            wordSimpleDefinition += htmlEntitiesParse(currentDictionary.words[itemIndex].simpleDefinition).replace(searchRegEx, "<searchTerm>$1</searchterm>");
+            wordSimpleDefinition += htmlEntities(htmlEntitiesParse(currentDictionary.words[itemIndex].simpleDefinition).replace(searchRegEx, "<searchTerm>$1</searchterm>"));
         } else {
             wordSimpleDefinition += currentDictionary.words[itemIndex].simpleDefinition.toString();
         }
@@ -301,9 +301,9 @@ function DictionaryEntry(itemIndex) {
 
     if (currentDictionary.words[itemIndex].longDefinition != "") {
         if (searchTerm != "" && searchByLong) {
-            wordLongDefinition += marked(htmlEntitiesParse(currentDictionary.words[itemIndex].longDefinition).replace(searchRegEx, "<searchTerm>$1</searchterm>"));
+            wordLongDefinition += marked(htmlEntities(htmlEntitiesParse(currentDictionary.words[itemIndex].longDefinition).replace(searchRegEx, "<searchTerm>$1</searchterm>")));
         } else {
-            wordLongDefinition += marked(htmlEntitiesParse(currentDictionary.words[itemIndex].longDefinition));
+            wordLongDefinition += marked(currentDictionary.words[itemIndex].longDefinition);
         }
     }
 
