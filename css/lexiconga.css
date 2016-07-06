@@ -90,9 +90,8 @@ input, textarea, select, option {
     background: #c0c088;
 }
 
-#dictionaryContent {
+#dictionaryColumn {
 	background: #bd7251;
-	padding: 15px;
 	border: none;
 	-webkit-box-shadow: 5px 5px 7px 0px rgba(0,0,0,0.75);
 	-moz-box-shadow: 5px 5px 7px 0px rgba(0,0,0,0.75);

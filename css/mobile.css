@@ -21,6 +21,7 @@ and (max-device-width : 910px) {
 
     #leftColumn {
         width: 100%;
+        margin: 0;
     }
 
     #wordEntryForm {
@@ -28,9 +29,6 @@ and (max-device-width : 910px) {
         width: 100%;
         max-width: 450px;
         margin: 10px auto;
-        -webkit-box-shadow: 0px 5px 7px 0px rgba(0,0,0,0.75) !important;
-        -moz-box-shadow: 0px 5px 7px 0px rgba(0,0,0,0.75) !important;
-        box-shadow: 0px 5px 7px 0px rgba(0,0,0,0.75) !important;
     }
 
     #wordEntryForm label {
@@ -66,18 +64,30 @@ and (max-device-width : 910px) {
         margin: 0px auto;
     }
     
-    #dictionaryContent {
+    #dictionaryColumn {
         width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    #dictionaryContent {
         margin: 0 auto;
         padding: 15px;
     }
 
-    #dictionaryContent {
-        padding: 15px;
+    #dictionaryDescription {
+        margin: 0 auto;
     }
 
-    #dictionaryDescription {
-        margin: 0;
+    #searchFilterArea {
+        width: 90%;
+        min-width: 200px;
+        padding: 10px 10px 3px;
+        margin: 0 auto;
+    }
+
+    entry {
+        margin: 0 auto 5px;
     }
 
     #formLockButton {
