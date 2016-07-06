@@ -51,7 +51,7 @@ function ShowPublicDictionary(ignoreFilters) {
         }
         
         var dictionaryDescriptionArea = document.getElementById("dictionaryDescription");
-        dictionaryDescriptionArea.innerHTML = marked(publicDictionary.description);
+        dictionaryDescriptionArea.innerHTML = marked(htmlEntitiesParseForMarkdown(publicDictionary.description));
         
         var dictionaryArea = document.getElementById("theDictionary");
         var dictionaryText = "";
@@ -97,22 +97,22 @@ function PublicDictionaryEntry(itemIndex, ignoreFilters) {
     var wordName = wordPronunciation = wordPartOfSpeech = wordSimpleDefinition = wordLongDefinition = "";
 
     if (searchTerm != "" && searchByWord) {
-        wordName += htmlEntities(htmlEntitiesParse(publicDictionary.words[itemIndex].name).replace(searchRegEx, "<searchTerm>$1</searchterm>"));
+        wordName += htmlEntities(htmlEntitiesParse(publicDictionary.words[itemIndex].name).replace(searchRegEx, "<searchterm>$1</searchterm>")).replace(/&lt;(\/?)searchterm&gt;/g, '<$1searchterm>');
     } else {
         wordName += publicDictionary.words[itemIndex].name.toString(); // Use toString() to prevent using a reference instead of the value.
     }
     
     if (publicDictionary.words[itemIndex].pronunciation != "") {
-        wordPronunciation += marked(publicDictionary.words[itemIndex].pronunciation).replace("<p>","").replace("</p>","");
+        wordPronunciation += marked(htmlEntitiesParseForMarkdown(publicDictionary.words[itemIndex].pronunciation)).replace(/<\/?p>/g,"");
     }
     
-    if (publicDictionary.words[itemIndex].partOfSpeech != "") {
+    if (publicDictionary.words[itemIndex].partOfSpeech != " " && publicDictionary.words[itemIndex].partOfSpeech != "") {
         wordPartOfSpeech += publicDictionary.words[itemIndex].partOfSpeech.toString();
     }
 
     if (publicDictionary.words[itemIndex].simpleDefinition != "") {        
         if (searchTerm != "" && searchBySimple) {
-            wordSimpleDefinition += htmlEntities(htmlEntitiesParse(publicDictionary.words[itemIndex].simpleDefinition).replace(searchRegEx, "<searchTerm>$1</searchterm>"));
+            wordSimpleDefinition += htmlEntities(htmlEntitiesParse(publicDictionary.words[itemIndex].simpleDefinition).replace(searchRegEx, "<searchterm>$1</searchterm>")).replace(/&lt;(\/?)searchterm&gt;/g, '<$1searchterm>');
         } else {
             wordSimpleDefinition += publicDictionary.words[itemIndex].simpleDefinition.toString();
         }
@@ -120,9 +120,9 @@ function PublicDictionaryEntry(itemIndex, ignoreFilters) {
 
     if (publicDictionary.words[itemIndex].longDefinition != "") {
         if (searchTerm != "" && searchByLong) {
-            wordLongDefinition += marked(htmlEntities(htmlEntitiesParse(publicDictionary.words[itemIndex].longDefinition).replace(searchRegEx, "<searchTerm>$1</searchterm>")));
+            wordLongDefinition += marked(htmlEntitiesParseForMarkdown(htmlEntities(htmlEntitiesParse(publicDictionary.words[itemIndex].longDefinition).replace(searchRegEx, "<searchterm>$1</searchterm>")))).replace(/&lt;(\/?)searchterm&gt\;/g, '<$1searchterm>');
         } else {
-            wordLongDefinition += marked(publicDictionary.words[itemIndex].longDefinition);
+            wordLongDefinition += marked(htmlEntitiesParseForMarkdown(publicDictionary.words[itemIndex].longDefinition));
         }
     }
 
