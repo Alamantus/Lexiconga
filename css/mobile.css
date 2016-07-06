@@ -1,6 +1,6 @@
 /* Smartphones (portrait and landscape) ----------- */
 @media only screen 
-and (max-device-width : 480px) {
+and (max-device-width : 910px) {
     body {
         font-size: 11pt;
     }
@@ -66,8 +66,18 @@ and (max-device-width : 480px) {
         margin: 0px auto;
     }
     
-    #dictionaryContainer {
-        margin-bottom: 15px !important;
+    #dictionaryContent {
+        width: 100%;
+        margin: 0 auto;
+        padding: 15px;
+    }
+
+    #dictionaryContent {
+        padding: 15px;
+    }
+
+    #dictionaryDescription {
+        margin: 0;
     }
 
     #formLockButton {

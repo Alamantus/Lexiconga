@@ -80,7 +80,7 @@ function ShowPublicDictionary(ignoreFilters) {
             ShowFilterWordCount(numberOfWordsDisplayed);
         }
     } else {
-        document.getElementById("dictionaryContainer").innerHTML = publicDictionary;
+        document.getElementById("dictionaryContent").innerHTML = publicDictionary;
     }
 }
 

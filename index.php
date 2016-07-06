@@ -119,8 +119,8 @@ if ($display_mode != "build") {
     <?php } ?>
 
     <link href="/css/styles.css" rel="stylesheet" />
-    <link href="/css/mobile.css" rel="stylesheet" />
     <link href="/css/lexiconga.css" rel="stylesheet" />
+    <link href="/css/mobile.css" rel="stylesheet" />
 </head>
 <body>
     <header>
@@ -192,7 +192,7 @@ if ($display_mode != "build") {
     </div>
     <?php } ?>
 
-    <div id="dictionaryContainer">
+    <div id="dictionaryColumn"><div id="dictionaryContent">
         <?php if ($display_mode == "build") { ?>
         <span id="settingsButton" class="clickable" onclick="ShowSettings()">Settings</span>
         <?php } ?>
@@ -246,7 +246,7 @@ if ($display_mode != "build") {
         <?php } ?>
             
         <div id="theDictionary"></div>
-    </div>
+    </div></div>
     
     <div id="rightColumn" class="googleads" style="float:right;width:20%;max-width:300px;min-width:200px;overflow:hidden;">
         <?php if ($_GET['adminoverride'] != "noadsortracking") { include_once("php/google/adsense.php"); } ?>
@@ -405,7 +405,7 @@ if ($display_mode != "build") {
     </contents>
     <footer>
         <div id="footer-content">
-        Dictionary Builder only guaranteed to work with most up-to-date HTML5 browsers. <a href="/issues" class="clickable" target="_blank">Issues</a> <a href="/updates" class="clickable" target="_blank">Updates</a> | <span class="clickable" onclick="ShowInfo('termsText')" style="font-size:12px;">Terms</span> <span class="clickable" onclick="ShowInfo('privacyText')" style="font-size:12px;">Privacy</span>
+        Dictionary Builder only guaranteed to work with most up-to-date HTML5 browsers. <a href="/issues" class="clickable inline-button" target="_blank">Issues</a> <a href="/updates" class="clickable inline-button" target="_blank">Updates</a> | <span class="clickable inline-button" onclick="ShowInfo('termsText')" style="font-size:12px;">Terms</span> <span class="clickable inline-button" onclick="ShowInfo('privacyText')" style="font-size:12px;">Privacy</span>
         </div>
     </footer>
     
