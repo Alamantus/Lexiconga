@@ -234,7 +234,7 @@ function ShowDictionary() {
     }
     
     var dictionaryDescriptionArea = document.getElementById("dictionaryDescription");
-    dictionaryDescriptionArea.innerHTML = marked(currentDictionary.description);
+    dictionaryDescriptionArea.innerHTML = marked(htmlEntitiesParseForMarkdown(currentDictionary.description));
     
     var dictionaryArea = document.getElementById("theDictionary");
     var dictionaryText = "";
@@ -256,7 +256,7 @@ function ShowDictionary() {
             }
         }
     } else {
-        dictionaryText = "There are no entries in the dictionary."
+        dictionaryText = "There are no entries in the dictionary.";
     }
 
     dictionaryArea.innerHTML = dictionaryText;
@@ -277,14 +277,14 @@ function DictionaryEntry(itemIndex) {
 
     if (searchTerm != "" && searchByWord) {
         // Parse HTML Entities while searching so the regex can search actual characters instead of HTML.
-        wordName += htmlEntities(htmlEntitiesParse(currentDictionary.words[itemIndex].name).replace(searchRegEx, "<searchTerm>$1</searchterm>"));
+        wordName += htmlEntities(htmlEntitiesParse(currentDictionary.words[itemIndex].name).replace(searchRegEx, "<searchterm>$1</searchterm>")).replace(/&lt;(\/?)searchterm&gt;/g, '<$1searchterm>');
     } else {
         // Don't need to parse if not searching because HTML displays correctly anyway!
         wordName += currentDictionary.words[itemIndex].name.toString(); // Use toString() to prevent using a reference instead of the value.
     }
     
     if (currentDictionary.words[itemIndex].pronunciation != "") {
-        wordPronunciation += marked(currentDictionary.words[itemIndex].pronunciation).replace("<p>","").replace("</p>","");
+        wordPronunciation += marked(htmlEntitiesParseForMarkdown(currentDictionary.words[itemIndex].pronunciation)).replace(/<\/?p>/g,"");
     }
     
     if (currentDictionary.words[itemIndex].partOfSpeech != " " && currentDictionary.words[itemIndex].partOfSpeech != "") {
@@ -293,7 +293,7 @@ function DictionaryEntry(itemIndex) {
 
     if (currentDictionary.words[itemIndex].simpleDefinition != "") {        
         if (searchTerm != "" && searchBySimple) {
-            wordSimpleDefinition += htmlEntities(htmlEntitiesParse(currentDictionary.words[itemIndex].simpleDefinition).replace(searchRegEx, "<searchTerm>$1</searchterm>"));
+            wordSimpleDefinition += htmlEntities(htmlEntitiesParse(currentDictionary.words[itemIndex].simpleDefinition).replace(searchRegEx, "<searchterm>$1</searchterm>")).replace(/&lt;(\/?)searchterm&gt;/g, '<$1searchterm>');
         } else {
             wordSimpleDefinition += currentDictionary.words[itemIndex].simpleDefinition.toString();
         }
@@ -301,9 +301,9 @@ function DictionaryEntry(itemIndex) {
 
     if (currentDictionary.words[itemIndex].longDefinition != "") {
         if (searchTerm != "" && searchByLong) {
-            wordLongDefinition += marked(htmlEntities(htmlEntitiesParse(currentDictionary.words[itemIndex].longDefinition).replace(searchRegEx, "<searchTerm>$1</searchterm>")));
+            wordLongDefinition += marked(htmlEntitiesParseForMarkdown(htmlEntities(htmlEntitiesParse(currentDictionary.words[itemIndex].longDefinition).replace(searchRegEx, "<searchterm>$1</searchterm>")))).replace(/&lt;(\/?)searchterm&gt\;/g, '<$1searchterm>');
         } else {
-            wordLongDefinition += marked(currentDictionary.words[itemIndex].longDefinition);
+            wordLongDefinition += marked(htmlEntitiesParseForMarkdown(currentDictionary.words[itemIndex].longDefinition));
         }
     }
 

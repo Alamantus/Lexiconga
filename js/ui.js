@@ -168,7 +168,7 @@ function GetTextFile(filename, variableName, parseMarkdown) {
     readmeFileRequest.open('GET', filename);
     readmeFileRequest.onreadystatechange = function() {
         if (readmeFileRequest.readyState == 4 && readmeFileRequest.status == 200) {
-            window[variableName] = (parseMarkdown) ? marked(readmeFileRequest.responseText) : readmeFileRequest.responseText;
+            window[variableName] = (parseMarkdown) ? marked(readmeFileRequest.responseText, {sanitize: false}) : readmeFileRequest.responseText;
         }
     }
     readmeFileRequest.send();

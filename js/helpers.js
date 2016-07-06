@@ -6,6 +6,14 @@ function ready(fn) {
     }
 }
 
+// Set Marked.js settings
+marked.setOptions({
+    gfm: true,
+    tables: true,
+    breaks: true,
+    sanitize: true
+});
+
 // Get Keycode based on key name
 function keyCodeFor(keyName) {
     if (keyName == "backspace") return 8;
@@ -188,6 +196,10 @@ function htmlEntities(string) {
 
 function htmlEntitiesParse(string) {
     return String(string).replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/&#92;/g, '\\').replace(/<br>/g, '\n');
+}
+
+function htmlEntitiesParseForMarkdown(string) {
+    return String(string).replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/&#92;/g, '\\').replace(/<br>/g, '\n');
 }
 
 function stripHtmlEntities(string) {
