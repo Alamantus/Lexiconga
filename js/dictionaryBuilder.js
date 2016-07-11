@@ -122,6 +122,8 @@ function ShowWordEditForm(index) {
 
     SetPartsOfSpeech("partOfSpeech" + indexString);
     document.getElementById("partOfSpeech" + indexString).value = htmlEntitiesParse(word.partOfSpeech);
+
+    document.getElementById("word" + indexString).focus();
 }
 
 function CancelEditForm(index) {
