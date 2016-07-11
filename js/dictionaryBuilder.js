@@ -38,7 +38,7 @@ function AddWord() {
     var errorMessageArea = document.getElementById("errorMessage");
     var errorMessage = "";
     var updateConflictArea = document.getElementById("updateConflict");
-    
+
     if (word != "" && (simpleDefinition != "" || longDefinition != "")) {
         var wordIndex = (!currentDictionary.settings.allowDuplicates) ? WordIndex(word) : -1;
 
@@ -47,7 +47,7 @@ function AddWord() {
                 document.getElementById("newWordButtonArea").style.display = "none";
                 DisableForm('');
                 updateConflictArea.style.display = "block";
-                
+
                 var updateConflictText = "<span id='updateConflictMessage'>\"" + word + "\" is already in the dictionary";
                 if (currentDictionary.words[wordIndex].name != word) {
                     updateConflictText += " as \"" + currentDictionary.words[wordIndex].name + "\", and your dictionary is set to ignore case.";
@@ -59,7 +59,7 @@ function AddWord() {
                                                   onclick="UpdateWord(' + wordIndex + ', \'' + htmlEntities(word) + '\', \'' + htmlEntities(pronunciation) + '\', \'' + htmlEntities(partOfSpeech) + '\', \'' + htmlEntities(simpleDefinition) + '\', \'' + htmlEntities(longDefinition) + '\'); \
                                                   return false;">Yes, Update it</button>';
                 updateConflictText += ' <button type="button" id="updateCancelButton" onclick="CloseUpdateConflictArea(\'\'); return false;">No, Leave it</button>';
-                
+
                 updateConflictArea.innerHTML = updateConflictText;
             } else {
                 errorMessage = "\"" + word + "\" is already in the dictionary exactly as it is written above";
@@ -87,7 +87,7 @@ function AddWord() {
             errorMessage += "You need at least one definition."
         }
     }
-    
+
     errorMessageArea.innerHTML = errorMessage;
 }
 
@@ -159,6 +159,8 @@ function EditWord(indexString) {
 }
 
 function UpdateWord(wordIndex, word, pronunciation, partOfSpeech, simpleDefinition, longDefinition) {
+    SaveScroll();
+
     currentDictionary.words[wordIndex].name = word;
     currentDictionary.words[wordIndex].pronunciation = pronunciation;
     currentDictionary.words[wordIndex].partOfSpeech = ((partOfSpeech.length > 0) ? partOfSpeech : " ");
@@ -182,7 +184,7 @@ function DeleteWord(index) {
         if (deleteWord.readyState == 4 && deleteWord.status == 200) {
             if (deleteWord.responseText == "deleted successfully" || deleteWord.responseText == "not signed in") {
                 currentDictionary.words.splice(index, 1);
-                
+
                 SaveWords(false);
             }
             console.log(deleteWord.responseText);
@@ -196,7 +198,7 @@ function DeleteWord(index) {
 
 function ShowDictionary() {
     var filters = GetSelectedFilters();
-    
+
     var searchResults = [];
     var search = htmlEntitiesParseForSearchEntry(document.getElementById("searchBox").value);
     var searchByWord = document.getElementById("searchOptionWord").checked;
@@ -226,16 +228,16 @@ function ShowDictionary() {
         var searchDictionary = JSON.parse(searchDictionaryJSON);
         searchResults = JSON.search(searchDictionary, '//words['+ xpath.join(' or ') +']/wordId');
     }
-    
+
     var dictionaryNameArea = document.getElementById("dictionaryName");
     dictionaryNameArea.innerHTML = currentDictionary.name + " Dictionary";
     if (loggedIn && currentDictionary.settings.isPublic) {
         dictionaryNameArea.innerHTML += "<a href='/" + currentDictionary.externalID + "' target='_blank' id='dictionaryShareLink' class='clickable' title='Share Dictionary'>&#10150;</a>";
     }
-    
+
     var dictionaryDescriptionArea = document.getElementById("dictionaryDescription");
     dictionaryDescriptionArea.innerHTML = marked(htmlEntitiesParseForMarkdown(currentDictionary.description));
-    
+
     var dictionaryArea = document.getElementById("theDictionary");
     var dictionaryText = "";
     var numberOfWordsDisplayed = 0;
@@ -270,7 +272,7 @@ function DictionaryEntry(itemIndex) {
     var searchByLong = document.getElementById("searchOptionLong").checked;
     var searchIgnoreCase = !document.getElementById("searchCaseSensitive").checked; //It's easier to negate case here instead of negating it every use since ignore case is default.
     var searchIgnoreDiacritics = document.getElementById("searchIgnoreDiacritics").checked;
-    
+
     var searchRegEx = new RegExp("(" + ((searchIgnoreDiacritics) ? removeDiacritics(searchTerm) + "|" + searchTerm : searchTerm) + ")", "g" + ((searchIgnoreCase) ? "i" : ""));
 
     var wordName = wordPronunciation = wordPartOfSpeech = wordSimpleDefinition = wordLongDefinition = "";
@@ -282,16 +284,16 @@ function DictionaryEntry(itemIndex) {
         // Don't need to parse if not searching because HTML displays correctly anyway!
         wordName += currentDictionary.words[itemIndex].name.toString(); // Use toString() to prevent using a reference instead of the value.
     }
-    
+
     if (currentDictionary.words[itemIndex].pronunciation != "") {
         wordPronunciation += marked(htmlEntitiesParseForMarkdown(currentDictionary.words[itemIndex].pronunciation)).replace(/<\/?p>/g,"");
     }
-    
+
     if (currentDictionary.words[itemIndex].partOfSpeech != " " && currentDictionary.words[itemIndex].partOfSpeech != "") {
         wordPartOfSpeech += currentDictionary.words[itemIndex].partOfSpeech.toString();
     }
 
-    if (currentDictionary.words[itemIndex].simpleDefinition != "") {        
+    if (currentDictionary.words[itemIndex].simpleDefinition != "") {
         if (searchTerm != "" && searchBySimple) {
             wordSimpleDefinition += htmlEntities(htmlEntitiesParse(currentDictionary.words[itemIndex].simpleDefinition).replace(searchRegEx, "<searchterm>$1</searchterm>")).replace(/&lt;(\/?)searchterm&gt;/g, '<$1searchterm>');
         } else {
@@ -347,13 +349,13 @@ function DictionaryEntryTemplate(wordObject, managementIndex) {
     }
 
     entryText += "<a href='#" + wordObject.wordId + "' class='wordLink clickable' title='Link Within Page'>&#x1f517;</a>";
-    
+
     entryText += "<word>" + wordObject.name + "</word>";
-    
+
     if (wordObject.pronunciation != "") {
         entryText += "<pronunciation>" + wordObject.pronunciation + "</pronunciation>";
     }
-    
+
     if (wordObject.partOfSpeech != "") {
         entryText += "<partofspeech>" + wordObject.partOfSpeech + "</partofspeech>";
     }
@@ -381,23 +383,23 @@ function SaveSettings() {
     if (htmlEntities(document.getElementById("dictionaryNameEdit").value) != "") {
         currentDictionary.name = htmlEntities(document.getElementById("dictionaryNameEdit").value);
     }
-    
+
     currentDictionary.description = htmlEntities(document.getElementById("dictionaryDescriptionEdit").value);
-    
+
     CheckForPartsOfSpeechChange();
-    
+
     currentDictionary.settings.allowDuplicates = document.getElementById("dictionaryAllowDuplicates").checked;
     currentDictionary.settings.caseSensitive = document.getElementById("dictionaryCaseSensitive").checked;
-    
+
     currentDictionary.settings.sortByEquivalent = document.getElementById("dictionarySortByEquivalent").checked;
-    
+
     currentDictionary.settings.isComplete = document.getElementById("dictionaryIsComplete").checked;
     if (document.getElementById("dictionaryIsPublic")) {
         currentDictionary.settings.isPublic = document.getElementById("dictionaryIsPublic").checked;
     }
-    
+
     HideSettingsWhenComplete();
-    
+
     SaveAndUpdateDictionary(true);
     LoadUserDictionaries();
 }
@@ -420,7 +422,7 @@ function CreateNewDictionary() {
 function DeleteCurrentDictionary() {
     if (confirm("This will delete the current dictionary from the database. If you do not have a backed up export, you will lose it forever!\n\nDo you still want to delete?")) {
         ResetDictionaryToDefault();
-        
+
         var deleteDictionary = new XMLHttpRequest();
         deleteDictionary.open('POST', "/php/ajax_dictionarymanagement.php?action=delete");
         deleteDictionary.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -505,9 +507,9 @@ function SaveDictionary(sendToDatabase) {
     if (sendToDatabase) {
         SendDictionary();
     }
-    
+
     localStorage.setItem('dictionary', JSON.stringify(currentDictionary));
-    
+
     SavePreviousDictionary();
 }
 
@@ -665,15 +667,15 @@ function ProcessLoad() {
     }
 
     HideSettingsWhenComplete();
-    
+
     ShowDictionary();
 
     SetPartsOfSpeech();
-    
+
     if (currentDictionary.settings.isComplete) {
         document.getElementById("wordEntryForm").style.display = "none";
     }
-    
+
     SavePreviousDictionary();
 }
 
@@ -741,7 +743,7 @@ function ImportDictionary() {
             reader.onloadend = function () {
                 if (reader.result && reader.result.length) {
                     var tmpDicitonary = JSON.parse(reader.result);
-                    
+
                     if (tmpDicitonary.hasOwnProperty("name") && tmpDicitonary.hasOwnProperty("description") &&
                         tmpDicitonary.hasOwnProperty("words") && tmpDicitonary.hasOwnProperty("settings"))
                     {
@@ -756,7 +758,7 @@ function ImportDictionary() {
                         NewNotification("Successfully Imported the \"" + currentDictionary.name + "\" Dictionary.");
                     } else {
                         var errorString = "File is missing:";
-                        if (!tmpDicitonary.hasOwnProperty("name")) 
+                        if (!tmpDicitonary.hasOwnProperty("name"))
                             errorString += " name";
                         if (!tmpDicitonary.hasOwnProperty("description"))
                             errorString += " description";
@@ -766,7 +768,7 @@ function ImportDictionary() {
                             errorString += " settings";
                         alert("Uploaded file is not compatible.\n\n" + errorString);
                     }
-                    
+
                     tmpDicitonary = null;
                 } else {
                     alert("Upload Failed");
