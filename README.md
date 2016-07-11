@@ -47,7 +47,9 @@ The only things to remember while adding new words is that the minimum informati
 And that's all you need to get started! Everything else should be pretty self-explanatory, but a full explanation of Dictionary Builder and all of its functions continues below.
 
 ### Locking/Unlocking the Word Entry Form
-If you are not viewing Lexiconga from a mobile device, you will see a lock icon (🔒) in a button in the top right corner of the word entry form. If you click the button, the word entry form will be undocked from the top of the dictionary and will scroll down the page with you. If you click the unlocked icon (🔓) after the form has been unlocked, it will lock again and jump back to the top of the page.
+If you are **_not_** viewing Lexiconga from a mobile device or otherwise small window, you will see a lock icon (🔒) in a button in the top right corner of the word entry form. If you click the button, the word entry form will be undocked from the top of the dictionary and will scroll down the page with you. If you click the unlocked icon (🔓) after the form has been unlocked, it will lock again and jump back to the top of the page.
+
+If you _are_ viewing from a mobile device or from a small enough window, when you scroll past the word form, you will see a green box with a + sign. Tapping/clicking this box will make the word entry form appear at that position on your screen so you can add words from anywhere in your dictionary. To hide the word entry form after it is open, just click the ✕ icon that replaces the + in the green box and the word form will hide.
 
 ### Viewing your Dictionary's Details
 After you enter a markdown-formatted description/rules in the Settings menu, you can view the formatted version by clicking the "Show Description" button under your dictionary's name. You can hide it again by clicking "Hide Description" when the description is displayed.

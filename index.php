@@ -100,7 +100,7 @@ if ($display_mode != "build") {
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    
+
     <?php if ($display_mode != "build") { ?>
         <title><?php echo (($display_mode == "word") ? ($word_name . " | ") : "") . $dictionary_name; ?> Dictionary on Lexiconga</title>
         <meta property="og:url" content="http://lexicon.ga/<?php echo $dictionary_to_load . (($display_mode == "word") ? ("/" . $word_to_load) : ""); ?>" />
@@ -152,11 +152,11 @@ if ($display_mode != "build") {
     <contents>
     <?php if ($display_mode == "build") { ?>
     <div id="announcementArea" style="display:<?php echo (($announcement) ? "block" : "none"); ?>;">
-        <span id="announcementCloseButton" class="clickable" onclick="document.getElementById('announcementArea').style.display='none';">Close</span>
+        <span id="announcementCloseButton" class="clickable rightButton" onclick="document.getElementById('announcementArea').style.display='none';">Close</span>
         <div id="announcement"><?php echo $announcement; ?></div>
     </div>
     <div id="notificationArea" style="display:<?php echo (($notificationMessage) ? "block" : "none"); ?>;">
-        <span id="notificationCloseButton" class="clickable" onclick="document.getElementById('notificationArea').style.display='none';">Close</span>
+        <span id="notificationCloseButton" class="clickable rightButton" onclick="document.getElementById('notificationArea').style.display='none';">Close</span>
         <div id="notificationMessage"><?php echo $notificationMessage; ?></div>
     </div>
     <div id="leftColumn">
@@ -196,7 +196,7 @@ if ($display_mode != "build") {
 
     <div id="dictionaryColumn"><div id="dictionaryContent">
         <?php if ($display_mode == "build") { ?>
-        <span id="settingsButton" class="clickable" onclick="ShowSettings()">Settings</span>
+        <span id="settingsButton" class="clickable rightButton" onclick="ShowSettings()">Settings</span>
         <?php } ?>
         <h1 id="dictionaryName"></h1>
 
@@ -204,13 +204,13 @@ if ($display_mode != "build") {
         <h4 id="dictionaryBy"></h4>
         <div id="incompleteNotice"></div>
         <?php } ?>
-        
+
         <?php if ($display_mode == "word") { ?>
         <a class="clickable toggleButton" href="/<?php echo $dictionary_to_load; ?>">View Full Dictionary</a>
         <?php } ?>
         <span id="descriptionToggle" class="clickable toggleButton" onclick="ToggleDescription();"><?php if ($display_mode == "view") { ?>Hide<?php } else { ?>Show<?php } ?> Description</span>
         <div id="dictionaryDescription" style="display:<?php if ($display_mode == "view") { ?>block<?php } else { ?>none<?php } ?>;"></div>
-        
+
         <?php if ($display_mode != "word") { ?>
         <span id="searchFilterToggle" class="clickable toggleButton" onclick="ToggleSearchFilter();"><?php if ($display_mode == "view") { ?>Hide <?php } ?>Search/Filter Options</span>
         <div id="searchFilterArea" style="display:<?php if ($display_mode == "view") { ?>block<?php } else { ?>none<?php } ?>;">
@@ -231,7 +231,7 @@ if ($display_mode != "build") {
                     </div>
                 </label>
             </div>
-            
+
             <label style="display:block;margin-bottom:0;"><b>Filter Words</b></label>
             <div id="filterOptions" style="display:block"></div>
             <div style="display:block;">
@@ -246,10 +246,10 @@ if ($display_mode != "build") {
         </div>
         <div id="filterWordCount"></div>
         <?php } ?>
-            
+
         <div id="theDictionary"></div>
     </div></div>
-    
+
     <div id="rightColumn" class="googleads" style="float:right;width:20%;max-width:300px;min-width:200px;overflow:hidden;">
         <?php if ($_GET['adminoverride'] != "noadsortracking") { include_once("php/google/adsense.php"); } ?>
     </div>
@@ -257,9 +257,9 @@ if ($display_mode != "build") {
     <?php if ($display_mode == "build") { ?>
 
     <div id="settingsScreen" style="display:none;">
-        <div id="settingsBackgroundFade" onclick="HideSettings()"></div>
-        <div id="settingsOptions">
-            <span id="settingsScreenCloseButton" class="clickable" onclick="HideSettings()">Close</span>
+        <div id="settingsBackgroundFade" class="fixedFade" onclick="HideSettings()"></div>
+        <div id="settingsOptions" class="fixedPage">
+            <span id="settingsScreenCloseButton" class="clickable rightButton" onclick="HideSettings()">Close</span>
             <h2>Dictionary Settings</h2>
             <form id="settingsForm">
                 <div class="settingsCol">
@@ -325,29 +325,29 @@ if ($display_mode != "build") {
                 </div>
                 <div id="settingsSaveButtons">
                     <span id="settingsErrorMessage"></span><br>
-                    <button type="button" onclick="SaveSettings(); HideSettings(); return false;">Save and Close</button>
-                    <button type="button" onclick="SaveSettings(); return false;" style="margin-right:2px;">Save</button>
+                    <button type="button" class="rightButton" onclick="SaveSettings(); HideSettings(); return false;">Save and Close</button>
+                    <button type="button" class="rightButton" onclick="SaveSettings(); return false;" style="margin-right:2px;">Save</button>
                 </div>
             </form>
         </div>
     </div>
-    
+
     <div id="fullScreenTextboxScreen" style="display:none;">
-        <div id="fullScreenTextboxBackgroundFade" onclick="HideFullScreenTextbox()"></div>
+        <div id="fullScreenTextboxBackgroundFade" class="fixedFade" onclick="HideFullScreenTextbox()"></div>
         <div id="expandedTextboxId" style="display:none;width:0px;height:0px;"></div>
-        <div id="fullScreenTextboxPage">
-            <span id="fullScreenTextboxScreenCloseButton" class="clickable" onclick="HideFullScreenTextbox()">Minimize</span>
+        <div id="fullScreenTextboxPage" class="fixedPage">
+            <span id="fullScreenTextboxScreenCloseButton" class="clickable rightButton" onclick="HideFullScreenTextbox()">Minimize</span>
             <label><span id="fullScreenTextboxLabel"></span></label>
             <textarea id="fullScreenTextbox"></textarea>
         </div>
     </div>
 
     <?php } ?>
-    
+
     <div id="infoScreen" style="display:none;">
-        <div id="infoBackgroundFade" onclick="HideInfo()"></div>
-        <div id="infoPage">
-            <span id="infoScreenCloseButton" class="clickable" onclick="HideInfo()">Close</span>
+        <div id="infoBackgroundFade" class="fixedFade" onclick="HideInfo()"></div>
+        <div id="infoPage" class="fixedPage">
+            <span id="infoScreenCloseButton" class="clickable rightButton" onclick="HideInfo()">Close</span>
             <div id="infoText"></div>
         </div>
     </div>
@@ -356,9 +356,9 @@ if ($display_mode != "build") {
         $user_email = Get_User_Email($current_user);
     ?>
     <div id="accountSettingsScreen" style="display:none;">
-        <div id="accountSettingsBackgroundFade" onclick="HideAccountSettings()"></div>
-        <div id="accountSettingsPage">
-            <span id="accountSettingsScreenCloseButton" class="clickable" onclick="HideAccountSettings()">Close</span>
+        <div id="accountSettingsBackgroundFade" class="fixedFade" onclick="HideAccountSettings()"></div>
+        <div id="accountSettingsPage" class="fixedPage">
+            <span id="accountSettingsScreenCloseButton" class="clickable rightButton" onclick="HideAccountSettings()">Close</span>
             <div class="settingsCol"><form id="accountSettingsForm" method="post" action="?accountsettings">
                 <h2>Account Settings</h2>
                 <label><span>Email</span>
@@ -390,8 +390,8 @@ if ($display_mode != "build") {
 
     <?php if ($display_mode == "build") { ?>
     <div id="loadAfterDeleteScreen" style="display:none;">
-        <div id="loadAfterDeleteFade"></div>
-        <div id="loadAfterDeletePage">
+        <div id="loadAfterDeleteFade" class="fixedFade"></div>
+        <div id="loadAfterDeletePage" class="fixedPage">
             <div class="settingsCol">
                 <h1>Dictionary Deleted</h1>
                 <label>Select dictionary to load:<br />
@@ -410,7 +410,7 @@ if ($display_mode != "build") {
         Dictionary Builder only guaranteed to work with most up-to-date HTML5 browsers. <a href="/issues" class="clickable inline-button" target="_blank">Issues</a> <a href="/updates" class="clickable inline-button" target="_blank">Updates</a> | <span class="clickable inline-button" onclick="ShowInfo('termsText')" style="font-size:12px;">Terms</span> <span class="clickable inline-button" onclick="ShowInfo('privacyText')" style="font-size:12px;">Privacy</span>
         </div>
     </footer>
-    
+
     <!-- Markdown Parser -->
     <script src="/js/marked.js"></script>
     <!-- CSV Parser -->
@@ -439,7 +439,7 @@ if ($display_mode != "build") {
         if ($display_mode != "word") {    // don't try to set the filters
             echo "SetPublicPartsOfSpeech()";
         } ?>
-        
+
         GetTextFile("/README.md", "aboutText", true);
         GetTextFile("/TERMS.md", "termsText", true);
         GetTextFile("/PRIVACY.md", "privacyText", true);
@@ -451,7 +451,7 @@ if ($display_mode != "build") {
     <?php } else { ?>
     ready(function() {
         Initialize();
-    });    
+    });
     <?php } ?>
     var loggedIn = <?php echo ($current_user > 0) ? "true" : "false"; ?>;
     </script>

@@ -364,8 +364,7 @@ searchTerm {
     margin: 10px;
 }
 
-#settingsBackgroundFade, #infoBackgroundFade, #loadAfterDeleteFade,
-#accountSettingsBackgroundFade, #fullScreenTextboxBackgroundFade {
+.fixedFade {
     position: fixed;
     top: 0;
     left: 0;
@@ -375,8 +374,7 @@ searchTerm {
     opacity: 0.6;
 }
 
-#settingsOptions, #infoPage, #loadAfterDeletePage,
-#accountSettingsPage, #fullScreenTextboxPage {
+.fixedPage {
     position: fixed;
     top: 5%;
     left: 6%;
@@ -395,10 +393,7 @@ searchTerm {
     box-shadow: 5px 5px 7px 0px rgba(0,0,0,0.75);
 }
 
-#announcementCloseButton, #notificationCloseButton,
-#settingsButton, #settingsScreenCloseButton, #accountSettingsScreenCloseButton,
-#settingsSaveButtons button, #infoScreenCloseButton,
-#fullScreenTextboxScreenCloseButton {
+.rightButton {
     float: right;
     font-size: 12px;
 }
