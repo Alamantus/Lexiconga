@@ -2,7 +2,7 @@ function Initialize() {
     LoadDictionary();
     ClearForm();
     LoadUserDictionaries();
-    
+
     GetTextFile("/README.md", "aboutText", true);
     GetTextFile("/TERMS.md", "termsText", true);
     GetTextFile("/PRIVACY.md", "privacyText", true);
@@ -37,9 +37,9 @@ function SetKeyboardShortcuts() {
             // Only allow shortcuts if not currently using fullscreen textbox
             if (document.getElementById("fullScreenTextboxScreen").style.display == "none") {
                 if (keyCode == keyCodeFor("m")) {
-                    if (document.activeElement.id == "longDefinition") {
+                    if (document.activeElement.id.indexOf("longDefinition") >= 0) {
                         e.preventDefault();
-                        ShowFullScreenTextbox('longDefinition', 'Explanation/Long Definition');
+                        ShowFullScreenTextbox(document.activeElement.id, 'Explanation/Long Definition');
                     }
                     else if (document.activeElement.id == "dictionaryDescriptionEdit") {
                         e.preventDefault();
@@ -58,16 +58,12 @@ function SetKeyboardShortcuts() {
                     e.preventDefault();
                     ToggleDescription();
                 }
-                else if ((e.shiftKey && keyCode == keyCodeFor("s")) || keyCode == keyCodeFor("e")) {
-                    e.preventDefault();
-                    ExportDictionary();
-                }
                 else if (keyCode == keyCodeFor("s")) {
                     e.preventDefault();
                     //ToggleSearchFilter();
                     var searchFilterToggle = document.getElementById("searchFilterToggle");
                     var searchFilterArea = document.getElementById("searchFilterArea");
-                    
+
                     if (searchFilterArea.style.display == "none") {
                         searchFilterArea.style.display = "block";
                         searchFilterToggle.innerHTML = "Hide Search/Filter Options";
@@ -88,9 +84,6 @@ function SetKeyboardShortcuts() {
                     e.preventDefault();
                 }
                 else if (keyCode == keyCodeFor("d")) {
-                    e.preventDefault();
-                }
-                else if ((e.shiftKey && keyCode == keyCodeFor("s")) || keyCode == keyCodeFor("e")) {
                     e.preventDefault();
                 }
                 else if (keyCode == keyCodeFor("s")) {
@@ -142,10 +135,10 @@ function SubmitWordOnCtrlEnter(keypress) {
     if (keyCode === keyCodeFor("ctrlEnter") || (keyCode == keyCodeFor("enter") && event.ctrlKey)) { //Windows and Linux Chrome accept ctrl+enter as keyCode 10.
         event.preventDefault();
 
-        AddWord();
-        
-        if (document.getElementById("newWordButtonArea").style.display == "none" && document.getElementById("editWordButtonArea").style.display == "none") {
-            document.getElementById("updateConfirmButton").focus();
+        if (/\d/.test(document.activeElement.id)) { // If there IS a number in the ID, then it is a word being edited.
+            EditWord(document.activeElement.id.match(/\d+/)[0]);    // .match(/\d+/) returns an array of digits in a string.
+        } else {    // Otherwise, it's a new word.
+            AddWord();
         }
     }
 }
@@ -170,7 +163,7 @@ function ParseUserDictionariesIntoSelect(selectToPopulate, dicitonaryList) {
             selectToPopulate.removeChild(selectToPopulate.options[i]);
         }
     }
-    
+
     var dictionaries = dicitonaryList.split("_DICTIONARYSEPARATOR_");
     for (var j = 0; j < dictionaries.length - 1; j++) {
         var dictionaryOption = document.createElement('option');
@@ -198,7 +191,7 @@ function ValidateLogin() {
     var errorMessage = document.getElementById("loginError");
     var emailValue = document.getElementById("loginEmailField").value;
     var passwordValue = document.getElementById("loginPasswordField").value;
-      
+
     if (emailValue == "") {
         errorMessage.innerHTML = "Email cannot be blank!";
         return false;
@@ -219,7 +212,7 @@ function ValidateCreateAccount() {
     var passwordValue = document.getElementById("createAccountPasswordField").value;
     var passwordConfirmValue = document.getElementById("createAccountPasswordConfirmField").value;
     var publicNameValue = document.getElementById("createAccountPublicNameField").value;
-      
+
     if (emailValue == "") {
         errorMessage.innerHTML = "Email cannot be blank!";
         return false;
@@ -256,7 +249,7 @@ function ValidateAccountSettings() {
     var errorMessage = document.getElementById("accountSettingsError");
     var emailValue = document.getElementById("accountSettingsEmailField").value;
     var publicNameValue = document.getElementById("accountSettingsPublicNameField").value;
-      
+
     if (emailValue == "") {
         errorMessage.innerHTML = "Email cannot be blank!";
         return false;
@@ -274,7 +267,7 @@ function ValidateAccountSettings() {
 function ValidateForgotPassword() {
     var errorMessage = document.getElementById("forgotError");
     var emailValue = document.getElementById("forgotEmailField").value;
-      
+
     if (emailValue == "") {
         errorMessage.innerHTML = "Email cannot be blank!";
         return false;
@@ -302,7 +295,7 @@ function ValidateResetPassword() {
     var errorMessage = document.getElementById("resetPasswordError");
     var passwordValue = document.getElementById("newPasswordField").value;
     var passwordConfirmValue = document.getElementById("newPasswordConfirmField").value;
-      
+
     if (passwordValue == "") {
         errorMessage.innerHTML = "Password cannot be blank!";
         return false;
@@ -382,7 +375,7 @@ function UnlockWordForm(topValue) {
     var leftColumnHeight = leftColumn.offsetHeight;
 
     lockButton.innerHTML = "&#128275;"; // Change to the "Unlocked lock" icon.
-    
+
     wordForm.style.position = "fixed";
     wordForm.style.top = (typeof topValue !== 'undefined') ? topValue : document.getElementById("dictionaryColumn").offsetTop.toString() + "px";
     wordForm.style.width = wordFormWidth.toString() + "px";
@@ -439,7 +432,7 @@ function ClearForm() {
         document.getElementById("simpleDefinition").value = "";
         document.getElementById("longDefinition").value = "";
         document.getElementById("editIndex").value = "";
-        
+
         document.getElementById("newWordButtonArea").style.display = "block";
         document.getElementById("editWordButtonArea").style.display = "none";
         document.getElementById("errorMessage").innerHTML = "";
@@ -451,7 +444,7 @@ function ClearForm() {
 function ToggleDescription() {
     var descriptionToggle = document.getElementById("descriptionToggle");
     var descriptionArea = document.getElementById("dictionaryDescription");
-    
+
     if (descriptionArea.style.display == "none") {
         descriptionArea.style.display = "block";
         descriptionToggle.innerHTML = "Hide Description";
@@ -464,7 +457,7 @@ function ToggleDescription() {
 function ToggleSearchFilter() {
     var searchFilterToggle = document.getElementById("searchFilterToggle");
     var searchFilterArea = document.getElementById("searchFilterArea");
-    
+
     if (searchFilterArea.style.display == "none") {
         searchFilterArea.style.display = "block";
         searchFilterToggle.innerHTML = "Hide Search/Filter Options";
@@ -510,7 +503,7 @@ function ToggleAccountSettings() {
 function ShowAccountSettings(variableName) {
     if (document.getElementById("accountSettingsScreen"))
         document.getElementById("accountSettingsScreen").style.display = "block";
-    
+
     HideInfo();
 }
 
@@ -556,7 +549,7 @@ function HideSettings() {
     } else {
         document.getElementById("wordEntryForm").style.display = "block";
     }
-    
+
 }
 
 function HideSettingsWhenComplete() {
@@ -578,7 +571,7 @@ function ShowFullScreenTextbox(textboxToExpandId, labelText) {
     document.getElementById("expandedTextboxId").innerHTML = textboxToExpandId;
     targetTextboxElement.value = sourceTextboxElement.value;
     document.getElementById("fullScreenTextboxScreen").style.display = "block";
-    
+
     setSelectionRange(targetTextboxElement, selection.start, selection.end);
 }
 
@@ -590,7 +583,7 @@ function HideFullScreenTextbox() {
 
     targetTextboxElement.value = sourceTextboxElement.value;
     document.getElementById("fullScreenTextboxScreen").style.display = "none";
-    
+
     setSelectionRange(targetTextboxElement, selection.start, selection.end);
 }
 

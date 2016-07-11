@@ -105,9 +105,8 @@ The "Filter Words" drop-down box allows you to filter your dictionary by part of
 
 **Ctrl/Control +**
 
-* **Enter/Return** : Submit Word (when typing in Word Form)
+* **Enter/Return** : Submit Word (when typing in Word or Edit Form)
 * **D** : Toggle Dictionary Description visibility.
-* **E** : Export current dictionary. (Also Ctrl+Shift+S does this.)
 * **H** : Open this help window.
 * **M** : Maximize/Minimize Full Screen textbox when typing in the boxes that have the Maximize button.
 * **S** : Jump to Search box.

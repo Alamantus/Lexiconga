@@ -156,6 +156,10 @@ function EditWord(indexString) {
     }
 
     errorMessageArea.innerHTML = errorMessage;
+
+    if (document.getElementById("updateConfirmButton" + indexString)) {
+        document.getElementById("updateConfirmButton" + indexString).focus();
+    }
 }
 
 function UpdateWord(wordIndex, word, pronunciation, partOfSpeech, simpleDefinition, longDefinition) {
@@ -859,7 +863,7 @@ function WordAtIndexWasChanged(indexString, word, pronunciation, partOfSpeech, s
      return (!currentDictionary.settings.caseSensitive && currentDictionary.words[parseInt(indexString)].name.toLowerCase() != word.toLowerCase()) ||
             (currentDictionary.settings.caseSensitive && currentDictionary.words[parseInt(indexString)].name != word) ||
             currentDictionary.words[parseInt(indexString)].pronunciation != pronunciation ||
-            currentDictionary.words[parseInt(indexString)].partOfSpeech != partOfSpeech ||
+            currentDictionary.words[parseInt(indexString)].partOfSpeech.trim() != partOfSpeech ||
             currentDictionary.words[parseInt(indexString)].simpleDefinition != simpleDefinition ||
             currentDictionary.words[parseInt(indexString)].longDefinition != longDefinition;
 }
