@@ -1,0 +1,149 @@
+body {
+	background: #e6cfaa;
+}
+
+header {
+	background: #eacc9d;
+}
+
+tr, thead {
+    border-bottom: 1px solid #af8050;
+}
+td, th {
+    border-right: 1px solid #af8050;
+}
+
+a {
+	text-decoration: underline;
+	color: #a01000;
+}
+
+#siteLogo {
+	display: block;
+	text-indent: -9999px;
+	width: 242px;
+	height: 48px;
+	background: url(../images/logo.svg);
+	background-size: 242px 48px;
+	float: left;
+}
+
+#aboutButton {
+}
+
+#loginoutArea {
+	float: right;
+}
+
+#loginoutArea a {
+	color: #000000;
+	text-decoration: none;
+	font-size: 13px;
+}
+
+@media screen 
+and (min-device-width : 481px) {
+	#headerPadder {
+		padding: 1px;
+	}
+	
+	#loginoutArea {
+		margin: 16px;
+	}
+}
+
+/* Smartphones (portrait and landscape) ----------- */
+@media only screen 
+and (max-device-width : 480px) {
+	#siteLogo {
+		display: block;
+		text-indent: -9999px;
+		width: 150px;
+		height: 30px;
+		background: url(../images/logo.svg);
+		background-size: 150px 30px;
+		float: left;
+	}
+	
+	#loginoutArea {
+		margin: 16px 8px;
+	}
+}
+
+#wordEntryForm {
+	background: #ba5536;
+	-webkit-box-shadow: 5px 5px 7px 0px rgba(0,0,0,0.75);
+	-moz-box-shadow: 5px 5px 7px 0px rgba(0,0,0,0.75);
+	box-shadow: 5px 5px 7px 0px rgba(0,0,0,0.75);
+	border: none;
+}
+
+input, textarea, select, option {
+	background: #efdfc0;
+}
+
+#announcementArea {
+    background: #a0c066;
+}
+
+#notificationArea {
+    background: #c0c088;
+}
+
+#dictionaryColumn {
+	background: #bd7251;
+	border: none;
+	-webkit-box-shadow: 5px 5px 7px 0px rgba(0,0,0,0.75);
+	-moz-box-shadow: 5px 5px 7px 0px rgba(0,0,0,0.75);
+	box-shadow: 5px 5px 7px 0px rgba(0,0,0,0.75);
+}
+
+#settingsOptions, #infoPage, #loadAfterDeletePage, #accountSettingsPage, #fullScreenTextboxPage {
+	background: #f2d5b2;
+}
+
+.management {
+	border-width: 2px;
+	border: none;
+}
+
+#dictionaryName {
+	text-shadow: 2px 2px 2px #915337;
+}
+
+#dictionaryShareLink {
+	text-shadow: none;
+}
+
+#dictionaryDescription {
+	width: 90%;
+	background: #f2d5b2;
+}
+
+#loginLink, #logoutLink, #descriptionToggle, #searchFilterToggle, #settingsButton, .deleteCancelButton, .deleteConfirmButton, #settingsScreenCloseButton, #infoScreenCloseButton, .clickable, button {
+	background: #dcb078;
+}
+
+entry {
+	background: #d7ad7d;
+	border: none;
+	-webkit-box-shadow: 3px 3px 10px -1px rgba(0,0,0,0.75);
+	-moz-box-shadow: 3px 3px 10px -1px rgba(0,0,0,0.75);
+	box-shadow: 3px 3px 10px -1px rgba(0,0,0,0.75);
+}
+
+.editButton {
+	background: #86ac41;
+}
+
+.deleteButton {
+	background: #ba5536;
+}
+
+footer {
+	background: #cb6318;
+	border: none;
+	-webkit-box-shadow: 0px -3px 7px -1px rgba(0,0,0,0.75);
+	-moz-box-shadow: 0px -3px 7px -1px rgba(0,0,0,0.75);
+	box-shadow: 0px -3px 7px -1px rgba(0,0,0,0.75);
+}

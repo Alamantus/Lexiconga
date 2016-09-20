@@ -1,0 +1,453 @@
+* {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+html {
+    width: 100%;
+}
+
+body {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    border: none;
+    font-family: "Helvetica", Arial, sans-serif;
+}
+
+contents {
+    display: block;
+    width: 100%;
+}
+
+header {
+    height: 50px;
+    width: 100%;
+    margin: 0 0 10px;
+    position: relative;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    border: none;
+    padding: 0;
+    -webkit-box-shadow: 0px 3px 10px -1px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 3px 10px -1px rgba(0,0,0,0.75);
+    box-shadow: 0px 3px 10px -1px rgba(0,0,0,0.75);
+}
+
+footer {
+    width: 100%;
+    text-align: center;
+    vertical-align: middle;
+    position:fixed;
+    bottom: 0px;
+    left: 0px;
+    background: #aaaaaa;
+    padding: 0;
+    max-height: 32px;   /* Update Dictionary Container's bottom margin to account for footer */
+}
+
+#footer-content {
+    padding: 8px;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+tr, thead {
+    border-bottom: 1px solid #afafaf;
+}
+tr:last-child {
+    border-bottom: none;
+}
+
+td, th {
+    border-right: 1px solid #afafaf;
+    padding: 3px 10px;
+}
+td:last-child, th:last-child {
+    border-right: none;
+}
+
+.inline {
+    display: inline !important;
+}
+
+#leftColumn {
+    float: left;
+    width: 25%;
+    margin: 15px 0 15px 15px;
+}
+
+form {
+    padding: 15px;
+}
+
+#wordEntryForm {
+    max-width: 400px;
+    min-width: 260px;
+}
+
+.wbr:after {
+    content: "\00200B";
+}
+
+label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+label span {
+    display: block;
+    font-weight: bold;
+}
+
+label label {
+    margin-left: 20px;
+}
+
+label span.checkboxlabel {
+    display: inline;
+    margin-left: 10px;
+}
+
+input, textarea {
+    display: block;
+    padding: 2px 0 2px 5px;
+    border: none;
+    margin: 2px 0;
+}
+
+input[type=checkbox] {
+    display: inline;
+    margin: 5px;
+}
+
+.longDefinition {
+    width: 100%;
+    min-width: 230px;
+    height: 150px;
+}
+
+#updateConflict {
+    width: 260px;
+}
+
+#errorMessage, #updateConflictMessage, #settingsErrorMessage {
+    display: block;
+    color: maroon;
+    font-weight: bold;
+}
+
+#dictionaryWarn {
+    margin-top: 10px;
+    font-size: 12px;
+    font-weight: bold;
+    font-style: italic;
+}
+
+.exportWarnText {
+    display: inline;
+    color: red;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+#formLockButton {
+    float: right;
+}
+
+#createAccountSubmitButton, #accountSettingsSubmitButton {
+    margin-top: 10px;
+}
+
+#aboutButton {
+    display: inline;
+    margin: 0 10px 0 0;
+}
+
+#announcementArea, #notificationArea {
+    text-align:center;
+    padding:10px;
+    margin: 0 auto 5px;
+    width:50%;
+    min-width:200px;
+    -webkit-box-shadow: 5px 5px 7px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 5px 5px 7px 0px rgba(0,0,0,0.75);
+    box-shadow: 5px 5px 7px 0px rgba(0,0,0,0.75);
+}
+
+#dictionaryColumn {
+    width: 50%;
+    margin: 15px 0 36px 15px;    /* bottom margin must clear footer */
+    padding: 0;
+    float: left;
+}
+
+#dictionaryContent {
+    width: 100%;
+    min-width: 260px;
+    max-width: 800px;
+    padding: 15px;
+}
+
+#dictionaryName {
+    margin: 0 0 5px;
+}
+
+#dictionaryShareLink {
+    margin-left: 10px;
+    vertical-align: middle;
+    text-decoration: none;
+}
+
+#dictionaryDescription {
+    width: 100%;
+    max-height: 400px;
+    overflow-y: auto;
+    padding: 15px;
+    border: none;
+    margin: 10px;
+}
+
+.clickable, button {
+    display: inline;
+    font-weight: bold;
+    font-size: 13px;
+    padding: 5px;
+    border: none;
+    background: #dddddd;
+}
+
+.clickable, button {
+    cursor: pointer;
+}
+
+.inline-button {
+    font-size: 11px;
+    padding: 2px 4px;
+}
+
+.toggleButton {
+    display: inline-block;
+    margin: 8px;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+.searchOption, .filterOption {
+    font-size:12px;
+    display: inline-block;
+    margin: 0 8px 0 0;
+}
+
+#wordFilter {
+    margin: 10px 0;
+}
+
+#filterWordCount {
+    margin: 10px 10px;
+    display: block;
+    font-weight: bold;
+    font-style: italic;
+}
+
+entry {
+    display: block;
+    width: 90%;
+    min-width: 200px;
+    padding: 10px 10px 3px;
+    margin-bottom: 5px;
+}
+
+.wordLink {
+    text-decoration: none;
+    float: right;
+    font-size: 13px;
+    padding: 2px;
+    line-height: 10px;
+}
+
+word {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+pronunciation {
+    font-size: 12px;
+    margin-left:10px;
+}
+
+partofspeech {
+    font-style: italic;
+    font-weight: bold;
+    font-size: 10px;
+    margin-left:10px;
+}
+
+simpledefinition {
+    display: block;
+    font-style: italic;
+}
+
+longdefinition {
+    display: block;
+    margin-left: 20px;
+}
+
+longDefinition h1, longDefinition h2, longDefinition h3, longDefinition h4, longDefinition h5, longDefinition h6 {
+    margin: 5px 0 8px;
+    font-weight: bold;
+}
+
+longDefinition h1 {
+    font-size: 22px;
+}
+
+longDefinition h2 {
+    font-size: 20px;
+}
+
+longDefinition h3 {
+    font-size: 20px;
+    font-weight: normal;
+}
+
+longDefinition h4 {
+    font-size: 18px;
+}
+
+longDefinition h5 {
+    font-size: 18px;
+    font-weight: normal;
+}
+
+longDefinition h6 {
+    font-size: 17px;
+}
+
+longDefinition p {
+    margin: 3px 0 8px;
+}
+
+searchTerm {
+    display: inline;
+    color: #ff0000;
+    background: #ffff00;
+    padding: 1px;
+    text-decoration: underline;
+    font-style: italic;
+    font-weight: bold;
+}
+
+.management {
+    display: block;
+    right: 5px;
+    width: 100px;
+    padding: 3px;
+    border: inset 3px;
+    margin: 10px;
+}
+
+.editButton, .deleteButton, .deleteConfirmButton, .deleteCancelButton {
+    display: inline;
+    font-size: 10px;
+    margin: 5px;
+}
+
+.deleteConfirm {
+    display: block;
+    font-size: 10px;
+    margin: 10px;
+}
+
+.fixedFade {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000000;
+    opacity: 0.6;
+}
+
+.fixedPage {
+    position: fixed;
+    top: 5%;
+    left: 6%;
+    right: 6%;
+    bottom: 10%;
+    min-width: 260px;
+    min-height: 260px;
+    padding: 5px 5% 5%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background: #ffffff;
+    opacity: 1;
+    border: none;
+    -webkit-box-shadow: 5px 5px 7px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 5px 5px 7px 0px rgba(0,0,0,0.75);
+    box-shadow: 5px 5px 7px 0px rgba(0,0,0,0.75);
+}
+
+.rightButton {
+    float: right;
+    font-size: 12px;
+}
+
+#fullScreenTextboxPage {
+    padding: 5px 3% 4%;
+    overflow-y: hidden;
+}
+
+#fullScreenTextbox {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+#settingsForm {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+#publicLink {
+    font-size:12px;
+    font-style: italic;
+}
+
+#dictionaryDescriptionEdit, #dictionaryPartsOfSpeechEdit {
+    width: 100%;
+    max-width: 360px;
+    min-width: 200px;
+}
+
+#dictionaryDescriptionEdit {
+    height: 200px;
+}
+
+#settingsErrorMessage {
+    float: right;
+    clear: both;
+}
+#settingsSaveButtons {
+    position: absolute;
+    right: 10%;
+    bottom: 8%;
+    font-size: 14px;
+    display: block;
+    width: 50%;
+}
+
+.settingsCol {
+    display: block;
+    float: left;
+    width: 30%;
+    min-width: 260px;
+    max-width: 400px;
+    margin: 0 30px 0 0;
+}
