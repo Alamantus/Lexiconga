@@ -1,21 +1,21 @@
-function ready(fn) {
-    if (document.readyState != 'loading'){
-        fn();
-    } else {
-       document.addEventListener('DOMContentLoaded', fn);
-    }
-}
+// function ready(fn) {
+//     if (document.readyState != 'loading'){
+//         fn();
+//     } else {
+//        document.addEventListener('DOMContentLoaded', fn);
+//     }
+// }
 
 // Set Marked.js settings
-marked.setOptions({
-    gfm: true,
-    tables: true,
-    breaks: true,
-    sanitize: true
-});
+// marked.setOptions({
+//     gfm: true,
+//     tables: true,
+//     breaks: true,
+//     sanitize: true
+// });
 
 // Get Keycode based on key name
-function keyCodeFor(keyName) {
+export function keyCodeFor(keyName) {
     if (keyName == "backspace") return 8;
     else if (keyName == "tab") return 9;
     else if (keyName == "ctrlEnter") return 10;
@@ -119,7 +119,7 @@ function keyCodeFor(keyName) {
     else return false;
 }
 
-function getInputSelection(el) {
+export function getInputSelection(el) {
 // Retrieved from http://stackoverflow.com/a/4207763
     var start = 0, end = 0, normalizedValue, range,
         textInputRange, len, endRange;
@@ -166,7 +166,7 @@ function getInputSelection(el) {
     };
 }
 
-function setSelectionRange(input, selectionStart, selectionEnd) {
+export function setSelectionRange(input, selectionStart, selectionEnd) {
 // Retrieved from http://stackoverflow.com/a/17858641/3508346
     if (input.setSelectionRange) {
         input.focus();
@@ -181,7 +181,7 @@ function setSelectionRange(input, selectionStart, selectionEnd) {
     }
 }
 
-function SaveScroll() {
+export function SaveScroll() {
     var doc = document.documentElement;
     var left = (window.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0);
     var top = (window.pageYOffset || doc.scrollTop) - (doc.clientTop || 0);
@@ -190,36 +190,36 @@ function SaveScroll() {
     savedScroll.y = top;
 }
 
-function htmlEntities(string) {
+export function htmlEntities(string) {
     return String(string).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;').replace(/\\/g, '&#92;').replace(/\n/g, '<br>');
 }
 
-function htmlEntitiesParse(string) {
+export function htmlEntitiesParse(string) {
     return String(string).replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/&#92;/g, '\\').replace(/<br>/g, '\n');
 }
 
-function htmlEntitiesParseForMarkdown(string) {
+export function htmlEntitiesParseForMarkdown(string) {
     return String(string).replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/&#92;/g, '\\').replace(/<br>/g, '\n');
 }
 
-function stripHtmlEntities(string) {
+export function stripHtmlEntities(string) {
     // This is for the export name.
     return String(string).replace(/&amp;/g, '').replace(/&lt;/g, '').replace(/&gt;/g, '').replace(/&quot;/g, '').replace(/&apos;/g, "").replace(/&#92;/g, '').replace(/<br>/g, '');
 }
 
-function htmlEntitiesParseForSearchEntry(string) {
+export function htmlEntitiesParseForSearchEntry(string) {
     return String(string).replace(/"/g, '%%%%').replace(/'/g, "````");
 }
 
-function htmlEntitiesParseForSearch(string) {
+export function htmlEntitiesParseForSearch(string) {
     return String(string).replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '%%%%').replace(/&apos;/g, "````");
 }
 
-function regexParseForSearch(string) {
+export function regexParseForSearch(string) {
     return String(string).replace(/([\[\\\^\$\.\|\?\*\+\(\)\{\}\]])/g, "\\$1");
 }
 
-function dynamicSort(propertiesArray) {
+export function dynamicSort(propertiesArray) {
 	/* Retrieved from http://stackoverflow.com/a/30446887/3508346
 	   Usage: theArray.sort(dynamicSort(['propertyAscending', '-propertyDescending']));*/
     return function (a, b) {
@@ -240,7 +240,7 @@ function dynamicSort(propertiesArray) {
     };
 }
 
-function download(filename, text) {
+export function download(filename, text) {
     /* Retrieved from http://stackoverflow.com/a/18197341/3508346
        Usage: download('test.txt', 'Hello world!');*/
     var element = document.createElement('a');
