@@ -11,14 +11,7 @@ export class Dictionary extends React.Component {
       name: "New",
       description: "A new dictionary.",
       createdBy: 'Someone',
-      words: [{
-        name: 'word',
-        pronunciation: 'pronunciation',
-        partOfSpeech: 'partOfSpeech',
-        simpleDefinition: 'simpleDefinition',
-        longDefinition: 'longDefinition',
-        wordId: 'wordId'
-      }],
+      words: [],
       nextWordId: 1,
       externalID: 0,
       allowDuplicates: false,
@@ -34,7 +27,7 @@ export class Dictionary extends React.Component {
 
   showWords() {
     let words = this.state.words.map((word, index) => {
-      <Word key={'dictionaryEntry' + index.toString()}
+      return <Word key={'dictionaryEntry' + index.toString()}
         name={word.name}
         wordId={word.wordId}
         pronunciation={word.pronunciation}
@@ -81,14 +74,6 @@ export class Dictionary extends React.Component {
         </div>
 
         <div id="theDictionary">
-          <Word
-            name='{word.name}'
-            wordId='{word.wordId}'
-            pronunciation='{word.pronunciation}'
-            partOfSpeech='{word.partOfSpeech}'
-            simpleDefinition='{word.simpleDefinition}'
-            longDefinition='{word.longDefinition}'
-            initialPosition='{index}' />
           {this.showWords()}
         </div>
 
