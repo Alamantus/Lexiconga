@@ -8,6 +8,7 @@ export class Dictionary extends React.Component {
     super(props);
 
     this.state = {
+      dictionary: this.props.reference,
       name: this.props.reference.name,
       description: this.props.reference.description,
       createdBy: this.props.reference.createdBy,
@@ -56,17 +57,19 @@ export class Dictionary extends React.Component {
     }, () => console.log(this.state.words));
   }
 
-  changeTestWord() {
-    this.setState(
-      words[0].name: 'cool'
-    );
+  changeNameAgain() {
+    let updateDictionary = this.state.dictionary;
+    updateDictionary.name = 'something else again'
+    this.setState({
+      dictionary: updateDictionary
+    })
   }
 
   render() {
     return (
       <div>
         <h1 id="dictionaryName">
-          {this.state.name}
+          {this.state.dictionary.name}
         </h1>
         
         <h4 id="dictionaryBy">
@@ -83,6 +86,10 @@ export class Dictionary extends React.Component {
         <Button
           action={() => this.addTestWord()}
           label='Add a Test Word' />
+
+        <Button
+          action={() => this.changeNameAgain()}
+          label='Change Name Again' />
 
         <Button
           action={() => {

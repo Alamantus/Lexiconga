@@ -6,6 +6,7 @@ import ReactDOM from 'react-dom';
 
 import {Header} from './components/Header';
 import {NewWordForm} from './components/NewWordForm';
+import {Button} from './components/Button';
 import {Dictionary} from './components/Dictionary';
 
 class Lexiconga extends React.Component {
@@ -42,11 +43,25 @@ class Lexiconga extends React.Component {
     // this.addTestWord();
   }
 
+  changeDictionaryName() {
+    // To change elements within the dictionary object, you can set it to
+    // a variable, manipulate the variable, then use setState() to set
+    // the object equal to the changed variable.
+    let updateDictionary = this.state.currentDictionary;
+    updateDictionary.name = 'something else'
+    this.setState({
+      currentDictionary: updateDictionary
+    })
+  }
+
   render() {
     return (
       <div>
         <Header />
         <NewWordForm reference={this.state.currentDictionary} />
+        <Button
+          action={() => this.changeDictionaryName()}
+          label='change name' />
         <Dictionary reference={this.state.currentDictionary} />
       </div>
     );
