@@ -19,13 +19,9 @@ export class Input extends React.Component {
     // Bind listeners
     this.handleOnChange = this.handleOnChange.bind(this);
   }
-
-  handleOnChange(event) {
-    this.setValue(event);
-  }
   
   // Whenever the input changes we update the value state of this component
-  setValue(event) {
+  handleOnChange(event) {
     this.setState({
       isValid: !(this.props.doValidate && event.currentTarget.value === ''),
       value: event.currentTarget.value
@@ -40,6 +36,10 @@ export class Input extends React.Component {
         </a>
       );
     }
+  }
+
+  clearField() {
+    this.setState({value: ''});
   }
 
   render() {

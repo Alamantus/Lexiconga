@@ -1,3 +1,5 @@
+import {removeDiacritics} from './dependencies/removeDiacritics';
+
 // function ready(fn) {
 //     if (document.readyState != 'loading'){
 //         fn();
