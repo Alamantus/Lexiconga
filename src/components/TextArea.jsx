@@ -2,6 +2,7 @@ import React from 'react';
 import {Input} from './Input';
 
 import {getInputSelection, setSelectionRange} from '../js/helpers';
+import {Button} from './Button';
 
 export class TextArea extends Input {
   constructor(props) {
@@ -34,7 +35,10 @@ export class TextArea extends Input {
       <label>
         <span>
           {this.props.name}
-          <span className="clickable inline-button" onClick={this.handleMaximizeClick}>Maximize</span>
+          <Button
+            classes='inline-button'
+            action={() => this.handleMaximizeClick()}
+            label='Maximize' />
         </span>
         <textarea id={this.props.id} onChange={this.handleOnChange} value={this.state.value} />
       </label>

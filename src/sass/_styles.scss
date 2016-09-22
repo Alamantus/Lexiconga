@@ -34,6 +34,16 @@ header {
     -webkit-box-shadow: 0px 3px 10px -1px rgba(0,0,0,0.75);
     -moz-box-shadow: 0px 3px 10px -1px rgba(0,0,0,0.75);
     box-shadow: 0px 3px 10px -1px rgba(0,0,0,0.75);
+
+    .button-group {
+        float: right;
+        margin: 16px 8px;
+        font-size:12px;
+
+        span {
+            margin-left: 16px;
+        }
+    }
 }
 
 footer {
@@ -46,10 +56,10 @@ footer {
     background: #aaaaaa;
     padding: 0;
     max-height: 32px;   /* Update Dictionary Container's bottom margin to account for footer */
-}
 
-#footer-content {
-    padding: 8px;
+    #footer-content {
+        padding: 8px;
+    }
 }
 
 table {
@@ -255,12 +265,74 @@ input[type=checkbox] {
     font-style: italic;
 }
 
-entry {
+.word {
     display: block;
     width: 90%;
     min-width: 200px;
     padding: 10px 10px 3px;
     margin-bottom: 5px;
+
+    .name {
+        font-weight: bold;
+        font-size: 20px;
+    }
+
+    .pronunciation {
+        font-size: 12px;
+        margin-left:10px;
+    }
+
+    .part-of-speech {
+        font-style: italic;
+        font-weight: bold;
+        font-size: 10px;
+        margin-left:10px;
+    }
+
+    .simple-definition {
+        display: block;
+        font-style: italic;
+    }
+
+    .long-definition {
+        display: block;
+        margin-left: 20px;
+
+        h1, h2, h3, h4, h5, h6 {
+            margin: 5px 0 8px;
+            font-weight: bold;
+        }
+
+        h1 {
+            font-size: 22px;
+        }
+
+        h2 {
+            font-size: 20px;
+        }
+
+        h3 {
+            font-size: 20px;
+            font-weight: normal;
+        }
+
+        h4 {
+            font-size: 18px;
+        }
+
+        h5 {
+            font-size: 18px;
+            font-weight: normal;
+        }
+
+        h6 {
+            font-size: 17px;
+        }
+
+        p {
+            margin: 3px 0 8px;
+        }
+    }
 }
 
 .wordLink {
@@ -269,68 +341,6 @@ entry {
     font-size: 13px;
     padding: 2px;
     line-height: 10px;
-}
-
-word {
-    font-weight: bold;
-    font-size: 20px;
-}
-
-pronunciation {
-    font-size: 12px;
-    margin-left:10px;
-}
-
-partofspeech {
-    font-style: italic;
-    font-weight: bold;
-    font-size: 10px;
-    margin-left:10px;
-}
-
-simpledefinition {
-    display: block;
-    font-style: italic;
-}
-
-longdefinition {
-    display: block;
-    margin-left: 20px;
-}
-
-longDefinition h1, longDefinition h2, longDefinition h3, longDefinition h4, longDefinition h5, longDefinition h6 {
-    margin: 5px 0 8px;
-    font-weight: bold;
-}
-
-longDefinition h1 {
-    font-size: 22px;
-}
-
-longDefinition h2 {
-    font-size: 20px;
-}
-
-longDefinition h3 {
-    font-size: 20px;
-    font-weight: normal;
-}
-
-longDefinition h4 {
-    font-size: 18px;
-}
-
-longDefinition h5 {
-    font-size: 18px;
-    font-weight: normal;
-}
-
-longDefinition h6 {
-    font-size: 17px;
-}
-
-longDefinition p {
-    margin: 3px 0 8px;
 }
 
 searchTerm {
