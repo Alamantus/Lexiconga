@@ -16,10 +16,27 @@ class Lexiconga extends React.Component {
       scroll: {
         x: 0,
         y: 0
-      }
-    }
+      },
 
-    // this.defaultDictionaryJSON = JSON.stringify(this.state.dictionaryDetails);  //Saves a stringifyed default dictionary.
+      currentDictionary: {
+        name: "New",
+        description: "A new dictionary.",
+        createdBy: 'Someone',
+        words: [],
+        settings: {
+          allowDuplicates: false,
+          caseSensitive: false,
+          partsOfSpeech: "Noun,Adjective,Verb,Adverb,Preposition,Pronoun,Conjunction",
+          sortByEquivalent: false,
+          isComplete: false,
+          isPublic: false
+        },
+        nextWordId: 1,
+        externalID: 0
+      }
+    };
+
+    this.defaultDictionaryJSON = JSON.stringify(this.state.dictionaryDetails);  //Saves a stringifyed default dictionary.
     this.previousDictionary = {};
 
     // this.addTestWord();
@@ -29,8 +46,8 @@ class Lexiconga extends React.Component {
     return (
       <div>
         <Header />
-        <NewWordForm />
-        <Dictionary />
+        <NewWordForm reference={this.state.currentDictionary} />
+        <Dictionary reference={this.state.currentDictionary} />
       </div>
     );
   }

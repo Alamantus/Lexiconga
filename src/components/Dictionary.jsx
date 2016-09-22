@@ -8,18 +8,18 @@ export class Dictionary extends React.Component {
     super(props);
 
     this.state = {
-      name: "New",
-      description: "A new dictionary.",
-      createdBy: 'Someone',
-      words: [],
-      nextWordId: 1,
-      externalID: 0,
-      allowDuplicates: false,
-      caseSensitive: false,
-      partsOfSpeech: "Noun,Adjective,Verb,Adverb,Preposition,Pronoun,Conjunction",
-      sortByEquivalent: false,
-      isComplete: false,
-      isPublic: false
+      name: this.props.reference.name,
+      description: this.props.reference.description,
+      createdBy: this.props.reference.createdBy,
+      words: this.props.reference.words,
+      nextWordId: this.props.reference.nextWordId,
+      externalID: this.props.reference.externalID,
+      allowDuplicates: this.props.reference.settings.allowDuplicates,
+      caseSensitive: this.props.reference.settings.caseSensitive,
+      partsOfSpeech: this.props.reference.settings.partOfSpeech,
+      sortByEquivalent: this.props.reference.settings.sortByEquivalent,
+      isComplete: this.props.reference.settings.isComplete,
+      isPublic: this.props.reference.settings.isPublic
     }
 
     // this.addTestWord();
@@ -28,13 +28,16 @@ export class Dictionary extends React.Component {
   showWords() {
     let words = this.state.words.map((word, index) => {
       return <Word key={'dictionaryEntry' + index.toString()}
-        name={word.name}
-        wordId={word.wordId}
-        pronunciation={word.pronunciation}
-        partOfSpeech={word.partOfSpeech}
-        simpleDefinition={word.simpleDefinition}
-        longDefinition={word.longDefinition}
-        initialPosition={index} />
+        reference={word}
+        initialPosition={index} />;
+      // return <Word key={'dictionaryEntry' + index.toString()}
+      //   name={word.name}
+      //   wordId={word.wordId}
+      //   pronunciation={word.pronunciation}
+      //   partOfSpeech={word.partOfSpeech}
+      //   simpleDefinition={word.simpleDefinition}
+      //   longDefinition={word.longDefinition}
+      //   initialPosition={index} />;
     });
 
     return <div>{words}</div>;
