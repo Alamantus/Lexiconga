@@ -34,55 +34,26 @@ export class Word extends React.Component {
 
   showName() {
     let editButton;
-    if (this.state.editName) {
-      if (this.state.editWord) {
-        editButton = (
-          <Button
-            action={() => {
-              let value = this.nameField.state.value;
-              this.setState({editName: false}, () => {
-                this.updateWord({name: value});
-              });
-            }}
-            label={saveIcon} />
-        );
-      }
+    if (this.state.editWord) {
       return (
         <div>
           <Input value={this.props.name} ref={(inputComponent) => this.nameField = inputComponent} />
-          {editButton}
         </div>
       );
     } else {
-      if (this.state.editWord) {
-        <Button
-          action={() => {
-            this.setState({editName: true});
-          }}
-          label={editIcon} />
-      }
       return (
         <div className='name'>
           {this.props.name}
-          {editButton}
         </div>
       );
     }
   }
 
   showPronunciation() {
-    if (this.state.editPronunciation) {
+    if (this.state.editWord) {
       return (
         <div>
           <Input value={this.props.pronunciation} ref={(inputComponent) => this.pronunciationField = inputComponent} />
-          <Button
-            action={() => {
-              let value = this.pronunciationField.state.value;
-              this.setState({editPronunciation: false}, () => {
-                this.updateWord({pronunciation: value});
-              });
-            }}
-            label={saveIcon} />
         </div>
       );
     } else {
@@ -90,11 +61,6 @@ export class Word extends React.Component {
         return (
           <div className='pronunciation'>
             {this.props.pronunciation}
-            <Button
-              action={() => {
-                this.setState({editPronunciation: true});
-              }}
-              label={editIcon} />
           </div>
         );
       }
@@ -102,18 +68,10 @@ export class Word extends React.Component {
   }
 
   showPartOfSpeech() {
-    if (this.state.editPartOfSpeech) {
+    if (this.state.editWord) {
       return (
         <div>
           <Input value={this.props.partOfSpeech} ref={(inputComponent) => this.partOfSpeechField = inputComponent} />
-          <Button
-            action={() => {
-              let value = this.partOfSpeechField.state.value;
-              this.setState({editPartOfSpeech: false}, () => {
-                this.updateWord({partOfSpeech: value});
-              });
-            }}
-            label={saveIcon} />
         </div>
       );
     } else {
@@ -121,11 +79,6 @@ export class Word extends React.Component {
         return (
           <div className='part-of-speech'>
             {this.props.partOfSpeech}
-            <Button
-              action={() => {
-                this.setState({editPartOfSpeech: true});
-              }}
-              label={editIcon} />
           </div>
         );
       }
@@ -133,18 +86,10 @@ export class Word extends React.Component {
   }
 
   showSimpleDefinition() {
-    if (this.state.editSimpleDefinition) {
+    if (this.state.editWord) {
       return (
         <div>
           <Input value={this.props.simpleDefinition} ref={(inputComponent) => this.simpleDefinitionField = inputComponent} />
-          <Button
-            action={() => {
-              let value = this.simpleDefinitionField.state.value;
-              this.setState({editSimpleDefinition: false}, () => {
-                this.updateWord({simpleDefinition: value});
-              });
-            }}
-            label={saveIcon} />
         </div>
       );
     } else {
@@ -152,11 +97,6 @@ export class Word extends React.Component {
         return (
           <div className='simple-definition'>
             {this.props.simpleDefinition}
-            <Button
-              action={() => {
-                this.setState({editSimpleDefinition: true});
-              }}
-              label={editIcon} />
           </div>
         );
       }
@@ -164,18 +104,10 @@ export class Word extends React.Component {
   }
 
   showLongDefinition() {
-    if (this.state.editLongDefinition) {
+    if (this.state.editWord) {
       return (
         <div>
           <Input value={this.props.longDefinition} ref={(inputComponent) => this.longDefinitionField = inputComponent} />
-          <Button
-            action={() => {
-              let value = this.longDefinitionField.state.value;
-              this.setState({editLongDefinition: false}, () => {
-                this.updateWord({longDefinition: value});
-              });
-            }}
-            label={saveIcon} />
         </div>
       );
     } else {
@@ -183,11 +115,6 @@ export class Word extends React.Component {
         return (
           <div className='long-definition'>
             {this.props.longDefinition}
-            <Button
-              action={() => {
-                this.setState({editLongDefinition: true});
-              }}
-              label={editIcon} />
           </div>
         );
       }
@@ -198,11 +125,23 @@ export class Word extends React.Component {
     if (this.props.isEditing) {
       if (this.state.editWord) {
         return (
-          <Button
-            action={() => {
-              this.setState({editWord: false});
-            }}
-            label='Stop Editing' />
+          <div>
+            <Button
+              action={() => {
+                let values = {
+                  name: this.nameField.state.value,
+                  pronunciation: this.pronunciationField.state.value,
+                  partOfSpeech: this.partOfSpeechField.state.value,
+                  simpleDefinition: this.simpleDefinitionField.state.value,
+                  longDefinition: this.longDefinitionField.state.value
+                }
+                this.setState({editWord: false}, () => this.updateWord(values));
+              }}
+              label='Save' />
+            <Button
+              action={() => this.setState({editWord: false})}
+              label='Cancel' />
+          </div>
         );
       } else {
         return (
