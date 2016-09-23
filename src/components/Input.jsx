@@ -56,6 +56,6 @@ export class Input extends React.Component {
 }
 
 Input.defaultProps = {
-  name: 'Field',
+  name: '',
   doValidate: true
 };

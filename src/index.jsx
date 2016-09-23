@@ -8,7 +8,6 @@ import {Header} from './components/Header';
 import {NewWordForm} from './components/NewWordForm';
 import {Button} from './components/Button';
 import {Dictionary} from './components/Dictionary';
-import {Word} from './components/Word';
 
 import {dynamicSort} from './js/helpers';
 
@@ -39,7 +38,7 @@ class Lexiconga extends React.Component {
         sortByEquivalent: false,
         isComplete: false,
         isPublic: false
-      },
+      }
     };
 
     this.defaultDictionaryJSON = JSON.stringify(this.state.dictionaryDetails);  //Saves a stringifyed default dictionary.
@@ -57,6 +56,17 @@ class Lexiconga extends React.Component {
     })
   }
 
+  sortWords(array) {
+    let sortMethod;
+    if (this.state.settings.sortByEquivalent) {
+        sortMethod = ['simpleDefinition', 'partOfSpeech'];
+    } else {
+        sortMethod = ['name', 'partOfSpeech'];
+    }
+
+    return array.sort(dynamicSort(sortMethod));
+  }
+
   addWord(wordObject) {
     let newWord = {
       name: wordObject.name || 'errorWord',
@@ -67,15 +77,8 @@ class Lexiconga extends React.Component {
       wordId: this.state.details.nextWordId
     }
 
-    let sortMethod;
-    if (this.state.settings.sortByEquivalent) {
-        sortMethod = ['simpleDefinition', 'partOfSpeech'];
-    } else {
-        sortMethod = ['name', 'partOfSpeech'];
-    }
-
     let updatedWords = this.state.words.concat([newWord]);
-    updatedWords.sort(dynamicSort(sortMethod));
+    updatedWords = this.sortWords(updatedWords);
 
     let updatedDetails = this.state.details;
     updatedDetails.nextwordid += 1;
@@ -91,13 +94,22 @@ class Lexiconga extends React.Component {
   }
 
   updateWord(index, wordObject) {
+    if (this.showConsoleMessages) console.log('Updating ' + this.state.words[index].name + ' to ' + wordObject.name);
+
     let updatedWords = this.state.words;
     updatedWords[index].name = wordObject.name;
     updatedWords[index].pronunciation = wordObject.pronunciation;
     updatedWords[index].partOfSpeech = wordObject.partOfSpeech;
     updatedWords[index].simpledefinition = wordObject.simpledefinition;
     updatedWords[index].longDefinition = wordObject.longDefinition;
-    this.setState({words: updatedWords});
+
+    updatedWords = this.sortWords(updatedWords);
+
+    this.setState({words: updatedWords}, () => {
+      if (this.showConsoleMessages) {
+        console.log('Updated successfully');
+      }
+    });
   }
 
   showWords() {
@@ -112,6 +124,11 @@ class Lexiconga extends React.Component {
         index={index}
         updateWord={(index, wordObject) => this.updateWord(index, wordObject)} />;
     });
+
+    if (this.showConsoleMessages) {
+      console.log('Showing these words:');
+      console.log(words);
+    }
 
     return <div>{words}</div>;
   }
@@ -128,9 +145,11 @@ class Lexiconga extends React.Component {
         <div id="incompleteNotice">
           Dictionary is complete: {this.state.settings.isComplete.toString()}
         </div>
-        <Dictionary parent={this}>
-          {this.showWords()}
-        </Dictionary>
+        <Dictionary
+          details={this.state.details}
+          words={this.state.words}
+          settings={this.state.settings}
+          updateWord={(index, wordObject) => this.updateWord(index, wordObject)} />
       </div>
     );
   }
