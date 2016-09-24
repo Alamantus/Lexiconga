@@ -10,7 +10,7 @@ export class Dictionary extends React.Component {
 
   showWords() {
     let words = this.props.words.map((word) => {
-      return <Word key={'dictionaryEntry' + word.wordId.toString()} isEditing={true}
+      return <Word key={'d:' + this.props.details.name + this.props.details.externalID.toString() + 'w:' + word.wordId.toString()} isEditing={true}
         name={word.name}
         pronunciation={word.pronunciation}
         partOfSpeech={word.partOfSpeech}
