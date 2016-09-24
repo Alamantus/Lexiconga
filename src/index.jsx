@@ -11,6 +11,11 @@ import {Dictionary} from './components/Dictionary';
 
 import {dynamicSort} from './js/helpers';
 
+const defaultDictionaryName = 'New',
+      defaultDictionaryDescription = 'A new dictionary.',
+      defaultDictionaryCreatedBy = 'Someone',
+      defaultDictionaryPartsOfSpeech = 'Noun,Adjective,Verb,Adverb,Preposition,Pronoun,Conjunction';
+
 class Lexiconga extends React.Component {
   constructor(props) {
     super(props);
@@ -24,9 +29,9 @@ class Lexiconga extends React.Component {
       },
 
       details: {
-        name: "New",
-        description: "A new dictionary.",
-        createdBy: 'Someone',
+        name: defaultDictionaryName,
+        description: defaultDictionaryDescription,
+        createdBy: defaultDictionaryCreatedBy,
         nextWordId: 1,
         externalID: 0
       },
@@ -34,7 +39,7 @@ class Lexiconga extends React.Component {
       settings: {
         allowDuplicates: false,
         caseSensitive: false,
-        partsOfSpeech: "Noun,Adjective,Verb,Adverb,Preposition,Pronoun,Conjunction",
+        partsOfSpeech: defaultDictionaryPartsOfSpeech,
         sortByEquivalent: false,
         isComplete: false,
         isPublic: false
@@ -133,6 +138,72 @@ class Lexiconga extends React.Component {
     }
   }
 
+  dictionaryIsDefault(dictionary) {
+    if (this.showConsoleMessages) {
+      console.log('Name: ' + dictionary.name
+        + '\nDescription: ' + dictionary.description
+        + '\n# Words: ' + dictionary.words.length);
+    }
+    return dictionary.words.length <= 0 && dictionary.description === defaultDictionaryDescription && dictionary.name === defaultDictionaryName;
+  }
+
+  saveLocalDictionary() {
+    let saveDictionary = {
+      name: this.state.details.name,
+      description: this.state.details.description,
+      createdBy: this.state.details.createdBy,
+      words: this.state.words,
+      nextWordId: this.state.details.nextWordId,
+      settings: this.state.settings,
+      externalID: this.state.details.externalID
+    };
+
+    if (!this.dictionaryIsDefault(saveDictionary)) {
+      localStorage.setItem('dictionary', JSON.stringify(saveDictionary));
+
+      console.log('Saved "' + this.state.details.name + '" dictionary locally');
+    } else {
+      if (this.showConsoleMessages) console.log('Current dictionary is default, so it wasn\'t saved');
+    }
+  }
+
+  loadLocalDictionary() {
+    if (localStorage.getItem('dictionary')){
+      let localDictionary = JSON.parse(localStorage.getItem('dictionary'));
+
+      if (!this.dictionaryIsDefault(localDictionary)) {
+        this.setState({
+          details: {
+            name: localDictionary.name,
+            description: localDictionary.description,
+            createdBy: localDictionary.createdBy,
+            nextWordId: localDictionary.nextWordId,
+            externalID: localDictionary.externalID
+          },
+
+          words: localDictionary.words.slice(),
+
+          settings: {
+            allowDuplicates: localDictionary.settings.allowDuplicates,
+            caseSensitive: localDictionary.settings.caseSensitive,
+            partsOfSpeech: localDictionary.settings.partsOfSpeech,
+            sortByEquivalent: localDictionary.settings.sortByEquivalent,
+            isComplete: localDictionary.settings.isComplete,
+            isPublic: localDictionary.settings.isPublic
+          }
+        }, () => {
+          if (this.showConsoleMessages) {
+            console.log('Loaded local "' + this.state.details.name + '" dictionary successfully');
+          }
+        });
+      } else {
+        if (this.showConsoleMessages) console.log('Locally saved dictionary is default');
+      }
+    } else {
+      if (this.showConsoleMessages) console.log('No saved local dictionary');
+    }
+  }
+
   render() {
     return (
       <div>
@@ -150,6 +221,14 @@ class Lexiconga extends React.Component {
           words={this.state.words}
           settings={this.state.settings}
           updateWord={(wordId, wordObject) => this.updateWord(wordId, wordObject)} />
+
+        <Button
+          action={() => this.saveLocalDictionary()}
+          label='Save Dictionary' />
+
+        <Button
+          action={() => this.loadLocalDictionary()}
+          label='Load Dictionary' />
       </div>
     );
   }

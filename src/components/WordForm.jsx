@@ -87,7 +87,7 @@ export class WordForm extends React.Component {
   render() {
     let nameDefaultValue = (this.props.wordValues) ? this.props.wordValues.name : '';
     let pronunciationDefaultValue = (this.props.wordValues) ? this.props.wordValues.pronunciation : '';
-    let partOfSpeechDefaultValue = (this.props.wordValues) ? this.props.wordValues.partOfSpeech : '';
+    let partOfSpeechDefaultValue = (this.props.wordValues) ? this.props.wordValues.partOfSpeech : ' ';
     let simpleDefinitionDefaultValue = (this.props.wordValues) ? this.props.wordValues.simpleDefinition : '';
     let longDefinitionDefaultValue = (this.props.wordValues) ? this.props.wordValues.longDefinition : '';
     return (
