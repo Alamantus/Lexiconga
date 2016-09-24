@@ -1,10 +1,12 @@
 import React from 'react';
 
+import {keyCodeFor} from '../js/helpers'
+
 import {Input} from './Input';
 import {TextArea} from './TextArea';
 import {Button} from './Button';
 
-export class NewWordForm extends React.Component {
+export class WordForm extends React.Component {
   constructor(props) {
     super(props);
 
@@ -21,7 +23,7 @@ export class NewWordForm extends React.Component {
     this.longDefinitionField = null;
   }
 
-  submitWordOnCtrlEnter() {
+  submitWordOnCtrlEnter(event) {
     var keyCode = (event.which ? event.which : event.keyCode);
 
     //Windows and Linux Chrome accept ctrl+enter as keyCode 10.
@@ -34,15 +36,21 @@ export class NewWordForm extends React.Component {
 
   handleSubmit() {
     if (this.formIsValid()) {
-      this.props.addWord({
+      let word = {
         name: this.wordField.state.value,
         pronunciation: this.pronunciationField.state.value,
         partOfSpeech: this.partOfSpeechField.state.value,
         simpleDefinition: this.simpleDefinitionField.state.value,
         longDefinition: this.longDefinitionField.state.value
-      });
+      };
 
-      this.clearForm()
+      if (this.props.updateWord) {
+        this.props.updateWord(word);
+      } else {
+        this.props.addWord(word);
+      }
+
+      this.clearForm();
     }
   }
 
@@ -77,9 +85,17 @@ export class NewWordForm extends React.Component {
   }
 
   render() {
+    let nameDefaultValue = (this.props.wordValues) ? this.props.wordValues.name : '';
+    let pronunciationDefaultValue = (this.props.wordValues) ? this.props.wordValues.pronunciation : '';
+    let partOfSpeechDefaultValue = (this.props.wordValues) ? this.props.wordValues.partOfSpeech : '';
+    let simpleDefinitionDefaultValue = (this.props.wordValues) ? this.props.wordValues.simpleDefinition : '';
+    let longDefinitionDefaultValue = (this.props.wordValues) ? this.props.wordValues.longDefinition : '';
     return (
       <form>
-        <Input name='Word' ref={(inputComponent) => this.wordField = inputComponent} />
+        <Input name='Word'
+          value={nameDefaultValue}
+          onKeyDown={(event) => this.submitWordOnCtrlEnter(event)}
+          ref={(inputComponent) => this.wordField = inputComponent} />
 
         <Input name='Pronunciation'
           helperLink={{
@@ -87,20 +103,28 @@ export class NewWordForm extends React.Component {
             label: "IPA Characters",
             hover: "IPA Character Picker located at http://r12a.github.io/pickers/ipa/"
           }}
+          value={pronunciationDefaultValue}
+          onKeyDown={(event) => this.submitWordOnCtrlEnter(event)}
           ref={(inputComponent) => this.pronunciationField = inputComponent} />
 
-        <Input name='Part of Speech' ref={(inputComponent) => this.partOfSpeechField = inputComponent} />
+        <Input name='Part of Speech'
+          value={partOfSpeechDefaultValue}
+          ref={(inputComponent) => this.partOfSpeechField = inputComponent} />
 
         <Input name={<div style={{display: 'inline'}}>Definition/<wbr /><b className="wbr"></b>Equivalent Word(s)</div>}
+          value={simpleDefinitionDefaultValue}
+          onKeyDown={(event) => this.submitWordOnCtrlEnter(event)}
           ref={(inputComponent) => this.simpleDefinitionField = inputComponent} />
 
         <TextArea id='newWordForm'
           name={<div style={{display: 'inline'}}>Explanation/<wbr /><b className="wbr"></b>Long Definition</div>}
+          value={longDefinitionDefaultValue}
+          onKeyDown={(event) => this.submitWordOnCtrlEnter(event)}
           ref={(inputComponent) => this.longDefinitionField = inputComponent} />
 
         <span id="errorMessage">{this.state.errorMessage}</span>
         
-        <Button action={() => this.handleSubmit()} label='Add Word' />
+        <Button action={() => this.handleSubmit()} label={this.props.submitLabel} />
 
         <div id="updateConflict">{this.state.updateConflictMessage}</div>
       </form>

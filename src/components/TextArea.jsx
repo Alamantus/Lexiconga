@@ -12,11 +12,7 @@ export class TextArea extends Input {
     this.handleMaximizeClick = this.handleMaximizeClick.bind(this);
   }
 
-  handleMaximizeClick(event) {
-    this.showFullScreenTextbox();
-  }
-
-  showFullScreenTextbox() {
+  handleMaximizeClick() {
     var sourceTextboxElement = document.getElementById(this.props.id);
     var targetTextboxElement = document.getElementById("fullScreenTextbox");
     document.getElementById("fullScreenTextboxLabel").innerHTML = this.props.name;
@@ -40,7 +36,7 @@ export class TextArea extends Input {
             action={() => this.handleMaximizeClick()}
             label='Maximize' />
         </span>
-        <textarea id={this.props.id} onChange={this.handleOnChange} value={this.state.value} />
+        <textarea id={this.props.id} onChange={this.handleOnChange} onKeyDown={(event) => this.props.onKeyDown(event)} value={this.state.value} />
       </label>
     );
   }

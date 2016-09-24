@@ -49,7 +49,7 @@ export class Input extends React.Component {
           {this.props.name}
           {this.showHelperLink()}
         </span>
-        <input type="text" onChange={this.handleOnChange} value={this.state.value} />
+        <input type="text" onChange={this.handleOnChange} onKeyDown={(event) => this.props.onKeyDown(event)} value={this.state.value} />
       </label>
     );
   }

@@ -5,7 +5,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import {Header} from './components/Header';
-import {NewWordForm} from './components/NewWordForm';
+import {WordForm} from './components/WordForm';
 import {Button} from './components/Button';
 import {Dictionary} from './components/Dictionary';
 
@@ -100,7 +100,7 @@ class Lexiconga extends React.Component {
     updatedWords[index].name = wordObject.name;
     updatedWords[index].pronunciation = wordObject.pronunciation;
     updatedWords[index].partOfSpeech = wordObject.partOfSpeech;
-    updatedWords[index].simpledefinition = wordObject.simpledefinition;
+    updatedWords[index].simpleDefinition = wordObject.simpleDefinition;
     updatedWords[index].longDefinition = wordObject.longDefinition;
 
     updatedWords = this.sortWords(updatedWords);
@@ -137,7 +137,7 @@ class Lexiconga extends React.Component {
     return (
       <div>
         <Header />
-        <NewWordForm addWord={(wordObject) => this.addWord(wordObject)} parent={this} />
+        <WordForm addWord={(wordObject) => this.addWord(wordObject)} submitLabel='Add Word' />
         <Button
           action={() => this.changeDictionaryName()}
           label='change name' />

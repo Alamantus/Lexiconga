@@ -1,7 +1,6 @@
 import React from 'react';
 
-import {Input} from './Input';
-import {TextArea} from './TextArea';
+import {WordForm} from './WordForm';
 import {Button} from './Button';
 
 const saveIcon = <i>&#128190;</i>;
@@ -33,91 +32,77 @@ export class Word extends React.Component {
   */
 
   showName() {
-    let editButton;
-    if (this.state.editWord) {
-      return (
-        <div>
-          <Input value={this.props.name} ref={(inputComponent) => this.nameField = inputComponent} />
-        </div>
-      );
-    } else {
-      return (
-        <div className='name'>
-          {this.props.name}
-        </div>
-      );
-    }
+    return (
+      <div className='name'>
+        {this.props.name}
+      </div>
+    );
   }
 
   showPronunciation() {
-    if (this.state.editWord) {
+    if (this.props.pronunciation !== '') {
       return (
-        <div>
-          <Input value={this.props.pronunciation} ref={(inputComponent) => this.pronunciationField = inputComponent} />
+        <div className='pronunciation'>
+          {this.props.pronunciation}
         </div>
       );
-    } else {
-      if (this.props.pronunciation !== '') {
-        return (
-          <div className='pronunciation'>
-            {this.props.pronunciation}
-          </div>
-        );
-      }
     }
   }
 
   showPartOfSpeech() {
-    if (this.state.editWord) {
+    if (this.props.partOfSpeech !== '') {
       return (
-        <div>
-          <Input value={this.props.partOfSpeech} ref={(inputComponent) => this.partOfSpeechField = inputComponent} />
+        <div className='part-of-speech'>
+          {this.props.partOfSpeech}
         </div>
       );
-    } else {
-      if (this.props.partOfSpeech !== '') {
-        return (
-          <div className='part-of-speech'>
-            {this.props.partOfSpeech}
-          </div>
-        );
-      }
     }
   }
 
   showSimpleDefinition() {
-    if (this.state.editWord) {
+    if (this.props.simpleDefinition !== '') {
       return (
-        <div>
-          <Input value={this.props.simpleDefinition} ref={(inputComponent) => this.simpleDefinitionField = inputComponent} />
+        <div className='simple-definition'>
+          {this.props.simpleDefinition}
         </div>
       );
-    } else {
-      if (this.props.simpleDefinition !== '') {
-        return (
-          <div className='simple-definition'>
-            {this.props.simpleDefinition}
-          </div>
-        );
-      }
     }
   }
 
   showLongDefinition() {
-    if (this.state.editWord) {
+    if (this.props.longDefinition !== '') {
       return (
-        <div>
-          <Input value={this.props.longDefinition} ref={(inputComponent) => this.longDefinitionField = inputComponent} />
+        <div className='long-definition'>
+          {this.props.longDefinition}
         </div>
       );
+    }
+  }
+
+  showWordOrEdit() {
+    if (this.state.editWord) {
+      return (
+        <WordForm
+          updateWord={(wordObject) => this.updateWord(wordObject)}
+          wordValues={this.packageThisWordIntoObject()}
+          submitLabel='Update' />
+      );
     } else {
-      if (this.props.longDefinition !== '') {
-        return (
-          <div className='long-definition'>
-            {this.props.longDefinition}
-          </div>
-        );
-      }
+      return (
+        <div>
+          {this.showName()}
+
+          {this.showPronunciation()}
+
+          {this.showPartOfSpeech()}
+
+          <br />
+
+          {this.showSimpleDefinition()}
+
+          {this.showLongDefinition()}
+        </div>
+      );
     }
   }
 
@@ -125,23 +110,9 @@ export class Word extends React.Component {
     if (this.props.isEditing) {
       if (this.state.editWord) {
         return (
-          <div>
-            <Button
-              action={() => {
-                let values = {
-                  name: this.nameField.state.value,
-                  pronunciation: this.pronunciationField.state.value,
-                  partOfSpeech: this.partOfSpeechField.state.value,
-                  simpleDefinition: this.simpleDefinitionField.state.value,
-                  longDefinition: this.longDefinitionField.state.value
-                }
-                this.setState({editWord: false}, () => this.updateWord(values));
-              }}
-              label='Save' />
-            <Button
-              action={() => this.setState({editWord: false})}
-              label='Cancel' />
-          </div>
+          <Button
+            action={() => this.setState({editWord: false})}
+            label='Cancel' />
         );
       } else {
         return (
@@ -161,10 +132,18 @@ export class Word extends React.Component {
       simpleDefinition: wordObject.simpleDefinition || this.props.simpleDefinition,
       longDefinition: wordObject.longDefinition || this.props.longDefinition
     });
+
+    this.setState({editWord: false});
   }
 
-  editProperty(property) {
-
+  packageThisWordIntoObject() {
+    return {
+      name: this.props.name,
+      pronunciation: this.props.pronunciation,
+      partOfSpeech: this.props.partOfSpeech,
+      simpleDefinition: this.props.simpleDefinition,
+      longDefinition: this.props.longDefinition
+    };
   }
 
   render() {
@@ -173,17 +152,7 @@ export class Word extends React.Component {
 
         <a name={'entry' + this.props.wordId}></a>
 
-        {this.showName()}
-
-        {this.showPronunciation()}
-
-        {this.showPartOfSpeech()}
-
-        <br />
-
-        {this.showSimpleDefinition()}
-
-        {this.showLongDefinition()}
+        {this.showWordOrEdit()}
 
         {this.showManagementArea()}
 
