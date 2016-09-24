@@ -81,7 +81,7 @@ class Lexiconga extends React.Component {
     updatedWords = this.sortWords(updatedWords);
 
     let updatedDetails = this.state.details;
-    updatedDetails.nextwordid += 1;
+    updatedDetails.nextWordId += 1;
 
     this.setState({
       words: updatedWords,
@@ -93,44 +93,44 @@ class Lexiconga extends React.Component {
     });
   }
 
-  updateWord(index, wordObject) {
-    if (this.showConsoleMessages) console.log('Updating ' + this.state.words[index].name + ' to ' + wordObject.name);
+  firstIndexWordWithId(id) {
+    let resultIndex = -1;
 
-    let updatedWords = this.state.words;
-    updatedWords[index].name = wordObject.name;
-    updatedWords[index].pronunciation = wordObject.pronunciation;
-    updatedWords[index].partOfSpeech = wordObject.partOfSpeech;
-    updatedWords[index].simpleDefinition = wordObject.simpleDefinition;
-    updatedWords[index].longDefinition = wordObject.longDefinition;
+    for (let i = 0; i < this.state.words.length; i++) {
+      let word = this.state.words[i];
 
-    updatedWords = this.sortWords(updatedWords);
-
-    this.setState({words: updatedWords}, () => {
-      if (this.showConsoleMessages) {
-        console.log('Updated successfully');
+      if (word.wordId === id) {
+        resultIndex = i;
+        break;
       }
-    });
-  }
-
-  showWords() {
-    let words = this.state.words.map((word, index) => {
-      return <Word key={'dictionaryEntry' + index.toString()} isEditing={true}
-        name={word.name}
-        pronunciation={word.pronunciation}
-        partOfSpeech={word.partOfSpeech}
-        simpleDefinition={word.simpleDefinition}
-        longDefinition={word.longDefinition}
-        wordId={word.wordId}
-        index={index}
-        updateWord={(index, wordObject) => this.updateWord(index, wordObject)} />;
-    });
-
-    if (this.showConsoleMessages) {
-      console.log('Showing these words:');
-      console.log(words);
     }
 
-    return <div>{words}</div>;
+    return resultIndex;
+  }
+
+  updateWord(wordId, wordObject) {
+    let index = this.firstIndexWordWithId(wordId);
+
+    if (index >= 0) {
+      if (this.showConsoleMessages) console.log('Updating ' + this.state.words[index].name + ' to ' + wordObject.name);
+
+      let updatedWords = this.state.words;
+      updatedWords[index].name = wordObject.name;
+      updatedWords[index].pronunciation = wordObject.pronunciation;
+      updatedWords[index].partOfSpeech = wordObject.partOfSpeech;
+      updatedWords[index].simpleDefinition = wordObject.simpleDefinition;
+      updatedWords[index].longDefinition = wordObject.longDefinition;
+
+      updatedWords = this.sortWords(updatedWords);
+
+      this.setState({words: updatedWords}, () => {
+        if (this.showConsoleMessages) {
+          console.log('Updated successfully');
+        }
+      });
+    } else {
+      console.log('Could not update. No word with id of ' + wordId.toString());
+    }
   }
 
   render() {
@@ -149,7 +149,7 @@ class Lexiconga extends React.Component {
           details={this.state.details}
           words={this.state.words}
           settings={this.state.settings}
-          updateWord={(index, wordObject) => this.updateWord(index, wordObject)} />
+          updateWord={(wordId, wordObject) => this.updateWord(wordId, wordObject)} />
       </div>
     );
   }

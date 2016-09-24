@@ -124,20 +124,20 @@ input, textarea, select, option {
 	background: #dcb078;
 }
 
-entry {
+.word {
 	background: #d7ad7d;
 	border: none;
 	-webkit-box-shadow: 3px 3px 10px -1px rgba(0,0,0,0.75);
 	-moz-box-shadow: 3px 3px 10px -1px rgba(0,0,0,0.75);
 	box-shadow: 3px 3px 10px -1px rgba(0,0,0,0.75);
-}
 
-.editButton {
-	background: #86ac41;
-}
+	.edit-button {
+		background: #86ac41;
+	}
 
-.deleteButton {
-	background: #ba5536;
+	.delete-button {
+		background: #ba5536;
+	}
 }
 
 footer {

@@ -36,7 +36,7 @@ export class TextArea extends Input {
             action={() => this.handleMaximizeClick()}
             label='Maximize' />
         </span>
-        <textarea id={this.props.id} onChange={this.handleOnChange} onKeyDown={(event) => this.props.onKeyDown(event)} value={this.state.value} />
+        <textarea id={this.props.id} onChange={this.handleOnChange} onKeyDown={this.handleOnKeyDown} value={this.state.value} />
       </label>
     );
   }

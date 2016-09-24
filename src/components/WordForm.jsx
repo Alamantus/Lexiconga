@@ -124,7 +124,7 @@ export class WordForm extends React.Component {
 
         <span id="errorMessage">{this.state.errorMessage}</span>
         
-        <Button action={() => this.handleSubmit()} label={this.props.submitLabel} />
+        <Button classes={(this.props.updateWord) ? 'edit-button' : 'add-button'} action={() => this.handleSubmit()} label={this.props.submitLabel} />
 
         <div id="updateConflict">{this.state.updateConflictMessage}</div>
       </form>

@@ -18,6 +18,7 @@ export class Input extends React.Component {
 
     // Bind listeners
     this.handleOnChange = this.handleOnChange.bind(this);
+    this.handleOnKeyDown = this.handleOnKeyDown.bind(this);
   }
   
   // Whenever the input changes we update the value state of this component
@@ -26,6 +27,12 @@ export class Input extends React.Component {
       isValid: !(this.props.doValidate && event.currentTarget.value === ''),
       value: event.currentTarget.value
     });
+  }
+
+  handleOnKeyDown(event) {
+    if (this.props.onKeyDown) {
+      this.props.onKeyDown(event);
+    }
   }
 
   showHelperLink() {
@@ -49,7 +56,7 @@ export class Input extends React.Component {
           {this.props.name}
           {this.showHelperLink()}
         </span>
-        <input type="text" onChange={this.handleOnChange} onKeyDown={(event) => this.props.onKeyDown(event)} value={this.state.value} />
+        <input type="text" onChange={this.handleOnChange} onKeyDown={this.handleOnKeyDown} value={this.state.value} />
       </label>
     );
   }

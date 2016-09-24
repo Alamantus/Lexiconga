@@ -125,7 +125,7 @@ export class Word extends React.Component {
   }
 
   updateWord(wordObject) {
-    this.props.passWordAndUpdate(this.props.index, {
+    this.props.updateWord(this.props.wordId, {
       name: wordObject.name || this.props.name,
       pronunciation: wordObject.pronunciation || this.props.pronunciation,
       partOfSpeech: wordObject.partOfSpeech || this.props.partOfSpeech,
@@ -148,13 +148,13 @@ export class Word extends React.Component {
 
   render() {
     return (
-      <div id={'entry' + this.props.index} className='word'>
-
-        <a name={'entry' + this.props.wordId}></a>
+      <div id={'entry' + this.props.wordId} className='word'>
 
         {this.showWordOrEdit()}
 
-        {this.showManagementArea()}
+        <div className='management'>
+          {this.showManagementArea()}
+        </div>
 
       </div>
     );

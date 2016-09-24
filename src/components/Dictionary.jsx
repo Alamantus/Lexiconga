@@ -9,29 +9,18 @@ export class Dictionary extends React.Component {
   }
 
   showWords() {
-    let words = this.props.words.map((word, index) => {
-      return <Word key={'dictionaryEntry' + index.toString()} isEditing={true}
+    let words = this.props.words.map((word) => {
+      return <Word key={'dictionaryEntry' + word.wordId.toString()} isEditing={true}
         name={word.name}
         pronunciation={word.pronunciation}
         partOfSpeech={word.partOfSpeech}
         simpleDefinition={word.simpleDefinition}
         longDefinition={word.longDefinition}
         wordId={word.wordId}
-        index={index}
-        passWordAndUpdate={(index, wordObject) => this.passWordAndUpdate(index, wordObject)} />;
+        updateWord={(wordId, wordObject) => this.props.updateWord(wordId, wordObject)} />;
     });
 
-    if (this.showConsoleMessages) {
-      console.log('Showing these words:');
-      console.log(words);
-    }
-
     return <div>{words}</div>;
-  }
-
-  passWordAndUpdate(index, wordObject) {
-    console.log('Passing edited up: ' + wordObject.name);
-    this.props.updateWord(index, wordObject);
   }
 
   render() {
