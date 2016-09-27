@@ -1,4 +1,5 @@
 import React from 'react';
+import marked from 'marked';
 
 import {WordForm} from './WordForm';
 import {Button} from './Button';
@@ -72,9 +73,7 @@ export class Word extends React.Component {
   showLongDefinition() {
     if (this.props.longDefinition !== '') {
       return (
-        <div className='long-definition'>
-          {this.props.longDefinition}
-        </div>
+        <div className='long-definition' dangerouslySetInnerHTML={{__html: marked(this.props.longDefinition)}} />
       );
     }
   }

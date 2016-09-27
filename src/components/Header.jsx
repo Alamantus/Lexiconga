@@ -1,6 +1,8 @@
 import React from 'react';
+import marked from 'marked';
 
 import {Button} from './Button';
+import {FixedPage} from './FixedPage';
 
 export class Header extends React.Component {
   constructor(props) {
@@ -10,6 +12,8 @@ export class Header extends React.Component {
       loggedIn: false,
       lockedOut: false
     }
+
+    this.aboutText = '# About  \nGet this later.';
   }
 
   logUserIn() {
@@ -73,16 +77,23 @@ export class Header extends React.Component {
   render() {
     return (
       <header>
+
         <div id="headerPadder">
+
           <a href="/" id="siteLogo">Lexiconga Dictionary Builder</a>
+
           <div className='button-group'>
-            <Button
-              id='aboutButton'
-              action={() => alert('fixme')}
-              label='About Lexiconga' />
+            
+            <FixedPage id='aboutButton' buttonText='About Lexiconga'>
+              <div dangerouslySetInnerHTML={{__html: marked(this.aboutText)}} />
+            </FixedPage>
+
           </div>
+
           {this.showAccountButtons()}
+
         </div>
+
       </header>
     );
   }

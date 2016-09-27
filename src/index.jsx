@@ -5,8 +5,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import {Header} from './components/Header';
+import {Footer} from './components/Footer';
 import {WordForm} from './components/WordForm';
 import {Button} from './components/Button';
+import {FixedPage} from './components/FixedPage';
 import {Dictionary} from './components/Dictionary';
 
 import {dynamicSort} from './js/helpers';
@@ -208,27 +210,38 @@ class Lexiconga extends React.Component {
     return (
       <div>
         <Header />
-        <WordForm addWord={(wordObject) => this.addWord(wordObject)} submitLabel='Add Word' />
-        <Button
-          action={() => this.changeDictionaryName()}
-          label='change name' />
 
-        <div id="incompleteNotice">
-          Dictionary is complete: {this.state.settings.isComplete.toString()}
+        <div className='left-column'>
+          <div className='floating-form'>
+            <WordForm addWord={(wordObject) => this.addWord(wordObject)} submitLabel='Add Word' />
+          </div>
         </div>
-        <Dictionary
-          details={this.state.details}
-          words={this.state.words}
-          settings={this.state.settings}
-          updateWord={(wordId, wordObject) => this.updateWord(wordId, wordObject)} />
 
-        <Button
-          action={() => this.saveLocalDictionary()}
-          label='Save Dictionary' />
+        <div className='center-column'>
+          <div id="incompleteNotice">
+            Dictionary is complete: {this.state.settings.isComplete.toString()}
+          </div>
 
-        <Button
-          action={() => this.loadLocalDictionary()}
-          label='Load Dictionary' />
+          <Button
+            action={() => this.saveLocalDictionary()}
+            label='Save Dictionary' />
+
+          <Button
+            action={() => this.loadLocalDictionary()}
+            label='Load Dictionary' />
+
+          <FixedPage buttonClasses='right' buttonText='Edit Dictionary'>
+
+          </FixedPage>
+
+          <Dictionary
+            details={this.state.details}
+            words={this.state.words}
+            settings={this.state.settings}
+            updateWord={(wordId, wordObject) => this.updateWord(wordId, wordObject)} />
+        </div>
+
+        <Footer />
       </div>
     );
   }

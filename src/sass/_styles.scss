@@ -1,4 +1,6 @@
 * {
+    // position: relative;
+    // z-index: 0;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
@@ -22,7 +24,7 @@ contents {
 }
 
 header {
-    height: 50px;
+    height: $header-height;
     width: 100%;
     margin: 0 0 10px;
     position: relative;
@@ -31,9 +33,6 @@ header {
     right: 0px;
     border: none;
     padding: 0;
-    -webkit-box-shadow: 0px 3px 10px -1px rgba(0,0,0,0.75);
-    -moz-box-shadow: 0px 3px 10px -1px rgba(0,0,0,0.75);
-    box-shadow: 0px 3px 10px -1px rgba(0,0,0,0.75);
 
     .button-group {
         float: right;
@@ -55,7 +54,7 @@ footer {
     left: 0px;
     background: #aaaaaa;
     padding: 0;
-    max-height: 32px;   /* Update Dictionary Container's bottom margin to account for footer */
+    max-height: $footer-height;
 
     #footer-content {
         padding: 8px;
@@ -86,19 +85,43 @@ td:last-child, th:last-child {
     display: inline !important;
 }
 
-#leftColumn {
+.right {
+    float: right;
+}
+
+.column {
     float: left;
+    margin: $column-margin;
+}
+
+.left-column {
+    @extend .column;
+
     width: 25%;
-    margin: 15px 0 15px 15px;
+    min-width: $min-column-width;
+    max-width: $max-column-width / 2;
+}
+
+.center-column {
+    @extend .column;
+    
+    width: 50%;
+    margin-bottom: $column-margin + $footer-height;
+    min-width: $min-column-width;
+    max-width: $max-column-width;
+    padding: 15px;
+}
+
+.floating-form {
+    position: fixed;
+    top: $header-height + $column-margin;
+    width: 25%;
+    min-width: $min-column-width - ($column-margin * 2);
+    max-width: ($max-column-width / 2) - ($column-margin * 2);
 }
 
 form {
     padding: 15px;
-}
-
-#wordEntryForm {
-    max-width: 400px;
-    min-width: 260px;
 }
 
 .wbr:after {
@@ -129,6 +152,11 @@ input, textarea {
     padding: 2px 0 2px 5px;
     border: none;
     margin: 2px 0;
+    width: 100%;
+}
+
+textarea {
+    min-height: 125px;
 }
 
 input[type=checkbox] {
@@ -185,23 +213,6 @@ input[type=checkbox] {
     margin: 0 auto 5px;
     width:50%;
     min-width:200px;
-    -webkit-box-shadow: 5px 5px 7px 0px rgba(0,0,0,0.75);
-    -moz-box-shadow: 5px 5px 7px 0px rgba(0,0,0,0.75);
-    box-shadow: 5px 5px 7px 0px rgba(0,0,0,0.75);
-}
-
-#dictionaryColumn {
-    width: 50%;
-    margin: 15px 0 36px 15px;    /* bottom margin must clear footer */
-    padding: 0;
-    float: left;
-}
-
-#dictionaryContent {
-    width: 100%;
-    min-width: 260px;
-    max-width: 800px;
-    padding: 15px;
 }
 
 #dictionaryName {
@@ -230,6 +241,7 @@ input[type=checkbox] {
     padding: 5px;
     border: none;
     background: #dddddd;
+    margin: 0 3px;
 }
 
 .clickable, button {
@@ -237,6 +249,7 @@ input[type=checkbox] {
 }
 
 .inline-button {
+    display: inline-block !important;
     font-size: 11px;
     padding: 2px 4px;
 }
@@ -374,46 +387,49 @@ searchTerm {
     margin: 10px;
 }
 
-.fixedFade {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: #000000;
-    opacity: 0.6;
+.fixed-page-container {
+    position: relative;
+    z-index: 999;
+
+    .fixed-page-background-fade {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #000000;
+        opacity: 0.6;
+    }
+
+    .fixed-page-content {
+        position: fixed;
+        top: 5%;
+        left: 6%;
+        right: 6%;
+        bottom: 10%;
+        min-width: 260px;
+        min-height: 260px;
+        padding: 5px 5% 5%;
+        overflow-y: auto;
+        overflow-x: hidden;
+        opacity: 1;
+        border: none;
+        text-align: left;
+    }
 }
 
-.fixedPage {
-    position: fixed;
-    top: 5%;
-    left: 6%;
-    right: 6%;
-    bottom: 10%;
-    min-width: 260px;
-    min-height: 260px;
-    padding: 5px 5% 5%;
-    overflow-y: auto;
-    overflow-x: hidden;
-    background: #ffffff;
-    opacity: 1;
-    border: none;
-    -webkit-box-shadow: 5px 5px 7px 0px rgba(0,0,0,0.75);
-    -moz-box-shadow: 5px 5px 7px 0px rgba(0,0,0,0.75);
-    box-shadow: 5px 5px 7px 0px rgba(0,0,0,0.75);
-}
+.right-button {
+    @extend .right;
 
-.rightButton {
-    float: right;
     font-size: 12px;
 }
 
-#fullScreenTextboxPage {
-    padding: 5px 3% 4%;
-    overflow-y: hidden;
+.no-scroll {
+    padding: 5px 3% 4% !important;
+    overflow-y: hidden !important;
 }
 
-#fullScreenTextbox {
+.fullscreen-textbox {
     position: relative;
     width: 100%;
     height: 100%;
