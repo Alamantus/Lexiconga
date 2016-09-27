@@ -13,7 +13,8 @@ export class Input extends React.Component {
     // };
 
     this.state = {
-      value: props.value || ''
+      value: props.value || '',
+      isDisabled: props.isDisabled || false
     };
 
     // Bind listeners
@@ -49,6 +50,12 @@ export class Input extends React.Component {
     this.setState({value: ''});
   }
 
+  toggleFieldEnabled() {
+    this.setState({
+      isDisabled: !this.state.isDisabled
+    })
+  }
+
   render() {
     return (
       <label>
@@ -56,7 +63,7 @@ export class Input extends React.Component {
           {this.props.name}
           {this.showHelperLink()}
         </span>
-        <input type="text" onChange={this.handleOnChange} onKeyDown={this.handleOnKeyDown} value={this.state.value} />
+        <input type="text" onChange={this.handleOnChange} onKeyDown={this.handleOnKeyDown} disabled={(this.state.isDisabled) ? 'disabled' : null} value={this.state.value} />
       </label>
     );
   }

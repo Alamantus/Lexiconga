@@ -90,6 +90,7 @@ td:last-child, th:last-child {
 }
 
 .column {
+    display: block;
     float: left;
     margin: $column-margin;
 }
@@ -469,11 +470,8 @@ searchTerm {
     width: 50%;
 }
 
-.settingsCol {
-    display: block;
-    float: left;
-    width: 30%;
-    min-width: 260px;
-    max-width: 400px;
-    margin: 0 30px 0 0;
+.settings-column {
+    @extend .left-column;
+
+    margin-right: $column-margin * 2;
 }

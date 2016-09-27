@@ -8,7 +8,7 @@ import {Header} from './components/Header';
 import {Footer} from './components/Footer';
 import {WordForm} from './components/WordForm';
 import {Button} from './components/Button';
-import {FixedPage} from './components/FixedPage';
+import {EditDictionaryForm} from './components/EditDictionaryForm';
 import {Dictionary} from './components/Dictionary';
 
 import {dynamicSort} from './js/helpers';
@@ -52,15 +52,26 @@ class Lexiconga extends React.Component {
     this.previousDictionary = {};
   }
 
-  changeDictionaryName() {
-    // To change elements within the dictionary object, you can set it to
-    // a variable, manipulate the variable, then use setState() to set
-    // the object equal to the changed variable.
-    let updateDictionary = this.state.currentDictionary;
-    updateDictionary.name = 'something else'
+  saveChanges(changesObject) {
+    let updatedDetails = this.state.details;
+    let updatedSettings = this.state.settings;
+
+    updatedDetails.name = changesObject.name;
+    updatedDetails.description = changesObject.description;
+
+    updatedSettings.partsOfSpeech = changesObject.partsOfSpeech;
+    updatedSettings.allowDuplicates = changesObject.allowDuplicates;
+    updatedSettings.caseSensitive = changesObject.caseSensitive;
+    updatedSettings.sortByEquivalent = changesObject.sortByEquivalent;
+    updatedSettings.isComplete = changesObject.isComplete;
+    updatedSettings.isPublic = changesObject.isPublic;
+
     this.setState({
-      currentDictionary: updateDictionary
-    })
+      details: updatedDetails,
+      settings: updatedSettings
+    }, () => {
+      this.saveLocalDictionary();
+    });
   }
 
   sortWords(array) {
@@ -230,9 +241,10 @@ class Lexiconga extends React.Component {
             action={() => this.loadLocalDictionary()}
             label='Load Dictionary' />
 
-          <FixedPage buttonClasses='right' buttonText='Edit Dictionary'>
-
-          </FixedPage>
+          <EditDictionaryForm
+            details={this.state.details}
+            settings={this.state.settings}
+            saveChanges={(changesObject) => this.saveChanges(changesObject)} />
 
           <Dictionary
             details={this.state.details}

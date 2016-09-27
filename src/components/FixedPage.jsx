@@ -10,6 +10,7 @@ export class FixedPage extends React.Component {
       display: false
     };
 
+    this.show = this.show.bind(this);
     this.hide = this.hide.bind(this);
   }
 
@@ -41,7 +42,7 @@ export class FixedPage extends React.Component {
     } else {
       return (
         <Button classes={this.props.buttonClasses}
-          action={() => this.show()}
+          action={this.show}
           label={this.props.buttonText} />
       );
     }
@@ -54,6 +55,10 @@ export class FixedPage extends React.Component {
   }
 
   hide() {
+    if (this.props.onHide) {
+      this.props.onHide();
+    }
+
     this.setState({
       display: false
     });

@@ -41,7 +41,7 @@ export class TextArea extends Input {
 
         </span>
 
-        <textarea id={this.props.id} onChange={this.handleOnChange} onKeyDown={this.handleOnKeyDown} value={this.state.value} />
+        <textarea id={this.props.id} onChange={this.handleOnChange} onKeyDown={this.handleOnKeyDown} disabled={(this.state.isDisabled) ? 'disabled' : null} value={this.state.value} />
 
       </label>
     );
