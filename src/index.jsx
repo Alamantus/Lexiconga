@@ -8,6 +8,7 @@ import {Header} from './components/Header';
 import {Footer} from './components/Footer';
 import {WordForm} from './components/WordForm';
 import {Button} from './components/Button';
+import {InfoDisplay} from './components/InfoDisplay';
 import {EditDictionaryForm} from './components/EditDictionaryForm';
 import {Dictionary} from './components/Dictionary';
 
@@ -229,10 +230,6 @@ class Lexiconga extends React.Component {
         </div>
 
         <div className='center-column'>
-          <div id="incompleteNotice">
-            Dictionary is complete: {this.state.settings.isComplete.toString()}
-          </div>
-
           <Button
             action={() => this.saveLocalDictionary()}
             label='Save Dictionary' />
@@ -245,6 +242,15 @@ class Lexiconga extends React.Component {
             details={this.state.details}
             settings={this.state.settings}
             saveChanges={(changesObject) => this.saveChanges(changesObject)} />
+
+          <h1 className="dictionary-name">
+            {this.state.details.name}
+          </h1>
+
+          <InfoDisplay
+            details={this.state.details}
+            numberOfWords={this.state.words.length}
+            isComplete={this.state.settings.isComplete} />
 
           <Dictionary
             details={this.state.details}

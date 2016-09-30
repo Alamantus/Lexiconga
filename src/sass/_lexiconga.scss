@@ -122,7 +122,7 @@ input, textarea, select, option {
 	border: none;
 }
 
-#dictionaryName {
+.dictionary-name {
 	text-shadow: 2px 2px 2px #915337;
 }
 
@@ -130,13 +130,24 @@ input, textarea, select, option {
 	text-shadow: none;
 }
 
-#dictionaryDescription {
-	width: 90%;
-	background: #f2d5b2;
+.tabbed-interface {
+	z-index: 10;
+	background: $dictionary-info-color;
+	-webkit-box-shadow: $box-shadow;
+	-moz-box-shadow: $box-shadow;
+	box-shadow: $box-shadow;
+}
+
+.selected-tab {
+	z-index: 5;
+	background: $dictionary-info-color !important;
+	-webkit-box-shadow: $box-shadow;
+	-moz-box-shadow: $box-shadow;
+	box-shadow: $box-shadow;
 }
 
 #loginLink, #logoutLink, #descriptionToggle, #searchFilterToggle, #settingsButton, .deleteCancelButton, .deleteConfirmButton, #settingsScreenCloseButton, #infoScreenCloseButton, .clickable, button {
-	background: #dcb078;
+	background: $button-color;
 }
 
 .word {

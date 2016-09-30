@@ -216,7 +216,7 @@ input[type=checkbox] {
     min-width:200px;
 }
 
-#dictionaryName {
+.dictionary-name {
     margin: 0 0 5px;
 }
 
@@ -226,13 +226,22 @@ input[type=checkbox] {
     text-decoration: none;
 }
 
-#dictionaryDescription {
-    width: 100%;
+.dictionary-info {
+    width: 90%;
     max-height: 400px;
     overflow-y: auto;
-    padding: 15px;
+    padding: 10px;
     border: none;
-    margin: 10px;
+    margin: 0;
+
+    .selected-tab, .tabbed-interface {
+        position: relative;
+    }
+
+    .tabbed-interface {
+        margin: 0;
+        padding: 5px 10px;
+    }
 }
 
 .clickable, button {
