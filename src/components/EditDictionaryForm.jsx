@@ -24,6 +24,7 @@ export class EditDictionaryForm extends React.Component {
   saveOnClose() {
     this.props.saveChanges({
       name: this.nameField.state.value,
+      listTypeName: this.listTypeNameField.state.value,
       description: this.descriptionField.state.value,
       partsOfSpeech: this.partsOfSpeechField.state.value,
       allowDuplicates: this.allowDuplicatesField.state.value,
@@ -53,6 +54,13 @@ export class EditDictionaryForm extends React.Component {
           <Input name='Parts of Speech'
             value={this.props.settings.partsOfSpeech}
             ref={(inputComponent) => this.partsOfSpeechField = inputComponent} />
+
+          <Input name='Classification'
+            value={this.props.details.listTypeName}
+            helperLink={{
+              action: () => alert('The word used to describe the list of words represented by this dictionary. By default, it is "Dictionary", but it could be "Lexicon" or some other classification.')
+            }}
+            ref={(inputComponent) => this.listTypeNameField = inputComponent} />
 
           <Checkbox name='Allow Duplicates'
             value={this.props.settings.allowDuplicates}

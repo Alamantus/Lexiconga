@@ -38,11 +38,19 @@ export class Input extends React.Component {
 
   showHelperLink() {
     if (this.props.helperLink) {
-      return (
-        <a className='clickable inline-button' href={this.props.helperLink.url} target='_blank' title={this.props.helperLink.hover}>
-          {this.props.helperLink.label}
-        </a>
-      );
+      if (this.props.helperLink.url) {
+        return (
+          <a className='clickable inline-button' href={this.props.helperLink.url} target='_blank' title={this.props.helperLink.hover}>
+            {this.props.helperLink.label}
+          </a>
+        );
+      } else {
+        return (
+          <Button classes='inline-button'
+            action={this.props.helperLink.action}
+            label={this.props.helperLink.label || '?'} />
+        );
+      }
     }
   }
 

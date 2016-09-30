@@ -15,6 +15,7 @@ import {Dictionary} from './components/Dictionary';
 import {dynamicSort} from './js/helpers';
 
 const defaultDictionaryName = 'New',
+      defaultListTypeName = 'Dictionary',
       defaultDictionaryDescription = 'A new dictionary.',
       defaultDictionaryCreatedBy = 'Someone',
       defaultDictionaryPartsOfSpeech = 'Noun,Adjective,Verb,Adverb,Preposition,Pronoun,Conjunction';
@@ -33,6 +34,7 @@ class Lexiconga extends React.Component {
 
       details: {
         name: defaultDictionaryName,
+        listTypeName: defaultListTypeName,
         description: defaultDictionaryDescription,
         createdBy: defaultDictionaryCreatedBy,
         nextWordId: 1,
@@ -58,6 +60,7 @@ class Lexiconga extends React.Component {
     let updatedSettings = this.state.settings;
 
     updatedDetails.name = changesObject.name;
+    updatedDetails.listTypeName = changesObject.listTypeName;
     updatedDetails.description = changesObject.description;
 
     updatedSettings.partsOfSpeech = changesObject.partsOfSpeech;
@@ -164,6 +167,7 @@ class Lexiconga extends React.Component {
   saveLocalDictionary() {
     let saveDictionary = {
       name: this.state.details.name,
+      listTypeName: this.state.details.listTypeName,
       description: this.state.details.description,
       createdBy: this.state.details.createdBy,
       words: this.state.words,
@@ -189,6 +193,7 @@ class Lexiconga extends React.Component {
         this.setState({
           details: {
             name: localDictionary.name,
+            listTypeName: localDictionary.listTypeName || defaultListTypeName,
             description: localDictionary.description,
             createdBy: localDictionary.createdBy,
             nextWordId: localDictionary.nextWordId,
@@ -244,7 +249,7 @@ class Lexiconga extends React.Component {
             saveChanges={(changesObject) => this.saveChanges(changesObject)} />
 
           <h1 className="dictionary-name">
-            {this.state.details.name}
+            {this.state.details.name} {this.state.details.listTypeName}
           </h1>
 
           <InfoDisplay
