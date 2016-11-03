@@ -1,9 +1,12 @@
+// Import the HTML file and sass for Webpack to handle.
 import './index.html';
 import './sass/main.scss';
 
+// Import React for the React.Component class and ReactDOM for rendering.
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+// Import the necessary components.
 import {Header} from './components/Header';
 import {Footer} from './components/Footer';
 import {WordForm} from './components/WordForm';
@@ -12,49 +15,58 @@ import {InfoDisplay} from './components/InfoDisplay';
 import {EditDictionaryForm} from './components/EditDictionaryForm';
 import {Dictionary} from './components/Dictionary';
 
+// Import the helper functions needed for this file.
 import {dynamicSort} from './js/helpers';
 
-const defaultDictionaryName = 'New',
-      defaultListTypeName = 'Dictionary',
-      defaultDictionaryDescription = 'A new dictionary.',
-      defaultDictionaryCreatedBy = 'Someone',
-      defaultDictionaryPartsOfSpeech = 'Noun,Adjective,Verb,Adverb,Preposition,Pronoun,Conjunction';
+// Declare the values of the default empty dictionary.
+const defaultDictionaryName = 'New'
+    , defaultListTypeName = 'Dictionary'
+    , defaultDictionaryDescription = 'A new dictionary.'
+    , defaultDictionaryCreatedBy = 'Someone'
+    , defaultDictionaryPartsOfSpeech = 'Noun,Adjective,Verb,Adverb,Preposition,Pronoun,Conjunction'
+    ;
 
+// Create the Lexiconga component just for rendering the whole site.
 class Lexiconga extends React.Component {
   constructor(props) {
     super(props);
 
+    // This could probably be a global constant instead.
     this.showConsoleMessages = this.props.showConsoleMessages || false;
 
+    // Put the dictionary details, settings, and words into the state so modifications will affect display.
     this.state = {
       scroll: {
-        x: 0,
-        y: 0
-      },
+        x: 0
+      , y: 0
+      }
 
-      details: {
-        name: defaultDictionaryName,
-        listTypeName: defaultListTypeName,
-        description: defaultDictionaryDescription,
-        createdBy: defaultDictionaryCreatedBy,
-        nextWordId: 1,
-        externalID: 0
-      },
-      words: [],
-      settings: {
-        allowDuplicates: false,
-        caseSensitive: false,
-        partsOfSpeech: defaultDictionaryPartsOfSpeech,
-        sortByEquivalent: false,
-        isComplete: false,
-        isPublic: false
+    , details: {
+        name: defaultDictionaryName
+      , listTypeName: defaultListTypeName
+      , description: defaultDictionaryDescription
+      , createdBy: defaultDictionaryCreatedBy
+      , nextWordId: 1
+      , externalID: 0
+      }
+    , words: []
+    , settings: {
+        allowDuplicates: false
+      , caseSensitive: false
+      , partsOfSpeech: defaultDictionaryPartsOfSpeech
+      , sortByEquivalent: false
+      , isComplete: false
+      , isPublic: false
       }
     };
 
-    this.defaultDictionaryJSON = JSON.stringify(this.state.dictionaryDetails);  //Saves a stringifyed default dictionary.
+    //Saves a stringifyed default dictionary. Actually does nothing because this value doesn't exist.
+    this.defaultDictionaryJSON = JSON.stringify(this.state.dictionaryDetails);
     this.previousDictionary = {};
   }
 
+  // Receive an object containing changes to the dictionary details and settings, apply them to the state,
+  // and save the local dictionary after the state is updated.
   saveChanges(changesObject) {
     let updatedDetails = this.state.details;
     let updatedSettings = this.state.settings;
@@ -78,7 +90,8 @@ class Lexiconga extends React.Component {
     });
   }
 
-  sortWords(array) {
+  // Sort the given array of word objects in the state according to the sortByEquivalent setting.
+  sortWords(wordsArray) {
     let sortMethod;
     if (this.state.settings.sortByEquivalent) {
         sortMethod = ['simpleDefinition', 'partOfSpeech'];
@@ -86,17 +99,18 @@ class Lexiconga extends React.Component {
         sortMethod = ['name', 'partOfSpeech'];
     }
 
-    return array.sort(dynamicSort(sortMethod));
+    return wordsArray.sort(dynamicSort(sortMethod));
   }
 
+  // Receive a word object, process it, and update the words state array with the new word.
   addWord(wordObject) {
     let newWord = {
-      name: wordObject.name || 'errorWord',
-      pronunciation: wordObject.pronunciation || '',
-      partOfSpeech: wordObject.partOfSpeech || '',
-      simpleDefinition: wordObject.simpleDefinition || '',
-      longDefinition: wordObject.longDefinition || '',
-      wordId: this.state.details.nextWordId
+      name: wordObject.name || 'errorWord'
+    , pronunciation: wordObject.pronunciation || ''
+    , partOfSpeech: wordObject.partOfSpeech || ''
+    , simpleDefinition: wordObject.simpleDefinition || ''
+    , longDefinition: wordObject.longDefinition || ''
+    , wordId: this.state.details.nextWordId
     }
 
     let updatedWords = this.state.words.concat([newWord]);
@@ -115,21 +129,19 @@ class Lexiconga extends React.Component {
     });
   }
 
+  // Search the words list for the first word with the given idea and return its index in the array.
   firstIndexWordWithId(id) {
-    let resultIndex = -1;
-
-    for (let i = 0; i < this.state.words.length; i++) {
-      let word = this.state.words[i];
-
+    this.state.words.forEach((word, index) => {
       if (word.wordId === id) {
-        resultIndex = i;
-        break;
+        return index;
       }
-    }
+    });
 
-    return resultIndex;
+    return -1;
   }
 
+  // Receive a wordId and a wordObject, find the index of the first word in the words state array with
+  // the given wordId, and set that word's values to the values in the given wordObject.
   updateWord(wordId, wordObject) {
     let index = this.firstIndexWordWithId(wordId);
 
@@ -155,6 +167,7 @@ class Lexiconga extends React.Component {
     }
   }
 
+  // Return true if the given dictionary reference has no words and its name and description are the same as the defaults.
   dictionaryIsDefault(dictionary) {
     if (this.showConsoleMessages) {
       console.log('Name: ' + dictionary.name
@@ -164,16 +177,18 @@ class Lexiconga extends React.Component {
     return dictionary.words.length <= 0 && dictionary.description === defaultDictionaryDescription && dictionary.name === defaultDictionaryName;
   }
 
+  // Put the state details, words, and settings into an object, stringify it, and save it to the browser's localStorage as 'dictionary' if
+  // the dictionary in the state is not the default dictionary.
   saveLocalDictionary() {
     let saveDictionary = {
-      name: this.state.details.name,
-      listTypeName: this.state.details.listTypeName,
-      description: this.state.details.description,
-      createdBy: this.state.details.createdBy,
-      words: this.state.words,
-      nextWordId: this.state.details.nextWordId,
-      settings: this.state.settings,
-      externalID: this.state.details.externalID
+      name: this.state.details.name
+    , listTypeName: this.state.details.listTypeName
+    , description: this.state.details.description
+    , createdBy: this.state.details.createdBy
+    , words: this.state.words
+    , nextWordId: this.state.details.nextWordId
+    , settings: this.state.settings
+    , externalID: this.state.details.externalID
     };
 
     if (!this.dictionaryIsDefault(saveDictionary)) {
@@ -185,6 +200,7 @@ class Lexiconga extends React.Component {
     }
   }
 
+  // If there is a saved 'dictionary' JSON string in localStorage, parse it, and set the state with its values.
   loadLocalDictionary() {
     if (localStorage.getItem('dictionary')){
       let localDictionary = JSON.parse(localStorage.getItem('dictionary'));
@@ -192,23 +208,23 @@ class Lexiconga extends React.Component {
       if (!this.dictionaryIsDefault(localDictionary)) {
         this.setState({
           details: {
-            name: localDictionary.name,
-            listTypeName: localDictionary.listTypeName || defaultListTypeName,
-            description: localDictionary.description,
-            createdBy: localDictionary.createdBy,
-            nextWordId: localDictionary.nextWordId,
-            externalID: localDictionary.externalID
-          },
+            name: localDictionary.name
+          , listTypeName: localDictionary.listTypeName || defaultListTypeName
+          , description: localDictionary.description
+          , createdBy: localDictionary.createdBy
+          , nextWordId: localDictionary.nextWordId
+          , externalID: localDictionary.externalID
+          }
 
-          words: localDictionary.words.slice(),
+        , words: localDictionary.words.slice()
 
-          settings: {
-            allowDuplicates: localDictionary.settings.allowDuplicates,
-            caseSensitive: localDictionary.settings.caseSensitive,
-            partsOfSpeech: localDictionary.settings.partsOfSpeech,
-            sortByEquivalent: localDictionary.settings.sortByEquivalent,
-            isComplete: localDictionary.settings.isComplete,
-            isPublic: localDictionary.settings.isPublic
+        , settings: {
+            allowDuplicates: localDictionary.settings.allowDuplicates
+          , caseSensitive: localDictionary.settings.caseSensitive
+          , partsOfSpeech: localDictionary.settings.partsOfSpeech
+          , sortByEquivalent: localDictionary.settings.sortByEquivalent
+          , isComplete: localDictionary.settings.isComplete
+          , isPublic: localDictionary.settings.isPublic
           }
         }, () => {
           if (this.showConsoleMessages) {
@@ -223,6 +239,7 @@ class Lexiconga extends React.Component {
     }
   }
 
+  // Put all of the components together.
   render() {
     return (
       <div>
@@ -270,4 +287,5 @@ class Lexiconga extends React.Component {
   }
 }
 
+// Put the app on the screen.
 ReactDOM.render(<Lexiconga showConsoleMessages={true} />, document.getElementById('site'));
