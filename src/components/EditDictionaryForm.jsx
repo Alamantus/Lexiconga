@@ -6,6 +6,7 @@ import {Checkbox} from './Checkbox';
 import {Button} from './Button';
 import {FixedPage} from './FixedPage';
 
+// A component that allows you to edit the dictionary's details and settings.
 export class EditDictionaryForm extends React.Component {
   constructor(props) {
     super(props);
@@ -21,20 +22,22 @@ export class EditDictionaryForm extends React.Component {
     this.isPublicField = null;
   }
 
+  // Pass the changes to the saveChanges function provided in the component props.
   saveOnClose() {
     this.props.saveChanges({
-      name: this.nameField.state.value,
-      listTypeName: this.listTypeNameField.state.value,
-      description: this.descriptionField.state.value,
-      partsOfSpeech: this.partsOfSpeechField.state.value,
-      allowDuplicates: this.allowDuplicatesField.state.value,
-      caseSensitive: this.caseSensitiveField.state.value,
-      sortByEquivalent: this.sortByEquivalentField.state.value,
-      isComplete: this.isCompleteField.state.value,
-      isPublic: this.isPublicField.state.value
+      name: this.nameField.state.value
+    , listTypeName: this.listTypeNameField.state.value
+    , description: this.descriptionField.state.value
+    , partsOfSpeech: this.partsOfSpeechField.state.value
+    , allowDuplicates: this.allowDuplicatesField.state.value
+    , caseSensitive: this.caseSensitiveField.state.value
+    , sortByEquivalent: this.sortByEquivalentField.state.value
+    , isComplete: this.isCompleteField.state.value
+    , isPublic: this.isPublicField.state.value
     });
   }
 
+  // Displays the form inside of a FixedPage component, which provides a button to click before displaying its contents.
   render() {
     return (
       <FixedPage buttonClasses='right' buttonText='Edit Dictionary' onHide={() => this.saveOnClose()}>

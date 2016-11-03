@@ -1,19 +1,17 @@
 import React from 'react';
 import {Input} from './Input';
 
-import {Button} from './Button';
-
 export class Checkbox extends Input {
   constructor(props) {
     super(props);
 
     this.state = {
-      value: props.value || false,
-      isDisabled: props.isDisabled || false
+      value: props.value || false
+    , isDisabled: props.isDisabled || false
     };
   }
   
-  // Whenever the input changes we update the value state of this component
+  // Whenever the input changes, update the value state of this component
   handleOnChange(event) {
     this.setState({
       value: event.target.checked
