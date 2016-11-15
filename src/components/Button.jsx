@@ -1,10 +1,12 @@
 import React from 'react';
 
+// Creates a clickable <span> tag with an onclick action.
 export class Button extends React.Component {
   constructor(props) {
     super(props);
   }
 
+  // Always give the Button a 'clickable' class and then add any others.
   processClasses() {
     var classes = 'clickable';
 

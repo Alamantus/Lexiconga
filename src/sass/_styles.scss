@@ -439,6 +439,10 @@ searchTerm {
     overflow-y: hidden !important;
 }
 
+.maximize-button {
+    @extend .inline-button;
+}
+
 .fullscreen-textbox {
     position: relative;
     width: 100%;
