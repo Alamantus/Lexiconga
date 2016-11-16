@@ -5,6 +5,7 @@ import {TextArea} from './TextArea';
 
 import {WordForm} from './WordForm';
 
+// A component that allows you to edit a word
 export class EditWordForm extends React.Component {
   constructor(props) {
     super(props);

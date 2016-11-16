@@ -3,6 +3,7 @@ import marked from 'marked';
 
 import {FixedPage} from './FixedPage';
 
+// A component for the site footer
 export class Footer extends React.Component {
   constructor(props) {
     super(props);

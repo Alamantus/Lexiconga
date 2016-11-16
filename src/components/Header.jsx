@@ -4,6 +4,7 @@ import marked from 'marked';
 import {Button} from './Button';
 import {FixedPage} from './FixedPage';
 
+// A component for the site header
 export class Header extends React.Component {
   constructor(props) {
     super(props);

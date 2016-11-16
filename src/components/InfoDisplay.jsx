@@ -7,6 +7,7 @@ import {Button} from './Button';
 const saveIcon = <i>&#128190;</i>;
 const editIcon = <i>&#128393;</i>;
 
+// A component to show dictionary information in a tabbed interface.
 export class InfoDisplay extends React.Component {
   constructor(props) {
     super(props);
