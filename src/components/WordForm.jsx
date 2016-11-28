@@ -3,6 +3,7 @@ import React from 'react';
 import {keyCodeFor} from '../js/helpers'
 
 import {Input} from './Input';
+import {Dropdown} from './Dropdown';
 import {TextArea} from './TextArea';
 import {Button} from './Button';
 
@@ -107,7 +108,8 @@ export class WordForm extends React.Component {
           onKeyDown={(event) => this.submitWordOnCtrlEnter(event)}
           ref={(inputComponent) => this.pronunciationField = inputComponent} />
 
-        <Input name='Part of Speech'
+        <Dropdown name='Part of Speech'
+          optionsList={this.props.partsOfSpeech}
           value={partOfSpeechDefaultValue}
           ref={(inputComponent) => this.partOfSpeechField = inputComponent} />
 

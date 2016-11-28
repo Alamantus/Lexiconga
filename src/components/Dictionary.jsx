@@ -20,6 +20,7 @@ export class Dictionary extends React.Component {
             simpleDefinition={word.simpleDefinition}
             longDefinition={word.longDefinition}
             wordId={word.wordId}
+            dictionary={this}
             updateWord={(wordId, wordObject) => this.props.updateWord(wordId, wordObject)} />
         );
       });

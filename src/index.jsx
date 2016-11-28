@@ -132,6 +132,8 @@ class Lexiconga extends React.Component {
   // Search the words list for the first word with the given idea and return its index in the array.
   firstIndexWordWithId(id) {
     this.state.words.forEach((word, index) => {
+      console.log('given id: ' + typeof id + ' ' + id + '\n' + typeof word.wordId + ' ' + word.wordId + ' ' + word.name);
+
       if (word.wordId === id) {
         return index;
       }
@@ -247,7 +249,10 @@ class Lexiconga extends React.Component {
 
         <div className='left-column'>
           <div className='floating-form'>
-            <WordForm addWord={(wordObject) => this.addWord(wordObject)} submitLabel='Add Word' />
+            <WordForm
+              partsOfSpeech={this.state.settings.partsOfSpeech}
+              addWord={(wordObject) => this.addWord(wordObject)}
+              submitLabel='Add Word' />
           </div>
         </div>
 

@@ -82,6 +82,7 @@ export class Word extends React.Component {
     if (this.state.editWord) {
       return (
         <WordForm
+          partsOfSpeech={this.props.dictionary.props.settings.partsOfSpeech}
           updateWord={(wordObject) => this.updateWord(wordObject)}
           wordValues={this.packageThisWordIntoObject()}
           submitLabel='Update' />
