@@ -40,7 +40,7 @@ export class Input extends React.Component {
     if (this.props.helperLink) {
       if (this.props.helperLink.url) {
         return (
-          <a className='clickable inline-button' href={this.props.helperLink.url} target='_blank' title={this.props.helperLink.hover}>
+          <a className='button is-small inline-button' href={this.props.helperLink.url} target='_blank' title={this.props.helperLink.hover}>
             {this.props.helperLink.label}
           </a>
         );

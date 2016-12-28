@@ -77,7 +77,7 @@ export class Header extends React.Component {
 
   render() {
     return (
-      <header>
+      <header className='header'>
 
         <div id="headerPadder">
 

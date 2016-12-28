@@ -27,7 +27,7 @@ export class Dictionary extends React.Component {
 
       return <div>{words}</div>;
     } else {
-      return <h3>No words yet!</h3>;
+      return <h3 className='title is-3'>No words yet!</h3>;
     }
   }
 

@@ -34,7 +34,7 @@ export class Word extends React.Component {
 
   showName() {
     return (
-      <div className='name'>
+      <div className='title is-4 name'>
         {this.props.name}
       </div>
     );

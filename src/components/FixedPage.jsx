@@ -18,20 +18,20 @@ export class FixedPage extends React.Component {
 
   conditionalDisplay() {
     if (this.state.display) {
-      let contentClass = 'fixed-page-content';
+      let contentClass = 'modal-content fixed-page-content';
 
       if (this.props.contentClass) {
         contentClass += ' ' + this.props.contentClass;
       }
 
       return (
-        <div id={this.props.id} className='fixed-page-container'>
+        <div id={this.props.id} className='modal is-active'>
 
-          <div className='fixed-page-background-fade' onClick={this.hide}></div>
+          <div className='modal-background' onClick={this.hide}></div>
 
           <div className={contentClass}>
             
-            <Button classes='right-button'
+            <Button classes='modal-close'
               action={this.hide}
               label='Close' />
 

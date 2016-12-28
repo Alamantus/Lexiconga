@@ -246,45 +246,50 @@ class Lexiconga extends React.Component {
     return (
       <div>
         <Header />
-
-        <div className='left-column'>
-          <div className='floating-form'>
-            <WordForm
-              partsOfSpeech={this.state.settings.partsOfSpeech}
-              addWord={(wordObject) => this.addWord(wordObject)}
-              submitLabel='Add Word' />
+        <section className='section columns'>
+          <div className='column is-one-third'>
+            <div className='floating-form'>
+              <WordForm
+                partsOfSpeech={this.state.settings.partsOfSpeech}
+                addWord={(wordObject) => this.addWord(wordObject)}
+                submitLabel='Add Word' />
+            </div>
           </div>
-        </div>
 
-        <div className='center-column'>
-          <Button
-            action={() => this.saveLocalDictionary()}
-            label='Save Dictionary' />
+          <div className='column is-half'>
+            <Button
+              action={() => this.saveLocalDictionary()}
+              label='Save Dictionary' />
 
-          <Button
-            action={() => this.loadLocalDictionary()}
-            label='Load Dictionary' />
+            <Button
+              action={() => this.loadLocalDictionary()}
+              label='Load Dictionary' />
 
-          <EditDictionaryForm
-            details={this.state.details}
-            settings={this.state.settings}
-            saveChanges={(changesObject) => this.saveChanges(changesObject)} />
+            <EditDictionaryForm
+              details={this.state.details}
+              settings={this.state.settings}
+              saveChanges={(changesObject) => this.saveChanges(changesObject)} />
 
-          <h1 className="dictionary-name">
-            {this.state.details.name} {this.state.details.listTypeName}
-          </h1>
+            <h1 className="title is-1 dictionary-name">
+              {this.state.details.name} {this.state.details.listTypeName}
+            </h1>
 
-          <InfoDisplay
-            details={this.state.details}
-            numberOfWords={this.state.words.length}
-            isComplete={this.state.settings.isComplete} />
+            <InfoDisplay
+              details={this.state.details}
+              numberOfWords={this.state.words.length}
+              isComplete={this.state.settings.isComplete} />
 
-          <Dictionary
-            details={this.state.details}
-            words={this.state.words}
-            settings={this.state.settings}
-            updateWord={(wordId, wordObject) => this.updateWord(wordId, wordObject)} />
-        </div>
+            <Dictionary
+              details={this.state.details}
+              words={this.state.words}
+              settings={this.state.settings}
+              updateWord={(wordId, wordObject) => this.updateWord(wordId, wordObject)} />
+          </div>
+
+          <div className='column ad-column'>
+
+          </div>
+        </section>
 
         <Footer />
       </div>
