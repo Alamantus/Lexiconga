@@ -1,4 +1,5 @@
-import React from 'react';
+// import React from 'react';
+import Inferno, {linkEvent} from 'inferno';
 import {Input} from './Input';
 
 import {getInputSelection, setSelectionRange} from '../js/helpers';
@@ -8,26 +9,50 @@ import {FixedPage} from './FixedPage';
 export class TextArea extends Input {
   constructor(props) {
     super(props);
+
+    this.mainTextarea = null;
+    this.maximizedTextarea = null;
+  }
+
+  handleMaximizedTextboxClose (instance, event) {
+    instance.mainTextarea.value = event.currentTarget.value;
+  }
+
+  handleMaximizedTextboxOpen (instance, event) {
+    instance.maximizedTextarea.value = event.currentTarget.value;
   }
 
   // Use a FixedPage for TextArea's fullscreen mode.
   render() {
     return (
-      <label>
-        <span>
-          {this.props.name}
+      <div className='control'>
+        <div className='level'>
+          <div className='level-item'>
+            <label className='label' for={this.generatedId}>
+                {this.props.name}
+            </label>
+          </div>
 
-          <FixedPage id={this.props.id + '_textbox'} contentClass='no-scroll' buttonClasses='maximize-button' buttonText='Maximize'>
-            <label><span>{this.props.name}</span></label>
+          <div className='level-item'>
+              <FixedPage id={this.generatedId + '_textbox'} contentClass='no-scroll' buttonClasses='maximize-button' buttonText='Maximize'>
+                <label><span>{this.props.name}</span></label>
 
-            <textarea id={this.props.id} className='fullscreen-textbox' onChange={this.handleOnChange} onKeyDown={this.handleOnKeyDown} value={this.state.value} />
-          </FixedPage>
+                <textarea id={this.generatedId} className='fullscreen-textbox'
+                  onChange={linkEvent(this, this.handleMaximizedTextboxClose)}
+                  onKeyDown={linkEvent(this, this.handleOnKeyDown)}
+                  ref={(textarea) => {this.maximizedTextarea = textarea}} />
+              </FixedPage>
+          </div>
 
-        </span>
+        </div>
 
-        <textarea id={this.props.id} onChange={this.handleOnChange} onKeyDown={this.handleOnKeyDown} disabled={(this.state.isDisabled) ? 'disabled' : null} value={this.state.value} />
+        <textarea className='textarea' id={this.generatedId}
+          onInput={linkEvent(this, this.handleOnChange)}
+          onChange={linkEvent(this, this.handleMaximizedTextboxOpen)}
+          onKeyDown={linkEvent(this, this.handleOnChange)} disabled={(this.state.isDisabled) ? 'disabled' : null}
+          ref={(textarea) => {this.mainTextarea = textarea}} />
 
-      </label>
+      </div>
     );
   }
 }

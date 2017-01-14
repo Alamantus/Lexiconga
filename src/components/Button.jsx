@@ -1,7 +1,10 @@
-import React from 'react';
+// import React from 'react';
+import Inferno from 'inferno';
+import Component from 'inferno-component';
 
 // Creates a clickable <span> tag with an onclick action.
-export class Button extends React.Component {
+// export class Button extends React.Component {
+export class Button extends Component {
   constructor(props) {
     super(props);
   }

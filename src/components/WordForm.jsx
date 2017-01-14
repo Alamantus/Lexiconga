@@ -1,4 +1,6 @@
-import React from 'react';
+// import React from 'react';
+import Inferno from 'inferno';
+import Component from 'inferno-component';
 
 import {keyCodeFor} from '../js/helpers'
 
@@ -7,7 +9,8 @@ import {Dropdown} from './Dropdown';
 import {TextArea} from './TextArea';
 import {Button} from './Button';
 
-export class WordForm extends React.Component {
+// export class WordForm extends React.Component {
+export class WordForm extends Component {
   constructor(props) {
     super(props);
 
@@ -91,14 +94,15 @@ export class WordForm extends React.Component {
     let partOfSpeechDefaultValue = (this.props.wordValues) ? this.props.wordValues.partOfSpeech : ' ';
     let simpleDefinitionDefaultValue = (this.props.wordValues) ? this.props.wordValues.simpleDefinition : '';
     let longDefinitionDefaultValue = (this.props.wordValues) ? this.props.wordValues.longDefinition : '';
+
     return (
-      <form>
-        <Input name='Word'
+      <div className='form'>
+        <Input name='Word' idManager={this.props.idManager}
           value={nameDefaultValue}
           onKeyDown={(event) => this.submitWordOnCtrlEnter(event)}
           ref={(inputComponent) => this.wordField = inputComponent} />
 
-        <Input name='Pronunciation'
+        <Input name='Pronunciation' idManager={this.props.idManager}
           helperLink={{
             url: "http://r12a.github.io/pickers/ipa/",
             label: "IPA Characters",
@@ -108,17 +112,17 @@ export class WordForm extends React.Component {
           onKeyDown={(event) => this.submitWordOnCtrlEnter(event)}
           ref={(inputComponent) => this.pronunciationField = inputComponent} />
 
-        <Dropdown name='Part of Speech'
+        <Dropdown name='Part of Speech' idManager={this.props.idManager}
           optionsList={this.props.partsOfSpeech}
           value={partOfSpeechDefaultValue}
           ref={(inputComponent) => this.partOfSpeechField = inputComponent} />
 
-        <Input name={<div style={{display: 'inline'}}>Definition/<wbr /><b className="wbr"></b>Equivalent Word(s)</div>}
+        <Input name={<div style={{display: 'inline'}}>Definition/<wbr /><b className="wbr"></b>Equivalent Word(s)</div>} idManager={this.props.idManager}
           value={simpleDefinitionDefaultValue}
           onKeyDown={(event) => this.submitWordOnCtrlEnter(event)}
           ref={(inputComponent) => this.simpleDefinitionField = inputComponent} />
 
-        <TextArea id='newWordForm'
+        <TextArea id='newWordForm' idManager={this.props.idManager}
           name={<div style={{display: 'inline'}}>Explanation/<wbr /><b className="wbr"></b>Long Definition</div>}
           value={longDefinitionDefaultValue}
           onKeyDown={(event) => this.submitWordOnCtrlEnter(event)}
@@ -129,7 +133,7 @@ export class WordForm extends React.Component {
         <Button classes={(this.props.updateWord) ? 'edit-button' : 'add-button'} action={() => this.handleSubmit()} label={this.props.submitLabel} />
 
         <div id="updateConflict">{this.state.updateConflictMessage}</div>
-      </form>
+      </div>
     );
   }
 }

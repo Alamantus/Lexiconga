@@ -1,4 +1,6 @@
-import React from 'react';
+// import React from 'react';
+import Inferno from 'inferno';
+import Component from 'inferno-component';
 import marked from 'marked';
 
 import {WordForm} from './WordForm';
@@ -8,7 +10,8 @@ const saveIcon = <i>&#128190;</i>;
 const editIcon = <i>&#128393;</i>;
 
 // A component to show dictionary information in a tabbed interface.
-export class InfoDisplay extends React.Component {
+// export class InfoDisplay extends React.Component {
+export class InfoDisplay extends Component {
   constructor(props) {
     super(props);
 

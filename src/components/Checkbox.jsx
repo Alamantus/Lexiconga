@@ -1,4 +1,5 @@
-import React from 'react';
+// import React from 'react';
+import Inferno from 'inferno';
 import {Input} from './Input';
 
 export class Checkbox extends Input {
@@ -25,7 +26,7 @@ export class Checkbox extends Input {
           {this.props.name}
           {this.showHelperLink()}
         </span>
-        <input type="checkbox" onChange={this.handleOnChange} checked={(this.state.value) ? 'checked' : null} disabled={(this.state.isDisabled) ? 'disabled' : null} />
+        <input type="checkbox" onInput={this.handleOnChange} checked={(this.state.value) ? 'checked' : null} disabled={(this.state.isDisabled) ? 'disabled' : null} />
       </label>
     );
   }

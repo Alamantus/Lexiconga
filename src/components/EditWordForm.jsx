@@ -1,4 +1,6 @@
-import React from 'react';
+// import React from 'react';
+import Inferno from 'inferno';
+import Component from 'inferno-component';
 
 import {Input} from './Input';
 import {TextArea} from './TextArea';
@@ -6,7 +8,8 @@ import {TextArea} from './TextArea';
 import {WordForm} from './WordForm';
 
 // A component that allows you to edit a word
-export class EditWordForm extends React.Component {
+// export class EditWordForm extends React.Component {
+export class EditWordForm extends Component {
   constructor(props) {
     super(props);
   }

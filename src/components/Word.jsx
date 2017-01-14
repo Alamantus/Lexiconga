@@ -1,4 +1,6 @@
-import React from 'react';
+// import React from 'react';
+import Inferno from 'inferno';
+import Component from 'inferno-component';
 import marked from 'marked';
 
 import {WordForm} from './WordForm';
@@ -7,7 +9,8 @@ import {Button} from './Button';
 const saveIcon = <i>&#128190;</i>;
 const editIcon = <i>&#128393;</i>;
 
-export class Word extends React.Component {
+// export class Word extends React.Component {
+export class Word extends Component {
   constructor(props) {
     super(props);
 
@@ -34,7 +37,7 @@ export class Word extends React.Component {
 
   showName() {
     return (
-      <div className='title is-4 name'>
+      <div className='title is-4 name is-inline'>
         {this.props.name}
       </div>
     );
@@ -43,7 +46,7 @@ export class Word extends React.Component {
   showPronunciation() {
     if (this.props.pronunciation !== '') {
       return (
-        <div className='pronunciation'>
+        <div className='pronunciation is-inline'>
           {this.props.pronunciation}
         </div>
       );
@@ -53,7 +56,7 @@ export class Word extends React.Component {
   showPartOfSpeech() {
     if (this.props.partOfSpeech !== '') {
       return (
-        <div className='part-of-speech'>
+        <div className='part-of-speech is-inline'>
           {this.props.partOfSpeech}
         </div>
       );
@@ -89,18 +92,23 @@ export class Word extends React.Component {
       );
     } else {
       return (
-        <div>
-          {this.showName()}
+        <div className='content'>
+          <div className='hero'>
+            {this.showName()}
 
-          {this.showPronunciation()}
+            {this.showPronunciation()}
 
-          {this.showPartOfSpeech()}
+            {this.showPartOfSpeech()}
 
-          <br />
+          </div>
 
-          {this.showSimpleDefinition()}
+          <div className='section'>
 
-          {this.showLongDefinition()}
+            {this.showSimpleDefinition()}
+
+            {this.showLongDefinition()}
+
+          </div>
         </div>
       );
     }
@@ -148,7 +156,7 @@ export class Word extends React.Component {
 
   render() {
     return (
-      <div id={'entry' + this.props.wordId} className='word'>
+      <div id={'entry' + this.props.wordId} className='box word'>
 
         {this.showWordOrEdit()}
 

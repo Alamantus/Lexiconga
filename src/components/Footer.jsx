@@ -1,10 +1,13 @@
-import React from 'react';
+// import React from 'react';
+import Inferno from 'inferno';
+import Component from 'inferno-component';
 import marked from 'marked';
 
 import {FixedPage} from './FixedPage';
 
 // A component for the site footer
-export class Footer extends React.Component {
+// export class Footer extends React.Component {
+export class Footer extends Component {
   constructor(props) {
     super(props);
 

@@ -1,11 +1,14 @@
-import React from 'react';
+// import React from 'react';
+import Inferno from 'inferno';
+import Component from 'inferno-component';
 import marked from 'marked';
 
 import {Button} from './Button';
 import {FixedPage} from './FixedPage';
 
 // A component for the site header
-export class Header extends React.Component {
+// export class Header extends React.Component {
+export class Header extends Component {
   constructor(props) {
     super(props);
 
@@ -49,10 +52,12 @@ export class Header extends React.Component {
       buttons = [
         <Button key='accountbutton1'
           id='accountSettings'
+          classes='level-item'
           action={() => this.lockUserOut()}
           label='Account Settings' />,
         <Button key='accountbutton2'
           id='logoutLink'
+          classes='level-item'
           action={() => this.logUserOut()}
           label='Log Out' />
       ];
@@ -60,6 +65,7 @@ export class Header extends React.Component {
       buttons = [
         <Button key='accountbutton3'
           id='logoutLink'
+          classes='level-item'
           action={() => this.unlockUser()}
           label='Can&apos;t Log In' />
       ];
@@ -67,34 +73,41 @@ export class Header extends React.Component {
       buttons = [
         <Button key='accountbutton4'
           id='loginLink'
+          classes='level-item'
           action={() => this.logUserIn()}
           label='Log In/Create Account' />
       ];
     }
 
-    return <div className='button-group'>{buttons}</div>;
+    return buttons;
   }
 
   render() {
     return (
       <header className='header'>
+        <div className='hero'>
+          <nav className='level' id="headerPadder">
 
-        <div id="headerPadder">
+            <div className='level-left'>
+              <a className='level-item' href="/" id="siteLogo">
+                Lexiconga Dictionary Builder
+              </a>
+            </div>
 
-          <a href="/" id="siteLogo">Lexiconga Dictionary Builder</a>
+            <div className='level-right'>
 
-          <div className='button-group'>
-            
-            <FixedPage id='aboutButton' buttonText='About Lexiconga'>
-              <div dangerouslySetInnerHTML={{__html: marked(this.aboutText)}} />
-            </FixedPage>
+              {this.showAccountButtons()}
 
-          </div>
+              <div className='level-item'>
+                <FixedPage id='aboutButton' buttonText='About Lexiconga'>
+                  <div dangerouslySetInnerHTML={{__html: marked(this.aboutText)}} />
+                </FixedPage>
+              </div>
 
-          {this.showAccountButtons()}
+            </div>
 
+          </nav>
         </div>
-
       </header>
     );
   }

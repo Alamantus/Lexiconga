@@ -1,9 +1,12 @@
-import React from 'react';
+// import React from 'react';
+import Inferno from 'inferno';
+import Component from 'inferno-component';
 
 import {Button} from './Button';
 
 // Creates a page that floats above other elements when a connected button is clicked.
-export class FixedPage extends React.Component {
+// export class FixedPage extends React.Component {
+export class FixedPage extends Component {
   constructor(props) {
     super(props);
 

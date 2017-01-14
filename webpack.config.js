@@ -30,7 +30,9 @@ const APP_DIR = path.resolve(__dirname, 'src');
           exclude: /node_modules/,
           loader: 'babel',
           query: {
-            presets: ['react', 'es2015']
+            // presets: ['react', 'es2015']
+            presets: ['es2015'],
+            plugins: ['inferno']
           }
         }
       ]

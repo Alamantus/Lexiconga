@@ -1,8 +1,19 @@
-import React from 'react';
+// import React from 'react';
+import Inferno, {linkEvent} from 'inferno';
+import Component from 'inferno-component';
 
 import {Button} from './Button';
 
-export class Input extends React.Component {
+function handleOnChange(instance, event) {
+  console.log('changing');
+  instance.setState({
+    isValid: !(instance.props.doValidate && event.currentTarget.value === ''),
+    value: event.currentTarget.value
+  });
+}
+
+// export class Input extends React.Component {
+export class Input extends Component {
   constructor(props) {
     super(props);
 
@@ -12,27 +23,29 @@ export class Input extends React.Component {
     //   doValidate: props.doValidate || true
     // };
 
+    this.generatedId = 'input' + props.idManager.nextStr;
+
     this.state = {
       value: props.value || '',
       isDisabled: props.isDisabled || false
     };
 
     // Bind listeners
-    this.handleOnChange = this.handleOnChange.bind(this);
+    // this.handleOnChange = this.handleOnChange.bind(this);
     this.handleOnKeyDown = this.handleOnKeyDown.bind(this);
   }
   
   // Whenever the input changes we update the value state of this component
-  handleOnChange(event) {
-    this.setState({
-      isValid: !(this.props.doValidate && event.currentTarget.value === ''),
+  handleOnChange(instance, event) {
+    instance.setState({
+      isValid: !(instance.props.doValidate && event.currentTarget.value === ''),
       value: event.currentTarget.value
     });
   }
 
-  handleOnKeyDown(event) {
-    if (this.props.onKeyDown) {
-      this.props.onKeyDown(event);
+  handleOnKeyDown(instance, event) {
+    if (instance.props.onKeyDown) {
+      instance.props.onKeyDown(event);
     }
   }
 
@@ -46,9 +59,9 @@ export class Input extends React.Component {
         );
       } else {
         return (
-          <Button classes='inline-button'
-            action={this.props.helperLink.action}
-            label={this.props.helperLink.label || '?'} />
+            <Button classes='inline-button'
+              action={this.props.helperLink.action}
+              label={this.props.helperLink.label || '?'} />
         );
       }
     }
@@ -66,18 +79,38 @@ export class Input extends React.Component {
 
   render() {
     return (
-      <label>
-        <span>
-          {this.props.name}
-          {this.showHelperLink()}
-        </span>
-        <input type="text" onChange={this.handleOnChange} onKeyDown={this.handleOnKeyDown} disabled={(this.state.isDisabled) ? 'disabled' : null} value={this.state.value} />
-      </label>
+      <div>
+
+          <div className='level is-marginless'>
+
+            <div className='level-item'>
+              <label className='label' for={this.generatedId}>
+                {this.props.name}
+              </label>
+            </div>
+
+            <div className='level-item'>
+              {this.showHelperLink()}
+            </div>
+
+          </div>
+
+          <p className='control'>
+            <input
+              className='input'
+              id={this.generatedId}
+              type="text"
+              onInput={linkEvent(this, this.handleOnChange)}
+              onKeyDown={linkEvent(this, this.handleOnKeyDown)}
+              disabled={(this.state.isDisabled) ? 'disabled' : null} />
+          </p>
+
+      </div>
     );
   }
 }
 
 Input.defaultProps = {
   name: '',
-  doValidate: true
+  doValidate: false
 };

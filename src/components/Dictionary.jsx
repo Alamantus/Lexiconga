@@ -1,9 +1,12 @@
-import React from 'react';
+// import React from 'react';
+import Inferno from 'inferno';
+import Component from 'inferno-component';
 
 import {Word} from './Word';
 
 // A component for showing just the list of words provided to it as a prop.
-export class Dictionary extends React.Component {
+// export class Dictionary extends React.Component {
+export class Dictionary extends Component {
   constructor(props) {
     super(props);
   }
@@ -33,7 +36,7 @@ export class Dictionary extends React.Component {
 
   render() {
     return (
-      <div id="theDictionary">
+      <div className='container' id="theDictionary">
         {this.showWords()}
       </div>
     );

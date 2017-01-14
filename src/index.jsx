@@ -3,8 +3,10 @@ import './index.html';
 import './sass/main.scss';
 
 // Import React for the React.Component class and ReactDOM for rendering.
-import React from 'react';
-import ReactDOM from 'react-dom';
+// import React from 'react';
+// import ReactDOM from 'react-dom';
+import Inferno from 'inferno';
+import Component from 'inferno-component';
 
 // Import the necessary components.
 import {Header} from './components/Header';
@@ -17,6 +19,7 @@ import {Dictionary} from './components/Dictionary';
 
 // Import the helper functions needed for this file.
 import {dynamicSort} from './js/helpers';
+import {IDManager} from './js/IDManager';
 
 // Declare the values of the default empty dictionary.
 const defaultDictionaryName = 'New'
@@ -27,12 +30,15 @@ const defaultDictionaryName = 'New'
     ;
 
 // Create the Lexiconga component just for rendering the whole site.
-class Lexiconga extends React.Component {
+// class Lexiconga extends React.Component {
+class Lexiconga extends Component {
   constructor(props) {
     super(props);
 
     // This could probably be a global constant instead.
     this.showConsoleMessages = this.props.showConsoleMessages || false;
+
+    this.idManager = new IDManager();
 
     // Put the dictionary details, settings, and words into the state so modifications will affect display.
     this.state = {
@@ -246,47 +252,69 @@ class Lexiconga extends React.Component {
     return (
       <div>
         <Header />
-        <section className='section columns'>
-          <div className='column is-one-third'>
-            <div className='floating-form'>
-              <WordForm
-                partsOfSpeech={this.state.settings.partsOfSpeech}
-                addWord={(wordObject) => this.addWord(wordObject)}
-                submitLabel='Add Word' />
+
+        <section className='section'>
+          <div className='columns'>
+
+            <div className='column is-one-quarter'>
+              <div className='box'>
+
+                <WordForm
+                  idManager={this.idManager}
+                  partsOfSpeech={this.state.settings.partsOfSpeech}
+                  addWord={(wordObject) => this.addWord(wordObject)}
+                  submitLabel='Add Word' />
+
+              </div>
             </div>
-          </div>
 
-          <div className='column is-half'>
-            <Button
-              action={() => this.saveLocalDictionary()}
-              label='Save Dictionary' />
+            <div className='column is-half'>
 
-            <Button
-              action={() => this.loadLocalDictionary()}
-              label='Load Dictionary' />
+              <div className='hero'>
+                <div className='container is-fluid'>
 
-            <EditDictionaryForm
-              details={this.state.details}
-              settings={this.state.settings}
-              saveChanges={(changesObject) => this.saveChanges(changesObject)} />
+                  <Button
+                    action={() => this.saveLocalDictionary()}
+                    label='Save Dictionary' />
 
-            <h1 className="title is-1 dictionary-name">
-              {this.state.details.name} {this.state.details.listTypeName}
-            </h1>
+                  <Button
+                    action={() => this.loadLocalDictionary()}
+                    label='Load Dictionary' />
 
-            <InfoDisplay
-              details={this.state.details}
-              numberOfWords={this.state.words.length}
-              isComplete={this.state.settings.isComplete} />
+                  <EditDictionaryForm
+                    details={this.state.details}
+                    settings={this.state.settings}
+                    saveChanges={(changesObject) => this.saveChanges(changesObject)} />
 
-            <Dictionary
-              details={this.state.details}
-              words={this.state.words}
-              settings={this.state.settings}
-              updateWord={(wordId, wordObject) => this.updateWord(wordId, wordObject)} />
-          </div>
+                  <h1 className="title is-1 dictionary-name">
+                    {this.state.details.name} {this.state.details.listTypeName}
+                  </h1>
 
-          <div className='column ad-column'>
+                  <InfoDisplay
+                    details={this.state.details}
+                    numberOfWords={this.state.words.length}
+                    isComplete={this.state.settings.isComplete} />
+
+                </div>
+              </div>
+
+              <div className='section'>
+
+                <Dictionary
+                  details={this.state.details}
+                  words={this.state.words}
+                  settings={this.state.settings}
+                  updateWord={(wordId, wordObject) => this.updateWord(wordId, wordObject)} />
+
+              </div>
+
+            </div>
+
+            <div className='column is-one-quarter ad-column'>
+              <div className='box'>
+                Advertisements or something.
+              </div>
+            </div>
 
           </div>
         </section>
@@ -298,4 +326,5 @@ class Lexiconga extends React.Component {
 }
 
 // Put the app on the screen.
-ReactDOM.render(<Lexiconga showConsoleMessages={true} />, document.getElementById('site'));
+// ReactDOM.render(<Lexiconga showConsoleMessages={true} />, document.getElementById('site'));
+Inferno.render(<Lexiconga showConsoleMessages={true} />, document.getElementById('site'));

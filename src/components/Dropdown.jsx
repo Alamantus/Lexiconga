@@ -1,4 +1,5 @@
-import React from 'react';
+// import React from 'react';
+import Inferno from 'inferno';
 import {Input} from './Input';
 
 import {htmlEntities} from '../js/helpers';
@@ -39,11 +40,15 @@ export class Dropdown extends Input {
 
   render() {
     return (
-      <label>
-        <span>
-          {this.props.name}
-          {this.showHelperLink()}
-        </span>
+      <label className='control'>
+        <div className='level'>
+          <span className='label level-item'>
+            {this.props.name}
+          </span>
+          <span className='level-item'>
+            {this.showHelperLink()}
+          </span>
+        </div>
         <select value={this.state.value} onChange={this.handleOnChange} disabled={(this.state.isDisabled) ? 'disabled' : null}>
           <option value=" "></option>
           {this.parseOptions(this.props.optionsList)}
