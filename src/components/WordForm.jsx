@@ -97,12 +97,12 @@ export class WordForm extends Component {
 
     return (
       <div className='form'>
-        <Input name='Word' idManager={this.props.idManager}
+        <Input name='Word'
           value={nameDefaultValue}
           onKeyDown={(event) => this.submitWordOnCtrlEnter(event)}
           ref={(inputComponent) => this.wordField = inputComponent} />
 
-        <Input name='Pronunciation' idManager={this.props.idManager}
+        <Input name='Pronunciation'
           helperLink={{
             url: "http://r12a.github.io/pickers/ipa/",
             label: "IPA Characters",
@@ -112,17 +112,17 @@ export class WordForm extends Component {
           onKeyDown={(event) => this.submitWordOnCtrlEnter(event)}
           ref={(inputComponent) => this.pronunciationField = inputComponent} />
 
-        <Dropdown name='Part of Speech' idManager={this.props.idManager}
+        <Dropdown name='Part of Speech'
           optionsList={this.props.partsOfSpeech}
           value={partOfSpeechDefaultValue}
           ref={(inputComponent) => this.partOfSpeechField = inputComponent} />
 
-        <Input name={<div style={{display: 'inline'}}>Definition/<wbr /><b className="wbr"></b>Equivalent Word(s)</div>} idManager={this.props.idManager}
+        <Input name={<div style={{display: 'inline'}}>Definition/<wbr /><b className="wbr"></b>Equivalent Word(s)</div>}
           value={simpleDefinitionDefaultValue}
           onKeyDown={(event) => this.submitWordOnCtrlEnter(event)}
           ref={(inputComponent) => this.simpleDefinitionField = inputComponent} />
 
-        <TextArea id='newWordForm' idManager={this.props.idManager}
+        <TextArea id='newWordForm'
           name={<div style={{display: 'inline'}}>Explanation/<wbr /><b className="wbr"></b>Long Definition</div>}
           value={longDefinitionDefaultValue}
           onKeyDown={(event) => this.submitWordOnCtrlEnter(event)}

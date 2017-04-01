@@ -40,20 +40,31 @@ export class Dropdown extends Input {
 
   render() {
     return (
-      <label className='control'>
-        <div className='level'>
-          <span className='label level-item'>
-            {this.props.name}
-          </span>
-          <span className='level-item'>
+      <div className='control'>
+
+        <div className='level is-marginless'>
+
+          <div className='level-item'>
+            <label className='label' for={this.generatedId}>
+              {this.props.name}
+            </label>
+          </div>
+
+          <div className='level-item'>
             {this.showHelperLink()}
-          </span>
+          </div>
+
         </div>
-        <select value={this.state.value} onChange={this.handleOnChange} disabled={(this.state.isDisabled) ? 'disabled' : null}>
-          <option value=" "></option>
-          {this.parseOptions(this.props.optionsList)}
-        </select>
-      </label>
+
+        <p className='control'>
+          <span className='select'>
+            <select value=' ' onChange={this.handleOnChange} disabled={(this.state.isDisabled) ? 'disabled' : null}>
+              <option value=' '></option>
+              {this.parseOptions(this.props.optionsList)}
+            </select>
+          </span>
+        </p>
+      </div>
     );
   }
 }

@@ -26,7 +26,7 @@ export class TextArea extends Input {
   render() {
     return (
       <div className='control'>
-        <div className='level'>
+        <div className='level is-marginless'>
           <div className='level-item'>
             <label className='label' for={this.generatedId}>
                 {this.props.name}
@@ -34,14 +34,26 @@ export class TextArea extends Input {
           </div>
 
           <div className='level-item'>
-              <FixedPage id={this.generatedId + '_textbox'} contentClass='no-scroll' buttonClasses='maximize-button' buttonText='Maximize'>
-                <label><span>{this.props.name}</span></label>
+            <FixedPage id={this.generatedId + '_textbox'}
+              contentClass='no-scroll'
+              buttonClasses='is-small'
+              buttonText='Maximize'>
+              <header className='header'>
+                <h3 className='title'>
+                  {this.props.name}
+                </h3>
+              </header>
 
-                <textarea id={this.generatedId} className='fullscreen-textbox'
-                  onChange={linkEvent(this, this.handleMaximizedTextboxClose)}
-                  onKeyDown={linkEvent(this, this.handleOnKeyDown)}
-                  ref={(textarea) => {this.maximizedTextarea = textarea}} />
-              </FixedPage>
+              <section className='section'>
+                <p className='control'>
+                  <textarea id={this.generatedId} className='textarea'
+                    onChange={linkEvent(this, this.handleMaximizedTextboxClose)}
+                    onKeyDown={linkEvent(this, this.handleOnKeyDown)}
+                    ref={(textarea) => {this.maximizedTextarea = textarea}} />
+                </p>
+              </section>
+
+            </FixedPage>
           </div>
 
         </div>

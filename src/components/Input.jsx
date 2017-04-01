@@ -23,7 +23,7 @@ export class Input extends Component {
     //   doValidate: props.doValidate || true
     // };
 
-    this.generatedId = 'input' + props.idManager.nextStr;
+    this.generatedId = 'input' + window.idManager.nextStr;
 
     this.state = {
       value: props.value || '',
@@ -53,13 +53,13 @@ export class Input extends Component {
     if (this.props.helperLink) {
       if (this.props.helperLink.url) {
         return (
-          <a className='button is-small inline-button' href={this.props.helperLink.url} target='_blank' title={this.props.helperLink.hover}>
+          <a className='button is-small' href={this.props.helperLink.url} target='_blank' title={this.props.helperLink.hover}>
             {this.props.helperLink.label}
           </a>
         );
       } else {
         return (
-            <Button classes='inline-button'
+            <Button classes='is-small'
               action={this.props.helperLink.action}
               label={this.props.helperLink.label || '?'} />
         );
@@ -79,7 +79,7 @@ export class Input extends Component {
 
   render() {
     return (
-      <div>
+      <div className='control'>
 
           <div className='level is-marginless'>
 

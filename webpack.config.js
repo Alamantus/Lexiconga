@@ -8,7 +8,7 @@ const APP_DIR = path.resolve(__dirname, 'src');
     entry: APP_DIR + '/index.jsx',
     output: {
       path: BUILD_DIR,
-      filename: 'dictionaryBuilder.js'
+      filename: 'lexiconga.js'
     },
     module: {
       loaders: [
@@ -40,18 +40,18 @@ const APP_DIR = path.resolve(__dirname, 'src');
     resolve: {
       extensions: ['', '.js', '.jsx'],
     },
-    // plugins: [
+    /*plugins: [
     // When you're ready to publish, check this article out.
     // http://dev.topheman.com/make-your-react-production-minified-version-with-webpack/
-    //   new webpack.optimize.UglifyJsPlugin({
-    //     compress: {
-    //       warnings: false
-    //     },
-    //     output: {
-    //       comments: false
-    //     }
-    //   })
-    // ],
+      new webpack.optimize.UglifyJsPlugin({
+        compress: {
+          warnings: false
+        },
+        output: {
+          comments: false
+        }
+      })
+    ],*/
     sassLoader: {
       file: './src/sass/styles.scss',
       // includePaths: ['./node_modules/bootstrap-sass/assets/'],

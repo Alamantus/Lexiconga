@@ -21,7 +21,7 @@ export class Checkbox extends Input {
 
   render() {
     return (
-      <label>
+      <label className='checkbox'>
         <span>
           {this.props.name}
           {this.showHelperLink()}

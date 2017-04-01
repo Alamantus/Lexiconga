@@ -23,11 +23,14 @@ import {IDManager} from './js/IDManager';
 
 // Declare the values of the default empty dictionary.
 const defaultDictionaryName = 'New'
-    , defaultListTypeName = 'Dictionary'
-    , defaultDictionaryDescription = 'A new dictionary.'
-    , defaultDictionaryCreatedBy = 'Someone'
-    , defaultDictionaryPartsOfSpeech = 'Noun,Adjective,Verb,Adverb,Preposition,Pronoun,Conjunction'
-    ;
+, defaultListTypeName = 'Dictionary'
+, defaultDictionaryDescription = 'A new dictionary.'
+, defaultDictionaryCreatedBy = 'Someone'
+, defaultDictionaryPartsOfSpeech = 'Noun,Adjective,Verb,Adverb,Preposition,Pronoun,Conjunction'
+;
+
+// Create global IDManager.
+window.idManager = window.idManager || new IDManager();
 
 // Create the Lexiconga component just for rendering the whole site.
 // class Lexiconga extends React.Component {
@@ -37,8 +40,6 @@ class Lexiconga extends Component {
 
     // This could probably be a global constant instead.
     this.showConsoleMessages = this.props.showConsoleMessages || false;
-
-    this.idManager = new IDManager();
 
     // Put the dictionary details, settings, and words into the state so modifications will affect display.
     this.state = {
@@ -117,7 +118,7 @@ class Lexiconga extends Component {
     , simpleDefinition: wordObject.simpleDefinition || ''
     , longDefinition: wordObject.longDefinition || ''
     , wordId: this.state.details.nextWordId
-    }
+    };
 
     let updatedWords = this.state.words.concat([newWord]);
     updatedWords = this.sortWords(updatedWords);
@@ -260,7 +261,6 @@ class Lexiconga extends Component {
               <div className='box'>
 
                 <WordForm
-                  idManager={this.idManager}
                   partsOfSpeech={this.state.settings.partsOfSpeech}
                   addWord={(wordObject) => this.addWord(wordObject)}
                   submitLabel='Add Word' />

@@ -33,13 +33,15 @@ export class FixedPage extends Component {
           <div className='modal-background' onClick={this.hide}></div>
 
           <div className={contentClass}>
+            <div className='box'>
             
-            <Button classes='modal-close'
-              action={this.hide}
-              label='Close' />
+              <Button classes='modal-close'
+                action={this.hide}
+                label='Close' />
 
-            {this.props.children}
+              {this.props.children}
 
+            </div>
           </div>
 
         </div>

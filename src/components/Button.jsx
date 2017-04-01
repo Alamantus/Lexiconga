@@ -11,7 +11,7 @@ export class Button extends Component {
 
   // Always give the Button a 'clickable' class and then add any others.
   processClasses() {
-    var classes = 'button is-small';
+    var classes = 'button';
 
     if (this.props.classes) {
       classes += ' ' + this.props.classes;
