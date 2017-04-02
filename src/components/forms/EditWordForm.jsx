@@ -2,8 +2,8 @@
 import Inferno from 'inferno';
 import Component from 'inferno-component';
 
-import {Input} from './Input';
-import {TextArea} from './TextArea';
+import {Input} from '../input/Input';
+import {TextArea} from '../input/TextArea';
 
 import {WordForm} from './WordForm';
 

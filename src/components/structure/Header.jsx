@@ -3,8 +3,8 @@ import Inferno from 'inferno';
 import Component from 'inferno-component';
 import marked from 'marked';
 
-import {Button} from './Button';
-import {FixedPage} from './FixedPage';
+import {Button} from '../input/Button';
+import {FixedPage} from '../display/FixedPage';
 
 // A component for the site header
 // export class Header extends React.Component {

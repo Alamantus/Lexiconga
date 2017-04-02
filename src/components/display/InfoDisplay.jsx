@@ -3,8 +3,8 @@ import Inferno from 'inferno';
 import Component from 'inferno-component';
 import marked from 'marked';
 
-import {WordForm} from './WordForm';
-import {Button} from './Button';
+import {WordForm} from '../forms/WordForm';
+import {Button} from '../input/Button';
 
 const saveIcon = <i>&#128190;</i>;
 const editIcon = <i>&#128393;</i>;

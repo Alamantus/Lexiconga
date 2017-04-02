@@ -9,13 +9,13 @@ import Inferno from 'inferno';
 import Component from 'inferno-component';
 
 // Import the necessary components.
-import {Header} from './components/Header';
-import {Footer} from './components/Footer';
-import {WordForm} from './components/WordForm';
-import {Button} from './components/Button';
-import {InfoDisplay} from './components/InfoDisplay';
-import {EditDictionaryForm} from './components/EditDictionaryForm';
-import {Dictionary} from './components/Dictionary';
+import {Header} from './components/structure/Header';
+import {Footer} from './components/structure/Footer';
+import {WordForm} from './components/forms/WordForm';
+import {Button} from './components/input/Button';
+import {InfoDisplay} from './components/display/InfoDisplay';
+import {EditDictionaryForm} from './components/forms/EditDictionaryForm';
+import {Dictionary} from './components/structure/Dictionary';
 
 // Import the helper functions needed for this file.
 import {dynamicSort} from './js/helpers';

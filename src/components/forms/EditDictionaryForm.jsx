@@ -2,11 +2,11 @@
 import Inferno from 'inferno';
 import Component from 'inferno-component';
 
-import {Input} from './Input';
-import {TextArea} from './TextArea';
-import {Checkbox} from './Checkbox';
-import {Button} from './Button';
-import {FixedPage} from './FixedPage';
+import {Input} from '../input/Input';
+import {TextArea} from '../input/TextArea';
+import {Checkbox} from '../input/Checkbox';
+import {Button} from '../input/Button';
+import {FixedPage} from '../display/FixedPage';
 
 // A component that allows you to edit the dictionary's details and settings.
 // export class EditDictionaryForm extends React.Component {

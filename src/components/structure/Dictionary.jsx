@@ -2,7 +2,7 @@
 import Inferno from 'inferno';
 import Component from 'inferno-component';
 
-import {Word} from './Word';
+import {Word} from '../display/Word';
 
 // A component for showing just the list of words provided to it as a prop.
 // export class Dictionary extends React.Component {

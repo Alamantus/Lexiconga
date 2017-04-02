@@ -2,9 +2,9 @@
 import Inferno, {linkEvent} from 'inferno';
 import {Input} from './Input';
 
-import {getInputSelection, setSelectionRange} from '../js/helpers';
+import {getInputSelection, setSelectionRange} from '../../js/helpers';
 import {Button} from './Button';
-import {FixedPage} from './FixedPage';
+import {FixedPage} from '../display/FixedPage';
 
 export class TextArea extends Input {
   constructor(props) {

@@ -2,12 +2,12 @@
 import Inferno from 'inferno';
 import Component from 'inferno-component';
 
-import {keyCodeFor} from '../js/helpers'
+import {keyCodeFor} from '../../js/helpers'
 
-import {Input} from './Input';
-import {Dropdown} from './Dropdown';
-import {TextArea} from './TextArea';
-import {Button} from './Button';
+import {Input} from '../input/Input';
+import {Dropdown} from '../input/Dropdown';
+import {TextArea} from '../input/TextArea';
+import {Button} from '../input/Button';
 
 // export class WordForm extends React.Component {
 export class WordForm extends Component {

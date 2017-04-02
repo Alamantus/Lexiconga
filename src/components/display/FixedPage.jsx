@@ -2,7 +2,7 @@
 import Inferno from 'inferno';
 import Component from 'inferno-component';
 
-import {Button} from './Button';
+import {Button} from '../input/Button';
 
 // Creates a page that floats above other elements when a connected button is clicked.
 // export class FixedPage extends React.Component {

@@ -3,7 +3,7 @@ import Inferno from 'inferno';
 import Component from 'inferno-component';
 import marked from 'marked';
 
-import {FixedPage} from './FixedPage';
+import {FixedPage} from '../display/FixedPage';
 
 // A component for the site footer
 // export class Footer extends React.Component {

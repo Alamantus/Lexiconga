@@ -2,7 +2,7 @@
 import Inferno from 'inferno';
 import {Input} from './Input';
 
-import {htmlEntities} from '../js/helpers';
+import {htmlEntities} from '../../js/helpers';
 
 export class Dropdown extends Input {
   constructor(props) {
