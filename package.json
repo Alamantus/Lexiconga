@@ -1,11 +1,11 @@
 {
   "name": "lexiconga",
   "title": "Lexiconga",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "A tool to build simple dictionaries using JSON.",
   "main": "src/app.js",
   "scripts": {
-    "start": "node start-server.js",
+    "serve": "node start-server.js",
     "pack": "node ./node_modules/webpack/bin/webpack.js -d --progress --display-error-details",
     "watch": "node ./node_modules/webpack/bin/webpack.js -d --progress --watch",
     "build": "node ./node_modules/webpack/bin/webpack.js -p --progress"
@@ -14,38 +14,33 @@
     "type": "git",
     "url": "git+https://Alamantus@github.com/Alamantus/Lexiconga.git"
   },
-  "author": "Robbie Antenesse <gamedev@alamantus.com>",
+  "author": "Robbie Antenesse <dev@alamantus.com>",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/Alamantus/Lexiconga/issues"
   },
   "homepage": "https://github.com/Alamantus/Lexiconga#readme",
-  "dependencies": {
-    "babel-polyfill": "^6.13.0",
-    "bulma": "^0.2.3",
-    "dexie": "^1.5.1",
-    "inferno": "^1.5.6",
-    "inferno-component": "^1.0.3",
-    "json-query": "^2.2.0",
-    "marked": "^0.3.6",
-    "papaparse": "^4.1.2",
-    "react": "^15.3.2",
-    "react-dom": "^15.3.2",
-    "react-select": "^1.0.0-rc.2"
-  },
   "devDependencies": {
-    "babel-core": "^6.14.0",
-    "babel-loader": "^6.2.5",
-    "babel-plugin-inferno": "^1.4.0",
-    "babel-preset-es2015": "^6.14.0",
-    "babel-preset-react": "^6.11.1",
-    "css-loader": "^0.25.0",
-    "express": "^4.14.0",
-    "file-loader": "^0.9.0",
-    "html-minify-loader": "^1.1.0",
-    "node-sass": "^3.10.0",
-    "sass-loader": "^4.0.2",
-    "style-loader": "^0.13.1",
-    "webpack": "^1.13.2"
+    "babel-core": "^6.24.0",
+    "babel-loader": "^6.4.1",
+    "babel-plugin-inferno": "^3.1.0",
+    "babel-preset-es2016": "^6.22.0",
+    "css-loader": "^0.28.0",
+    "express": "^4.15.2",
+    "file-loader": "^0.11.1",
+    "node-sass": "^4.5.2",
+    "sass-loader": "^6.0.3",
+    "style-loader": "^0.16.1",
+    "url-loader": "^0.5.8",
+    "webpack": "^2.3.3"
+  },
+  "dependencies": {
+    "babel-polyfill": "^6.23.0",
+    "bulma": "^0.4.0",
+    "dexie": "^1.5.1",
+    "inferno": "^1.6.0",
+    "inferno-component": "^1.6.0",
+    "marked": "^0.3.6",
+    "papaparse": "^4.2.0"
   }
 }
