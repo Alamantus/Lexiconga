@@ -1,10 +1,13 @@
+// Set BUILDMODE to 'production' to reduce overhead.
+const BUILDMODE = 'development';
+
 const webpack = require('webpack');
 const path = require('path');
 
 const BUILD_DIR = path.resolve(__dirname, 'public');
 const APP_DIR = path.resolve(__dirname, 'src');
 
-module.exports = {
+const webpackConfig = {
   entry: APP_DIR + '/index.jsx'
 , output: {
     path: BUILD_DIR
@@ -13,8 +16,8 @@ module.exports = {
 , module: {
     rules: [
       {
-        test: /\.scss$/
-      , exclude: /node_modules/
+        test: (/\.scss$/)
+      , exclude: (/node_modules/)
       , use: [
           'style-loader'
         , 'css-loader'
@@ -29,14 +32,18 @@ module.exports = {
         ]
       }
     , {
-        test: /\.jsx?$/
-      , exclude: /node_modules/
+        test: (/\.jsx?$/)
+      , exclude: (/node_modules/)
       , use: [
           {
             loader: 'babel-loader'
           , options: {
-              presets: ['es2016']
-            , plugins: ['inferno']
+              presets: [
+                'es2016'
+              ]
+            , plugins: [
+                'inferno'
+              ]
             }
           }
         ]
@@ -44,18 +51,31 @@ module.exports = {
     ]
   }
 , resolve: {
-  extensions: ['.js', '.jsx']
-}
-/*, plugins: [
-  // When you're ready to publish, check this article out.
-  // http://dev.topheman.com/make-your-react-production-minified-version-with-webpack/
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: false
-      },
-      output: {
-        comments: false
+    extensions: [
+      '.js'
+    , '.jsx'
+    ]
+  }
+, plugins: [
+    new webpack.DefinePlugin({
+      'process.env': {
+        'NODE_ENV': JSON.stringify(BUILDMODE)
       }
     })
-  ]*/
+  ]
 };
+
+if (BUILDMODE === 'production') {
+  webpackConfig.plugins.push(
+    new webpack.optimize.UglifyJsPlugin({
+      mangle: true
+    , compress: {
+        warnings: false
+      }
+    })
+  );
+
+  webpackConfig.devtool = 'hidden-source-map';
+}
+
+module.exports = webpackConfig;

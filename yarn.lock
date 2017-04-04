@@ -1389,6 +1389,15 @@ inferno-component@^1.6.0:
     inferno-shared "^1.6.0"
     inferno-vnode-flags "^1.6.0"
 
+inferno-devtools@^1.6.0:
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/inferno-devtools/-/inferno-devtools-1.6.0.tgz#869953c1d5a85fa899f9ee8405e5d93d470629d0"
+  dependencies:
+    inferno "^1.6.0"
+    inferno-component "^1.6.0"
+    inferno-shared "^1.6.0"
+    inferno-vnode-flags "^1.6.0"
+
 inferno-shared@^1.6.0:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/inferno-shared/-/inferno-shared-1.6.0.tgz#8b85ec17c7140a2fe1320e556df05accc4af7145"
