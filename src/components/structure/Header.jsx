@@ -6,6 +6,10 @@ import {SearchBox} from '../management/SearchBox';
 export class Header extends Component {
   constructor (props) {
     super(props);
+
+    this.state = {
+      displayNavMenu: false
+    }
   }
 
   render () {
@@ -13,24 +17,25 @@ export class Header extends Component {
       <nav className='nav'>
         <div className='nav-left'>
           <a href='/' className='nav-item'>
-            <img src='images/logo.svg' alt='Lexiconga' />
+            <img src='./logo.svg' alt='Lexiconga' />
           </a>
         </div>
 
         <div className='nav-center'>
           <div className='nav-item'>
             <SearchBox
-              partsOfSpeech={['Noun','Adjective','Verb']} />
+              search={searchConfig => this.props.search(searchConfig)} />
           </div>
         </div>
 
-        <span class='nav-toggle'>
+        <span className={`nav-toggle${this.state.displayNavMenu ? ' is-active' : ''}`}
+          onClick={() => this.setState({ displayNavMenu: !this.state.displayNavMenu })}>
           <span></span>
           <span></span>
           <span></span>
         </span>
 
-        <div className='nav-right nav-menu'>
+        <div className={`nav-right nav-menu${this.state.displayNavMenu ? ' is-active' : ''}`}>
           <span className='nav-item'>
             <a className='button'>
               Login

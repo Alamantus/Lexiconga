@@ -139,7 +139,7 @@ export class DictionaryDetails extends Component {
           <div className='level-left'>
             <div className='level-item'>
               <h2 className='title is-2'>
-                Dictionary Name
+                {this.props.name} {this.props.specification}
               </h2>
             </div>
           </div>

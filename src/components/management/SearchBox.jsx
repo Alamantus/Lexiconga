@@ -1,6 +1,10 @@
 import Inferno from 'inferno';
 import Component from 'inferno-component';
 
+import Helper from '../../Helper';
+
+import dictionary from '../../managers/DictionaryData';
+
 export class SearchBox extends Component {
   constructor (props) {
     super(props);
@@ -8,9 +12,21 @@ export class SearchBox extends Component {
     this.state = {
       searchingIn: 'name'
     , searchTerm: ''
+    , filteredPartsOfSpeech: []
     , showHeader: false
     , showAdvanced: false
     };
+  }
+
+  search () {
+    const {searchingIn, searchTerm, filteredPartsOfSpeech} = this.state;
+    const searchConfig = {
+      searchingIn
+    , searchTerm
+    , filteredPartsOfSpeech
+    };
+
+    this.props.search(searchConfig);
   }
 
   displaySearchHeader () {
@@ -31,7 +47,6 @@ export class SearchBox extends Component {
                         <span className='select'>
                           <select value={this.state.searchingIn}
                             onChange={event => {
-                              console.log(event);
                               this.setState({searchingIn: event.target.value});
                             }}>
                             <option value='name'>Word</option>
@@ -70,16 +85,59 @@ export class SearchBox extends Component {
   }
 
   showFilterOptions () {
-    if (this.props.hasOwnProperty('partsOfSpeech')
-        && this.props.partsOfSpeech.length > 0) {
-      let filterSectionJSX = (
+    if (dictionary.partsOfSpeech.length > 0) {
+      const searchMethodSectionJSX = this.state.searchingIn !== 'details'
+        ? (
+          <div className='field is-horizontal'>
+            <div className='field-label is-normal'>
+              <label className='label'>Search Method</label>
+            </div>
+            <div className='field-body'>
+              <div className='field'>
+                <p className='control'>
+                  <label className='radio'>
+                    <input type='radio' name='searchmethod' checked={true} />
+                    Contains
+                  </label>
+                  <label className='radio'>
+                    <input type='radio' name='searchmethod' />
+                    Starts With
+                  </label>
+                  <label className='radio'>
+                    <input type='radio' name='searchmethod' />
+                    Exact
+                  </label>
+                </p>
+              </div>
+              <div className='field'>
+                <p className='control'>
+                  <span className='help'>
+                    <strong>Contains:</strong>&nbsp;
+                    Search term is anywhere within the {this.state.searchingIn.capitalize()}
+                  </span>
+                  <span className='help'>
+                    <strong>Starts With:</strong>&nbsp;
+                    The {this.state.searchingIn.capitalize()} begins with the search term
+                  </span>
+                  <span className='help'>
+                    <strong>Exact:</strong>&nbsp;
+                    Search term matches the {this.state.searchingIn.capitalize()} exactly
+                  </span>
+                </p>
+              </div>
+            </div>
+          </div>
+        )
+        : null;
+
+      const filterSectionJSX = (
         <div className='field is-horizontal'>
           <div className='field-label is-normal'>
             <label className='label'>Filter</label>
           </div>
           <div className='field-body'>
             <div className='field is-grouped'>
-            {this.props.partsOfSpeech.map((partOfSpeech) => {
+            {dictionary.partsOfSpeech.map((partOfSpeech) => {
               return (
                 <p className='control'>
                   <label key={'filterPartOfSpeech' + Date.now()}
@@ -95,9 +153,10 @@ export class SearchBox extends Component {
         </div>
       );
 
-      let advancedSectionJSX = (
+      const advancedSectionJSX = (
         <div className='column'>
           <div className='box'>
+            {searchMethodSectionJSX}
             {filterSectionJSX}
           </div>
         </div>
@@ -108,7 +167,7 @@ export class SearchBox extends Component {
           <div class='column is-narrow'>
             <div className='field'>
               <p className='control'>
-                <a className='button is-link is-small'
+                <a className={`button is-link is-small${this.state.showAdvanced ? ' is-active' : ''}`}
                   onClick={() => this.setState({showAdvanced: !this.state.showAdvanced})}>
                   Advanced
                 </a>

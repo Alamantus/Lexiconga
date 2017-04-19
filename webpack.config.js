@@ -1,5 +1,10 @@
-// Set BUILDMODE to 'production' to reduce overhead.
-const BUILDMODE = 'development';
+// Set BUILDMODE to:
+//  'production' to reduce overhead.
+//  'donotsave' to clear the dictionary details and database on each load.
+//  'emptydetails' to clear the dictionary details on each load.
+//  'emptydb' to clear the database on each load.
+//  'development' to not do anything special.
+const BUILDMODE = 'donotsave';
 
 const webpack = require('webpack');
 const path = require('path');
