@@ -2,14 +2,11 @@ import Inferno from 'inferno';
 import Component from 'inferno-component';
 import marked from 'marked';
 
-import {SearchBox} from '../management/SearchBox';
-
 const DISPLAY = {
   NONE: false
 , DESCRIPTION: 1
 , DETAILS: 2
 , STATS: 3
-, SEARCH: 4
 }
 
 export class DictionaryDetails extends Component {
@@ -124,11 +121,6 @@ export class DictionaryDetails extends Component {
           );
           break;
         }
-
-        case DISPLAY.SEARCH : {
-          displayJSX = <SearchBox />;
-          break;
-        }
       }
 
       return (
@@ -154,46 +146,35 @@ export class DictionaryDetails extends Component {
 
           <div className='level-right'>
             <div className='level-item'>
-              <div className='field is-grouped'>
-                <div className='control'>
-                  <a className='button' onClick={this.toggleDisplay.bind(this, DISPLAY.SEARCH)}>
-                    Search
-                  </a>
-                </div>
-                <div className='control'>
+              <div className='field'>
+                <p className='control'>
                   <a className='button'>
                     Edit Dictionary
                   </a>
-                </div>
+                </p>
               </div>
             </div>
           </div>
         </div>
 
-        <div className='level'>
-          <div className='level-left'>
-            <div className='level-item'>
-              <div className='tabs is-toggle'>
-                <ul>
-                  <li className={(this.state.currentDisplay === DISPLAY.DESCRIPTION) ? 'is-active' : null}>
-                    <a onClick={this.toggleDisplay.bind(this, DISPLAY.DESCRIPTION)}>
-                      <span>Description</span>
-                    </a>
-                  </li>
-                  <li className={(this.state.currentDisplay === DISPLAY.DETAILS) ? 'is-active' : null}>
-                    <a onClick={this.toggleDisplay.bind(this, DISPLAY.DETAILS)}>
-                      <span>Details</span>
-                    </a>
-                  </li>
-                  <li className={(this.state.currentDisplay === DISPLAY.STATS) ? 'is-active' : null}>
-                    <a onClick={this.toggleDisplay.bind(this, DISPLAY.STATS)}>
-                      <span>Stats</span>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
+        <div className='tabs is-toggle'>
+          <ul>
+            <li className={(this.state.currentDisplay === DISPLAY.DESCRIPTION) ? 'is-active' : null}>
+              <a onClick={this.toggleDisplay.bind(this, DISPLAY.DESCRIPTION)}>
+                <span>Description</span>
+              </a>
+            </li>
+            <li className={(this.state.currentDisplay === DISPLAY.DETAILS) ? 'is-active' : null}>
+              <a onClick={this.toggleDisplay.bind(this, DISPLAY.DETAILS)}>
+                <span>Details</span>
+              </a>
+            </li>
+            <li className={(this.state.currentDisplay === DISPLAY.STATS) ? 'is-active' : null}>
+              <a onClick={this.toggleDisplay.bind(this, DISPLAY.STATS)}>
+                <span>Stats</span>
+              </a>
+            </li>
+          </ul>
         </div>
 
         {this.displayInfo()}

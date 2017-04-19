@@ -1,0 +1,29 @@
+@import 'variables';
+@import '../../node_modules/bulma/bulma';
+
+.input {
+  &[readonly] {
+    &.is-clickable {
+      cursor: pointer;
+    }
+  }
+}
+
+.search-bar {
+	@extend .hero;
+  background: transparent;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+
+  .search-body {
+    @extend .hero-body;
+    @extend .is-paddingless;
+
+    .search-background {
+      @extend .modal-background;
+    }
+  }
+}

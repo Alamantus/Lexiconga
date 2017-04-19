@@ -1,6 +1,8 @@
 import Inferno from 'inferno';
 import Component from 'inferno-component';
 
+import {SearchBox} from '../management/SearchBox';
+
 export class Header extends Component {
   constructor (props) {
     super(props);
@@ -15,7 +17,14 @@ export class Header extends Component {
           </a>
         </div>
 
-        <span class="nav-toggle">
+        <div className='nav-center'>
+          <div className='nav-item'>
+            <SearchBox
+              partsOfSpeech={['Noun','Adjective','Verb']} />
+          </div>
+        </div>
+
+        <span class='nav-toggle'>
           <span></span>
           <span></span>
           <span></span>
