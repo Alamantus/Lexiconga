@@ -1,6 +1,7 @@
 import assert from 'assert';
 import store from 'store';
 import wordDb from './WordDatabase';
+import idManager from './IDManager';
 
 const defaultDictionary = {
   name: 'New'
@@ -17,6 +18,15 @@ class DictionaryData {
 
     if (!store.get('Lexiconga')) {
       store.set('Lexiconga', defaultDictionary);
+    } else {
+      const largestId = wordDb.words
+        .orderBy('id').reverse()
+        .first((word) => {
+          return word.id;
+        });
+
+      idManager.setId('word', ++largestId);
+      console.log('First word ID: ' + idManager.next('word').toString());
     }
   }
 

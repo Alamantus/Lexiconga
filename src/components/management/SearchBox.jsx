@@ -47,7 +47,7 @@ export class SearchBox extends Component {
                         <span className='select'>
                           <select value={this.state.searchingIn}
                             onChange={event => {
-                              this.setState({searchingIn: event.target.value});
+                              this.setState({ searchingIn: event.target.value });
                             }}>
                             <option value='name'>Word</option>
                             <option value='definition'>Definition</option>
@@ -60,7 +60,7 @@ export class SearchBox extends Component {
                           value={this.state.searchTerm}
                           onChange={event => {
                             console.log(event);
-                            this.setState({searchTerm: event.target.value});
+                            this.setState({ searchTerm: event.target.value });
                           }} />
                       </p>
                     </div>
