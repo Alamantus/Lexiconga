@@ -1,3 +1,4 @@
+import './assets/fonts/fonts.scss';
 import './sass/main.scss';
 
 import Inferno from 'inferno';
