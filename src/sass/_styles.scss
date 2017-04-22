@@ -27,3 +27,12 @@
     }
   }
 }
+
+.ipa-suggest {
+  @extend .box;
+  position: absolute;
+  background-color: #FFFFFF;
+  border: 1px solid #CCCCFF;
+  font-size: 90%;
+  width: 200px;
+}

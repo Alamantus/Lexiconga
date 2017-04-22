@@ -1,6 +1,7 @@
 import Inferno from 'inferno';
 import Component from 'inferno-component';
 
+import {IPAField} from './IPAField';
 import {Word} from '../../managers/Word';
 
 export class WordForm extends Component {
@@ -97,16 +98,8 @@ export class WordForm extends Component {
           </p>
         </div>
 
-        <div className='field'>
-          <label className='label'>Pronunciation</label>
-          <p className='control'>
-            <input className='input' type='text' placeholder='[prəˌnʌnsiˈeɪʃən]'
-              value={this.state.wordPronunciation}
-              onChange={(event) => {
-                this.setState({ wordPronunciation: event.target.value });
-              }} />
-          </p>
-        </div>
+        <IPAField
+          onChange={newValue => this.setState({ wordPronunciation: newValue })} />
 
         <div className='field'>
           <label className='label'>Part of Speech</label>
