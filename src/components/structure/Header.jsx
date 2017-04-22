@@ -16,8 +16,8 @@ export class Header extends Component {
     return (
       <nav className='nav'>
         <div className='nav-left'>
-          <a href='/' className='nav-item'>
-            <img src='./logo.svg' alt='Lexiconga' />
+          <a href='/' className='nav-item image'>
+            <img src={`./logo.${(typeof SVGRect !== 'undefined') ? 'svg' : 'png'}`} alt='Lexiconga Logo' />
           </a>
         </div>
 
