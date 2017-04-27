@@ -2,7 +2,7 @@ import Inferno from 'inferno';
 import Component from 'inferno-component';
 
 const phondueUsage = require('../../../vendor/KeyboardFire/phondue/usage.html');
-const digraphsHexes = require('../../../vendor/KeyboardFire/phondue/digraphs.txt');
+const digraphs = require('../../../vendor/KeyboardFire/phondue/digraphs.json');
 
 import Helper from '../../Helper';
 
@@ -23,19 +23,6 @@ export class IPAField extends Component {
     }
 
     this.field = null;
-    this.digraphs = {};
-  }
-
-  componentDidMount () {
-    // Decode digraph hexes.
-    digraphsHexes.split('\n').forEach(digraph => {
-      let chunks = digraph.match(/\S{8}/g);
-      if (!chunks || chunks.length != 3) return;  // failsafe
-      chunks = chunks.map(hex => {
-        return String.fromCharCode(parseInt(hex, 16));
-      });
-      this.digraphs[chunks[0] + chunks[1]] = chunks[2];
-    });
   }
 
   showHelp () {
@@ -45,12 +32,19 @@ export class IPAField extends Component {
           <div className='modal-background'
             onClick={() => this.setState({ doShowHelp: false })} />
           <div className='modal-card'>
-            <div className='modal-card-body'>
+            <header className='modal-card-head'>
+              <h3 className='modal-card-title'>
+                IPA Shortcuts
+              </h3>
+              <button className='delete'
+                onClick={() => this.setState({ doShowHelp: false })} />
+            </header>
+            <section className='modal-card-body'>
 
               <div className='content'
                 dangerouslySetInnerHTML={{__html: phondueUsage}} />
 
-            </div>
+            </section>
           </div>
         </div>
       );
@@ -63,11 +57,11 @@ export class IPAField extends Component {
         <div className='modal is-active'>
           <div className='modal-background'
             onClick={() => this.setState({ doShowTable: false })} />
-          <div className='modal-card'><div className='modal-card-body'>
+
             <IPATable
               value={this.state.value}
               update={newValue => this.setState({ value: newValue }, this.field.focus())} />
-          </div></div>
+
         </div>
       );
     }
@@ -100,7 +94,7 @@ export class IPAField extends Component {
 
     if (event.key) {
       const key = event.key
-      , digraph = this.digraphs[val.substr(pos - 1, 1) + key];
+      , digraph = digraphs[val.substr(pos - 1, 1) + key];
 
       if (digraph) {
         event.preventDefault();
