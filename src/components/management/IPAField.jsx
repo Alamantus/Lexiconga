@@ -25,39 +25,55 @@ export class IPAField extends Component {
     }
   }
 
-  get lastLetter () {
-    return this.state.value.substr(this.state.value.length - 1, 1);
+  get valueAtCursor () {
+    const startPosition = this.field.selectionStart
+    , endPosition = this.field.selectionEnd;
+
+    // Get the character left of the farthest forward selection position.
+    let index = (startPosition === endPosition ? startPosition - 1 : (endPosition < startPosition ? startPosition : endPosition) - 1)
+    if (!index && index !== 0) {
+      index = -1;
+    }
+    const character = this.state.value.charAt(index) || '';
+    
+    return {
+      character: character
+    , position: index
+    };
   }
 
-  get lastLetterIsUppercase () {
-    return Helper.characterIsUppercase(this.lastLetter);
+  get valueAtCursorIsUpperCase () {
+    return Helper.characterIsUppercase(this.valueAtCursor.character);
   }
 
-  get lastLetterHasSuggestions () {
-    return this.letterPossibilities.hasOwnProperty(this.lastLetter.toLowerCase());
+  get valueAtCursorHasSuggestions () {
+    return this.letterPossibilities.hasOwnProperty(this.valueAtCursor.character.toLowerCase());
   }
 
-  get lastLetterPossibilities () {
-    return this.lastLetterHasSuggestions ? this.letterPossibilities[this.lastLetter.toLowerCase()] : [];
+  get valueAtCursorPossibilities () {
+    return this.valueAtCursorHasSuggestions
+      ? this.letterPossibilities[this.valueAtCursor.character.toLowerCase()]
+      : [];
   }
 
   checkDisplay () {
+    console.log(this.valueAtCursor);
     this.setState({
-      shouldDisplay: this.state.isFocused && this.lastLetterHasSuggestions
+      valueAtCursorHasSuggestions: this.valueAtCursorHasSuggestions
     });
   }
 
   listSuggestions () {
-    if (this.state.shouldDisplay) {
+    if (this.state.isFocused && this.state.valueAtCursorHasSuggestions) {
       return (
         <div className='ipa-suggest'
           onClick={() => this.setState({ isFocused: true }, this.checkDisplay)}>
-          {this.lastLetterHasSuggestions
-            ? this.lastLetterPossibilities.map(letter => {
+          {this.valueAtCursorHasSuggestions
+            ? this.valueAtCursorPossibilities.map(letter => {
                 return (
                   <a className='button is-small is-link'
-                    onClick={() => this.replaceLastCharacter(letter)}>
-                    {this.lastLetterIsUppercase ? letter.toUpperCase() : letter}
+                    onClick={() => this.replaceValueAtCursor(letter)}>
+                    {this.valueAtCursorIsUpperCase ? letter.toUpperCase() : letter}
                   </a>
                 );
               })
@@ -67,12 +83,14 @@ export class IPAField extends Component {
     }
   }
 
-  replaceLastCharacter (character) {
+  replaceValueAtCursor (character) {
+    const valueAtCursor = this.valueAtCursor;
     let updatedValue = this.state.value;
-    updatedValue = updatedValue.replaceAt(updatedValue.length - 1, (this.lastLetterIsUppercase) ? character.toUpperCase() : character);
+    updatedValue = updatedValue.replaceAt(valueAtCursor.position, (this.valueAtCursorIsUpperCase) ? character.toUpperCase() : character);
 
     this.setState({ value: updatedValue }, () => {
       this.field.focus();
+      this.field.startPosition = valueAtCursor.index + 1;
     });
   }
 
