@@ -54,15 +54,10 @@ export class IPAField extends Component {
   showTable () {
     if (this.state.doShowTable) {
       return (
-        <div className='modal is-active'>
-          <div className='modal-background'
-            onClick={() => this.setState({ doShowTable: false })} />
-
-            <IPATable
-              value={this.state.value}
-              update={newValue => this.setState({ value: newValue }, this.field.focus())} />
-
-        </div>
+        <IPATable
+          value={this.state.value}
+          close={() => this.setState({ doShowTable: false })}
+          update={newValue => this.setState({ value: newValue }, this.field.focus())} />
       );
     }
   }
