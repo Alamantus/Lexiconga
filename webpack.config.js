@@ -37,6 +37,20 @@ const webpackConfig = {
         ]
       }
     , {
+        test: (/\.html$/)
+      , exclude: (/node_modules/)
+      , use: [
+          'html-loader'
+        ]
+      }
+    , {
+        test: (/\.txt$/)
+      , exclude: (/node_modules/)
+      , use: [
+          'raw-loader'
+        ]
+      }
+    , {
         test: (/\.jsx?$/)
       , exclude: (/node_modules/)
       , use: [

@@ -1,0 +1,48 @@
+body {
+    font-family: sans-serif;
+    max-width: 1000px;
+    margin: 0px auto;
+    padding: 20px 10px;
+    color: #333;
+    background-color: #f7f7f7;
+    line-height: 1.6;
+}
+
+h1 {
+    margin: 0px;
+}
+
+#subtitle {
+    font-style: italic;
+    margin: 0px;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+td {
+    padding: 0;
+    margin: 0;
+    text-align: center;
+}
+td.grey {
+    background-color: #ddd;
+}
+
+button {
+    padding: 5px 10px;
+    border: none;
+    background: none;
+}
+button:hover {
+    background-color: #eee;
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.2) inset;
+}
+button:active {
+    background-color: #ccc;
+}
+
+#inputBox {
+    width: 98%;
+}
