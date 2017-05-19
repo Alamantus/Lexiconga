@@ -5,8 +5,9 @@ import {RightColumn} from './structure/RightColumn';
 
 import {WordForm} from './management/WordForm';
 import {DictionaryDetails} from './display/DictionaryDetails';
+import {WordsList} from './display/WordsList';
 
-export const MainDisplay = ({dictionaryInfo}) => {
+export const MainDisplay = ({dictionaryInfo, wordsToDisplayPromise}) => {
   return (
     <section className='section'>
       <div className='container'>
@@ -31,6 +32,9 @@ export const MainDisplay = ({dictionaryInfo}) => {
                 ]
               }}
             />
+
+            <WordsList
+              wordsPromise={wordsToDisplayPromise} />
           </RightColumn>
           
         </div>

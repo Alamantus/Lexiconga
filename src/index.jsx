@@ -39,11 +39,11 @@ class App extends Component {
     return info;
   }
 
-  get wordsToDisplay () {
+  get wordsToDisplayPromise () {
     // const {searchIn, searchTerm, filteredPartsOfSpeech} = this.state.searchConfig;
 
     // TODO: Sort out searching to remove this temporary solution.
-    return dictionary.words;
+    return dictionary.wordsPromise;
   }
 
   search (searchConfig) {
@@ -60,7 +60,7 @@ class App extends Component {
 
         <MainDisplay
           dictionaryInfo={this.dictionaryInfo}
-          wordsToDisplay={this.wordsToDisplay} />
+          wordsToDisplay={this.wordsToDisplayPromise} />
 
         <Footer />
       </div>

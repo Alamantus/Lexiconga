@@ -2,13 +2,6 @@ import assert from 'assert';
 import store from 'store';
 import wordDb from './WordDatabase';
 
-const defaultDictionary = {
-  name: 'New'
-, specification: 'Dictionary'
-, description: 'A new dictionary.'
-, partsOfSpeech: ['Noun', 'Adjective', 'Verb']
-}
-
 export class Word {
   constructor ({name = '', pronunciation = '', partOfSpeech = '', definition = '', details = ''}) {
     this.name = name;
@@ -33,13 +26,16 @@ export class Word {
     });
   }
 
-  update (wordObject, wordId) {
+  update (wordId) {
     const timestampInSeconds = Math.round(Date.now() / 1000);
     this.modifiedTime = timestampInSeconds;
 
-    wordDb.words.put(wordObject, wordId)
+    return wordDb.words.put(this, wordId)
+    .then(id => {
+      console.log('Word modified successfully');
+    })
     .catch(error => {
-
+      console.error(error);
     });
   }
 }

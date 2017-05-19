@@ -70,7 +70,7 @@ class DictionaryData {
     return store.set('Lexiconga', { partsOfSpeech: array });
   }
 
-  get words () {
+  get wordsPromise () {
     return wordDb.words.toArray();
   }
 

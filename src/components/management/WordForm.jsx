@@ -51,7 +51,7 @@ export class WordForm extends Component {
     return nameIsValid == true && definitionIsValid == true && detailsIsValid == true;
   }
 
-  createWord () {
+  submitWord () {
     const word = new Word({
       name: this.state.wordName
     , pronunciation: this.state.wordPronunciation
@@ -62,10 +62,18 @@ export class WordForm extends Component {
 
 
     if (this.isValidWord()) {
-      word.create()
-      .then(() => {
-        this.clearForm();
-      });
+      // Need to trigger a WordsList re-render after success.
+      if (this.props.wordId) {
+        word.update(this.props.wordId)
+        .then(() => {
+          this.props.callback();
+        })
+      } else {
+        word.create()
+        .then(() => {
+          this.clearForm();
+        });
+      }
     }
   }
 
@@ -160,7 +168,7 @@ export class WordForm extends Component {
           <p className='control'>
             <a className='button is-primary'
               onClick={() => {
-                this.createWord();
+                this.submitWord();
               }}>
               Create
             </a>
