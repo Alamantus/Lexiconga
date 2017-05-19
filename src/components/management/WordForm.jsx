@@ -98,7 +98,7 @@ export class WordForm extends Component {
           </p>
         </div>
 
-        <IPAField
+        <IPAField value={this.state.wordPronunciation}
           onChange={newValue => this.setState({ wordPronunciation: newValue })} />
 
         <div className='field'>
@@ -143,11 +143,10 @@ export class WordForm extends Component {
           <p className='control'>
             <textarea className={`textarea${(!this.state.detailsIsValid) ? ' is-danger' : ''}`}
               placeholder='Explanation of word (Markdown enabled)'
+              value={this.state.wordDetails}
               onChange={(event) => {
                 this.setState({ wordDetails: event.target.value });
-              }}>
-              {this.state.wordDetails}
-            </textarea>
+              }} />
               {(!this.state.detailsIsValid)
                 ? (
                   <span className='help is-danger'>

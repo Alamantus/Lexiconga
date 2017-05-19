@@ -25,6 +25,12 @@ export class IPAField extends Component {
     this.field = null;
   }
 
+  componentWillReceiveProps (nextProps) {
+    this.setState({
+      value: nextProps.value
+    });
+  }
+
   showHelp () {
     if (this.state.doShowHelp) {
       return (
