@@ -8,7 +8,7 @@ export class Header extends Component {
     super(props);
 
     this.state = {
-      displayNavMenu: false
+      displayNavMenu: false,
     }
   }
 
@@ -17,14 +17,15 @@ export class Header extends Component {
       <nav className='nav'>
         <div className='nav-left'>
           <a href='/' className='nav-item image'>
-            <img src={`./logo.${(typeof SVGRect !== 'undefined') ? 'svg' : 'png'}`} alt='Lexiconga Logo' />
+            <img src={ `./logo.${ (typeof SVGRect !== 'undefined') ? 'svg' : 'png' }` } alt='Lexiconga Logo' />
           </a>
         </div>
 
         <div className='nav-center'>
           <div className='nav-item'>
             <SearchBox
-              search={searchConfig => this.props.search(searchConfig)} />
+              partsOfSpeech={ this.props.partsOfSpeech }
+              search={ searchConfig => this.props.search(searchConfig) } />
           </div>
         </div>
 
@@ -35,7 +36,7 @@ export class Header extends Component {
           <span></span>
         </span>
 
-        <div className={`nav-right nav-menu${this.state.displayNavMenu ? ' is-active' : ''}`}>
+        <div className={ `nav-right nav-menu${ this.state.displayNavMenu ? ' is-active' : '' }` }>
           <span className='nav-item'>
             <a className='button'>
               Login

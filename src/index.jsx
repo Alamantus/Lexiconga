@@ -19,25 +19,31 @@ class App extends Component {
     super(props);
 
     this.state = {
-      name: dictionary.name
-    , specification: dictionary.specification
-    , description: dictionary.description
-    , partsOfSpeech: dictionary.partsOfSpeech
-    , displayedWords: []
-    , searchConfig: null
+      name: dictionary.name,
+      specification: dictionary.specification,
+      description: dictionary.description,
+      partsOfSpeech: dictionary.partsOfSpeech,
+      displayedWords: [],
+      searchConfig: null,
     }
   }
 
   get dictionaryInfo () {
     const {name, specification, description, partsOfSpeech} = this.state;
     const info = {
-      name
-    , specification
-    , description
-    , partsOfSpeech
+      name,
+      specification,
+      description,
+      partsOfSpeech,
     };
 
     return info;
+  }
+
+  updatePartsOfSpeech () {
+    this.setState({
+      partsOfSpeech: dictionary.partsOfSpeech,
+    });
   }
 
   updateDisplayedWords () {
@@ -46,14 +52,14 @@ class App extends Component {
     // TODO: Sort out searching to remove this temporary solution.
     dictionary.wordsPromise.then(words => {
       this.setState({
-        displayedWords: words
+        displayedWords: words,
       })
     });
   }
 
   search (searchConfig) {
     this.setState({
-      searchConfig: searchConfig
+      searchConfig: searchConfig,
     });
   }
 
@@ -61,12 +67,13 @@ class App extends Component {
     return (
       <div>
         <Header
-          search={searchConfig => this.search(searchConfig)} />
+          partsOfSpeech={ this.state.partsOfSpeech }
+          search={ searchConfig => this.search(searchConfig) } />
 
         <MainDisplay
-          dictionaryInfo={this.dictionaryInfo}
-          wordsToDisplay={this.state.displayedWords}
-          updateDisplay={() => this.updateDisplayedWords()} />
+          dictionaryInfo={ this.dictionaryInfo }
+          wordsToDisplay={ this.state.displayedWords }
+          updateDisplay={ this.updateDisplayedWords.bind(this) } />
 
         <Footer />
       </div>
