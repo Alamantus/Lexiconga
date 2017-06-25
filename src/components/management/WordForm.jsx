@@ -72,6 +72,7 @@ export class WordForm extends Component {
         word.create()
         .then(() => {
           this.clearForm();
+          this.props.updateDisplay();
         });
       }
     }

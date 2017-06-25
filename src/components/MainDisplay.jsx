@@ -7,7 +7,7 @@ import {WordForm} from './management/WordForm';
 import {DictionaryDetails} from './display/DictionaryDetails';
 import {WordsList} from './display/WordsList';
 
-export const MainDisplay = ({dictionaryInfo, wordsToDisplayPromise}) => {
+export const MainDisplay = ({dictionaryInfo, wordsToDisplay, updateDisplay, lastRender}) => {
   return (
     <section className='section'>
       <div className='container'>
@@ -15,6 +15,7 @@ export const MainDisplay = ({dictionaryInfo, wordsToDisplayPromise}) => {
           
           <LeftColumn>
             <WordForm
+              updateDisplay={() => updateDisplay()}
               partsOfSpeech={dictionaryInfo.partsOfSpeech}
             />
           </LeftColumn>
@@ -34,7 +35,8 @@ export const MainDisplay = ({dictionaryInfo, wordsToDisplayPromise}) => {
             />
 
             <WordsList
-              wordsPromise={wordsToDisplayPromise} />
+              lastRender={lastRender}
+              words={wordsToDisplay} />
           </RightColumn>
           
         </div>

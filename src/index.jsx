@@ -23,6 +23,7 @@ class App extends Component {
     , specification: dictionary.specification
     , description: dictionary.description
     , partsOfSpeech: dictionary.partsOfSpeech
+    , displayedWords: []
     , searchConfig: null
     }
   }
@@ -39,11 +40,15 @@ class App extends Component {
     return info;
   }
 
-  get wordsToDisplayPromise () {
+  updateDisplayedWords () {
     // const {searchIn, searchTerm, filteredPartsOfSpeech} = this.state.searchConfig;
 
     // TODO: Sort out searching to remove this temporary solution.
-    return dictionary.wordsPromise;
+    dictionary.wordsPromise.then(words => {
+      this.setState({
+        displayedWords: words
+      })
+    });
   }
 
   search (searchConfig) {
@@ -60,7 +65,8 @@ class App extends Component {
 
         <MainDisplay
           dictionaryInfo={this.dictionaryInfo}
-          wordsToDisplay={this.wordsToDisplayPromise} />
+          wordsToDisplay={this.state.displayedWords}
+          updateDisplay={() => this.updateDisplayedWords()} />
 
         <Footer />
       </div>

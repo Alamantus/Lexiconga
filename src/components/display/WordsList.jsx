@@ -15,15 +15,14 @@ export class WordsList extends Component {
     return (
       <div className='box'>
 
-        {this.props.wordsPromise
-          && this.props.wordsPromise.then(words => {
-          words.map(word => {
+        {this.props.words
+          && this.props.words.map(word => {
             return (
               <WordDisplay key={`word_${word.id}`}
                 word={word} />
             );
           })
-        })}
+        }
 
       </div>
     );
