@@ -263,7 +263,9 @@ export class SearchBox extends Component {
 
         <a className='button is-hidden-desktop'
           onClick={ this.showHeader.bind(this) }>
-          S
+          <span className='icon'>
+            <i className='fa fa-search' />
+          </span>
         </a>
 
         { this.displaySearchHeader() }

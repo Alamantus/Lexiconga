@@ -68,56 +68,13 @@ const webpackConfig = {
         ]
       }
     , {
-        test: (/\.woff$/)
-      , exclude: (/node_modules/)
+        test: (/\.(png|woff|woff2|eot|ttf|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/)
       , use: [
           {
             loader: 'url-loader'
           , options: {
-              limit: 65000
+              limit: 100000
             , mimetype: 'application/font-woff'
-            , name: './assets/fonts/[name].[ext]'
-            }
-          }
-        ]
-      }
-    , {
-        test: (/\.woff2$/)
-      , exclude: (/node_modules/)
-      , use: [
-          {
-            loader: 'url-loader'
-          , options: {
-              limit: 65000
-            , mimetype: 'application/font-woff2'
-            , name: './assets/fonts/[name].[ext]'
-            }
-          }
-        ]
-      }
-    , {
-        test: (/\.[ot]tf$/)
-      , exclude: (/node_modules/)
-      , use: [
-          {
-            loader: 'url-loader'
-          , options: {
-              limit: 65000
-            , mimetype: 'application/octet-stream'
-            , name: './assets/fonts/[name].[ext]'
-            }
-          }
-        ]
-      }
-    , {
-        test: (/\.eot$/)
-      , exclude: (/node_modules/)
-      , use: [
-          {
-            loader: 'url-loader'
-          , options: {
-              limit: 65000
-            , mimetype: 'application/vnd.ms-fontobject'
             , name: './assets/fonts/[name].[ext]'
             }
           }

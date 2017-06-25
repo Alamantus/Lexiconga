@@ -1,4 +1,4 @@
-// import './assets/fonts/fonts.scss';
+// import 'font-awesome/scss/font-awesome.scss';
 import './sass/main.scss';
 
 import Inferno from 'inferno';
