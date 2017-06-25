@@ -18,6 +18,12 @@ export class SearchBox extends Component {
     };
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.showHeader && this.searchBox) {
+      this.searchBox.focus();
+    }
+  }
+
   search () {
     const {searchingIn, searchTerm, filteredPartsOfSpeech} = this.state;
     const searchConfig = {
@@ -57,6 +63,9 @@ export class SearchBox extends Component {
                       </p>
                       <p className='control is-expanded'>
                         <input className='input' type='text' placeholder='Search Term'
+                          ref={input => {
+                            this.searchBox = input;
+                          }}
                           value={this.state.searchTerm}
                           onChange={event => {
                             console.log(event);
