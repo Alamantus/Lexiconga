@@ -56,7 +56,7 @@ export class SearchBox extends Component {
                       <p className='control'>
                         <span className='select'>
                           <select value={ this.state.searchingIn }
-                            onChange={event => {
+                            onChange={(event) => {
                               this.setState({ searchingIn: event.target.value });
                             }}>
                             <option value='name'>Word</option>
@@ -67,11 +67,11 @@ export class SearchBox extends Component {
                       </p>
                       <p className='control is-expanded'>
                         <input className='input' type='text' placeholder='Search Term'
-                          ref={input => {
+                          ref={(input) => {
                             this.searchBox = input;
                           }}
                           value={ this.state.searchTerm }
-                          onChange={event => {
+                          onChange={(event) => {
                             console.log(event);
                             this.setState({ searchTerm: event.target.value });
                           }} />
@@ -115,7 +115,7 @@ export class SearchBox extends Component {
                     <input type='radio' name='searchmethod'
                       value={ METHOD.contains }
                       checked={ this.state.searchMethod === METHOD.contains }
-                      onClick={event => {
+                      onClick={(event) => {
                         if (event.currentTarget.checked) {
                           this.setState({
                             searchMethod: event.currentTarget.value,
@@ -131,7 +131,7 @@ export class SearchBox extends Component {
                     <input type='radio' name='searchmethod'
                       value={ METHOD.startsWith }
                       checked={ this.state.searchMethod === METHOD.startsWith }
-                      onClick={event => {
+                      onClick={(event) => {
                         if (event.currentTarget.checked) {
                           this.setState({
                             searchMethod: event.currentTarget.value,
@@ -147,7 +147,7 @@ export class SearchBox extends Component {
                     <input type='radio' name='searchmethod'
                       value={ METHOD.endsWith }
                       checked={ this.state.searchMethod === METHOD.endsWith }
-                      onClick={event => {
+                      onClick={(event) => {
                         if (event.currentTarget.checked) {
                           this.setState({
                             searchMethod: event.currentTarget.value,
@@ -163,7 +163,7 @@ export class SearchBox extends Component {
                     <input type='radio' name='searchmethod'
                       value={ METHOD.isExactly }
                       checked={ this.state.searchMethod === METHOD.isExactly }
-                      onClick={event => {
+                      onClick={(event) => {
                         if (event.currentTarget.checked) {
                           this.setState({
                             searchMethod: event.currentTarget.value,
@@ -234,13 +234,13 @@ export class SearchBox extends Component {
 
   showHeader () {
     this.setState({
-      showHeader: true
+      showHeader: true,
     });
   }
 
   hideHeader () {
     this.setState({
-      showHeader: false
+      showHeader: false,
     });
   }
 

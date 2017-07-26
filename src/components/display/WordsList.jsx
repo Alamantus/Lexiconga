@@ -4,7 +4,7 @@ import marked from 'marked';
 
 import idManager from '../../managers/IDManager';
 
-import {WordDisplay} from './WordDisplay';
+import { WordDisplay } from './WordDisplay';
 
 export class WordsList extends Component {
   constructor (props) {
@@ -18,8 +18,8 @@ export class WordsList extends Component {
         {this.props.words
           && this.props.words.map(word => {
             return (
-              <WordDisplay key={`word_${word.id}`}
-                word={word} />
+              <WordDisplay key={ `word_${word.id}` }
+                word={ word } />
             );
           })
         }

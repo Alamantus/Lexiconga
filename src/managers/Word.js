@@ -3,7 +3,7 @@ import store from 'store';
 import wordDb from './WordDatabase';
 
 export class Word {
-  constructor ({name = '', pronunciation = '', partOfSpeech = '', definition = '', details = ''}) {
+  constructor ({ name = '', pronunciation = '', partOfSpeech = '', definition = '', details = '' }) {
     this.name = name;
     this.pronunciation = pronunciation;
     this.partOfSpeech = partOfSpeech;
@@ -17,7 +17,7 @@ export class Word {
     this.modifiedTime = null;
 
     return wordDb.words.add(this)
-    .then(id => {
+    .then((id) => {
       this.id = id;
       console.log('Word added successfully');
     })
@@ -31,7 +31,7 @@ export class Word {
     this.modifiedTime = timestampInSeconds;
 
     return wordDb.words.put(this, wordId)
-    .then(id => {
+    .then((id) => {
       console.log('Word modified successfully');
     })
     .catch(error => {

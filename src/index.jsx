@@ -10,9 +10,9 @@ if (process.env.NODE_ENV !== 'production') {
   require('inferno-devtools');
 }
 
-import {Header} from './components/structure/Header';
-import {MainDisplay} from './components/MainDisplay';
-import {Footer} from './components/structure/Footer';
+import { Header } from './components/structure/Header';
+import { MainDisplay } from './components/MainDisplay';
+import { Footer } from './components/structure/Footer';
 
 class App extends Component {
   constructor (props) {
@@ -29,7 +29,7 @@ class App extends Component {
   }
 
   get dictionaryInfo () {
-    const {name, specification, description, partsOfSpeech} = this.state;
+    const { name, specification, description, partsOfSpeech } = this.state;
     const info = {
       name,
       specification,
@@ -50,7 +50,7 @@ class App extends Component {
     // const {searchIn, searchTerm, filteredPartsOfSpeech} = this.state.searchConfig;
 
     // TODO: Sort out searching to remove this temporary solution.
-    dictionary.wordsPromise.then(words => {
+    dictionary.wordsPromise.then((words) => {
       this.setState({
         displayedWords: words,
       })
@@ -68,7 +68,7 @@ class App extends Component {
       <div>
         <Header
           partsOfSpeech={ this.state.partsOfSpeech }
-          search={ searchConfig => this.search(searchConfig) } />
+          search={ (searchConfig) => this.search(searchConfig) } />
 
         <MainDisplay
           dictionaryInfo={ this.dictionaryInfo }

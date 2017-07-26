@@ -3,16 +3,16 @@ import Component from 'inferno-component';
 import marked from 'marked';
 
 import idManager from '../../managers/IDManager';
-import {Word} from '../../managers/Word';
+import { Word } from '../../managers/Word';
 
-import {WordForm} from '../management/WordForm';
+import { WordForm } from '../management/WordForm';
 
 export class WordDisplay extends Component {
   constructor (props) {
     super(props);
 
     this.state = {
-      isEditing: false
+      isEditing: false,
     }
   }
 
@@ -22,7 +22,7 @@ export class WordDisplay extends Component {
 
         <header className='card-header'>
           <h3 className='card-header-title'>
-            {this.props.word.name}
+            { this.props.word.name }
           </h3>
         </header>
 
@@ -47,14 +47,14 @@ export class WordDisplay extends Component {
             {(this.props.word.definition)
               && (
                 <p>
-                  {this.props.word.definition}
+                  { this.props.word.definition }
                 </p>
                 )}
 
             {(this.props.word.details)
               && (
                 <p>
-                  {this.props.word.details}
+                  { this.props.word.details }
                 </p>
                 )}
           </div>

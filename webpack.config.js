@@ -13,97 +13,101 @@ const BUILD_DIR = path.resolve(__dirname, 'public');
 const APP_DIR = path.resolve(__dirname, 'src');
 
 const webpackConfig = {
-  entry: APP_DIR + '/index.jsx'
-, output: {
-    path: BUILD_DIR
-  , filename: 'lexiconga.js'
-  }
-, module: {
+  entry: APP_DIR + '/index.jsx',
+  
+  output: {
+    path: BUILD_DIR,
+    filename: 'lexiconga.js',
+  },
+
+  module: {
     rules: [
       {
-        test: (/\.scss$/)
-      , exclude: (/node_modules/)
-      , use: [
-          'style-loader'
-        , 'css-loader'
-        , {
-            loader: 'sass-loader'
-          , options: {
+        test: (/\.scss$/),
+        exclude: (/node_modules/),
+        use: [
+          'style-loader',
+          'css-loader',
+          {
+            loader: 'sass-loader',
+            options: {
               file: './src/sass/styles.scss',
               outFile: './public/styles.css',
-              outputStyle: 'compressed'
-            }
-          }
-        ]
-      }
-    , {
-        test: (/\.html$/)
-      , exclude: (/node_modules/)
-      , use: [
-          'html-loader'
-        ]
-      }
-    , {
-        test: (/\.txt$/)
-      , exclude: (/node_modules/)
-      , use: [
+              outputStyle: 'compressed',
+            },
+          },
+        ],
+      },
+      {
+        test: (/\.html$/),
+        exclude: (/node_modules/),
+        use: [
+          'html-loader',
+        ],
+      },
+      {
+        test: (/\.txt$/),
+        exclude: (/node_modules/),
+        use: [
           'raw-loader'
-        ]
-      }
-    , {
-        test: (/\.jsx?$/)
-      , exclude: (/node_modules/)
-      , use: [
+        ],
+      },
+      {
+        test: (/\.jsx?$/),
+        exclude: (/node_modules/),
+        use: [
           {
-            loader: 'babel-loader'
-          , options: {
+            loader: 'babel-loader',
+            options: {
               presets: [
-                'es2016'
-              ]
-            , plugins: [
-                'inferno'
-              ]
-            }
+                'es2016',
+              ],
+              plugins: [
+                'inferno',
+              ],
+            },
           }
-        ]
-      }
-    , {
-        test: (/\.(png|woff|woff2|eot|ttf|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/)
-      , use: [
+        ],
+      },
+      {
+        test: (/\.(png|woff|woff2|eot|ttf|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/),
+        use: [
           {
-            loader: 'url-loader'
-          , options: {
-              limit: 100000
-            , mimetype: 'application/font-woff'
-            , name: './assets/fonts/[name].[ext]'
+            loader: 'url-loader',
+            options: {
+              limit: 100000,
+              mimetype: 'application/font-woff',
+              name: './assets/fonts/[name].[ext]',
             }
           }
         ]
       }
     ]
-  }
-, resolve: {
+  },
+
+  resolve: {
     extensions: [
-      '.js'
-    , '.jsx'
+      '.js',
+      '.jsx',
     ]
-  }
-, plugins: [
+  },
+
+  plugins: [
     new webpack.DefinePlugin({
       'process.env': {
-        'NODE_ENV': JSON.stringify(BUILDMODE)
-      }
-    })
-  ]
+        'NODE_ENV': JSON.stringify(BUILDMODE),
+      },
+    }),
+  ],
 };
 
 if (BUILDMODE === 'production') {
   webpackConfig.plugins.push(
     new webpack.optimize.UglifyJsPlugin({
-      mangle: true
-    , compress: {
-        warnings: false
-      }
+      mangle: true,
+      compress: {
+        warnings: false,
+      },
     })
   );
 

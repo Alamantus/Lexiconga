@@ -4,10 +4,10 @@ import wordDb from './WordDatabase';
 import idManager from './IDManager';
 
 const defaultDictionary = {
-  name: 'New'
-, specification: 'Dictionary'
-, description: 'A new dictionary.'
-, partsOfSpeech: ['Noun', 'Adjective', 'Verb']
+  name: 'New',
+  specification: 'Dictionary',
+  description: 'A new dictionary.',
+  partsOfSpeech: ['Noun', 'Adjective', 'Verb'],
 }
 
 class DictionaryData {
@@ -80,8 +80,8 @@ class DictionaryData {
     if (Array.isArray(partOfSpeech)) {
       words = words.anyOf(partOfSpeech);
     } else {
-      assert(typeof partOfSpeech === 'string'
-        , 'You must use either a string or an array when searching for words with a particular part of speech');
+      assert(typeof partOfSpeech === 'string',
+        'You must use either a string or an array when searching for words with a particular part of speech');
       
       words = words.equals(partOfSpeech);
     }

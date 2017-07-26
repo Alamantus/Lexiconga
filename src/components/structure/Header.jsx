@@ -1,7 +1,7 @@
 import Inferno from 'inferno';
 import Component from 'inferno-component';
 
-import {SearchBox} from '../management/SearchBox';
+import { SearchBox } from '../management/SearchBox';
 
 export class Header extends Component {
   constructor (props) {
@@ -25,12 +25,12 @@ export class Header extends Component {
           <div className='nav-item'>
             <SearchBox
               partsOfSpeech={ this.props.partsOfSpeech }
-              search={ searchConfig => this.props.search(searchConfig) } />
+              search={ (searchConfig) => this.props.search(searchConfig) } />
           </div>
         </div>
 
         <span className={`nav-toggle${this.state.displayNavMenu ? ' is-active' : ''}`}
-          onClick={() => this.setState({ displayNavMenu: !this.state.displayNavMenu })}>
+          onClick={ () => this.setState({ displayNavMenu: !this.state.displayNavMenu }) }>
           <span></span>
           <span></span>
           <span></span>

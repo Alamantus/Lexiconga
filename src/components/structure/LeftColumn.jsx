@@ -9,7 +9,7 @@ export class LeftColumn extends Component {
   render () {
     return (
       <div className='column is-one-third'>
-        {this.props.children}
+        { this.props.children }
       </div>
     );
   }

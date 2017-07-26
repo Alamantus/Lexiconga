@@ -3,10 +3,10 @@ import Component from 'inferno-component';
 import marked from 'marked';
 
 const DISPLAY = {
-  NONE: false
-, DESCRIPTION: 1
-, DETAILS: 2
-, STATS: 3
+  NONE: false,
+  DESCRIPTION: 1,
+  DETAILS: 2,
+  STATS: 3,
 }
 
 export class DictionaryDetails extends Component {
@@ -14,15 +14,15 @@ export class DictionaryDetails extends Component {
     super(props);
 
     this.state = {
-      currentDisplay: DISPLAY.NONE
+      currentDisplay: DISPLAY.NONE,
     }
 
     this._descriptionHTML = marked(props.description);
   }
 
   componentWillReceiveProps (nextProps) {
-    const currentDescription = this.props.description
-    ,     nextDescription = nextProps.description;
+    const currentDescription = this.props.description,
+      nextDescription = nextProps.description;
 
     if (currentDescription !== nextDescription) {
       this._descriptionHTML = marked(nextProps.description);
@@ -33,7 +33,7 @@ export class DictionaryDetails extends Component {
     display = (this.state.currentDisplay !== display) ? display : DISPLAY.NONE;
 
     this.setState({
-      currentDisplay: display
+      currentDisplay: display,
     });
   }
 
@@ -61,9 +61,9 @@ export class DictionaryDetails extends Component {
           if (this.props.details.hasOwnProperty('custom')) {
             let customTabsJSX = this.props.details.custom.map((tab) => {
               return (
-                <li key={'customTab' + Date.now().toString()}>
+                <li key={ 'customTab' + Date.now().toString() }>
                   <a>
-                    {tab.name}
+                    { tab.name }
                   </a>
                 </li>
               );
@@ -75,7 +75,7 @@ export class DictionaryDetails extends Component {
                   Additional
                 </p>
                 <ul className="menu-list">
-                  {customTabsJSX}
+                  { customTabsJSX }
                 </ul>
               </div>
             );
@@ -91,7 +91,7 @@ export class DictionaryDetails extends Component {
                 <li><a>Grammar</a></li>
               </ul>
 
-              {additionalMenu}
+              { additionalMenu }
 
             </aside>
           );
@@ -106,8 +106,8 @@ export class DictionaryDetails extends Component {
 
           displayJSX = (
             <div className='columns'>
-              {menu}
-              {content}
+              { menu }
+              { content }
             </div>
           );
           break;
@@ -125,7 +125,7 @@ export class DictionaryDetails extends Component {
 
       return (
         <div className='box'>
-          {displayJSX}
+          { displayJSX }
         </div>
       )
     }
@@ -139,7 +139,7 @@ export class DictionaryDetails extends Component {
           <div className='level-left'>
             <div className='level-item'>
               <h2 className='title is-2'>
-                {this.props.name} {this.props.specification}
+                { this.props.name } { this.props.specification }
               </h2>
             </div>
           </div>
@@ -159,25 +159,25 @@ export class DictionaryDetails extends Component {
 
         <div className='tabs is-toggle'>
           <ul>
-            <li className={(this.state.currentDisplay === DISPLAY.DESCRIPTION) ? 'is-active' : null}>
-              <a onClick={this.toggleDisplay.bind(this, DISPLAY.DESCRIPTION)}>
+            <li className={ (this.state.currentDisplay === DISPLAY.DESCRIPTION) ? 'is-active' : null }>
+              <a onClick={ this.toggleDisplay.bind(this, DISPLAY.DESCRIPTION) }>
                 <span>Description</span>
               </a>
             </li>
-            <li className={(this.state.currentDisplay === DISPLAY.DETAILS) ? 'is-active' : null}>
-              <a onClick={this.toggleDisplay.bind(this, DISPLAY.DETAILS)}>
+            <li className={ (this.state.currentDisplay === DISPLAY.DETAILS) ? 'is-active' : null }>
+              <a onClick={ this.toggleDisplay.bind(this, DISPLAY.DETAILS) }>
                 <span>Details</span>
               </a>
             </li>
-            <li className={(this.state.currentDisplay === DISPLAY.STATS) ? 'is-active' : null}>
-              <a onClick={this.toggleDisplay.bind(this, DISPLAY.STATS)}>
+            <li className={ (this.state.currentDisplay === DISPLAY.STATS) ? 'is-active' : null }>
+              <a onClick={ this.toggleDisplay.bind(this, DISPLAY.STATS) }>
                 <span>Stats</span>
               </a>
             </li>
           </ul>
         </div>
 
-        {this.displayInfo()}
+        { this.displayInfo() }
 
       </div>
     );
