@@ -31,7 +31,7 @@ export class WordDisplay extends Component {
             {(this.props.word.pronunciation || this.props.word.partOfSpeech)
               && (<p>
                     {(this.props.word.partOfSpeech)
-                      ? (<small>this.props.word.partOfSpeech</small>)
+                      ? (<small>{ this.props.word.partOfSpeech }</small>)
                       : ''}
                   
                     {(this.props.word.partOfSpeech && this.props.word.pronunciation)
@@ -39,7 +39,7 @@ export class WordDisplay extends Component {
                       : ''}
                   
                     {(this.props.word.pronunciation)
-                      ? (<small>this.props.word.pronunciation</small>)
+                      ? (<small>{ this.props.word.pronunciation }</small>)
                       : ''}
                   </p>
                 )}

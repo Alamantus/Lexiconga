@@ -99,6 +99,12 @@ const webpackConfig = {
       },
     }),
   ],
+
+  devServer: {
+    contentBase: path.join(__dirname, "public"),
+    compress: true,
+    port: 3013,
+  },
 };
 
 if (BUILDMODE === 'production') {

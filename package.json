@@ -6,6 +6,7 @@
   "main": "src/app.js",
   "scripts": {
     "serve": "node start-server.js",
+    "dev": "./node_modules/.bin/webpack-dev-server",
     "pack": "node ./node_modules/webpack/bin/webpack.js -d --progress --display-error-details",
     "watch": "node ./node_modules/webpack/bin/webpack.js -d --progress --watch",
     "build": "node ./node_modules/webpack/bin/webpack.js -p --progress"
@@ -34,7 +35,8 @@
     "sass-loader": "^6.0.6",
     "style-loader": "^0.18.2",
     "url-loader": "^0.5.9",
-    "webpack": "^3.0.0"
+    "webpack": "^3.0.0",
+    "webpack-dev-server": "^2.6.1"
   },
   "dependencies": {
     "babel-polyfill": "^6.23.0",
