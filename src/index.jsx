@@ -6,6 +6,8 @@ import Component from 'inferno-component';
 
 import dictionary from './managers/DictionaryData';
 
+import { Updater } from './Updater';
+
 if (process.env.NODE_ENV !== 'production') {
   require('inferno-devtools');
 }
@@ -26,6 +28,8 @@ class App extends Component {
       displayedWords: [],
       searchConfig: null,
     }
+
+    this.updater = new Updater(this, dictionary);
   }
 
   get dictionaryInfo () {
@@ -68,12 +72,15 @@ class App extends Component {
       <div>
         <Header
           partsOfSpeech={ this.state.partsOfSpeech }
-          search={ (searchConfig) => this.search(searchConfig) } />
+          search={ (searchConfig) => this.search(searchConfig) }
+        />
 
         <MainDisplay
           dictionaryInfo={ this.dictionaryInfo }
           wordsToDisplay={ this.state.displayedWords }
-          updateDisplay={ this.updateDisplayedWords.bind(this) } />
+          updateDisplay={ this.updateDisplayedWords.bind(this) }
+          updater={ this.updater }
+        />
 
         <Footer />
       </div>

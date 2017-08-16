@@ -7,7 +7,7 @@ import { WordForm } from './management/WordForm';
 import { DictionaryDetails } from './display/DictionaryDetails';
 import { WordsList } from './display/WordsList';
 
-export const MainDisplay = ({ dictionaryInfo, wordsToDisplay, updateDisplay, lastRender }) => {
+export const MainDisplay = ({ dictionaryInfo, wordsToDisplay, updateDisplay, updater, lastRender }) => {
   return (
     <section className='section'>
       <div className='container'>
@@ -22,9 +22,11 @@ export const MainDisplay = ({ dictionaryInfo, wordsToDisplay, updateDisplay, las
 
           <RightColumn>
             <DictionaryDetails
+            updater={ updater }
               name={ dictionaryInfo.name }
               specification={ dictionaryInfo.specification }
               description={ dictionaryInfo.description }
+              partsOfSpeech={ dictionaryInfo.partsOfSpeech }
               details={{
                 custom: [
                   {

@@ -2,6 +2,8 @@ import Inferno from 'inferno';
 import Component from 'inferno-component';
 import marked from 'marked';
 
+import { EditDictionaryModal } from './EditDictionaryModal';
+
 const DISPLAY = {
   NONE: false,
   DESCRIPTION: 1,
@@ -132,6 +134,8 @@ export class DictionaryDetails extends Component {
   }
 
   render () {
+    const { currentDisplay } = this.state;
+
     return (
       <div className='box'>
 
@@ -146,30 +150,33 @@ export class DictionaryDetails extends Component {
 
           <div className='level-right'>
             <div className='level-item'>
-              <div className='field'>
-                <p className='control'>
-                  <a className='button'>
-                    Edit Dictionary
-                  </a>
-                </p>
-              </div>
+
+              <EditDictionaryModal
+                updater={ this.props.updater }
+                name={ this.props.name }
+                specification={ this.props.specification }
+                description={ this.props.description }
+                partsOfSpeech={ this.props.partsOfSpeech }
+                details={ this.props.details }
+              />
+
             </div>
           </div>
         </div>
 
         <div className='tabs is-toggle'>
           <ul>
-            <li className={ (this.state.currentDisplay === DISPLAY.DESCRIPTION) ? 'is-active' : null }>
+            <li className={ (currentDisplay === DISPLAY.DESCRIPTION) ? 'is-active' : null }>
               <a onClick={ this.toggleDisplay.bind(this, DISPLAY.DESCRIPTION) }>
                 <span>Description</span>
               </a>
             </li>
-            <li className={ (this.state.currentDisplay === DISPLAY.DETAILS) ? 'is-active' : null }>
+            <li className={ (currentDisplay === DISPLAY.DETAILS) ? 'is-active' : null }>
               <a onClick={ this.toggleDisplay.bind(this, DISPLAY.DETAILS) }>
                 <span>Details</span>
               </a>
             </li>
-            <li className={ (this.state.currentDisplay === DISPLAY.STATS) ? 'is-active' : null }>
+            <li className={ (currentDisplay === DISPLAY.STATS) ? 'is-active' : null }>
               <a onClick={ this.toggleDisplay.bind(this, DISPLAY.STATS) }>
                 <span>Stats</span>
               </a>
