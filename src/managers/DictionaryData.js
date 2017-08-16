@@ -37,7 +37,9 @@ class DictionaryData {
 
   set name (value) {
     assert(typeof value === 'string', 'Name must be passed as a string.');
-    return store.set('Lexiconga', { name: value });
+    const updatedValues = store.get('Lexiconga');
+    updatedValues.name = value.trim();
+    return store.set('Lexiconga', updatedValues);
   }
 
   get specification () {
@@ -47,7 +49,9 @@ class DictionaryData {
 
   set specification (value) {
     assert(typeof value === 'string', 'Specification must be passed as a string.');
-    return store.set('Lexiconga', { specification: value });
+    const updatedValues = store.get('Lexiconga');
+    updatedValues.specification = value.trim();
+    return store.set('Lexiconga', updatedValues);
   }
 
   get description () {
@@ -57,7 +61,9 @@ class DictionaryData {
 
   set description (value) {
     assert(typeof value === 'string', 'Description must be passed as a string.');
-    return store.set('Lexiconga', { description: value });
+    const updatedValues = store.get('Lexiconga');
+    updatedValues.description = value.trim();
+    return store.set('Lexiconga', updatedValues);
   }
 
   get partsOfSpeech () {
@@ -67,7 +73,11 @@ class DictionaryData {
 
   set partsOfSpeech (array) {
     assert(Array.isArray(array), 'Parts of Speech must be passed as an array');
-    return store.set('Lexiconga', { partsOfSpeech: array });
+    const updatedValues = store.get('Lexiconga');
+    updatedValues.partsOfSpeech = array
+      .filter((value) => { return value !== '' })
+      .map((value) => { return value.trim() });
+    return store.set('Lexiconga', updatedValues);
   }
 
   get wordsPromise () {
