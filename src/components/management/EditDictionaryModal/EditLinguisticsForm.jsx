@@ -1,8 +1,6 @@
 import Inferno from 'inferno';
 import Component from 'inferno-component';
 
-import dictionary from '../../../../managers/DictionaryData';
-
 export const EditLinguisticsForm = ({
   editDictionaryModal,
   partsOfSpeech,

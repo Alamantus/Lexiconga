@@ -2,9 +2,9 @@ import Inferno from 'inferno';
 import Component from 'inferno-component';
 import marked from 'marked';
 
-import helper from '../../../../Helper';
+import helper from '../../../Helper';
 
-import { Modal } from '../../../structure/Modal';
+import { Modal } from '../../structure/Modal';
 
 import { EditDictionaryForm } from './EditDictionaryForm';
 import { EditLinguisticsForm } from './EditLinguisticsForm';
