@@ -2,7 +2,8 @@ import Inferno from 'inferno';
 import Component from 'inferno-component';
 import marked from 'marked';
 
-import { EditDictionaryModal } from './EditDictionaryModal';
+import { EditDictionaryModal } from '../../management/EditDictionaryModal';
+import { DetailsSection } from './DetailsSection';
 
 const DISPLAY = {
   NONE: false,
@@ -51,7 +52,7 @@ export class DictionaryDetails extends Component {
             <div>
               <div className="content"
                 dangerouslySetInnerHTML={{
-                  __html: this._descriptionHTML
+                  __html: this._descriptionHTML,
                 }} />
             </div>
           );
@@ -59,59 +60,7 @@ export class DictionaryDetails extends Component {
         }
 
         case DISPLAY.DETAILS : {
-          let additionalMenu;
-          if (this.props.details.hasOwnProperty('custom')) {
-            let customTabsJSX = this.props.details.custom.map((tab) => {
-              return (
-                <li key={ 'customTab' + Date.now().toString() }>
-                  <a>
-                    { tab.name }
-                  </a>
-                </li>
-              );
-            });
-
-            additionalMenu = (
-              <div>
-                <p className="menu-label">
-                  Additional
-                </p>
-                <ul className="menu-list">
-                  { customTabsJSX }
-                </ul>
-              </div>
-            );
-          }
-
-          const menu = (
-            <aside className="column is-one-quarter menu">
-              <p className="menu-label">
-                Linguistics
-              </p>
-              <ul className="menu-list">
-                <li><a className="is-active">Phonology</a></li>
-                <li><a>Grammar</a></li>
-              </ul>
-
-              { additionalMenu }
-
-            </aside>
-          );
-
-          let content = (
-            <div className='column'>
-              <p>
-                Details Content!
-              </p>
-            </div>
-          );
-
-          displayJSX = (
-            <div className='columns'>
-              { menu }
-              { content }
-            </div>
-          );
+          displayJSX = <DetailsSection details={ this.props.details } />;
           break;
         }
 
