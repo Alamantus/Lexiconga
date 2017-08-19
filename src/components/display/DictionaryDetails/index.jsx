@@ -1,6 +1,7 @@
 import Inferno from 'inferno';
 import Component from 'inferno-component';
 import marked from 'marked';
+import sanitizeHtml from 'sanitize-html';
 
 import { EditDictionaryModal } from '../../management/EditDictionaryModal';
 import { DetailsSection } from './DetailsSection';
@@ -20,7 +21,7 @@ export class DictionaryDetails extends Component {
       currentDisplay: DISPLAY.NONE,
     }
 
-    this._descriptionHTML = marked(props.description);
+    this._descriptionHTML = marked(sanitizeHtml(props.description));
   }
 
   componentWillReceiveProps (nextProps) {
@@ -28,7 +29,7 @@ export class DictionaryDetails extends Component {
       nextDescription = nextProps.description;
 
     if (currentDescription !== nextDescription) {
-      this._descriptionHTML = marked(nextProps.description);
+      this._descriptionHTML = marked(sanitizeHtml(nextProps.description));
     }
   }
 

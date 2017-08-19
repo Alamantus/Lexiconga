@@ -1,6 +1,7 @@
 import Inferno from 'inferno';
 import Component from 'inferno-component';
 import marked from 'marked';
+import sanitizeHtml from 'sanitize-html';
 
 import { PhonologyDisplay } from './PhonologyDisplay';
 
@@ -48,10 +49,11 @@ export class DetailsSection extends Component {
         }
       }
     } else {
+      const sanitizedCustomTabContent = sanitizeHtml(details.custom[currentDisplay - defaultMenuLength].content);
       return (
         <div className='content'>
           <div dangerouslySetInnerHTML={{
-            __html: marked(details.custom[currentDisplay - defaultMenuLength].content),
+            __html: marked(sanitizedCustomTabContent),
           }} />
         </div>
       );

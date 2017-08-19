@@ -1,6 +1,7 @@
 import Inferno from 'inferno';
 import Component from 'inferno-component';
 import marked from 'marked';
+import sanitizeHtml from 'sanitize-html';
 
 export const PhonologyDisplay = ({ phonologyContent }) => {
   return (
@@ -128,7 +129,7 @@ export const PhonologyDisplay = ({ phonologyContent }) => {
                     <strong>Exceptions:</strong>
                     <div className="content"
                       dangerouslySetInnerHTML={{
-                        __html: marked(phonologyContent.phonotactics.exceptions),
+                        __html: marked(sanitizeHtml(phonologyContent.phonotactics.exceptions)),
                       }} />
                   </div>
                 </div>
