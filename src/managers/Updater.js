@@ -33,7 +33,7 @@ export class Updater {
 
       if (dicitonaryDetails.specification) {
         updatedDetails['specification'] = dicitonaryDetails.specification;
-        this.dicitonary.specification = dicitonaryDetails.specification;
+        this.dictionary.specification = dicitonaryDetails.specification;
       }
 
       if (dicitonaryDetails.description) {
@@ -46,7 +46,7 @@ export class Updater {
         this.dictionary.partsOfSpeech = dicitonaryDetails.partsOfSpeech;
       }
 
-      if (helper.objectIsEmpty(updatedDetails)) {
+      if (updatedDetails.isEmpty()) {
         reject('No dictionary details have changed.');
       } else {
         this.app.setState(updatedDetails, () => {

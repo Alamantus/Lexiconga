@@ -110,7 +110,7 @@ export class EditDictionaryModal extends Component {
         .map((value) => { return value.trim() });
     }
 
-    console.log(updatedDetails);
+    // console.log(updatedDetails);
 
     this.props.updater.updateDictionaryDetails(updatedDetails)
       .then(() => {
