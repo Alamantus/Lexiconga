@@ -109,24 +109,44 @@ export class IPAField extends Component {
       this.setState({ value: val }, () => {
         this.field.focus();
         this.field.setSelectionRange(pos, pos);
+
+        if (this.props.onInput) {
+          this.props.onInput(this.state.value);
+        }
       });
+    }
+  }
+
+  onChange () {
+    if (this.props.onChange) {
+      this.props.onChange(this.state.value);
     }
   }
 
   render () {
     return (
       <div className='field'>
-        <label className='label'>Pronunciation</label>
-        <p className='control'>
-          <input className='input' type='text'
-            placeholder='[prə.ˌnʌn.si.ˈeɪ.ʃən]'
+        <label className='label' htmlFor={ this.props.id || null }>
+          { this.props.label || 'Pronunciation' }
+        </label>
+        {
+          this.props.helpText
+          && (
+            <p className='help'>
+              { this.props.helpText }
+            </p>
+          )
+        }
+        <div className='control'>
+          <input className='input' id={ this.props.id || null } type='text'
+            placeholder={ this.props.placeholder || '[prə.ˌnʌn.si.ˈeɪ.ʃən]' }
             disabled={ !!this.props.isDisplayOnly }
             ref={ (input) => this.field = input }
             value={ this.state.value }
             onInput={ (event) => this.onInput(event) }
             onKeyDown={ (event) => this.onInput(event) }
-            onChange={ () => this.props.onChange(this.state.value) } />
-        </p>
+            onChange={ () => this.onChange() } />
+        </div>
         { this.showButtons() }
       </div>
     );
