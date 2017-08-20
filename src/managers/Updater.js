@@ -46,6 +46,23 @@ export class Updater {
         this.dictionary.partsOfSpeech = dicitonaryDetails.partsOfSpeech;
       }
 
+      if (dicitonaryDetails.consonants) {
+        this.dictionary.consonants = dicitonaryDetails.consonants;
+        updatedDetails['details'] = this.dictionary.details;
+      }
+
+      if (dicitonaryDetails.vowels) {
+        this.dictionary.vowels = dicitonaryDetails.vowels;
+        updatedDetails['details'] = this.dictionary.details;
+      }
+
+      if (dicitonaryDetails.blends) {
+        this.dictionary.blends = dicitonaryDetails.blends;
+        updatedDetails['details'] = this.dictionary.details;
+      }
+
+      console.log(updatedDetails);
+
       if (updatedDetails.isEmpty()) {
         reject('No dictionary details have changed.');
       } else {

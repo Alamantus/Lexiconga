@@ -8,10 +8,38 @@ const defaultDictionary = {
   specification: 'Dictionary',
   description: 'A new dictionary.',
   partsOfSpeech: ['Noun', 'Adjective', 'Verb'],
-}
+  details: {
+    phonology: {
+      consonants: ['b', 'p', 'ɱ', 'ʃ', 'ʁ'],
+      vowels: ['a', 'o', 'e'],
+      blends: ['ae', 'oe', 'ɱʃ', 'pʁ'],
+      phonotactics: {
+        onset: ['none'],
+        nucleus: ['vowels'],
+        coda: ['any'],
+        exceptions: `You can enter exceptions to your phonotactics here using [Markdown](MARKDOWN_LINK)!`,
+      },
+    },
+    orthography: {
+      notes: `You can enter notes on orthography here using [Markdown](MARKDOWN_LINK)!`
+    },
+    grammar: {
+      content: `You can enter grammar rules about your language here using [Markdown](MARKDOWN_LINK)!`,
+    },
+    custom: [
+      {
+        name: 'Example Tab',
+        content: `This is an _example_ tab to show how **tabs** work with [Markdown](MARKDOWN_LINK)!`,
+      }
+    ],
+  },
+  alphabeticalOrder: ['b', 'p', 't', 'd', 'a', 'o', 'j', 'e'],
+};
 
 class DictionaryData {
   constructor () {
+    this.default = defaultDictionary;
+
     if (['emptydb', 'donotsave'].includes(process.env.NODE_ENV)) {
       store.remove('Lexiconga');
     }
@@ -75,6 +103,67 @@ class DictionaryData {
     assert(Array.isArray(array), 'Parts of Speech must be passed as an array');
     const updatedValues = store.get('Lexiconga');
     updatedValues.partsOfSpeech = array
+      .filter((value) => { return value !== '' })
+      .map((value) => { return value.trim() });
+    return store.set('Lexiconga', updatedValues);
+  }
+
+  get details () {
+    return store.get('Lexiconga').details
+      || defaultDictionary.details;
+  }
+
+  get consonants () {
+    return store.get('Lexiconga').details.phonology.consonants
+      || defaultDictionary.details.phonology.consonants;
+  }
+
+  set consonants (array) {
+    assert(Array.isArray(array), 'Consonants must be passed as an array');
+    const updatedValues = store.get('Lexiconga');
+    updatedValues.details.phonology.consonants = array
+      .filter((value) => { return value !== '' })
+      .map((value) => { return value.trim() });
+    return store.set('Lexiconga', updatedValues);
+  }
+
+  get vowels () {
+    return store.get('Lexiconga').details.phonology.vowels
+      || defaultDictionary.details.phonology.vowels;
+  }
+
+  set vowels (array) {
+    assert(Array.isArray(array), 'Vowels must be passed as an array');
+    const updatedValues = store.get('Lexiconga');
+    updatedValues.details.phonology.vowels = array
+      .filter((value) => { return value !== '' })
+      .map((value) => { return value.trim() });
+    return store.set('Lexiconga', updatedValues);
+  }
+
+  get blends () {
+    return store.get('Lexiconga').details.phonology.blends
+      || defaultDictionary.details.phonology.blends;
+  }
+
+  set blends (array) {
+    assert(Array.isArray(array), 'Blends must be passed as an array');
+    const updatedValues = store.get('Lexiconga');
+    updatedValues.details.phonology.blends = array
+      .filter((value) => { return value !== '' })
+      .map((value) => { return value.trim() });
+    return store.set('Lexiconga', updatedValues);
+  }
+
+  get alphabeticalOrder () {
+    return store.get('Lexiconga').alphabeticalOrder
+      || defaultDictionary.alphabeticalOrder;
+  }
+
+  set alphabeticalOrder (array) {
+    assert(Array.isArray(array), 'Parts of Speech must be passed as an array');
+    const updatedValues = store.get('Lexiconga');
+    updatedValues.alphabeticalOrder = array
       .filter((value) => { return value !== '' })
       .map((value) => { return value.trim() });
     return store.set('Lexiconga', updatedValues);

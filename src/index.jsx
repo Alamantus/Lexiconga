@@ -24,6 +24,9 @@ class App extends Component {
       specification: dictionary.specification,
       description: dictionary.description,
       partsOfSpeech: dictionary.partsOfSpeech,
+      details: dictionary.details,
+      alphabeticalOrder: dictionary.alphabeticalOrder,
+
       displayedWords: [],
       searchConfig: null,
     }
@@ -32,15 +35,23 @@ class App extends Component {
   }
 
   get dictionaryInfo () {
-    const { name, specification, description, partsOfSpeech } = this.state;
-    const info = {
+    const {
       name,
       specification,
       description,
       partsOfSpeech,
-    };
+      details,
+      alphabeticalOrder,
+    } = this.state;
 
-    return info;
+    return {
+      name,
+      specification,
+      description,
+      partsOfSpeech,
+      details,
+      alphabeticalOrder,
+    };
   }
 
   updatePartsOfSpeech () {
