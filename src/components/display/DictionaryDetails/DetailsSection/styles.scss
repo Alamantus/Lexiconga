@@ -1,0 +1,11 @@
+@import '../../../../../node_modules/bulma/bulma';
+
+.details-menu {
+  @extend .menu;
+}
+
+.details-menu,
+.details-display {
+  max-height: 500px;
+  overflow-y: auto;
+}

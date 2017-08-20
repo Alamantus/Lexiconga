@@ -1,0 +1,5 @@
+@import '../../../../node_modules/bulma/bulma';
+
+.details-box {
+  @extend .box;
+}

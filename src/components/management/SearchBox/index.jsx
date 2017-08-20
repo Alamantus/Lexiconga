@@ -1,6 +1,8 @@
 import Inferno from 'inferno';
 import Component from 'inferno-component';
 
+import './styles.scss';
+
 import Helper from '../../../Helper';
 
 import dictionary from '../../../managers/DictionaryData';
@@ -249,7 +251,7 @@ export class SearchBox extends Component {
       <div>
         <div className='field has-addons is-hidden-touch'>
           <p className='control'>
-            <input className='input' type='text' readonly={ true }
+            <input className='open-search-input' type='text' readonly={ true }
               value={ this.state.searchTerm }
               onClick={ this.showHeader.bind(this) } />
           </p>

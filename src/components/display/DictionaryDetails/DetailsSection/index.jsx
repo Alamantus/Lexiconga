@@ -3,6 +3,8 @@ import Component from 'inferno-component';
 import marked from 'marked';
 import sanitizeHtml from 'sanitize-html';
 
+import './styles.scss';
+
 import { PhonologyDisplay } from './PhonologyDisplay';
 
 const DISPLAY = {
@@ -32,35 +34,7 @@ export class DetailsSection extends Component {
     });
   }
 
-  displayDetails () {
-    const { currentDisplay } = this.state;
-    const { details } = this.props;
-    const defaultMenuLength = this.defaultMenuItems.length;
-
-    if (currentDisplay < defaultMenuLength) {
-      switch (this.defaultMenuItems[currentDisplay]) {
-        case 'Phonology': {
-          return <PhonologyDisplay phonologyContent={details.phonology} />
-          break;
-        }
-        case 'Grammar': {
-          return 'Grammar content!';
-          break;
-        }
-      }
-    } else {
-      const sanitizedCustomTabContent = sanitizeHtml(details.custom[currentDisplay - defaultMenuLength].content);
-      return (
-        <div className='content'>
-          <div dangerouslySetInnerHTML={{
-            __html: marked(sanitizedCustomTabContent),
-          }} />
-        </div>
-      );
-    }
-  }
-
-  render () {
+  displayMenu () {
     const { details } = this.props;
 
     let additionalMenu = (
@@ -87,8 +61,8 @@ export class DetailsSection extends Component {
       </div>
     );
 
-    const menu = (
-      <div className='menu'>
+    return (
+      <div className='details-menu'>
         <p className='menu-label'>
           Linguistics
         </p>
@@ -110,11 +84,49 @@ export class DetailsSection extends Component {
 
       </div>
     );
+  }
 
+  displayDetails () {
+    const { currentDisplay } = this.state;
+    const { details } = this.props;
+    const defaultMenuLength = this.defaultMenuItems.length;
+
+    let detailsDisplay = '';
+
+    if (currentDisplay < defaultMenuLength) {
+      switch (this.defaultMenuItems[currentDisplay]) {
+        case 'Phonology': {
+          detailsDisplay = <PhonologyDisplay phonologyContent={details.phonology} />
+          break;
+        }
+        case 'Grammar': {
+          detailsDisplay = 'Grammar content!';
+          break;
+        }
+      }
+    } else {
+      const sanitizedCustomTabContent = sanitizeHtml(details.custom[currentDisplay - defaultMenuLength].content);
+      detailsDisplay = (
+        <div className='content'>
+          <div dangerouslySetInnerHTML={{
+            __html: marked(sanitizedCustomTabContent),
+          }} />
+        </div>
+      );
+    }
+
+    return (
+      <div className='details-display'>
+        { detailsDisplay }
+      </div>
+    );
+  }
+
+  render () {
     return (
       <div className='columns'>
         <aside className='column is-one-quarter'>
-          { menu }
+          { this.displayMenu() }
         </aside>
         <div className='column'>
           { this.displayDetails() }

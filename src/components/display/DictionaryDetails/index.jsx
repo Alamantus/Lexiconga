@@ -3,6 +3,8 @@ import Component from 'inferno-component';
 import marked from 'marked';
 import sanitizeHtml from 'sanitize-html';
 
+import './styles.scss';
+
 import { EditDictionaryModal } from '../../management/EditDictionaryModal';
 import { DetailsSection } from './DetailsSection';
 
@@ -76,7 +78,7 @@ export class DictionaryDetails extends Component {
       }
 
       return (
-        <div className='box'>
+        <div className='details-box'>
           { displayJSX }
         </div>
       )
