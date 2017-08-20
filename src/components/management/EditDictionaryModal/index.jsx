@@ -26,6 +26,13 @@ export class EditDictionaryModal extends Component {
       specification: props.specification,
       description: props.description,
       partsOfSpeech: props.partsOfSpeech.join('\n'),
+      consonants: props.details.phonology.consonants.join(' '),
+      vowels: props.details.phonology.vowels.join(' '),
+      blends: props.details.phonology.blends.join(' '),
+      onset: props.details.phonology.phonotactics.onset.join(' '),
+      nucleus: props.details.phonology.phonotactics.nucleus.join(' '),
+      coda: props.details.phonology.phonotactics.coda.join(' '),
+      exceptions: props.details.phonology.phonotactics.exceptions,
 
       hasChanged: false,
     }
@@ -67,6 +74,13 @@ export class EditDictionaryModal extends Component {
           <EditLinguisticsForm
             editDictionaryModal={ this }
             partsOfSpeech={ this.state.partsOfSpeech }
+            consonants={ this.state.consonants }
+            vowels={ this.state.vowels }
+            blends={ this.state.blends }
+            onset={ this.state.onset }
+            nucleus={ this.state.nucleus }
+            coda={ this.state.coda }
+            exceptions={ this.state.exceptions }
           />
         );
         break;
@@ -106,6 +120,24 @@ export class EditDictionaryModal extends Component {
 
     if (this.state.partsOfSpeech !== this.props.partsOfSpeech.join('\n')) {
       updatedDetails['partsOfSpeech'] = this.state.partsOfSpeech.split('\n')
+        .filter((value) => { return value !== '' })
+        .map((value) => { return value.trim() });
+    }
+
+    if (this.state.consonants !== this.props.details.phonology.consonants.join(' ')) {
+      updatedDetails['consonants'] = this.state.consonants.split(' ')
+        .filter((value) => { return value !== '' })
+        .map((value) => { return value.trim() });
+    }
+
+    if (this.state.vowels !== this.props.details.phonology.vowels.join(' ')) {
+      updatedDetails['vowels'] = this.state.vowels.split(' ')
+        .filter((value) => { return value !== '' })
+        .map((value) => { return value.trim() });
+    }
+
+    if (this.state.blends !== this.props.details.phonology.blends.join(' ')) {
+      updatedDetails['blends'] = this.state.blends.split(' ')
         .filter((value) => { return value !== '' })
         .map((value) => { return value.trim() });
     }
