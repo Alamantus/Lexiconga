@@ -1,0 +1,10 @@
+/* Modal size override */
+.modal-card {
+  max-height: calc(100vh - 20px) !important;
+}
+
+@media screen and (min-width: 769px), print {
+  .modal-content, .modal-card {
+    width: 750px !important;
+  }
+}
