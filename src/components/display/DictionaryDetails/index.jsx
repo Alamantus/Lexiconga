@@ -23,7 +23,7 @@ export class DictionaryDetails extends Component {
       currentDisplay: DISPLAY.NONE,
     }
 
-    this._descriptionHTML = marked(sanitizeHtml(props.description));
+    this._descriptionHTML = marked(sanitizeHtml(props.description, { allowedTags: [], allowedAttributes: [], }));
   }
 
   componentWillReceiveProps (nextProps) {
@@ -31,7 +31,7 @@ export class DictionaryDetails extends Component {
       nextDescription = nextProps.description;
 
     if (currentDescription !== nextDescription) {
-      this._descriptionHTML = marked(sanitizeHtml(nextProps.description));
+      this._descriptionHTML = marked(sanitizeHtml(nextProps.description, { allowedTags: [], allowedAttributes: [], }));
     }
   }
 

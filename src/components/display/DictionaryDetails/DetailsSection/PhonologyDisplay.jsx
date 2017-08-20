@@ -129,7 +129,7 @@ export const PhonologyDisplay = ({ phonologyContent }) => {
                     <strong>Exceptions:</strong>
                     <div className="content"
                       dangerouslySetInnerHTML={{
-                        __html: marked(sanitizeHtml(phonologyContent.phonotactics.exceptions)),
+                        __html: marked(sanitizeHtml(phonologyContent.phonotactics.exceptions, { allowedTags: [], allowedAttributes: [], })),
                       }} />
                   </div>
                 </div>
