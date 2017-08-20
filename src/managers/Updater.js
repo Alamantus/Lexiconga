@@ -1,4 +1,4 @@
-import helper from './Helper';
+import helper from '../Helper';
 
 export class Updater {
   constructor (appWithDictionaryState, dictionary) {

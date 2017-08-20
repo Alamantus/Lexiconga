@@ -5,8 +5,7 @@ import Inferno from 'inferno';
 import Component from 'inferno-component';
 
 import dictionary from './managers/DictionaryData';
-
-import { Updater } from './Updater';
+import { Updater } from './managers/Updater';
 
 if (process.env.NODE_ENV !== 'production') {
   require('inferno-devtools');
