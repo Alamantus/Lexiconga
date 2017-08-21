@@ -155,13 +155,67 @@ class DictionaryData {
     return store.set('Lexiconga', updatedValues);
   }
 
+  get onset () {
+    return store.get('Lexiconga').details.phonology.phonotactics.onset
+      || defaultDictionary.details.phonology.phonotactics.onset;
+  }
+
+  set onset (array) {
+    assert(Array.isArray(array), 'Onset must be passed as an array');
+    const updatedValues = store.get('Lexiconga');
+    updatedValues.details.phonology.phonotactics.onset = array
+      .filter((value) => { return value !== '' })
+      .map((value) => { return value.trim() });
+    return store.set('Lexiconga', updatedValues);
+  }
+
+  get nucleus () {
+    return store.get('Lexiconga').details.phonology.phonotactics.nucleus
+      || defaultDictionary.details.phonology.phonotactics.nucleus;
+  }
+
+  set nucleus (array) {
+    assert(Array.isArray(array), 'Nucleus must be passed as an array');
+    const updatedValues = store.get('Lexiconga');
+    updatedValues.details.phonology.phonotactics.nucleus = array
+      .filter((value) => { return value !== '' })
+      .map((value) => { return value.trim() });
+    return store.set('Lexiconga', updatedValues);
+  }
+
+  get coda () {
+    return store.get('Lexiconga').details.phonology.phonotactics.coda
+      || defaultDictionary.details.phonology.phonotactics.coda;
+  }
+
+  set coda (array) {
+    assert(Array.isArray(array), 'Coda must be passed as an array');
+    const updatedValues = store.get('Lexiconga');
+    updatedValues.details.phonology.phonotactics.coda = array
+      .filter((value) => { return value !== '' })
+      .map((value) => { return value.trim() });
+    return store.set('Lexiconga', updatedValues);
+  }
+
+  get exceptions () {
+    return store.get('Lexiconga').details.phonology.phonotactics.exceptions
+      || defaultDictionary.details.phonology.phonotactics.exceptions;
+  }
+
+  set exceptions (value) {
+    assert(typeof value === 'string', 'Exceptions must be passed as a string.');
+    const updatedValues = store.get('Lexiconga');
+    updatedValues.details.phonology.phonotactics.exceptions = value.trim();
+    return store.set('Lexiconga', updatedValues);
+  }
+
   get alphabeticalOrder () {
     return store.get('Lexiconga').alphabeticalOrder
       || defaultDictionary.alphabeticalOrder;
   }
 
   set alphabeticalOrder (array) {
-    assert(Array.isArray(array), 'Parts of Speech must be passed as an array');
+    assert(Array.isArray(array), 'Alphabetical Order must be passed as an array');
     const updatedValues = store.get('Lexiconga');
     updatedValues.alphabeticalOrder = array
       .filter((value) => { return value !== '' })

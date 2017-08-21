@@ -109,6 +109,7 @@ export class DictionaryDetails extends Component {
                 specification={ this.props.specification }
                 description={ this.props.description }
                 partsOfSpeech={ this.props.partsOfSpeech }
+                alphabeticalOrder={ this.props.alphabeticalOrder }
                 details={ this.props.details }
               />
 

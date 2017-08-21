@@ -25,6 +25,7 @@ export class EditDictionaryModal extends Component {
       name: props.name,
       specification: props.specification,
       description: props.description,
+      alphabeticalOrder: props.alphabeticalOrder.join('\n'),
       partsOfSpeech: props.partsOfSpeech.join('\n'),
       consonants: props.details.phonology.consonants.join(' '),
       vowels: props.details.phonology.vowels.join(' '),
@@ -64,6 +65,7 @@ export class EditDictionaryModal extends Component {
             name={ this.state.name }
             specification={ this.state.specification }
             description={ this.state.description }
+            alphabeticalOrder={ this.state.alphabeticalOrder }
           />
         );
         break;
@@ -107,19 +109,31 @@ export class EditDictionaryModal extends Component {
     const updatedDetails = {};
 
     if (this.state.name !== this.props.name) {
-      updatedDetails['name'] = this.state.name;
+      updatedDetails['name'] = this.state.name.trim();
     }
 
     if (this.state.specification !== this.props.specification) {
-      updatedDetails['specification'] = this.state.specification;
+      updatedDetails['specification'] = this.state.specification.trim();
     }
 
     if (this.state.description !== this.props.description) {
       updatedDetails['description'] = this.state.description;
     }
 
+    if (this.state.alphabeticalOrder !== this.props.alphabeticalOrder.join('\n')) {
+      updatedDetails['alphabeticalOrder'] = this.state.alphabeticalOrder.split('\n')
+        .filter((value) => { return value !== '' })
+        .map((value) => { return value.trim() });
+    }
+
     if (this.state.partsOfSpeech !== this.props.partsOfSpeech.join('\n')) {
       updatedDetails['partsOfSpeech'] = this.state.partsOfSpeech.split('\n')
+        .filter((value) => { return value !== '' })
+        .map((value) => { return value.trim() });
+    }
+
+    if (this.state.alphabeticalOrder !== this.props.alphabeticalOrder.join('\n')) {
+      updatedDetails['alphabeticalOrder'] = this.state.alphabeticalOrder.split('\n')
         .filter((value) => { return value !== '' })
         .map((value) => { return value.trim() });
     }
@@ -140,6 +154,28 @@ export class EditDictionaryModal extends Component {
       updatedDetails['blends'] = this.state.blends.split(' ')
         .filter((value) => { return value !== '' })
         .map((value) => { return value.trim() });
+    }
+
+    if (this.state.onset !== this.props.details.phonology.phonotactics.onset.join(' ')) {
+      updatedDetails['onset'] = this.state.onset.split(' ')
+        .filter((value) => { return value !== '' })
+        .map((value) => { return value.trim() });
+    }
+
+    if (this.state.nucleus !== this.props.details.phonology.phonotactics.nucleus.join(' ')) {
+      updatedDetails['nucleus'] = this.state.nucleus.split(' ')
+        .filter((value) => { return value !== '' })
+        .map((value) => { return value.trim() });
+    }
+
+    if (this.state.coda !== this.props.details.phonology.phonotactics.coda.join(' ')) {
+      updatedDetails['coda'] = this.state.coda.split(' ')
+        .filter((value) => { return value !== '' })
+        .map((value) => { return value.trim() });
+    }
+
+    if (this.state.exceptions !== this.props.details.phonology.phonotactics.exceptions) {
+      updatedDetails['exceptions'] = this.state.exceptions;
     }
 
     // console.log(updatedDetails);
