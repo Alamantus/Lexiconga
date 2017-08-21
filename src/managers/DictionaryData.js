@@ -8,23 +8,24 @@ const defaultDictionary = {
   specification: 'Dictionary',
   description: 'A new dictionary.',
   partsOfSpeech: ['Noun', 'Adjective', 'Verb'],
+  alphabeticalOrder: [],
   details: {
     phonology: {
-      consonants: ['b', 'p', 'ɱ', 'ʃ', 'ʁ'],
-      vowels: ['a', 'o', 'e'],
-      blends: ['ae', 'oe', 'ɱʃ', 'pʁ'],
+      consonants: [],
+      vowels: [],
+      blends: [],
       phonotactics: {
-        onset: ['none'],
-        nucleus: ['vowels'],
-        coda: ['any'],
-        exceptions: `You can enter exceptions to your phonotactics here using [Markdown](MARKDOWN_LINK)!`,
+        onset: [],
+        nucleus: [],
+        coda: [],
+        exceptions: '',
       },
     },
     orthography: {
-      notes: `You can enter notes on orthography here using [Markdown](MARKDOWN_LINK)!`
+      notes: '',
     },
     grammar: {
-      content: `You can enter grammar rules about your language here using [Markdown](MARKDOWN_LINK)!`,
+      content: '',
     },
     custom: [
       {
@@ -33,7 +34,6 @@ const defaultDictionary = {
       }
     ],
   },
-  alphabeticalOrder: ['b', 'p', 't', 'd', 'a', 'o', 'j', 'e'],
 };
 
 class DictionaryData {
