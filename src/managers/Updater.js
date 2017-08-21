@@ -22,42 +22,21 @@ export class Updater {
     });
   }
 
-  updateDictionaryDetails (dicitonaryDetails = {}) {
+  updateDictionaryDetails (dictionaryDetails = {}) {
     return new Promise((resolve, reject) => {
       const updatedDetails = {};
 
-      if (dicitonaryDetails.name) {
-        updatedDetails['name'] = dicitonaryDetails.name;
-        this.dictionary.name = dicitonaryDetails.name;
+      const detailKeys = ['consonants', 'vowels', 'blends', 'onset', 'nucleus', 'coda', 'exceptions'];
+
+      for (const key in dictionaryDetails) {
+        this.dictionary[key] = dictionaryDetails[key];
+
+        if (!detailKeys.includes(key)) {
+          updatedDetails[key] = dictionaryDetails[key];
+        }
       }
 
-      if (dicitonaryDetails.specification) {
-        updatedDetails['specification'] = dicitonaryDetails.specification;
-        this.dictionary.specification = dicitonaryDetails.specification;
-      }
-
-      if (dicitonaryDetails.description) {
-        updatedDetails['description'] = dicitonaryDetails.description;
-        this.dictionary.description = dicitonaryDetails.description;
-      }
-
-      if (dicitonaryDetails.partsOfSpeech) {
-        updatedDetails['partsOfSpeech'] = dicitonaryDetails.partsOfSpeech;
-        this.dictionary.partsOfSpeech = dicitonaryDetails.partsOfSpeech;
-      }
-
-      if (dicitonaryDetails.consonants) {
-        this.dictionary.consonants = dicitonaryDetails.consonants;
-        updatedDetails['details'] = this.dictionary.details;
-      }
-
-      if (dicitonaryDetails.vowels) {
-        this.dictionary.vowels = dicitonaryDetails.vowels;
-        updatedDetails['details'] = this.dictionary.details;
-      }
-
-      if (dicitonaryDetails.blends) {
-        this.dictionary.blends = dicitonaryDetails.blends;
+      if (Object.keys(dictionaryDetails).some(key => { return detailKeys.includes(key) })) {
         updatedDetails['details'] = this.dictionary.details;
       }
 
