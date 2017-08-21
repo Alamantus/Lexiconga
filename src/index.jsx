@@ -4,6 +4,9 @@ import './sass/main.scss';
 import Inferno from 'inferno';
 import Component from 'inferno-component';
 
+import { addHelpfulPrototypes } from './Helpers';
+addHelpfulPrototypes();
+
 import dictionary from './managers/DictionaryData';
 import { Updater } from './managers/Updater';
 

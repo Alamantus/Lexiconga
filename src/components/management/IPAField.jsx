@@ -4,8 +4,6 @@ import Component from 'inferno-component';
 const phondueUsage = require('../../../vendor/KeyboardFire/phondue/usage.html');
 const digraphs = require('../../../vendor/KeyboardFire/phondue/digraphs.json');
 
-import Helper from '../../Helper';
-
 import { IPATable } from './IPATable';
 
 export class IPAField extends Component {

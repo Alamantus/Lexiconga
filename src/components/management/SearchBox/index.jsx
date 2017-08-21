@@ -3,8 +3,6 @@ import Component from 'inferno-component';
 
 import './styles.scss';
 
-import Helper from '../../../Helper';
-
 import dictionary from '../../../managers/DictionaryData';
 
 import METHOD from './SearchMethod.js';
