@@ -28,9 +28,9 @@ export class EditDictionaryModal extends Component {
       consonants: props.details.phonology.consonants.join(' '),
       vowels: props.details.phonology.vowels.join(' '),
       blends: props.details.phonology.blends.join(' '),
-      onset: props.details.phonology.phonotactics.onset.join(' '),
-      nucleus: props.details.phonology.phonotactics.nucleus.join(' '),
-      coda: props.details.phonology.phonotactics.coda.join(' '),
+      onset: props.details.phonology.phonotactics.onset.join('\n'),
+      nucleus: props.details.phonology.phonotactics.nucleus.join('\n'),
+      coda: props.details.phonology.phonotactics.coda.join('\n'),
       exceptions: props.details.phonology.phonotactics.exceptions,
 
       hasChanged: false,
@@ -154,20 +154,20 @@ export class EditDictionaryModal extends Component {
         .map((value) => { return value.trim() });
     }
 
-    if (this.state.onset !== this.props.details.phonology.phonotactics.onset.join(' ')) {
-      updatedDetails['onset'] = this.state.onset.split(' ')
+    if (this.state.onset !== this.props.details.phonology.phonotactics.onset.join('\n')) {
+      updatedDetails['onset'] = this.state.onset.split('\n')
         .filter((value) => { return value !== '' })
         .map((value) => { return value.trim() });
     }
 
-    if (this.state.nucleus !== this.props.details.phonology.phonotactics.nucleus.join(' ')) {
-      updatedDetails['nucleus'] = this.state.nucleus.split(' ')
+    if (this.state.nucleus !== this.props.details.phonology.phonotactics.nucleus.join('\n')) {
+      updatedDetails['nucleus'] = this.state.nucleus.split('\n')
         .filter((value) => { return value !== '' })
         .map((value) => { return value.trim() });
     }
 
-    if (this.state.coda !== this.props.details.phonology.phonotactics.coda.join(' ')) {
-      updatedDetails['coda'] = this.state.coda.split(' ')
+    if (this.state.coda !== this.props.details.phonology.phonotactics.coda.join('\n')) {
+      updatedDetails['coda'] = this.state.coda.split('\n')
         .filter((value) => { return value !== '' })
         .map((value) => { return value.trim() });
     }

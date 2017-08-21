@@ -95,42 +95,72 @@ export const EditLinguisticsForm = ({
       <div className='columns'>
 
         <div className='column'>
-          <IPAField label='Onset' id='editOnset'
-            helpText='Separate phonemes/groups with a space'
-            placeholder='consonants blends'
-            value={ onset }
-            onInput={ (newValue) => {
-              editDictionaryModal.setState({
-                onset: newValue,
-                hasChanged: newValue != editDictionaryModal.props.details.phonology.phonotactics.onset.join(' '),
-              });
-            }} />
+          <div className='field'>
+            <label className='label' htmlFor='editOnset'>
+              Onset
+            </label>
+            <p className='help'>
+              Put each phoneme or group on a separate line
+            </p>
+            <div className='control'>
+              <textarea className='textarea' id='editOnset'
+                placeholder={ `none\nconsonant blends\n...` }
+                value={ onset }
+                onInput={ (event) => {
+                  editDictionaryModal.setState({
+                    onset: event.target.value,
+                    hasChanged: event.target.value != editDictionaryModal.props.details.phonology.phonotactics.onset.join('\n'),
+                  });
+                }}
+              />
+            </div>
+          </div>
         </div>
 
         <div className='column'>
-          <IPAField label='Nucleus' id='editNucleus'
-            helpText='Separate phonemes/groups with a space'
-            placeholder='vowels'
-            value={ nucleus }
-            onInput={ (newValue) => {
-              editDictionaryModal.setState({
-                nucleus: newValue,
-                hasChanged: newValue != editDictionaryModal.props.details.phonology.phonotactics.nucleus.join(' '),
-              });
-            }} />
+        <div className='field'>
+            <label className='label' htmlFor='editNucleus'>
+              Nucleus
+            </label>
+            <p className='help'>
+              Put each phoneme or group on a separate line
+            </p>
+            <div className='control'>
+              <textarea className='textarea' id='editNucleus'
+                placeholder={ `vowels\nvowel blends\n...` }
+                value={ nucleus }
+                onInput={ (event) => {
+                  editDictionaryModal.setState({
+                    nucleus: event.target.value,
+                    hasChanged: event.target.value != editDictionaryModal.props.details.phonology.phonotactics.nucleus.join('\n'),
+                  });
+                }}
+              />
+            </div>
+          </div>
         </div>
 
         <div className='column'>
-          <IPAField label='Coda' id='editCoda'
-            helpText='Separate phonemes/groups with a space'
-            placeholder='any'
-            value={ coda }
-            onInput={ (newValue) => {
-              editDictionaryModal.setState({
-                coda: newValue,
-                hasChanged: newValue != editDictionaryModal.props.details.phonology.phonotactics.coda.join(' '),
-              });
-            }} />
+        <div className='field'>
+            <label className='label' htmlFor='editCoda'>
+              Coda
+            </label>
+            <p className='help'>
+              Put each phoneme or group on a separate line
+            </p>
+            <div className='control'>
+              <textarea className='textarea' id='editCoda'
+                placeholder={ `consonants\nconsonant blends\n...` }
+                value={ coda }
+                onInput={ (event) => {
+                  editDictionaryModal.setState({
+                    coda: event.target.value,
+                    hasChanged: event.target.value != editDictionaryModal.props.details.phonology.phonotactics.coda.join('\n'),
+                  });
+                }}
+              />
+            </div>
+          </div>
         </div>
 
       </div>
@@ -149,10 +179,10 @@ export const EditLinguisticsForm = ({
               <textarea className='textarea' id='editExceptions'
                 placeholder='Vowel blends are not allowed in the onset, and [e], including blends with [e] comprising it, is not allowed in the coda.'
                 value={ exceptions }
-                onInput={ (newValue) => {
+                onInput={ (event) => {
                   editDictionaryModal.setState({
-                    exceptions: newValue,
-                    hasChanged: newValue != editDictionaryModal.props.details.phonology.exceptions.join(' '),
+                    exceptions: event.target.value,
+                    hasChanged: event.target.value != editDictionaryModal.props.details.phonology.phonotactics.exceptions,
                   });
                 }}
               />
