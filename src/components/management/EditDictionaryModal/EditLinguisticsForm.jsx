@@ -37,11 +37,11 @@ export const EditLinguisticsForm = ({
         </div>
       </div>
 
-      <div className='columns'>
+      <h4 className='title as-4'>
+        Phonology
+      </h4>
 
-        <h4 className='title as-4'>
-          Phonology
-        </h4>
+      <div className='columns'>
 
         <div className='column'>
           <IPAField label='Consonants' id='editConsonants'
@@ -88,14 +88,11 @@ export const EditLinguisticsForm = ({
 
       </div>
 
-      <div className='columns'>
+      <h4 className='subtitle as-4'>
+        Phonotactics
+      </h4>
 
-        <h5 className='title as-5'>
-          Phonotactics
-        </h5>
-        <h6 className='subtitle as-6'>
-          The makeup of a syllable
-        </h6>
+      <div className='columns'>
 
         <div className='column'>
           <IPAField label='Onset' id='editOnset'
