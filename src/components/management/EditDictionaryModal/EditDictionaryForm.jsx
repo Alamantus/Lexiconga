@@ -1,5 +1,4 @@
 import Inferno from 'inferno';
-import Component from 'inferno-component';
 
 export const EditDictionaryForm = ({
   editDictionaryModal,

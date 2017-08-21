@@ -2,7 +2,11 @@ import Inferno from 'inferno';
 
 import {IPAField} from './IPAField';
 
-export const IPATable = ({ value, close, update }) => {
+export const IPATable = ({
+  value,
+  close,
+  update
+}) => {
 /*
   Modified from KeyboardFire's Phondue project (https://github.com/KeyboardFire/phondue)
   to fit React/Inferno and Lexiconga

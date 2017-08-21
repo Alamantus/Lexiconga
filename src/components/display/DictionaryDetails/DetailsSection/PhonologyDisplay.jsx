@@ -1,5 +1,4 @@
 import Inferno from 'inferno';
-import Component from 'inferno-component';
 import marked from 'marked';
 import sanitizeHtml from 'sanitize-html';
 

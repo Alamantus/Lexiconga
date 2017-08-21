@@ -28,35 +28,48 @@ export class WordDisplay extends Component {
 
         <section className='card-content'>
           <div className='content'>
-            {(this.props.word.pronunciation || this.props.word.partOfSpeech)
-              && (<p>
-                    {(this.props.word.partOfSpeech)
-                      ? (<small>{ this.props.word.partOfSpeech }</small>)
-                      : ''}
-                  
-                    {(this.props.word.partOfSpeech && this.props.word.pronunciation)
-                      ? ' | '
-                      : ''}
-                  
-                    {(this.props.word.pronunciation)
-                      ? (<small>{ this.props.word.pronunciation }</small>)
-                      : ''}
-                  </p>
-                )}
+            {
+              (this.props.word.pronunciation || this.props.word.partOfSpeech)
+              && (
+                <p>
+                  {
+                    (this.props.word.partOfSpeech)
+                    ? (<small>{ this.props.word.partOfSpeech }</small>)
+                    : ''
+                  }
+                
+                  {
+                    (this.props.word.partOfSpeech && this.props.word.pronunciation)
+                    ? ' | '
+                    : ''
+                  }
+                
+                  {
+                    (this.props.word.pronunciation)
+                    ? (<small>{ this.props.word.pronunciation }</small>)
+                    : ''
+                  }
+                </p>
+              )
+            }
 
-            {(this.props.word.definition)
+            {
+              (this.props.word.definition)
               && (
                 <p>
                   { this.props.word.definition }
                 </p>
-                )}
+              )
+            }
 
-            {(this.props.word.details)
+            {
+              (this.props.word.details)
               && (
                 <p>
                   { this.props.word.details }
                 </p>
-                )}
+              )
+            }
           </div>
         </section>
 
