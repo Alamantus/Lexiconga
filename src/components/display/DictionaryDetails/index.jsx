@@ -63,7 +63,12 @@ export class DictionaryDetails extends Component {
         }
 
         case DISPLAY.DETAILS : {
-          displayJSX = <DetailsSection details={ this.props.details } />;
+          displayJSX = (
+            <DetailsSection
+              partsOfSpeech={ this.props.partsOfSpeech }
+              alphabeticalOrder={ this.props.alphabeticalOrder }
+              details={ this.props.details } />
+          );
           break;
         }
 

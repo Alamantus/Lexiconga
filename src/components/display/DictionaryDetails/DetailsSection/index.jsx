@@ -5,6 +5,7 @@ import sanitizeHtml from 'sanitize-html';
 
 import './styles.scss';
 
+import { GeneralDisplay } from './GeneralDisplay';
 import { PhonologyDisplay } from './PhonologyDisplay';
 
 const DISPLAY = {
@@ -19,6 +20,7 @@ export class DetailsSection extends Component {
     super(props);
 
     this.defaultMenuItems = [
+      'General',
       'Phonology',
       'Grammar',
     ];
@@ -67,17 +69,19 @@ export class DetailsSection extends Component {
           Linguistics
         </p>
         <ul className='menu-list'>
-          {this.defaultMenuItems.map((tab, index) => {
-            return (
-              <li key={ `${ tab }_${ index }_${ Date.now().toString() }` }>
-                <a className={(this.state.currentDisplay === index) ? 'is-active' : null}
-                  onClick={ () => this.setState({ currentDisplay: index }) }
-                >
-                  { tab.capitalize() }
-                </a>
-              </li>
-            );
-          })}
+          {
+            this.defaultMenuItems.map((tab, index) => {
+              return (
+                <li key={ `${ tab }_${ index }_${ Date.now().toString() }` }>
+                  <a className={(this.state.currentDisplay === index) ? 'is-active' : null}
+                    onClick={ () => this.setState({ currentDisplay: index }) }
+                  >
+                    { tab.capitalize() }
+                  </a>
+                </li>
+              );
+            })
+          }
         </ul>
 
         { additionalMenu }
@@ -88,15 +92,30 @@ export class DetailsSection extends Component {
 
   displayDetails () {
     const { currentDisplay } = this.state;
-    const { details } = this.props;
+    const {
+      partsOfSpeech,
+      alphabeticalOrder,
+      details,
+    } = this.props;
     const defaultMenuLength = this.defaultMenuItems.length;
 
     let detailsDisplay = '';
 
     if (currentDisplay < defaultMenuLength) {
       switch (this.defaultMenuItems[currentDisplay]) {
+        case 'General': {
+          detailsDisplay = (
+            <GeneralDisplay
+              partsOfSpeech={ partsOfSpeech }
+              alphabeticalOrder={ alphabeticalOrder } />
+          );
+          break;
+        }
         case 'Phonology': {
-          detailsDisplay = <PhonologyDisplay phonologyContent={details.phonology} />
+          detailsDisplay = (
+            <PhonologyDisplay
+              phonologyContent={ details.phonology } />
+          );
           break;
         }
         case 'Grammar': {
