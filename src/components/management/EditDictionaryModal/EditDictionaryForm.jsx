@@ -53,7 +53,7 @@ export const EditDictionaryForm = ({
           Description
         </label>
         <p className='help'>
-          A description of your dictionary, <a href='MARKDOWN_LINK' target='_blank'>Markdown</a> enabled
+          A description of your dictionary, <a href={ MARKDOWN_LINK } target='_blank'>Markdown</a> enabled
         </p>
         <div className='control'>
           <textarea className='textarea' id='editDescription'

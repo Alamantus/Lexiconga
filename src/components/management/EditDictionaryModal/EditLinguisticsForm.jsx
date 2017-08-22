@@ -172,7 +172,7 @@ export const EditLinguisticsForm = ({
               Exceptions
             </label>
             <p className='help'>
-              Any exceptions for your phonotactics rules, <a href='MARKDOWN_LINK' target='_blank'>Markdown</a> enabled
+              Any exceptions for your phonotactics rules, <a href={ MARKDOWN_LINK } target='_blank'>Markdown</a> enabled
             </p>
             <div className='control'>
               <textarea className='textarea' id='editExceptions'

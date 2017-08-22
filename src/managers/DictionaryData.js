@@ -30,7 +30,7 @@ const defaultDictionary = {
     custom: [
       {
         name: 'Example Tab',
-        content: `This is an _example_ tab to show how **tabs** work with [Markdown](MARKDOWN_LINK)!`,
+        content: `This is an _example_ tab to show how **tabs** work with [Markdown](${ MARKDOWN_LINK })!`,
       }
     ],
   },

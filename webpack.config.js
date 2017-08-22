@@ -96,10 +96,8 @@ const webpackConfig = {
     new webpack.DefinePlugin({
       'process.env': {
         'NODE_ENV': JSON.stringify(BUILDMODE),
-      }
-    }),
-    new webpack.DefinePlugin({
-      'MARKDOWN_LINK': 'https://guides.github.com/features/mastering-markdown/'
+      },
+      MARKDOWN_LINK: JSON.stringify('https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet'),
     }),
   ],
 
