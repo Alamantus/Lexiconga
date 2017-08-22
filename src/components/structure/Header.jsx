@@ -1,7 +1,11 @@
 import Inferno from 'inferno';
 import Component from 'inferno-component';
+import marked from 'marked';
 
+import { Modal } from './Modal';
 import { SearchBox } from '../management/SearchBox';
+
+import helpMarkdown from '../../assets/text/help.md';
 
 export class Header extends Component {
   constructor (props) {
@@ -43,9 +47,13 @@ export class Header extends Component {
             </a>
           </span>
           <span className='nav-item'>
-            <a className='button'>
-              About
-            </a>
+            <Modal buttonText='Help' title='Lexiconga Help'>
+              <div className='content has-text-left'>
+                <div dangerouslySetInnerHTML={{
+                  __html: marked(helpMarkdown.replace(/(MARKDOWN_LINK)/g, MARKDOWN_LINK))
+                }} />
+              </div>
+            </Modal>
           </span>
         </div>
       </nav>

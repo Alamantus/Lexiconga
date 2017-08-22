@@ -32,15 +32,11 @@ export class Modal extends Component {
     } = this.props;
 
     return (
-      <div>
-        <div className='field'>
-          <p className='control'>
-            <a className='button'
-              onClick={ this.show.bind(this) }>
-              { buttonText || 'Show' }
-            </a>
-          </p>
-        </div>
+      <div className='is-inline'>
+        <a className='button'
+          onClick={ this.show.bind(this) }>
+          { buttonText || 'Show' }
+        </a>
 
         <div className={ `modal ${(this.state.isVisible) ? 'is-active' : ''}` }>
 

@@ -46,7 +46,7 @@ const webpackConfig = {
         ],
       },
       {
-        test: (/\.txt$/),
+        test: (/\.(txt|md)$/),
         exclude: (/node_modules/),
         use: [
           'raw-loader'
