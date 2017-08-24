@@ -69,27 +69,8 @@ export const EditDictionaryForm = ({
         </div>
       </div>
 
-      <div className='field'>
-        <label className='label' htmlFor='editAlphabeticalOrder'>
-          Alphabetical Order
-        </label>
-        <p className='help'>
-          The custom order for sorting the words in your { specification }. If blank, English alphabetical order will be used.<br />
-          If the "Case Sensitive" setting is set, include both upper and lower case letters, otherwise, use upper or lower case exclusively.
-        </p>
-        <div className='control'>
-          <textarea className='textarea' id='editAlphabeticalOrder'
-            placeholder={ `a\nb\nc\nd\n...` }
-            value={ alphabeticalOrder }
-            onInput={ (event) => {
-              editDictionaryModal.setState({
-                alphabeticalOrder: event.target.value,
-                hasChanged: event.target.value != editDictionaryModal.props.alphabeticalOrder.join('\n'),
-              });
-            }}
-          />
-        </div>
-      </div>
+      {/* Custom alphabetical order is restricted to paid. */}
+
     </div>
   );
 }
