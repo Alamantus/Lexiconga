@@ -32,6 +32,7 @@ export class EditDictionaryModal extends Component {
       nucleus: props.details.phonology.phonotactics.nucleus.join('\n'),
       coda: props.details.phonology.phonotactics.coda.join('\n'),
       exceptions: props.details.phonology.phonotactics.exceptions,
+      orthographyNotes: props.details.orthography.notes,
 
       hasChanged: false,
     }
@@ -81,6 +82,7 @@ export class EditDictionaryModal extends Component {
             nucleus={ this.state.nucleus }
             coda={ this.state.coda }
             exceptions={ this.state.exceptions }
+            orthographyNotes={ this.state.orthographyNotes }
           />
         );
         break;
@@ -174,6 +176,10 @@ export class EditDictionaryModal extends Component {
 
     if (this.state.exceptions !== this.props.details.phonology.phonotactics.exceptions) {
       updatedDetails['exceptions'] = this.state.exceptions;
+    }
+
+    if (this.state.orthographyNotes !== this.props.details.orthography.notes) {
+      updatedDetails['orthographyNotes'] = this.state.orthographyNotes;
     }
 
     // console.log(updatedDetails);

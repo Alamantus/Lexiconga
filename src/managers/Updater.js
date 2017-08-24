@@ -24,7 +24,16 @@ export class Updater {
     return new Promise((resolve, reject) => {
       const updatedDetails = {};
 
-      const detailKeys = ['consonants', 'vowels', 'blends', 'onset', 'nucleus', 'coda', 'exceptions'];
+      const detailKeys = [
+        'consonants',
+        'vowels',
+        'blends',
+        'onset',
+        'nucleus',
+        'coda',
+        'exceptions',
+        'orthographyNotes',
+      ];
 
       for (const key in dictionaryDetails) {
         this.dictionary[key] = dictionaryDetails[key];

@@ -12,6 +12,7 @@ export const EditLinguisticsForm = ({
   nucleus,
   coda,
   exceptions,
+  orthographyNotes,
 }) => {
   return (
     <div className='form'>
@@ -189,6 +190,37 @@ export const EditLinguisticsForm = ({
           </div>
 
         </div>
+      </div>
+      
+      <h4 className='title as-4'>
+        Orthography
+      </h4>
+
+      <div className='columns'>
+
+        <div className='column'>
+          <div className='field'>
+            <label className='label' htmlFor='editOrthographyNotes'>
+              Orthography Notes
+            </label>
+            <p className='help'>
+              Any notes on orthography or how phonemes are written, <a href={ MARKDOWN_LINK } target='_blank'>Markdown</a> enabled
+            </p>
+            <div className='control'>
+              <textarea className='textarea' id='editOrthographyNotes'
+                placeholder={ `- **m** = [ɱ]\n- **sh** = [ʃ]\n- **r** = [ʁ]\n...` }
+                value={ orthographyNotes }
+                onInput={ (event) => {
+                  editDictionaryModal.setState({
+                    orthographyNotes: event.target.value,
+                    hasChanged: event.target.value != editDictionaryModal.props.details.orthography.notes,
+                  });
+                }}
+              />
+            </div>
+          </div>
+        </div>
+        
       </div>
 
     </div>

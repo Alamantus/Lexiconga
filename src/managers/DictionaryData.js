@@ -209,6 +209,18 @@ class DictionaryData {
     return store.set('Lexiconga', updatedValues);
   }
 
+  get orthographyNotes () {
+    return store.get('Lexiconga').details.orthography.notes
+      || defaultDictionary.details.orthography.notes;
+  }
+
+  set orthographyNotes (value) {
+    assert(typeof value === 'string', 'Orthography Notes must be passed as a string.');
+    const updatedValues = store.get('Lexiconga');
+    updatedValues.details.orthography.notes = value.trim();
+    return store.set('Lexiconga', updatedValues);
+  }
+
   get alphabeticalOrder () {
     return store.get('Lexiconga').alphabeticalOrder
       || defaultDictionary.alphabeticalOrder;

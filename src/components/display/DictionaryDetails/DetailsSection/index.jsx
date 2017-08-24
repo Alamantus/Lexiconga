@@ -7,6 +7,7 @@ import './styles.scss';
 
 import { GeneralDisplay } from './GeneralDisplay';
 import { PhonologyDisplay } from './PhonologyDisplay';
+import { OrthographyDisplay } from './OrthographyDisplay';
 
 const DISPLAY = {
   NONE: false,
@@ -22,6 +23,7 @@ export class DetailsSection extends Component {
     this.defaultMenuItems = [
       'General',
       'Phonology',
+      'Orthography',
       'Grammar',
     ];
 
@@ -115,6 +117,13 @@ export class DetailsSection extends Component {
           detailsDisplay = (
             <PhonologyDisplay
               phonologyContent={ details.phonology } />
+          );
+          break;
+        }
+        case 'Orthography': {
+          detailsDisplay = (
+            <OrthographyDisplay
+              orthographyContent={ details.orthography } />
           );
           break;
         }
