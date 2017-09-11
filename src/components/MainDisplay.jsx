@@ -33,7 +33,8 @@ export const MainDisplay = ({ dictionaryInfo, wordsToDisplay, updateDisplay, upd
 
             <WordsList
               lastRender={ lastRender }
-              words={ wordsToDisplay } />
+              words={ wordsToDisplay }
+              adsEveryXWords={ 10 } />
           </RightColumn>
           
         </div>
