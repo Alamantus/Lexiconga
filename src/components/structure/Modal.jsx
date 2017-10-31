@@ -33,7 +33,7 @@ export class Modal extends Component {
 
     return (
       <div className='is-inline'>
-        <a className='button'
+        <a className={!this.props.noButton ? 'button' : null}
           onClick={ this.show.bind(this) }>
           { buttonText || 'Show' }
         </a>
