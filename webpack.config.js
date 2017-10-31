@@ -27,7 +27,20 @@ const webpackConfig = {
         exclude: (/node_modules/),
         use: [
           'style-loader',
-          'css-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              importLoaders: 1,
+            },
+          },
+          {
+            loader: 'postcss-loader',
+            options: {
+              plugins: [
+                require('autoprefixer'),
+              ],
+            },
+          },
           {
             loader: 'sass-loader',
             options: {
