@@ -1,0 +1,39 @@
+@import '../../node_modules/bulma/sass/utilities/initial-variables';
+@import '../../node_modules/bulma/sass/utilities/derived-variables';
+@import '../../node_modules/bulma/sass/components/card';
+
+.word-card-header-title {
+  @extend .card-header-title;
+
+  align-items: baseline;
+
+  .word-name {
+    font-size: 1.2em;
+  }
+}
+
+.word-card-header-title,
+.word-classification {
+  span:not(:last-child) {
+    margin-right: 10px;
+  }
+}
+
+.word-classification {
+  font-size: 0.75em;
+
+  .word-pronunciation {
+    font-weight: normal !important;
+  }
+  .word-part-of-speech {
+    font-style: italic;
+  }
+}
+
+.word-definition {
+  font-style: italic;
+}
+
+.word-details {
+  padding-left: 15px;
+}

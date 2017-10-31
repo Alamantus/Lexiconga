@@ -2,6 +2,8 @@ import Inferno from 'inferno';
 import Component from 'inferno-component';
 import marked from 'marked';
 
+import './WordDisplay.scss';
+
 import idManager from '../../managers/IDManager';
 import { Word } from '../../managers/Word';
 
@@ -14,6 +16,14 @@ export class WordDisplay extends Component {
     this.state = {
       isEditing: false,
     }
+
+    this.wordDetailsHTML = marked(props.word.details);
+  }
+
+  componentWillUpdate (nextProps, nextState) {
+    if (this.props.word.details !== nextProps.word.details) {
+      this.wordDetailsHTML = marked(nextProps.word.details);
+    }
   }
 
   render () {
@@ -21,42 +31,48 @@ export class WordDisplay extends Component {
       <div className='card'>
 
         <header className='card-header'>
-          <h3 className='card-header-title'>
-            { this.props.word.name }
-          </h3>
+          <div className='word-card-header-title'>
+            <span className='word-name'>
+              { this.props.word.name }
+            </span>
+            {
+              (this.props.word.pronunciation || this.props.word.partOfSpeech)
+              && (
+                <span className='word-classification'>
+                  {
+                    (this.props.word.pronunciation)
+                    && (
+                      <span className='word-pronunciation'>
+                      { this.props.word.pronunciation }
+                      </span>
+                    )
+                  }
+
+                  {
+                    (this.props.word.partOfSpeech)
+                    && (
+                      <span className='word-part-of-speech'>
+                      { this.props.word.partOfSpeech }
+                      </span>
+                    )
+                  }
+                </span>
+              )
+            }
+          </div>
+          <a className='card-header-icon' aria-label='more options'>
+            <span className='icon'>
+              <i className='fa fa-angle-down' aria-hidden='true'></i>
+            </span>
+          </a>
         </header>
 
         <section className='card-content'>
           <div className='content'>
             {
-              (this.props.word.pronunciation || this.props.word.partOfSpeech)
-              && (
-                <p>
-                  {
-                    (this.props.word.partOfSpeech)
-                    ? (<small>{ this.props.word.partOfSpeech }</small>)
-                    : ''
-                  }
-                
-                  {
-                    (this.props.word.partOfSpeech && this.props.word.pronunciation)
-                    ? ' | '
-                    : ''
-                  }
-                
-                  {
-                    (this.props.word.pronunciation)
-                    ? (<small>{ this.props.word.pronunciation }</small>)
-                    : ''
-                  }
-                </p>
-              )
-            }
-
-            {
               (this.props.word.definition)
               && (
-                <p>
+                <p className='word-definition'>
                   { this.props.word.definition }
                 </p>
               )
@@ -65,9 +81,8 @@ export class WordDisplay extends Component {
             {
               (this.props.word.details)
               && (
-                <p>
-                  { this.props.word.details }
-                </p>
+                <p className='word-details'
+                  dangerouslySetInnerHTML={{__html: this.wordDetailsHTML}} />
               )
             }
           </div>
