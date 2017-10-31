@@ -18,43 +18,43 @@ export class Header extends Component {
 
   render () {
     return (
-      <nav className='nav'>
-        <div className='nav-left'>
-          <a href='/' className='nav-item image'>
+      <nav className='navbar'>
+        <div className='navbar-brand'>
+          <a href='/' className='navbar-item'>
             <img src={ `./logo.${ (typeof SVGRect !== 'undefined') ? 'svg' : 'png' }` } alt='Lexiconga Logo' />
           </a>
-        </div>
 
-        <div className='nav-center'>
-          <div className='nav-item'>
+          <div className='navbar-item'>
             <SearchBox
               partsOfSpeech={ this.props.partsOfSpeech }
               search={ (searchConfig) => this.props.search(searchConfig) } />
           </div>
+
+          <a className={`button navbar-burger${this.state.displayNavMenu ? ' is-active' : ''}`}
+            onClick={ () => this.setState({ displayNavMenu: !this.state.displayNavMenu }) }>
+            <span></span>
+            <span></span>
+            <span></span>
+          </a>
         </div>
 
-        <span className={`nav-toggle${this.state.displayNavMenu ? ' is-active' : ''}`}
-          onClick={ () => this.setState({ displayNavMenu: !this.state.displayNavMenu }) }>
-          <span></span>
-          <span></span>
-          <span></span>
-        </span>
-
-        <div className={ `nav-right nav-menu${ this.state.displayNavMenu ? ' is-active' : '' }` }>
-          <span className='nav-item'>
-            <a className='button'>
-              Login
-            </a>
-          </span>
-          <span className='nav-item'>
-            <Modal buttonText='Help' title='Lexiconga Help'>
-              <div className='content has-text-left'>
-                <div dangerouslySetInnerHTML={{
-                  __html: marked(helpMarkdown.replace(/(MARKDOWN_LINK)/g, MARKDOWN_LINK))
-                }} />
-              </div>
-            </Modal>
-          </span>
+        <div className={`navbar-menu${ this.state.displayNavMenu ? ' is-active' : '' }`}>
+          <div className='navbar-end'>
+            <span className='navbar-item'>
+              <a className='button'>
+                Login
+              </a>
+            </span>
+            <span className='navbar-item'>
+              <Modal buttonText='Help' title='Lexiconga Help'>
+                <div className='content has-text-left'>
+                  <div dangerouslySetInnerHTML={{
+                    __html: marked(helpMarkdown.replace(/(MARKDOWN_LINK)/g, MARKDOWN_LINK))
+                  }} />
+                </div>
+              </Modal>
+            </span>
+          </div>
         </div>
       </nav>
     );
