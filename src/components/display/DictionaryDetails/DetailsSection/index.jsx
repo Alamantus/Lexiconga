@@ -1,5 +1,6 @@
 import Inferno from 'inferno';
 import Component from 'inferno-component';
+import PropTypes from 'prop-types';
 import marked from 'marked';
 import sanitizeHtml from 'sanitize-html';
 
@@ -9,16 +10,15 @@ import { GeneralDisplay } from './GeneralDisplay';
 import { PhonologyDisplay } from './PhonologyDisplay';
 import { OrthographyDisplay } from './OrthographyDisplay';
 
-const DISPLAY = {
-  NONE: false,
-  DESCRIPTION: 1,
-  DETAILS: 2,
-  STATS: 3,
-}
-
 export class DetailsSection extends Component {
   constructor (props) {
     super(props);
+
+    PropTypes.checkPropTypes({
+      details: PropTypes.object.isRequired,
+      partsOfSpeech: PropTypes.array.isRequired,
+      alphabeticalOrder: PropTypes.array.isRequired,
+    }, props, 'prop', 'DetailsSection');
 
     this.defaultMenuItems = [
       'General',

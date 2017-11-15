@@ -1,5 +1,6 @@
 import Inferno from 'inferno';
 import Component from 'inferno-component';
+import PropTypes from 'prop-types';
 
 import dictionaryData from '../../managers/DictionaryData';
 import { IPAField } from './IPAField';
@@ -8,6 +9,12 @@ import { Word } from '../../managers/Word';
 export class WordForm extends Component {
   constructor (props) {
     super(props);
+
+    PropTypes.checkPropTypes({
+      word: PropTypes.object,
+      callback: PropTypes.func,
+      updateDisplay: PropTypes.func,
+    }, props, 'prop', 'WordForm');
 
     this.state = {
       wordName: props.word ? props.word.name : '',

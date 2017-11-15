@@ -1,16 +1,25 @@
 import Inferno from 'inferno';
+import PropTypes from 'prop-types';
 
 import {IPAField} from './IPAField';
 
-export const IPATable = ({
-  value,
-  close,
-  update
-}) => {
+export const IPATable = (values) => {
+  PropTypes.checkPropTypes({
+    value: PropTypes.string.isRequired,
+    close: PropTypes.func.isRequired,
+    update: PropTypes.func.isRequired,
+  }, values, 'value', 'IPATable');
 /*
   Modified from KeyboardFire's Phondue project (https://github.com/KeyboardFire/phondue)
   to fit React/Inferno and Lexiconga
 */
+
+  const {
+    value,
+    close,
+    update
+  } = values;
+
   const updateInput = (newValue) => {
     update(value + newValue);
   }

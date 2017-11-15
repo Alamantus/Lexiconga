@@ -1,9 +1,19 @@
 import Inferno from 'inferno';
 import Component from 'inferno-component';
+import PropTypes from 'prop-types';
 
 export class Modal extends Component {
   constructor (props) {
     super(props);
+
+  PropTypes.checkPropTypes({
+    noButton: PropTypes.bool,
+    buttonText: PropTypes.string,
+    title: PropTypes.string,
+    children: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+    footerAlign: PropTypes.string,
+    footerContent: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+  }, props, 'prop', 'Modal');
 
     this.state = {
       isVisible: false,
@@ -24,6 +34,7 @@ export class Modal extends Component {
 
   render () {
     const {
+      noButton,
       buttonText,
       title,
       children,
@@ -33,7 +44,7 @@ export class Modal extends Component {
 
     return (
       <div className='is-inline'>
-        <a className={!this.props.noButton ? 'button' : null}
+        <a className={!noButton ? 'button' : null}
           onClick={ this.show.bind(this) }>
           { buttonText || 'Show' }
         </a>

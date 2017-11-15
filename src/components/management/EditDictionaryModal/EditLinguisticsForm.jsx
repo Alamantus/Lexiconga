@@ -1,19 +1,34 @@
 import Inferno from 'inferno';
+import PropTypes from 'prop-types';
 
 import { IPAField } from '../IPAField';
 
-export const EditLinguisticsForm = ({
-  editDictionaryModal,
-  partsOfSpeech,
-  consonants,
-  vowels,
-  blends,
-  onset,
-  nucleus,
-  coda,
-  exceptions,
-  orthographyNotes,
-}) => {
+export const EditLinguisticsForm = (props) => {
+  PropTypes.checkPropTypes({
+    editDictionaryModal: PropTypes.object.isRequired,
+    partsOfSpeech: PropTypes.string.isRequired,
+    consonants: PropTypes.string.isRequired,
+    vowels: PropTypes.string.isRequired,
+    blends: PropTypes.string.isRequired,
+    onset: PropTypes.string.isRequired,
+    nucleus: PropTypes.string.isRequired,
+    coda: PropTypes.string.isRequired,
+    exceptions: PropTypes.string.isRequired,
+    orthographyNotes: PropTypes.string.isRequired,
+  }, props, 'prop', 'EditLinguisticsForm');
+
+  const {
+    editDictionaryModal,
+    partsOfSpeech,
+    consonants,
+    vowels,
+    blends,
+    onset,
+    nucleus,
+    coda,
+    exceptions,
+    orthographyNotes,
+  } = props;
   return (
     <div className='form'>
       <div className='field'>

@@ -1,12 +1,20 @@
 import Inferno from 'inferno';
+import PropTypes from 'prop-types';
 
-export const EditDictionaryForm = ({
-  editDictionaryModal,
-  name,
-  specification,
-  description,
-  alphabeticalOrder,
-}) => {
+export const EditDictionaryForm = (props) => {
+  PropTypes.checkPropTypes({
+    editDictionaryModal: PropTypes.object.isRequired,
+    name: PropTypes.string.isRequired,
+    specification: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+  }, props, 'prop', 'EditDictionaryForm');
+
+  const {
+    editDictionaryModal,
+    name,
+    specification,
+    description,
+  } = props;
   return (
     <div className='form'>
       <div className='field'>

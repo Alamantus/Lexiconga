@@ -1,5 +1,6 @@
 import Inferno from 'inferno';
 import Component from 'inferno-component';
+import PropTypes from 'prop-types';
 import marked from 'marked';
 
 import { Modal } from './Modal';
@@ -10,6 +11,11 @@ import helpMarkdown from '../../assets/text/help.md';
 export class Header extends Component {
   constructor (props) {
     super(props);
+
+    PropTypes.checkPropTypes({
+      partsOfSpeech: PropTypes.array.isRequired,
+      search: PropTypes.func.isRequired,
+    }, props, 'prop', 'Header');
 
     this.state = {
       displayNavMenu: false,
@@ -27,7 +33,7 @@ export class Header extends Component {
           <div className='navbar-item'>
             <SearchBox
               partsOfSpeech={ this.props.partsOfSpeech }
-              search={ (searchConfig) => this.props.search(searchConfig) } />
+              search={ this.props.search } />
           </div>
 
           <a className={`button navbar-burger${this.state.displayNavMenu ? ' is-active' : ''}`}

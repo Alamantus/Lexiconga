@@ -1,5 +1,6 @@
 import Inferno from 'inferno';
 import Component from 'inferno-component';
+import PropTypes from 'prop-types';
 import marked from 'marked';
 
 // npm lazyload-inferno-component uses outdated inferno dependencies, so just using the script.
@@ -19,6 +20,12 @@ const loadAd = (callback, { props, router }) => {
 export class WordsList extends Component {
   constructor (props) {
     super(props);
+
+    PropTypes.checkPropTypes({
+      adsEveryXWords: PropTypes.number,
+      words: PropTypes.array,
+      updateDisplay: PropTypes.func.isRequired,
+    }, props, 'prop', 'WordList');
   }
 
   render () {

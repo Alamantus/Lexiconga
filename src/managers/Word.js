@@ -1,9 +1,20 @@
-import assert from 'assert';
+import PropTypes from 'prop-types';
 import store from 'store';
 import wordDb from './WordDatabase';
 
 export class Word {
   constructor (values = {}) {
+    PropTypes.checkPropTypes({
+      id: PropTypes.number,
+      name: PropTypes.string,
+      pronunciation: PropTypes.string,
+      partOfSpeech: PropTypes.string,
+      definition: PropTypes.string,
+      details: PropTypes.string,
+      createdTime: PropTypes.number,
+      modifiedTime: PropTypes.number,
+    }, values, 'value', 'Word');
+    
     const {
       id = false,
       name = '',

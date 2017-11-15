@@ -1,5 +1,6 @@
 import Inferno from 'inferno';
 import Component from 'inferno-component';
+import PropTypes from 'prop-types';
 import marked from 'marked';
 import sanitizeHtml from 'sanitize-html';
 
@@ -18,6 +19,16 @@ const DISPLAY = {
 export class DictionaryDetails extends Component {
   constructor (props) {
     super(props);
+
+    PropTypes.checkPropTypes({
+      name: PropTypes.string,
+      specification: PropTypes.string,
+      description: PropTypes.string,
+      partsOfSpeech: PropTypes.array,
+      alphabeticalOrder: PropTypes.array,
+      details: PropTypes.object,
+      updater: PropTypes.object,
+    }, props, 'prop', 'DictionaryDetails');
 
     this.state = {
       currentDisplay: DISPLAY.NONE,

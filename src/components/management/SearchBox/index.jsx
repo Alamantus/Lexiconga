@@ -1,5 +1,6 @@
 import Inferno from 'inferno';
 import Component from 'inferno-component';
+import PropTypes from 'prop-types';
 
 import './styles.scss';
 
@@ -10,6 +11,11 @@ import METHOD from './SearchMethod.js';
 export class SearchBox extends Component {
   constructor (props) {
     super(props);
+
+    PropTypes.checkPropTypes({
+      partsOfSpeech: PropTypes.array,
+      search: PropTypes.func.isRequired,
+    }, props, 'prop', 'SearchBox');
 
     this.state = {
       searchingIn: 'name',

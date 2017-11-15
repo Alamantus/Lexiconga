@@ -1,10 +1,14 @@
 import Inferno from 'inferno';
+import PropTypes from 'prop-types';
 import marked from 'marked';
 import sanitizeHtml from 'sanitize-html';
 
-export const OrthographyDisplay = ({
-    orthographyContent,
-}) => {
+export const OrthographyDisplay = (props) => {
+  PropTypes.checkPropTypes({
+    orthographyContent: PropTypes.object.isRequired,
+  }, props, 'prop', 'OrthographyDisplay');
+
+  const { orthographyContent } = props
   return (
     <div>
       <div className='columns'>

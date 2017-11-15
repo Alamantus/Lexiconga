@@ -1,5 +1,6 @@
 import Inferno from 'inferno';
 import Component from 'inferno-component';
+import PropTypes from 'prop-types';
 import marked from 'marked';
 import swal from 'sweetalert2';
 
@@ -13,6 +14,11 @@ import { WordForm } from '../management/WordForm';
 export class WordDisplay extends Component {
   constructor (props) {
     super(props);
+
+    PropTypes.checkPropTypes({
+      word: PropTypes.object.isRequired,
+      updateDisplay: PropTypes.func.isRequired,
+    }, props, 'prop', 'WordDisplay');
 
     this.state = {
       menuIsOpen: false,

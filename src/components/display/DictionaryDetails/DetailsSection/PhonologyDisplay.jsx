@@ -1,8 +1,14 @@
 import Inferno from 'inferno';
+import PropTypes from 'prop-types';
 import marked from 'marked';
 import sanitizeHtml from 'sanitize-html';
 
-export const PhonologyDisplay = ({ phonologyContent }) => {
+export const PhonologyDisplay = (props) => {
+  PropTypes.checkPropTypes({
+    phonologyContent: PropTypes.object.isRequired,
+  }, props, 'prop', 'PhonologyDisplay');
+
+  const { phonologyContent } = props;
   return (
     <div>
       <h4 className='title is-4'>

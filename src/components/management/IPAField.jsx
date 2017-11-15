@@ -1,5 +1,6 @@
 import Inferno from 'inferno';
 import Component from 'inferno-component';
+import PropTypes from 'prop-types';
 
 const phondueUsage = require('../../../vendor/KeyboardFire/phondue/usage.html');
 const digraphs = require('../../../vendor/KeyboardFire/phondue/digraphs.json');
@@ -13,6 +14,17 @@ export class IPAField extends Component {
 */
   constructor (props) {
     super(props);
+
+    PropTypes.checkPropTypes({
+      value: PropTypes.string.isRequired,
+      id: PropTypes.string,
+      label: PropTypes.string,
+      helpText: PropTypes.string,
+      placeholder: PropTypes.string,
+      isDisplayOnly: PropTypes.bool,
+      onInput: PropTypes.func,
+      onChange: PropTypes.func,
+    }, props, 'prop', 'IPAField');
 
     this.state = {
       value: props.value || '',

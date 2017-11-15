@@ -1,9 +1,13 @@
 import Inferno from 'inferno';
+import PropTypes from 'prop-types';
 
-export const GeneralDisplay = ({
-    partsOfSpeech,
-    alphabeticalOrder,
-}) => {
+export const GeneralDisplay = (props) => {
+  PropTypes.checkPropTypes({
+    partsOfSpeech: PropTypes.array.isRequired,
+    alphabeticalOrder: PropTypes.array.isRequired,
+  }, props, 'prop', 'GeneralDisplay');
+
+  const { partsOfSpeech, alphabeticalOrder } = props;
   return (
     <div>
       <div className='columns'>

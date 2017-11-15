@@ -1,5 +1,6 @@
 import Inferno from 'inferno';
 import Component from 'inferno-component';
+import PropTypes from 'prop-types';
 import marked from 'marked';
 
 import { Modal } from '../../structure/Modal';
@@ -16,6 +17,15 @@ const DISPLAY = {
 export class EditDictionaryModal extends Component {
   constructor (props) {
     super(props);
+
+    PropTypes.checkPropTypes({
+      name: PropTypes.string,
+      specification: PropTypes.string,
+      description: PropTypes.string,
+      alphabeticalOrder: PropTypes.array,
+      partsOfSpeech: PropTypes.array,
+      details: PropTypes.object,
+    }, props, 'prop', 'EditDictionaryModal');
 
     this.state = {
       currentDisplay: DISPLAY.DETAILS,

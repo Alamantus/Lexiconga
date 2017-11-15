@@ -52,6 +52,7 @@
     "inferno-devtools": "^3.10.1",
     "marked": "^0.3.6",
     "papaparse": "^4.3.3",
+    "prop-types": "^15.6.0",
     "sanitize-html": "^1.14.1",
     "store": "^2.0.12",
     "sweetalert2": "^6.11.5"
