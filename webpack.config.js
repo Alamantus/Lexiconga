@@ -4,7 +4,7 @@
 //  'emptydetails' to clear the dictionary details on each load.
 //  'emptydb' to clear the database on each load.
 //  'development' to not do anything special.
-const BUILDMODE = 'donotsave';
+const BUILDMODE = 'development';
 
 const webpack = require('webpack');
 const path = require('path');
@@ -132,6 +132,8 @@ if (BUILDMODE === 'production') {
   );
 
   webpackConfig.devtool = 'hidden-source-map';
+} else {
+  webpackConfig.devtool = 'source-map';
 }
 
 module.exports = webpackConfig;

@@ -5,7 +5,7 @@ class IDManager {
     // Add IDs here as needed.
   }
 
-  setID (id, value) {
+  setId (id, value) {
     this[id] = value;
   }
 

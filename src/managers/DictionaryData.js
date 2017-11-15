@@ -40,21 +40,22 @@ class DictionaryData {
   constructor () {
     this.default = defaultDictionary;
 
-    if (['emptydb', 'donotsave'].includes(process.env.NODE_ENV)) {
+    if (['emptydetails', 'donotsave'].includes(process.env.NODE_ENV)) {
       store.remove('Lexiconga');
     }
 
     if (!store.get('Lexiconga')) {
       store.set('Lexiconga', defaultDictionary);
     } else {
-      const largestId = wordDb.words
-        .orderBy('id').reverse()
-        .first((word) => {
-          return word.id;
-        });
-
-      idManager.setId('word', ++largestId);
-      console.log('First word ID: ' + idManager.next('word').toString());
+      wordDb.words
+      .orderBy('id').reverse()
+      .first((word) => {
+        return parseInt(word.id);
+      })
+      .then(largestId => {
+        idManager.setId('word', ++largestId);
+        console.log('First word ID: ' + idManager.next('word').toString());
+      });
     }
   }
 

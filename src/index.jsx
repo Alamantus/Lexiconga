@@ -35,6 +35,8 @@ class App extends Component {
     }
 
     this.updater = new Updater(this, dictionary);
+
+    this.updateDisplayedWords();
   }
 
   get dictionaryInfo () {
