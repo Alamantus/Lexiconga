@@ -67,16 +67,19 @@ export class WordDisplay extends Component {
 
   render () {
     const { menuIsOpen, isEditing } = this.state;
-    const { word } = this.props;
+    const { word, updateDisplay } = this.props;
 
     if (isEditing) {
       return (
         <WordForm
-          name={word.name}
-          pronunciation={word.pronunciation}
-          partOfSpeech={word.partOfSpeech}
-          definition={word.definition}
-          details={word.details}
+          word={word}
+          updateDisplay={updateDisplay}
+          callback={() => {
+            this.setState({
+              menuIsOpen: false,
+              isEditing: false,
+            })
+          }}
         />
       );
     }

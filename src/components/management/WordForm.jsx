@@ -10,11 +10,11 @@ export class WordForm extends Component {
     super(props);
 
     this.state = {
-      wordName: this.props.name || '',
-      wordPronunciation: this.props.pronunciation || '',
-      wordPartOfSpeech: this.props.partOfSpeech || '',
-      wordDefinition: this.props.definition || '',
-      wordDetails: this.props.details || '',
+      wordName: props.word ? props.word.name : '',
+      wordPronunciation: props.word ? props.word.pronunciation : '',
+      wordPartOfSpeech: props.word ? props.word.partOfSpeech : '',
+      wordDefinition: props.word ? props.word.definition : '',
+      wordDetails: props.word ? props.word.details : '',
 
       nameIsValid: true,
       pronunciationIsValid: true,
@@ -53,29 +53,32 @@ export class WordForm extends Component {
   }
 
   submitWord () {
-    const word = new Word({
+    const word = new Word(Object.assign((this.props.word ? this.props.word : {}), {
       name: this.state.wordName,
       pronunciation: this.state.wordPronunciation,
       partOfSpeech: this.state.wordPartOfSpeech,
       definition: this.state.wordDefinition,
       details: this.state.wordDetails,
-    });
-
+    }));
 
     if (this.isValidWord()) {
       // Need to trigger a WordsList re-render after success.
-      if (this.props.wordId) {
-        word.update(this.props.wordId)
+      let wordAction;
+      if (this.props.word) {
+        wordAction = word.update()
         .then(() => {
           this.props.callback();
         })
       } else {
-        word.create()
+        wordAction = word.create()
         .then(() => {
           this.clearForm();
-          this.props.updateDisplay();
         });
       }
+
+      wordAction.then(() => {
+        this.props.updateDisplay();
+      })
     }
   }
 
