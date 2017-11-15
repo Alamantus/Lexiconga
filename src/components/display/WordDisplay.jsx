@@ -14,6 +14,7 @@ export class WordDisplay extends Component {
     super(props);
 
     this.state = {
+      menuIsOpen: false,
       isEditing: false,
     }
 
@@ -26,7 +27,27 @@ export class WordDisplay extends Component {
     }
   }
 
+  edit () {
+    this.setState({
+      menuIsOpen: false,
+      isEditing: true,
+    });
+  }
+
   render () {
+    const { menuIsOpen, isEditing } = this.state;
+
+    if (isEditing) {
+      return (
+        <WordForm
+          name={this.props.word.name}
+          pronunciation={this.props.word.pronunciation}
+          partOfSpeech={this.props.word.partOfSpeech}
+          definition={this.props.word.definition}
+          details={this.props.word.details}
+        />
+      );
+    }
     return (
       <div className='card'>
 
@@ -60,11 +81,25 @@ export class WordDisplay extends Component {
               )
             }
           </div>
-          <a className='card-header-icon' aria-label='more options'>
-            <span className='icon'>
-              <i className='fa fa-angle-down' aria-hidden='true'></i>
+          <div aria-label='options'
+            className={`card-header-icon dropdown is-right ${ menuIsOpen ? 'is-active' : '' }`}
+          >
+            <span className='icon dropdown-trigger'
+              onClick={ () => this.setState({ menuIsOpen: !menuIsOpen }) }
+            >
+              <i className={`fa fa-angle-${ menuIsOpen ? 'up' : 'down' }`} aria-hidden='true'></i>
             </span>
-          </a>
+            <div className='dropdown-menu' id='dropdown-menu' role='menu'>
+              <div className='dropdown-content'>
+                <a className='dropdown-item' onClick={ this.edit.bind(this) }>
+                  Edit
+                </a>
+                <a className='dropdown-item is-danger'>
+                  Delete
+                </a>
+              </div>
+            </div>
+          </div>
         </header>
 
         <section className='card-content'>
