@@ -1,6 +1,7 @@
 import Inferno from 'inferno';
 import Component from 'inferno-component';
 
+import dictionaryData from '../../managers/DictionaryData';
 import { IPAField } from './IPAField';
 import { Word } from '../../managers/Word';
 
@@ -119,7 +120,7 @@ export class WordForm extends Component {
                   this.setState({ wordPartOfSpeech: event.target.value });
                 }}>
                 <option value=''></option>
-                {this.props.partsOfSpeech.map((partOfSpeech) => {
+                {dictionaryData.partsOfSpeech.map((partOfSpeech) => {
                   return (
                     <option value={ partOfSpeech }>
                       { partOfSpeech }

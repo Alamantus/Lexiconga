@@ -16,7 +16,6 @@ export const MainDisplay = ({ dictionaryInfo, wordsToDisplay, updateDisplay, upd
           <LeftColumn>
             <WordForm
               updateDisplay={ () => updateDisplay() }
-              partsOfSpeech={ dictionaryInfo.partsOfSpeech }
             />
           </LeftColumn>
 
