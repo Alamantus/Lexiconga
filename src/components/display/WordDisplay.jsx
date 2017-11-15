@@ -1,6 +1,7 @@
 import Inferno from 'inferno';
 import Component from 'inferno-component';
 import marked from 'marked';
+import swal from 'sweetalert2';
 
 import './WordDisplay.scss';
 
@@ -34,17 +35,48 @@ export class WordDisplay extends Component {
     });
   }
 
+  delete () {
+    const { word } = this.props;
+    swal({
+      title: `Delete "${ word.name }"?`,
+      text: `It will be gone forever and cannot be restored!`,
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'No, cancel!',
+      confirmButtonClass: 'button is-danger',
+      cancelButtonClass: 'button',
+      buttonsStyling: false
+    }).then(() => {
+      word.delete(word.id)
+      .then(() => {
+        this.props.updateDisplay();
+      }).then(() => {
+        this.setState({ menuIsOpen: false }, () => {
+          swal(
+            'Deleted!',
+            `"${ word.name }" has been deleted.`,
+            'success'
+          );
+        });
+      });
+    }, dismiss => {
+      console.log('Word not deleted');
+    });
+  }
+
   render () {
     const { menuIsOpen, isEditing } = this.state;
+    const { word } = this.props;
 
     if (isEditing) {
       return (
         <WordForm
-          name={this.props.word.name}
-          pronunciation={this.props.word.pronunciation}
-          partOfSpeech={this.props.word.partOfSpeech}
-          definition={this.props.word.definition}
-          details={this.props.word.details}
+          name={word.name}
+          pronunciation={word.pronunciation}
+          partOfSpeech={word.partOfSpeech}
+          definition={word.definition}
+          details={word.details}
         />
       );
     }
@@ -54,26 +86,26 @@ export class WordDisplay extends Component {
         <header className='card-header'>
           <div className='word-card-header-title'>
             <span className='word-name'>
-              { this.props.word.name }
+              { word.name }
             </span>
             {
-              (this.props.word.pronunciation || this.props.word.partOfSpeech)
+              (word.pronunciation || word.partOfSpeech)
               && (
                 <span className='word-classification'>
                   {
-                    (this.props.word.pronunciation)
+                    (word.pronunciation)
                     && (
                       <span className='word-pronunciation'>
-                      { this.props.word.pronunciation }
+                      { word.pronunciation }
                       </span>
                     )
                   }
 
                   {
-                    (this.props.word.partOfSpeech)
+                    (word.partOfSpeech)
                     && (
                       <span className='word-part-of-speech'>
-                      { this.props.word.partOfSpeech }
+                      { word.partOfSpeech }
                       </span>
                     )
                   }
@@ -94,7 +126,7 @@ export class WordDisplay extends Component {
                 <a className='dropdown-item' onClick={ this.edit.bind(this) }>
                   Edit
                 </a>
-                <a className='dropdown-item is-danger'>
+                <a onClick={ this.delete.bind(this) } className='dropdown-item is-danger'>
                   Delete
                 </a>
               </div>
@@ -105,16 +137,16 @@ export class WordDisplay extends Component {
         <section className='card-content'>
           <div className='content'>
             {
-              (this.props.word.definition)
+              (word.definition)
               && (
                 <p className='word-definition'>
-                  { this.props.word.definition }
+                  { word.definition }
                 </p>
               )
             }
 
             {
-              (this.props.word.details)
+              (word.details)
               && (
                 <p className='word-details'
                   dangerouslySetInnerHTML={{__html: this.wordDetailsHTML}} />

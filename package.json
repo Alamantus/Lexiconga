@@ -53,6 +53,7 @@
     "marked": "^0.3.6",
     "papaparse": "^4.3.3",
     "sanitize-html": "^1.14.1",
-    "store": "^2.0.12"
+    "store": "^2.0.12",
+    "sweetalert2": "^6.11.5"
   }
 }

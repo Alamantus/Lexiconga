@@ -21,7 +21,7 @@ export const MainDisplay = ({ dictionaryInfo, wordsToDisplay, updateDisplay, upd
 
           <RightColumn>
             <DictionaryDetails
-            updater={ updater }
+              updater={ updater }
               name={ dictionaryInfo.name }
               specification={ dictionaryInfo.specification }
               description={ dictionaryInfo.description }
@@ -33,7 +33,8 @@ export const MainDisplay = ({ dictionaryInfo, wordsToDisplay, updateDisplay, upd
             <WordsList
               lastRender={ lastRender }
               words={ wordsToDisplay }
-              adsEveryXWords={ 10 } />
+              adsEveryXWords={ 10 }
+              updateDisplay={ updateDisplay } />
           </RightColumn>
           
         </div>

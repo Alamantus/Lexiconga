@@ -38,4 +38,14 @@ export class Word {
       console.error(error);
     });
   }
+
+  delete (wordId) {
+    return wordDb.words.delete(wordId)
+    .then(() => {
+      console.log('Word deleted successfully');
+    })
+    .catch(error => {
+      console.error(error);
+    });
+  }
 }
