@@ -4,12 +4,12 @@ import PropTypes from 'prop-types';
 import marked from 'marked';
 import swal from 'sweetalert2';
 
-import './WordDisplay.scss';
+import './styles.scss';
 
-import idManager from '../../managers/IDManager';
-import { Word } from '../../managers/Word';
+import idManager from '../../../managers/IDManager';
+import { Word } from '../../../managers/Word';
 
-import { WordForm } from '../management/WordForm';
+import { WordForm } from '../../management/WordForm';
 
 export class WordDisplay extends Component {
   constructor (props) {
@@ -90,9 +90,9 @@ export class WordDisplay extends Component {
       );
     }
     return (
-      <div className='card'>
+      <div className='word-card'>
 
-        <header className='card-header'>
+        <header className='word-card-header'>
           <div className='word-card-header-title'>
             <span className='word-name'>
               { word.name }
@@ -143,7 +143,7 @@ export class WordDisplay extends Component {
           </div>
         </header>
 
-        <section className='card-content'>
+        <section className='word-card-content'>
           <div className='content'>
             {
               (word.definition)

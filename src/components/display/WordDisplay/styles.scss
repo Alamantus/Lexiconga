@@ -2,6 +2,19 @@
 @import '../../node_modules/bulma/sass/utilities/derived-variables';
 @import '../../node_modules/bulma/sass/components/card';
 
+.word-card {
+  @extend .card;
+
+  margin-bottom: 10px;
+
+  .word-card-header {
+    @extend .card-header;
+  }
+  .word-card-content {
+    @extend .card-content;
+  }
+}
+
 .word-card-header-title {
   @extend .card-header-title;
 
