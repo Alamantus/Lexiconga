@@ -104,7 +104,7 @@ export class WordForm extends Component {
       <div className='box'>
         <div className='field'>
           <label className='label'>Word</label>
-          <p className='control'>
+          <div className='control'>
             <input className={ `input${(!this.state.nameIsValid) ? ' is-danger' : ''}` }
               type='text' placeholder='Required'
               value={ this.state.wordName }
@@ -115,7 +115,7 @@ export class WordForm extends Component {
                 ? (
                   <span className='help is-danger'>You must specify the word.</span>
                 ) : null}
-          </p>
+          </div>
         </div>
 
         <IPAField value={ this.state.wordPronunciation }
@@ -123,7 +123,7 @@ export class WordForm extends Component {
 
         <div className='field'>
           <label className='label'>Part of Speech</label>
-          <p className='control'>
+          <div className='control'>
             <span className='select'>
               <select value={ this.state.wordPartOfSpeech }
                 onChange={(event) => {
@@ -139,12 +139,12 @@ export class WordForm extends Component {
                 })}
               </select>
             </span>
-          </p>
+          </div>
         </div>
 
         <div className='field'>
           <label className='label'>Definition</label>
-          <p className='control'>
+          <div className='control'>
             <input className={ `input${(!this.state.definitionIsValid) ? ' is-danger' : ''}` }
               type='text' placeholder='Equivalent word(s)'
               value={ this.state.wordDefinition }
@@ -157,12 +157,12 @@ export class WordForm extends Component {
                     You must at least enter a Definition if excluding Details.
                   </span>
                 ) : null}
-          </p>
+          </div>
         </div>
         
         <div className='field'>
           <label className='label'>Details</label>
-          <p className='control'>
+          <div className='control'>
             <textarea className={ `textarea${(!this.state.detailsIsValid) ? ' is-danger' : ''}` }
               placeholder='Explanation of word (Markdown enabled)'
               value={ this.state.wordDetails }
@@ -175,19 +175,42 @@ export class WordForm extends Component {
                     You must at least enter Details if excluding a Definition.
                   </span>
                 ) : null}
-          </p>
+          </div>
         </div>
 
-        <div className='field'>
-          <p className='control'>
-            <a className='button is-primary'
-              onClick={() => {
-                this.submitWord();
-              }}>
-              Create
-            </a>
-          </p>
-        </div>
+        {this.props.word
+          ? (
+            <div className='field is-grouped'>
+              <div className='control'>
+                <a className='button is-text'
+                  onClick={() => {
+                    this.props.callback();
+                  }}>
+                  Cancel
+                </a>
+              </div>
+              <div className='control'>
+                <a className='button is-primary'
+                  onClick={() => {
+                    this.submitWord();
+                  }}>
+                  Update
+                </a>
+              </div>
+            </div>
+          ) : (
+            <div className='field'>
+              <div className='control'>
+                <a className='button is-primary'
+                  onClick={() => {
+                    this.submitWord();
+                  }}>
+                  Create
+                </a>
+              </div>
+            </div>
+          )
+        }
       </div>
     );
   }
