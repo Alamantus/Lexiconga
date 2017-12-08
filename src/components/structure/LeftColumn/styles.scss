@@ -1,0 +1,13 @@
+@import '../../node_modules/bulma/sass/utilities/mixins';
+@import '../../node_modules/bulma/sass/grid/columns';
+
+.left-column {
+  @extend .column;
+  @extend .is-one-third;
+}
+
+.floating-word-button {
+  position: fixed;
+  z-index: 2;
+  left: 0;
+}

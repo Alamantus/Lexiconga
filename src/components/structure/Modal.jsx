@@ -8,7 +8,7 @@ export class Modal extends Component {
 
   PropTypes.checkPropTypes({
     noButton: PropTypes.bool,
-    buttonText: PropTypes.string,
+    buttonText: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
     title: PropTypes.string,
     children: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
     footerAlign: PropTypes.string,
