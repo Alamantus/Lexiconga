@@ -1,13 +1,29 @@
+@import '../../node_modules/bulma/sass/utilities/initial-variables';
+@import '../../node_modules/bulma/sass/utilities/derived-variables';
 @import '../../node_modules/bulma/sass/utilities/mixins';
 @import '../../node_modules/bulma/sass/grid/columns';
+@import '../../node_modules/bulma/sass/components/navbar';
 
-.left-column {
+.left-column-open {
   @extend .column;
   @extend .is-one-third;
 }
 
 .floating-word-button {
+  margin: $column-gap;
+}
+
+.floating-word-button,
+.floating-word-form {
   position: fixed;
   z-index: 2;
+  top: $navbar-height;
   left: 0;
+}
+
+.floating-word-form {
+  @extend .column;
+  @extend .is-one-third;
+
+  overflow-y: auto;
 }

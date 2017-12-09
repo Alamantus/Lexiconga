@@ -1,16 +1,17 @@
 import Inferno from 'inferno';
-import Component from 'inferno-component';
+import PropTypes from 'prop-types';
 
-export class RightColumn extends Component {
-  constructor (props) {
-    super(props);
-  }
+export const RightColumn = (props) => {
+  PropTypes.checkPropTypes({
+    formIsDisplayed: PropTypes.bool.isRequired,
+    children: PropTypes.object,
+  }, props, 'prop', 'RightColumn');
 
-  render () {
-    return (
-      <div className='column is-two-thirds'>
-        { this.props.children }
-      </div>
-    );
-  }
+  const { formIsDisplayed } = props;
+
+  return (
+    <div className={ `column ${ formIsDisplayed ? 'is-two-thirds' : '' }` }>
+      { props.children }
+    </div>
+  );
 }
