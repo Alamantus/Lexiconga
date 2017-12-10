@@ -1,0 +1,19 @@
+@import '../../node_modules/bulma/sass/utilities/initial-variables';
+@import '../../node_modules/bulma/sass/utilities/derived-variables';
+@import '../../node_modules/bulma/sass/utilities/mixins';
+@import '../../node_modules/bulma/sass/components/modal';
+
+.large-modal {
+  @extend .modal;
+
+  .large-modal-card {
+    @extend .modal-card;
+
+    height: 100%;
+    width: 100%;
+
+    textarea {
+      @extend .modal-card-body;
+    }
+  }
+}

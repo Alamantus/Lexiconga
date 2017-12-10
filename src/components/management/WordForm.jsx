@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 
 import dictionaryData from '../../managers/DictionaryData';
 import { IPAField } from './IPAField';
+import { LargeTextArea } from './LargeTextArea';
 import { Word } from '../../managers/Word';
 
 export class WordForm extends Component {
@@ -160,23 +161,15 @@ export class WordForm extends Component {
           </div>
         </div>
         
-        <div className='field'>
-          <label className='label'>Details</label>
-          <div className='control'>
-            <textarea className={ `textarea${(!this.state.detailsIsValid) ? ' is-danger' : ''}` }
-              placeholder='Explanation of word (Markdown enabled)'
-              value={ this.state.wordDetails }
-              onChange={(event) => {
-                this.setState({ wordDetails: event.target.value });
-              }} />
-              {(!this.state.detailsIsValid)
-                ? (
-                  <span className='help is-danger'>
-                    You must at least enter Details if excluding a Definition.
-                  </span>
-                ) : null}
-          </div>
-        </div>
+        <LargeTextArea
+          label='Details'
+          value={ this.state.wordDetails }
+          placeholder='Explanation of word (Markdown enabled)'
+          isValid={ this.state.detailsIsValid }
+          invalidText='You must at least enter Details if excluding a Definition.'
+          onChange={(event) => {
+            this.setState({ wordDetails: event.target.value });
+          }} />
 
         {this.props.word
           ? (
