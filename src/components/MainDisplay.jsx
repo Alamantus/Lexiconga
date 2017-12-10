@@ -22,7 +22,7 @@ export class MainDisplay extends Component {
 
     this.state = {
       isMobile: false,
-      wordFormIsOpen: false,
+      wordFormIsOpen: true,
     };
   }
 
