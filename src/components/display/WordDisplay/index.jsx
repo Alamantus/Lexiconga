@@ -24,14 +24,6 @@ export class WordDisplay extends Component {
       menuIsOpen: false,
       isEditing: false,
     }
-
-    this.wordDetailsHTML = marked(props.word.details);
-  }
-
-  componentWillUpdate (nextProps, nextState) {
-    if (this.props.word.details !== nextProps.word.details) {
-      this.wordDetailsHTML = marked(nextProps.word.details);
-    }
   }
 
   edit () {
@@ -158,7 +150,7 @@ export class WordDisplay extends Component {
               (word.details)
               && (
                 <p className='word-details'
-                  dangerouslySetInnerHTML={{__html: this.wordDetailsHTML}} />
+                  dangerouslySetInnerHTML={{__html: marked(word.details)}} />
               )
             }
           </div>
