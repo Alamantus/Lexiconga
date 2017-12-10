@@ -1,4 +1,7 @@
-@import '../../../../node_modules/bulma/bulma';
+@import '../../../../node_modules/bulma/sass/utilities/initial-variables';
+@import '../../../../node_modules/bulma/sass/utilities/derived-variables';
+@import '../../../../node_modules/bulma/sass/utilities/mixins';
+@import '../../../../node_modules/bulma/sass/elements/box';
 
 .details-box {
   @extend .box;
