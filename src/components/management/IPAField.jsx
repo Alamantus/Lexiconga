@@ -74,7 +74,7 @@ export class IPAField extends Component {
       return (
         <IPATable
           value={ this.state.value }
-          close={ () => this.setState({ doShowTable: false }) }
+          close={ () => this.setState({ doShowTable: false }, () => this.field.focus()) }
           update={ (newValue) => this.setState({ value: newValue }, this.field.focus()) } />
       );
     }
