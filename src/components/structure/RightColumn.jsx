@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 export const RightColumn = (props) => {
   PropTypes.checkPropTypes({
     formIsDisplayed: PropTypes.bool.isRequired,
-    children: PropTypes.object,
+    children: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   }, props, 'prop', 'RightColumn');
 
   const { formIsDisplayed } = props;
