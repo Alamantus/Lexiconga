@@ -242,10 +242,11 @@ export class EditDictionaryModal extends Component {
 
   render () {
     const { currentDisplay, hasChanged } = this.state;
+    const { specification, settings, isLoggedIn } = this.props;
 
     return (
-      <Modal title={ `Edit ${ this.props.specification }` }
-        buttonText={ `Edit ${ this.props.specification }` }
+      <Modal title={ `Edit ${ specification }` }
+        buttonText={ `Edit ${ specification }` }
         footerAlign='right'
         footerContent={
           (
@@ -261,28 +262,74 @@ export class EditDictionaryModal extends Component {
         }
       >
 
-        <div className='tabs'>
-          <ul>
-            <li className={ (currentDisplay === DISPLAY.DETAILS) ? 'is-active' : null }>
-              <a onClick={ this.toggleDisplay.bind(this, DISPLAY.DETAILS) }>
-                Details
-              </a>
-            </li>
-            <li className={ (currentDisplay === DISPLAY.LINGUISTICS) ? 'is-active' : null }>
-              <a onClick={ this.toggleDisplay.bind(this, DISPLAY.LINGUISTICS) }>
-                Linguistics
-              </a>
-            </li>
-            <li className={ (currentDisplay === DISPLAY.SETTINGS) ? 'is-active' : null }>
-              <a onClick={ this.toggleDisplay.bind(this, DISPLAY.SETTINGS) }>
-                Settings
-              </a>
-            </li>
-          </ul>
-        </div>
+        {!settings.isComplete
+          ? [(
+              <div className='tabs'>
+                <ul>
+                  <li className={ (currentDisplay === DISPLAY.DETAILS) ? 'is-active' : null }>
+                    <a onClick={ this.toggleDisplay.bind(this, DISPLAY.DETAILS) }>
+                      Details
+                    </a>
+                  </li>
+                  <li className={ (currentDisplay === DISPLAY.LINGUISTICS) ? 'is-active' : null }>
+                    <a onClick={ this.toggleDisplay.bind(this, DISPLAY.LINGUISTICS) }>
+                      Linguistics
+                    </a>
+                  </li>
+                  <li className={ (currentDisplay === DISPLAY.SETTINGS) ? 'is-active' : null }>
+                    <a onClick={ this.toggleDisplay.bind(this, DISPLAY.SETTINGS) }>
+                      Settings
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            ),
+            this.displaySection(),
+          ] : (
+            <div className='columns'>
 
-        { this.displaySection() }
+              <div className='column has-text-centered'>
+                { specification } marked complete<br />
+                <a className='button is-warning is-small'
+                  onClick={() => {
+                    this.setState({ isComplete: false, currentDisplay: DISPLAY.SETTINGS }, () => {
+                      this.save();
+                    })
+                  }}>
+                  Mark it incomplete
+                </a>
+              </div>
 
+              {isLoggedIn
+               && (
+                  <div className='column has-text-centered'>
+                    Your dictionary is <strong>{ settings.isPublic ? 'Public' : 'Private'}</strong>
+                    {settings.isPublic
+                      && (
+                        [
+                          ' You can view it at',
+                          <br />,
+                          <a className='button is-text is-small'
+                            onClick={() => console.log('set up copying to clipboard')}>
+                            PUBLIC_LINK
+                          </a>,
+                        ]
+                      )}
+                    <br />
+                    <a className='button is-small'
+                      onClick={() => {
+                        this.setState({ isPublic: !settings.isPublic }, () => {
+                          this.save();
+                        })
+                      }}>
+                      Mark it { settings.isPublic ? 'Private' : 'Public'}
+                    </a>
+                  </div>
+                )}
+
+            </div>
+          )
+        }
       </Modal>
     );
   }

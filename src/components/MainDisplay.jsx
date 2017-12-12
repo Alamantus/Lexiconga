@@ -49,6 +49,7 @@ export class MainDisplay extends Component {
   render () {
     const { dictionaryInfo, wordsToDisplay, updateDisplay, updater } = this.props;
     const { isMobile, wordFormIsOpen } = this.state;
+    const wordFormIsDisabled = dictionaryInfo.settings.isComplete;
 
     return (
       <section className='section'>
@@ -56,6 +57,7 @@ export class MainDisplay extends Component {
           <div className='columns'>
             
             <LeftColumn
+              isDisabled={ wordFormIsDisabled }
               isMobile={ isMobile }
               displayForm={ wordFormIsOpen }
               openWordForm={ this.openWordForm.bind(this) }
@@ -66,7 +68,7 @@ export class MainDisplay extends Component {
               />
             </LeftColumn>
 
-            <RightColumn formIsDisplayed={ this.state.wordFormIsOpen }>
+            <RightColumn formIsDisplayed={ !wordFormIsDisabled && wordFormIsOpen }>
               <DictionaryDetails
                 updater={ updater }
                 name={ dictionaryInfo.name }

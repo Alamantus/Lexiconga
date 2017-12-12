@@ -106,7 +106,7 @@ export const EditSettingsForm = (props) => {
               }} />
           </label>
           <div className='help'>
-            Checking this box will mark your { specification } as "complete", and you will not be able to alter it until this checkbox is unchecked.
+            Checking this box will mark your { specification } as "complete" and prevent any changes from being made.
           </div>
         </div>
       </div>
