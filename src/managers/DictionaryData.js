@@ -34,6 +34,13 @@ const defaultDictionary = {
       }
     ],
   },
+  settings: {
+    allowDuplicates: false,
+    caseSensitive: false,
+    sortByDefinition: false,
+    isComplete: false,
+    isPublic: false,
+  },
 };
 
 class DictionaryData {
@@ -53,8 +60,12 @@ class DictionaryData {
         return parseInt(word.id);
       })
       .then(largestId => {
+        // Set next word id to biggest id + 1
         idManager.setId('word', ++largestId);
-        console.log('First word ID: ' + idManager.next('word').toString());
+      })
+      .catch(e => {
+        // No words, so set next id to 1
+        idManager.setId('word', 1);
       });
     }
   }
@@ -233,6 +244,71 @@ class DictionaryData {
     updatedValues.alphabeticalOrder = array
       .filter((value) => { return value !== '' })
       .map((value) => { return value.trim() });
+    return store.set('Lexiconga', updatedValues);
+  }
+
+  get settings () {
+    return store.get('Lexiconga').settings
+      || defaultDictionary.settings;
+  }
+
+  get allowDuplicates () {
+    return store.get('Lexiconga').settings.allowDuplicates
+      || defaultDictionary.settings.allowDuplicates;
+  }
+
+  set allowDuplicates (value) {
+    assert(typeof value === 'bool', 'allowDuplicates must be passed as a boolean.');
+    const updatedValues = store.get('Lexiconga');
+    updatedValues.settings.allowDuplicates = value;
+    return store.set('Lexiconga', updatedValues);
+  }
+
+  get caseSensitive () {
+    return store.get('Lexiconga').settings.caseSensitive
+      || defaultDictionary.settings.caseSensitive;
+  }
+
+  set caseSensitive (value) {
+    assert(typeof value === 'bool', 'caseSensitive must be passed as a boolean.');
+    const updatedValues = store.get('Lexiconga');
+    updatedValues.settings.caseSensitive = value;
+    return store.set('Lexiconga', updatedValues);
+  }
+
+  get sortByDefinition () {
+    return store.get('Lexiconga').settings.sortByDefinition
+      || defaultDictionary.settings.sortByDefinition;
+  }
+
+  set sortByDefinition (value) {
+    assert(typeof value === 'bool', 'sortByDefinition must be passed as a boolean.');
+    const updatedValues = store.get('Lexiconga');
+    updatedValues.settings.sortByDefinition = value;
+    return store.set('Lexiconga', updatedValues);
+  }
+
+  get isComplete () {
+    return store.get('Lexiconga').settings.isComplete
+      || defaultDictionary.settings.isComplete;
+  }
+
+  set isComplete (value) {
+    assert(typeof value === 'bool', 'isComplete must be passed as a boolean.');
+    const updatedValues = store.get('Lexiconga');
+    updatedValues.settings.isComplete = value;
+    return store.set('Lexiconga', updatedValues);
+  }
+
+  get isPublic () {
+    return store.get('Lexiconga').settings.isPublic
+      || defaultDictionary.settings.isPublic;
+  }
+
+  set isPublic (value) {
+    assert(typeof value === 'bool', 'isPublic must be passed as a boolean.');
+    const updatedValues = store.get('Lexiconga');
+    updatedValues.settings.isPublic = value;
     return store.set('Lexiconga', updatedValues);
   }
 
