@@ -10,6 +10,11 @@ export class LargeTextArea extends Component {
 
     PropTypes.checkPropTypes({
       label: PropTypes.string.isRequired,
+      helpText: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.object,
+        PropTypes.array,
+      ]),
       value: PropTypes.string.isRequired,
       placeholder: PropTypes.string,
       isValid: PropTypes.bool,
@@ -45,19 +50,19 @@ export class LargeTextArea extends Component {
   }
 
   onInput (event) {
-    const val = event.currentTarget.value;
+    const val = event.target.value;
 
     if (val !== this.state.value) {
       this.setState({ value: val }, () => {
         if (this.props.onInput) {
-          this.props.onInput(this.state.value);
+          this.props.onInput(event);
         }
       });
     }
   }
 
   renderTextarea () {
-    const { placeholder, isValid, onChange } = this.props;
+    const { placeholder, isValid = true, onChange } = this.props;
     return (
       <textarea className={ `textarea ${(!isValid) ? 'is-danger' : ''}` }
         placeholder={ placeholder || '' }
@@ -71,43 +76,32 @@ export class LargeTextArea extends Component {
   }
 
   render () {
-    const { label, isValid, invalidText } = this.props;
-
-    // if (this.state.isMaximized) {
-    //   return (
-    //     <div className='large-modal is-active'>
-    //       <div className='modal-background' onClick={ this.minimize.bind(this) } />
-    //       <div className='large-modal-card'>
-    //         <header className='modal-card-head'>
-    //           <span className='modal-card-title'>
-    //             { label }
-    //           </span>
-    //           <button className='delete'
-    //             aria-label='close'
-    //             onClick={ this.minimize.bind(this) }
-    //           />
-    //         </header>
-    //         { this.renderTextarea() }
-    //         <footer className='modal-card-foot is-small' />
-    //       </div>
-    //     </div>
-    //   );
-    // }
+    const { label, helpText, isValid = true, invalidText } = this.props;
 
     return (
       <div className='field'>
         <label className='label'>
           { label }
-          <a className='button is-small is-pulled-right is-inline' onClick={ this.maximize.bind(this) }>
+          <a className='button is-small is-pulled-right is-inline'
+            title='Maximize'
+            aria-label={`Maximize ${label}`}
+            onClick={ this.maximize.bind(this) }>
             <span className='icon'><i className='fa fa-expand' /></span>
           </a>
         </label>
+        {helpText
+          && (
+            <div className='help'>
+              { helpText }
+            </div>
+          )
+        }
         <div className='control'>
           { this.renderTextarea() }
           {(!isValid)
             ? (
               <span className='help is-danger'>
-                { invalidText }
+                { invalidText || 'Invalid' }
               </span>
             ) : null}
         </div>
@@ -121,7 +115,7 @@ export class LargeTextArea extends Component {
                   { label }
                 </span>
                 <button className='delete'
-                  aria-label='close'
+                  aria-label={`Minimize ${label}`}
                   onClick={ this.minimize.bind(this) }
                 />
               </header>
