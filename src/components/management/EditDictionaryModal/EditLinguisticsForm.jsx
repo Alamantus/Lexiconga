@@ -2,6 +2,7 @@ import Inferno from 'inferno';
 import PropTypes from 'prop-types';
 
 import { IPAField } from '../IPAField';
+import { LargeTextArea } from '../LargeTextArea';
 
 export const EditLinguisticsForm = (props) => {
   PropTypes.checkPropTypes({
@@ -183,26 +184,21 @@ export const EditLinguisticsForm = (props) => {
       <div className='columns'>
         <div className='column'>
 
-          <div className='field'>
-            <label className='label' htmlFor='editExceptions'>
-              Exceptions
-            </label>
-            <p className='help'>
-              Any exceptions for your phonotactics rules, <a href={ MARKDOWN_LINK } target='_blank'>Markdown</a> enabled
-            </p>
-            <div className='control'>
-              <textarea className='textarea' id='editExceptions'
-                placeholder='Vowel blends are not allowed in the onset, and [e], including blends with [e] comprising it, is not allowed in the coda.'
-                value={ exceptions }
-                onInput={ (event) => {
-                  editDictionaryModal.setState({
-                    exceptions: event.target.value,
-                    hasChanged: event.target.value != editDictionaryModal.props.details.phonology.phonotactics.exceptions,
-                  });
-                }}
-              />
-            </div>
-          </div>
+          <LargeTextArea
+            label='Exceptions'
+            helpText={[
+              'Any exceptions for your phonotactics rules, ',
+              <a href={ MARKDOWN_LINK } target='_blank'>Markdown</a>,
+              ' enabled',
+            ]}
+            placeholder='Vowel blends are not allowed in the onset, and [e], including blends with [e] comprising it, is not allowed in the coda.'
+            value={ exceptions }
+            onInput={ (event) => {
+              editDictionaryModal.setState({
+                exceptions: event.target.value,
+                hasChanged: event.target.value != editDictionaryModal.props.details.phonology.phonotactics.exceptions,
+              });
+            }} />
 
         </div>
       </div>
@@ -212,30 +208,25 @@ export const EditLinguisticsForm = (props) => {
       </h4>
 
       <div className='columns'>
-
         <div className='column'>
-          <div className='field'>
-            <label className='label' htmlFor='editOrthographyNotes'>
-              Orthography Notes
-            </label>
-            <p className='help'>
-              Any notes on orthography or how phonemes are written, <a href={ MARKDOWN_LINK } target='_blank'>Markdown</a> enabled
-            </p>
-            <div className='control'>
-              <textarea className='textarea' id='editOrthographyNotes'
-                placeholder={ `- **m** = [ɱ]\n- **sh** = [ʃ]\n- **r** = [ʁ]\n...` }
-                value={ orthographyNotes }
-                onInput={ (event) => {
-                  editDictionaryModal.setState({
-                    orthographyNotes: event.target.value,
-                    hasChanged: event.target.value != editDictionaryModal.props.details.orthography.notes,
-                  });
-                }}
-              />
-            </div>
-          </div>
+
+          <LargeTextArea
+            label='Orthography Notes'
+            helpText={[
+              'Any notes on orthography or how phonemes are written, ',
+              <a href={ MARKDOWN_LINK } target='_blank'>Markdown</a>,
+              ' enabled',
+            ]}
+            placeholder={ `- **m** = [ɱ]\n- **sh** = [ʃ]\n- **r** = [ʁ]\n...` }
+            value={ orthographyNotes }
+            onInput={ (event) => {
+              editDictionaryModal.setState({
+                orthographyNotes: event.target.value,
+                hasChanged: event.target.value != editDictionaryModal.props.details.orthography.notes,
+              });
+            }} />
+
         </div>
-        
       </div>
 
     </div>
