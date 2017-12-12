@@ -29,6 +29,7 @@ export class DictionaryDetails extends Component {
       details: PropTypes.object,
       settings: PropTypes.object,
       updater: PropTypes.object,
+      updateDisplay: PropTypes.func,
     }, props, 'prop', 'DictionaryDetails');
 
     this.state = {
@@ -129,6 +130,7 @@ export class DictionaryDetails extends Component {
                 alphabeticalOrder={ this.props.alphabeticalOrder }
                 details={ this.props.details }
                 settings={ this.props.settings }
+                updateDisplay={ this.props.updateDisplay }
               />
 
             </div>

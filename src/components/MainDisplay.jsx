@@ -78,6 +78,7 @@ export class MainDisplay extends Component {
                 details={ dictionaryInfo.details }
                 settings={ dictionaryInfo.settings }
                 alphabeticalOrder={ dictionaryInfo.alphabeticalOrder }
+                updateDisplay={ updateDisplay }
               />
 
               <WordsList

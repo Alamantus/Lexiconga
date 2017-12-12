@@ -313,6 +313,9 @@ class DictionaryData {
   }
 
   get wordsPromise () {
+    if (this.sortByDefinition) {
+      return wordDb.words.toCollection().sortBy('definition');
+    }
     return wordDb.words.toArray();
   }
 

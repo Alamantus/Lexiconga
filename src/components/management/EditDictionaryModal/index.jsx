@@ -28,6 +28,7 @@ export class EditDictionaryModal extends Component {
       details: PropTypes.object,
       settings: PropTypes.object,
       isLoggedIn: PropTypes.bool,
+      updateDisplay: PropTypes.func,
     }, props, 'prop', 'EditDictionaryModal');
 
     this.state = {
@@ -233,7 +234,12 @@ export class EditDictionaryModal extends Component {
 
     this.props.updater.updateDictionaryDetails(updatedDetails)
       .then(() => {
-        this.setState({ hasChanged: false });
+        this.setState({ hasChanged: false }, () => {
+          // If setting that alters word display is changed, update the display.
+          if (updatedDetails.hasOwnProperty('sortByDefinition')) {
+            this.props.updateDisplay();
+          }
+        });
       })
       .catch(errorMessage => {
         console.error(errorMessage);
@@ -289,7 +295,7 @@ export class EditDictionaryModal extends Component {
             <div className='columns'>
 
               <div className='column has-text-centered'>
-                { specification } marked complete<br />
+                { specification } marked complete&mdash;editing has been disabled.<br />
                 <a className='button is-warning is-small'
                   onClick={() => {
                     this.setState({ isComplete: false, currentDisplay: DISPLAY.SETTINGS }, () => {
