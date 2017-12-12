@@ -27,6 +27,7 @@ export class DictionaryDetails extends Component {
       partsOfSpeech: PropTypes.array,
       alphabeticalOrder: PropTypes.array,
       details: PropTypes.object,
+      settings: PropTypes.object,
       updater: PropTypes.object,
     }, props, 'prop', 'DictionaryDetails');
 
@@ -103,7 +104,6 @@ export class DictionaryDetails extends Component {
 
   render () {
     const { currentDisplay } = this.state;
-
     return (
       <div className='box'>
 
@@ -121,12 +121,14 @@ export class DictionaryDetails extends Component {
 
               <EditDictionaryModal
                 updater={ this.props.updater }
+                isLoggedIn={ true }
                 name={ this.props.name }
                 specification={ this.props.specification }
                 description={ this.props.description }
                 partsOfSpeech={ this.props.partsOfSpeech }
                 alphabeticalOrder={ this.props.alphabeticalOrder }
                 details={ this.props.details }
+                settings={ this.props.settings }
               />
 
             </div>

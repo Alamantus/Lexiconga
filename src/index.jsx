@@ -28,6 +28,7 @@ class App extends Component {
       description: dictionary.description,
       partsOfSpeech: dictionary.partsOfSpeech,
       details: dictionary.details,
+      settings: dictionary.settings,
       alphabeticalOrder: dictionary.alphabeticalOrder,
 
       displayedWords: [],
@@ -46,6 +47,7 @@ class App extends Component {
       description,
       partsOfSpeech,
       details,
+      settings,
       alphabeticalOrder,
     } = this.state;
 
@@ -55,6 +57,7 @@ class App extends Component {
       description,
       partsOfSpeech,
       details,
+      settings,
       alphabeticalOrder,
     };
   }

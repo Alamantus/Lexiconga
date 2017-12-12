@@ -258,7 +258,7 @@ class DictionaryData {
   }
 
   set allowDuplicates (value) {
-    assert(typeof value === 'bool', 'allowDuplicates must be passed as a boolean.');
+    assert(typeof value === 'boolean', 'allowDuplicates must be passed as a boolean.');
     const updatedValues = store.get('Lexiconga');
     updatedValues.settings.allowDuplicates = value;
     return store.set('Lexiconga', updatedValues);
@@ -270,7 +270,7 @@ class DictionaryData {
   }
 
   set caseSensitive (value) {
-    assert(typeof value === 'bool', 'caseSensitive must be passed as a boolean.');
+    assert(typeof value === 'boolean', 'caseSensitive must be passed as a boolean.');
     const updatedValues = store.get('Lexiconga');
     updatedValues.settings.caseSensitive = value;
     return store.set('Lexiconga', updatedValues);
@@ -282,7 +282,7 @@ class DictionaryData {
   }
 
   set sortByDefinition (value) {
-    assert(typeof value === 'bool', 'sortByDefinition must be passed as a boolean.');
+    assert(typeof value === 'boolean', 'sortByDefinition must be passed as a boolean.');
     const updatedValues = store.get('Lexiconga');
     updatedValues.settings.sortByDefinition = value;
     return store.set('Lexiconga', updatedValues);
@@ -294,7 +294,7 @@ class DictionaryData {
   }
 
   set isComplete (value) {
-    assert(typeof value === 'bool', 'isComplete must be passed as a boolean.');
+    assert(typeof value === 'boolean', 'isComplete must be passed as a boolean.');
     const updatedValues = store.get('Lexiconga');
     updatedValues.settings.isComplete = value;
     return store.set('Lexiconga', updatedValues);
@@ -306,7 +306,7 @@ class DictionaryData {
   }
 
   set isPublic (value) {
-    assert(typeof value === 'bool', 'isPublic must be passed as a boolean.');
+    assert(typeof value === 'boolean', 'isPublic must be passed as a boolean.');
     const updatedValues = store.get('Lexiconga');
     updatedValues.settings.isPublic = value;
     return store.set('Lexiconga', updatedValues);

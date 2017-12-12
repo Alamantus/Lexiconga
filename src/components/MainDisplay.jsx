@@ -56,8 +56,8 @@ export class MainDisplay extends Component {
           <div className='columns'>
             
             <LeftColumn
-              isMobile={ this.state.isMobile }
-              displayForm={ this.state.wordFormIsOpen }
+              isMobile={ isMobile }
+              displayForm={ wordFormIsOpen }
               openWordForm={ this.openWordForm.bind(this) }
               closeWordForm={ this.closeWordForm.bind(this) }
             >
@@ -74,6 +74,7 @@ export class MainDisplay extends Component {
                 description={ dictionaryInfo.description }
                 partsOfSpeech={ dictionaryInfo.partsOfSpeech }
                 details={ dictionaryInfo.details }
+                settings={ dictionaryInfo.settings }
                 alphabeticalOrder={ dictionaryInfo.alphabeticalOrder }
               />
 

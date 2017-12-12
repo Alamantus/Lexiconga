@@ -7,6 +7,7 @@ import { Modal } from '../../structure/Modal';
 
 import { EditDictionaryForm } from './EditDictionaryForm';
 import { EditLinguisticsForm } from './EditLinguisticsForm';
+import { EditSettingsForm } from './EditSettingsForm';
 
 const DISPLAY = {
   DETAILS: 1,
@@ -25,6 +26,8 @@ export class EditDictionaryModal extends Component {
       alphabeticalOrder: PropTypes.array,
       partsOfSpeech: PropTypes.array,
       details: PropTypes.object,
+      settings: PropTypes.object,
+      isLoggedIn: PropTypes.bool,
     }, props, 'prop', 'EditDictionaryModal');
 
     this.state = {
@@ -34,6 +37,7 @@ export class EditDictionaryModal extends Component {
       specification: props.specification,
       description: props.description,
       alphabeticalOrder: props.alphabeticalOrder.join('\n'),
+
       partsOfSpeech: props.partsOfSpeech.join('\n'),
       consonants: props.details.phonology.consonants.join(' '),
       vowels: props.details.phonology.vowels.join(' '),
@@ -43,6 +47,12 @@ export class EditDictionaryModal extends Component {
       coda: props.details.phonology.phonotactics.coda.join('\n'),
       exceptions: props.details.phonology.phonotactics.exceptions,
       orthographyNotes: props.details.orthography.notes,
+
+      allowDuplicates: props.settings.allowDuplicates,
+      caseSensitive: props.settings.caseSensitive,
+      sortByDefinition: props.settings.sortByDefinition,
+      isComplete: props.settings.isComplete,
+      isPublic: props.settings.isPublic,
 
       hasChanged: false,
     }
@@ -100,9 +110,16 @@ export class EditDictionaryModal extends Component {
 
       case DISPLAY.SETTINGS : {
         displayJSX = (
-          <div className='content'>
-            <p>Settings!</p>
-          </div>
+          <EditSettingsForm
+            editDictionaryModal={ this }
+            allowDuplicates={ this.state.allowDuplicates }
+            caseSensitive={ this.state.caseSensitive }
+            sortByDefinition={ this.state.sortByDefinition }
+            isComplete={ this.state.isComplete }
+            specification={ this.state.specification }
+            isLoggedIn={ this.props.isLoggedIn }
+            isPublic={ this.state.isPublic }
+          />
         );
         break;
       }
@@ -190,6 +207,26 @@ export class EditDictionaryModal extends Component {
 
     if (this.state.orthographyNotes !== this.props.details.orthography.notes) {
       updatedDetails['orthographyNotes'] = this.state.orthographyNotes;
+    }
+
+    if (this.state.allowDuplicates !== this.props.settings.allowDuplicates) {
+      updatedDetails['allowDuplicates'] = this.state.allowDuplicates;
+    }
+
+    if (this.state.caseSensitive !== this.props.settings.caseSensitive) {
+      updatedDetails['caseSensitive'] = this.state.caseSensitive;
+    }
+
+    if (this.state.sortByDefinition !== this.props.settings.sortByDefinition) {
+      updatedDetails['sortByDefinition'] = this.state.sortByDefinition;
+    }
+
+    if (this.state.isComplete !== this.props.settings.isComplete) {
+      updatedDetails['isComplete'] = this.state.isComplete;
+    }
+
+    if (this.state.isPublic !== this.props.settings.isPublic) {
+      updatedDetails['isPublic'] = this.state.isPublic;
     }
 
     // console.log(updatedDetails);

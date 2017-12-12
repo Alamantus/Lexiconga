@@ -34,17 +34,28 @@ export class Updater {
         'exceptions',
         'orthographyNotes',
       ];
+      const settingKeys = [
+        'allowDuplicates',
+        'caseSensitive',
+        'sortByDefinition',
+        'isComplete',
+        'isPublic',
+      ];
 
       for (const key in dictionaryDetails) {
         this.dictionary[key] = dictionaryDetails[key];
 
-        if (!detailKeys.includes(key)) {
+        if (!detailKeys.includes(key) && !settingKeys.includes(key)) {
           updatedDetails[key] = dictionaryDetails[key];
         }
       }
 
-      if (Object.keys(dictionaryDetails).some(key => { return detailKeys.includes(key) })) {
+      if (Object.keys(dictionaryDetails).some(key => detailKeys.includes(key))) {
         updatedDetails['details'] = this.dictionary.details;
+      }
+
+      if (Object.keys(dictionaryDetails).some(key => settingKeys.includes(key))) {
+        updatedDetails['settings'] = this.dictionary.settings;
       }
 
       console.log(updatedDetails);
