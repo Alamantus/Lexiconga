@@ -37,13 +37,12 @@ export class WordsList extends Component {
         {this.props.words
           && this.props.words.map((word, index) => {
             return (
-              <div>
-                {index % adsEveryXWords == 0
-                  && <LazyLoader lazyLoad={ loadAd } />
+              <div key={ `word_${word.id}` }>
+                {index % adsEveryXWords == 1
+                  && <LazyLoader key={ index } lazyLoad={ loadAd } />
                 }
                 
-                <WordDisplay key={ `word_${word.id}` }
-                  word={ word }
+                <WordDisplay word={ word }
                   updateDisplay={ this.props.updateDisplay } />
               </div>
             );
