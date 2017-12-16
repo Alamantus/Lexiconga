@@ -4,7 +4,7 @@ import './sass/main.scss';
 import Inferno from 'inferno';
 import Component from 'inferno-component';
 
-import { addHelpfulPrototypes } from './Helpers';
+import { addHelpfulPrototypes, getWordsStats } from './Helpers';
 addHelpfulPrototypes();
 
 import dictionary from './managers/DictionaryData';
@@ -29,6 +29,7 @@ class App extends Component {
       partsOfSpeech: dictionary.partsOfSpeech,
       details: dictionary.details,
       settings: dictionary.settings,
+      stats: [],
       alphabeticalOrder: dictionary.alphabeticalOrder,
 
       displayedWords: [],
@@ -48,6 +49,7 @@ class App extends Component {
       partsOfSpeech,
       details,
       settings,
+      stats,
       alphabeticalOrder,
     } = this.state;
 
@@ -58,6 +60,7 @@ class App extends Component {
       partsOfSpeech,
       details,
       settings,
+      stats,
       alphabeticalOrder,
     };
   }
@@ -72,10 +75,11 @@ class App extends Component {
     // const {searchIn, searchTerm, filteredPartsOfSpeech} = this.state.searchConfig;
 
     // TODO: Sort out searching to remove this temporary solution.
-    dictionary.wordsPromise.then((words) => {
+    dictionary.wordsPromise.then(words => {
       this.setState({
         displayedWords: words,
-      })
+        stats: getWordsStats(words, this.state.partsOfSpeech),
+      });
     });
   }
 

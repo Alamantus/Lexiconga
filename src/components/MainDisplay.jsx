@@ -77,6 +77,7 @@ export class MainDisplay extends Component {
                 partsOfSpeech={ dictionaryInfo.partsOfSpeech }
                 details={ dictionaryInfo.details }
                 settings={ dictionaryInfo.settings }
+                stats={ dictionaryInfo.stats }
                 alphabeticalOrder={ dictionaryInfo.alphabeticalOrder }
                 updateDisplay={ updateDisplay }
               />

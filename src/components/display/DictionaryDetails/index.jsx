@@ -28,6 +28,7 @@ export class DictionaryDetails extends Component {
       alphabeticalOrder: PropTypes.array,
       details: PropTypes.object,
       settings: PropTypes.object,
+      stats: PropTypes.array,
       updater: PropTypes.object,
       updateDisplay: PropTypes.func,
     }, props, 'prop', 'DictionaryDetails');
@@ -87,8 +88,26 @@ export class DictionaryDetails extends Component {
 
         case DISPLAY.STATS : {
           displayJSX = (
-            <div className="content">
-              <p>Stats!</p>
+            <div className='columns'>
+              <div className='column'>
+                <strong>Number of Words</strong>
+                <div className='field is-grouped is-grouped-multiline'>
+                  {this.props.stats.numberOfWords.map(stat => {
+                    return (
+                      <div className='control'>
+                        <div className='tags has-addons'>
+                          <span className='tag'>
+                            { stat.name }
+                          </span>
+                          <span className='tag is-white'>
+                            { stat.value }
+                          </span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
             </div>
           );
           break;

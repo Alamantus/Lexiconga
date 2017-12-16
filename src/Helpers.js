@@ -108,3 +108,29 @@ export function addHelpfulPrototypes () {
 export function characterIsUppercase (character) {
   return character === character.toUpperCase();
 }
+
+export function getWordsStats (words, partsOfSpeech) {
+  const wordStats = {
+    numberOfWords: [
+      {
+        name: 'Total',
+        value: words.length,
+      },
+    ],
+  };
+
+  partsOfSpeech.forEach(partOfSpeech => {
+    const wordsWithPartOfSpeech = words.filter(word => word.partOfSpeech === partOfSpeech);
+    wordStats.numberOfWords.push({
+      name: partOfSpeech,
+      value: wordsWithPartOfSpeech.length,
+    });
+  });
+
+  wordStats.numberOfWords.push({
+    name: 'Unclassified',
+    value: words.filter(word => !partsOfSpeech.includes(word.partOfSpeech)).length,
+  });
+
+  return wordStats;
+}
