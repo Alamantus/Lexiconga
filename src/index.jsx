@@ -29,7 +29,7 @@ class App extends Component {
       partsOfSpeech: dictionary.partsOfSpeech,
       details: dictionary.details,
       settings: dictionary.settings,
-      stats: [],
+      stats: {},
       alphabeticalOrder: dictionary.alphabeticalOrder,
 
       displayedWords: [],
@@ -71,15 +71,15 @@ class App extends Component {
     });
   }
 
-  updateDisplayedWords () {
+  updateDisplayedWords (callback = () => {}) {
     // const {searchIn, searchTerm, filteredPartsOfSpeech} = this.state.searchConfig;
 
     // TODO: Sort out searching to remove this temporary solution.
     dictionary.wordsPromise.then(words => {
       this.setState({
         displayedWords: words,
-        stats: getWordsStats(words, this.state.partsOfSpeech),
-      });
+        stats: getWordsStats(words, this.state.partsOfSpeech, this.state.settings.caseSensitive),
+      }, () => callback());
     });
   }
 

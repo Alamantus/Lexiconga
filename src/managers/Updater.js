@@ -58,12 +58,15 @@ export class Updater {
         updatedDetails['settings'] = this.dictionary.settings;
       }
 
-      console.log(updatedDetails);
+      // console.log(updatedDetails);
 
       if (updatedDetails.isEmpty()) {
         reject('No dictionary details have changed.');
       } else {
         this.app.setState(updatedDetails, () => {
+          if (updatedDetails.hasOwnProperty('settings')) {
+            this.app.updateDisplayedWords();
+          }
           resolve();
         });
       }

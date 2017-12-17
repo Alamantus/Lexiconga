@@ -109,7 +109,7 @@ export function characterIsUppercase (character) {
   return character === character.toUpperCase();
 }
 
-export function getWordsStats (words, partsOfSpeech) {
+export function getWordsStats (words, partsOfSpeech, isCaseSensitive = false) {
   const wordStats = {
     numberOfWords: [
       {
@@ -117,6 +117,19 @@ export function getWordsStats (words, partsOfSpeech) {
         value: words.length,
       },
     ],
+    wordLength: {
+      shortest: 0,
+      longest: 0,
+      average: 0,
+    },
+    letterDistribution: [
+      // {
+      //   letter: '',
+      //   number: 0,
+      //   percentage: 0.00,
+      // }
+    ],
+    totalLetters: 0,
   };
 
   partsOfSpeech.forEach(partOfSpeech => {
@@ -130,6 +143,54 @@ export function getWordsStats (words, partsOfSpeech) {
   wordStats.numberOfWords.push({
     name: 'Unclassified',
     value: words.filter(word => !partsOfSpeech.includes(word.partOfSpeech)).length,
+  });
+
+  let totalLetters = 0;
+  const numberOfLetters = {};
+
+  words.forEach(word => {
+    const shortestWord = wordStats.wordLength.shortest;
+    const longestWord = wordStats.wordLength.longest;
+    const wordLetters = word.name.split('');
+    const lettersInWord = wordLetters.length;
+
+    totalLetters += lettersInWord;
+
+    if (shortestWord === 0 || lettersInWord < shortestWord) {
+      wordStats.wordLength.shortest = lettersInWord;
+    }
+
+    if (longestWord === 0 || lettersInWord > longestWord) {
+      wordStats.wordLength.longest = lettersInWord;
+    }
+
+    wordLetters.forEach(letter => {
+      const letterToUse = isCaseSensitive ? letter : letter.toLowerCase();
+      if (!numberOfLetters.hasOwnProperty(letterToUse)) {
+        numberOfLetters[letterToUse] = 1;
+      } else {
+        numberOfLetters[letterToUse]++;
+      }
+    });
+  });
+
+  wordStats.totalLetters = totalLetters;
+  wordStats.wordLength.average = totalLetters / words.length;
+
+  for (const letter in numberOfLetters) {
+    if (numberOfLetters.hasOwnProperty(letter)) {
+      const number = numberOfLetters[letter];
+      wordStats.letterDistribution.push({
+        letter,
+        number,
+        percentage: number / totalLetters,
+      });
+    }
+  }
+
+  wordStats.letterDistribution.sort((a, b) => {
+    if (a.percentage === b.percentage) return 0;
+    return (a.percentage > b.percentage) ? -1 : 1;
   });
 
   return wordStats;
