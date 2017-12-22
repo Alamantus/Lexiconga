@@ -118,6 +118,11 @@ export class SearchBox extends Component {
                             <i className='fa fa-search' />
                           </span>
                       </div>
+                      <div className='control'>
+                        <a className='button' onClick={() => this.setState({ searchTerm: '' }, () => this.search())}>
+                          Clear
+                        </a>
+                      </div>
                     </div>
 
                     { this.showFilterOptions() }
