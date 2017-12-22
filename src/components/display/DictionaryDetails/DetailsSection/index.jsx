@@ -32,38 +32,35 @@ export class DetailsSection extends Component {
     }
   }
 
-  mapCustomMenuItems (customTabs) {
-    return customTabs.map(tab => {
-      return tab.name;
-    });
-  }
-
   displayMenu () {
     const { details } = this.props;
 
-    let additionalMenu = (
-      <div>
-        <p className='menu-label'>
-          Additional
-        </p>
-        <ul className='menu-list'>
-          {
-            details.custom.map((tab, index) => {
-              const tabId = index + this.defaultMenuItems.length;
-              return (
-                <li key={ `customTab_${ tabId }_${ Date.now().toString() }` }>
-                  <a className={(this.state.currentDisplay === tabId) ? 'is-active' : null}
-                    onClick={ () => this.setState({ currentDisplay: tabId }) }
-                  >
-                    { tab.name }
-                  </a>
-                </li>
-              );
-            })
-          }
-        </ul>
-      </div>
-    );
+    let additionalMenu = null
+    if (details.hasOwnProperty('custom') && details.custom.length > 0) {
+      additionalMenu = (
+        <div>
+          <p className='menu-label'>
+            Additional
+          </p>
+          <ul className='menu-list'>
+            {
+              details.custom.map((tab, index) => {
+                const tabId = index + this.defaultMenuItems.length;
+                return (
+                  <li key={ `customTab_${ tabId }_${ Date.now().toString() }` }>
+                    <a className={(this.state.currentDisplay === tabId) ? 'is-active' : null}
+                      onClick={ () => this.setState({ currentDisplay: tabId }) }
+                    >
+                      { tab.name }
+                    </a>
+                  </li>
+                );
+              })
+            }
+          </ul>
+        </div>
+      );
+    }
 
     return (
       <div className='details-menu'>
