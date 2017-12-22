@@ -9,6 +9,7 @@ import './styles.scss';
 import { GeneralDisplay } from './GeneralDisplay';
 import { PhonologyDisplay } from './PhonologyDisplay';
 import { OrthographyDisplay } from './OrthographyDisplay';
+import { GrammarDisplay } from './GrammarDisplay';
 
 export class DetailsSection extends Component {
   constructor (props) {
