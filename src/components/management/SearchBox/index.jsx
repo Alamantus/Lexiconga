@@ -21,7 +21,9 @@ export class SearchBox extends Component {
       searchingIn: 'name',
       searchMethod: METHOD.contains,
       searchTerm: '',
-      filteredPartsOfSpeech: [],
+      caseSensitive: false,
+      ignoreDiacritics: false,
+      filteredPartsOfSpeech: [...props.partsOfSpeech, 'Uncategorized'],
       showHeader: false,
       showAdvanced: false,
     };
@@ -33,16 +35,48 @@ export class SearchBox extends Component {
     }
   }
 
+  get partsOfSpeechForFilter () {
+    return [...this.props.partsOfSpeech, 'Uncategorized'];
+  }
+
   search () {
-    const {searchingIn, searchMethod, searchTerm, filteredPartsOfSpeech} = this.state;
+    const {
+      searchingIn,
+      searchMethod,
+      searchTerm,
+      caseSensitive,
+      ignoreDiacritics,
+      filteredPartsOfSpeech,
+    } = this.state;
+
     const searchConfig = {
       searchingIn,
       searchMethod,
       searchTerm,
+      caseSensitive,
+      ignoreDiacritics,
       filteredPartsOfSpeech,
     };
 
     this.props.search(searchConfig);
+  }
+
+  togglePartOfSpeech (event) {
+    const uniquePartsOfSpeech = new Set(this.partsOfSpeechForFilter);
+    if (event.target.checked) {
+      uniquePartsOfSpeech.add(event.target.value);
+    } else {
+      uniquePartsOfSpeech.delete(event.target.value);
+    }
+    this.setState({ filteredPartsOfSpeech: [...uniquePartsOfSpeech] }, () => this.search());
+  }
+
+  toggleCaseSensitive (event) {
+    this.setState({ caseSensitive: event.target.checked }, () => this.search());
+  }
+
+  toggleIgnoreDiacritics (event) {
+    this.setState({ ignoreDiacritics: event.target.checked }, () => this.search());
   }
 
   displaySearchHeader () {
@@ -59,29 +93,31 @@ export class SearchBox extends Component {
 
                   <div className='column'>
                     <div className='field has-addons'>
-                      <p className='control'>
+                      <div className='control'>
                         <span className='select'>
                           <select value={ this.state.searchingIn }
                             onChange={(event) => {
-                              this.setState({ searchingIn: event.target.value });
+                              this.setState({ searchingIn: event.target.value }, () => this.search());
                             }}>
                             <option value='name'>Word</option>
                             <option value='definition'>Definition</option>
                             <option value='details'>Details</option>
                           </select>
                         </span>
-                      </p>
-                      <p className='control is-expanded'>
+                      </div>
+                      <div className='control is-expanded has-icons-left'>
                         <input className='input' type='text' placeholder='Search Term'
                           ref={(input) => {
                             this.searchBox = input;
                           }}
                           value={ this.state.searchTerm }
                           onChange={(event) => {
-                            console.log(event);
-                            this.setState({ searchTerm: event.target.value });
+                            this.setState({ searchTerm: event.target.value.trim() }, () => this.search());
                           }} />
-                      </p>
+                          <span className='icon is-small is-left'>
+                            <i className='fa fa-search' />
+                          </span>
+                      </div>
                     </div>
 
                     { this.showFilterOptions() }
@@ -114,7 +150,7 @@ export class SearchBox extends Component {
             </div>
             <div className='field-body'>
               <div className='field'>
-                <p className='control'>
+                <div className='control'>
                   <label className='radio'
                     title={ `Search term is anywhere within the ${ this.state.searchingIn.capitalize() }` }
                   >
@@ -125,7 +161,7 @@ export class SearchBox extends Component {
                         if (event.currentTarget.checked) {
                           this.setState({
                             searchMethod: event.currentTarget.value,
-                          });
+                          }, () => this.search());
                         }
                       }}
                     />
@@ -141,7 +177,7 @@ export class SearchBox extends Component {
                         if (event.currentTarget.checked) {
                           this.setState({
                             searchMethod: event.currentTarget.value,
-                          });
+                          }, () => this.search());
                         }
                       }}
                     />
@@ -157,7 +193,7 @@ export class SearchBox extends Component {
                         if (event.currentTarget.checked) {
                           this.setState({
                             searchMethod: event.currentTarget.value,
-                          });
+                          }, () => this.search());
                         }
                       }}
                     />
@@ -173,18 +209,46 @@ export class SearchBox extends Component {
                         if (event.currentTarget.checked) {
                           this.setState({
                             searchMethod: event.currentTarget.value,
-                          });
+                          }, () => this.search());
                         }
                       }}
                     />
-                    Exact
+                    Is Exactly
                   </label>
-                </p>
+                </div>
               </div>
             </div>
           </div>
         )
         : null;
+
+      const optionsSectionJSX = (
+        <div className='field is-horizontal'>
+          <div className='field-label is-normal'>
+            <label className='label'>Search Options</label>
+          </div>
+          <div className='field-body'>
+            <div className='field is-grouped'>
+              <div className='control'>
+                <label className='checkbox'>
+                  Search Case-Sensitive{ ' ' }
+                  <input type='checkbox' defaultChecked={ this.state.caseSensitive }
+                    onChange={ this.toggleCaseSensitive.bind(this) }
+                  />
+                </label>
+              </div>
+              <div className='control'>
+                <label className='checkbox'>
+                  Ignore Diacritics{ ' ' }
+                  <input type='checkbox' defaultChecked={ this.state.ignoreDiacritics }
+                    onChange={ this.toggleIgnoreDiacritics.bind(this) }
+                  />
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
 
       const filterSectionJSX = (
         <div className='field is-horizontal'>
@@ -194,15 +258,18 @@ export class SearchBox extends Component {
           <div className='field-body'>
             <div className='field is-grouped'>
             {
-              this.props.partsOfSpeech.map(partOfSpeech => {
+              this.partsOfSpeechForFilter.map(partOfSpeech => {
                 return (
-                  <p className='control'>
+                  <div className='control'>
                     <label key={ 'filterPartOfSpeech' + Date.now() }
                       className='checkbox'>
-                      <input type='checkbox' checked={ true } />
+                      <input type='checkbox' value={ partOfSpeech }
+                        defaultChecked={ this.state.filteredPartsOfSpeech.includes(partOfSpeech) }
+                        onChange={this.togglePartOfSpeech.bind(this)}
+                      />
                       { partOfSpeech }
                     </label>
-                  </p>
+                  </div>
                 );
               })
             }
@@ -215,6 +282,7 @@ export class SearchBox extends Component {
         <div className='column'>
           <div className='box'>
             { searchMethodSectionJSX }
+            { optionsSectionJSX }
             { filterSectionJSX }
           </div>
         </div>
@@ -224,12 +292,12 @@ export class SearchBox extends Component {
         <div class='columns'>
           <div class='column is-narrow'>
             <div className='field'>
-              <p className='control'>
+              <div className='control'>
                 <a className={ `button is-link is-small${ this.state.showAdvanced ? ' is-active' : '' }` }
                   onClick={ () => this.setState({ showAdvanced: !this.state.showAdvanced }) }>
                   Advanced
                 </a>
-              </p>
+              </div>
             </div>
           </div>
           { this.state.showAdvanced ? advancedSectionJSX : null }
@@ -254,17 +322,17 @@ export class SearchBox extends Component {
     return (
       <div>
         <div className='field has-addons is-hidden-touch'>
-          <p className='control'>
+          <div className='control'>
             <input className='open-search-input' type='text' readonly={ true }
               value={ this.state.searchTerm }
               onClick={ this.showHeader.bind(this) } />
-          </p>
-          <p className='control'>
+          </div>
+          <div className='control'>
             <a className='button is-link'
               onClick={ this.showHeader.bind(this) }>
               Search
             </a>
-          </p>
+          </div>
         </div>
 
         <a className='button is-hidden-desktop'

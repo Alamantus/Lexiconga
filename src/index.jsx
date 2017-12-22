@@ -4,11 +4,13 @@ import './sass/main.scss';
 import Inferno from 'inferno';
 import Component from 'inferno-component';
 
+import removeDiacritics from '../vendor/StackOverflow/removeDiacritics';
 import { addHelpfulPrototypes, getWordsStats } from './Helpers';
 addHelpfulPrototypes();
 
 import dictionary from './managers/DictionaryData';
 import { Updater } from './managers/Updater';
+import SEARCH_METHOD from './components/management/SearchBox/SearchMethod';
 
 if (process.env.NODE_ENV !== 'production') {
   require('inferno-devtools');
@@ -33,7 +35,14 @@ class App extends Component {
       alphabeticalOrder: dictionary.alphabeticalOrder,
 
       displayedWords: [],
-      searchConfig: null,
+      searchConfig: {
+        searchingIn: 'name',
+        searchMethod: SEARCH_METHOD.contains,
+        searchTerm: '',
+        caseSensitive: false,
+        ignoreDiacritics: false,
+        filteredPartsOfSpeech: [...dictionary.partsOfSpeech, 'Uncategorized'],
+      },
     }
 
     this.updater = new Updater(this, dictionary);
@@ -72,13 +81,86 @@ class App extends Component {
   }
 
   updateDisplayedWords (callback = () => {}) {
-    // const {searchIn, searchTerm, filteredPartsOfSpeech} = this.state.searchConfig;
-
-    // TODO: Sort out searching to remove this temporary solution.
     dictionary.wordsPromise.then(words => {
+      const { searchConfig, partsOfSpeech } = this.state;
+      const partsOfSpeechForFilter = [...partsOfSpeech, 'Uncategorized'];
+      let displayedWords;
+      if (searchConfig.searchTerm !== ''
+        || partsOfSpeechForFilter.length !== searchConfig.filteredPartsOfSpeech.length) {
+        const {
+          searchingIn,
+          searchTerm,
+          searchMethod,
+          caseSensitive,
+          ignoreDiacritics,
+          filteredPartsOfSpeech
+        } = searchConfig;
+
+        console.log('search config', searchConfig);
+        // displayedWords = words;
+        displayedWords = words.filter((word) => {
+          const wordPartOfSpeech = word.partOfSpeech === '' ? 'Uncategorized' : word.partOfSpeech;
+          if (!filteredPartsOfSpeech.includes(wordPartOfSpeech)) {
+            return false;
+          }
+          if (searchingIn === 'details') {
+            let term = searchTerm;
+            let wordsOnly = word.details
+              .replace(/[\*_\|]|(\s*[\*-]\s)|-+/g, '')  // Common Markdown
+              .replace(/\[\[(.+)\]\]/g, '$&')           // Double brackets
+              .replace(/\!?\[(.+)\]\(.*\)/g, '$&');     // Links/images
+
+            if (ignoreDiacritics) {
+              wordsOnly = removeDiacritics(wordsOnly);
+              term = removeDiacritics(term);
+            }
+            if (!caseSensitive) {
+              wordsOnly = wordsOnly.toLowerCase();
+              term = term.toLowerCase();
+            }
+
+            console.log(wordsOnly);
+
+            return wordsOnly.includes(term);
+          } else {
+            let wordPart = word[searchingIn];
+            let term = searchTerm;
+            if (ignoreDiacritics) {
+              wordPart = removeDiacritics(wordPart);
+              term = removeDiacritics(term);
+            }
+            if (!caseSensitive) {
+              wordPart = wordPart.toLowerCase();
+              term = term.toLowerCase();
+            }
+            switch (searchMethod) {
+              case 'contains':
+              default: {
+                return wordPart.includes(term);
+                break;
+              }
+              case 'start': {
+                return wordPart.startsWith(term);
+                break;
+              }
+              case 'end': {
+                return wordPart.endsWith(term);
+                break;
+              }
+              case 'exact': {
+                return wordPart === term;
+                break;
+              }
+            }
+          }
+        });
+      } else {
+       displayedWords = words;
+      }
+
       this.setState({
-        displayedWords: words,
-        stats: getWordsStats(words, this.state.partsOfSpeech, this.state.settings.caseSensitive),
+        displayedWords,
+        stats: getWordsStats(words, partsOfSpeech, this.state.settings.caseSensitive),
       }, () => callback());
     });
   }
@@ -86,7 +168,7 @@ class App extends Component {
   search (searchConfig) {
     this.setState({
       searchConfig: searchConfig,
-    });
+    }, () => this.updateDisplayedWords());
   }
 
   render () {
