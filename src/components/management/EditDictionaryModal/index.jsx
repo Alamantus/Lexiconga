@@ -48,6 +48,7 @@ export class EditDictionaryModal extends Component {
       coda: props.details.phonology.phonotactics.coda.join('\n'),
       exceptions: props.details.phonology.phonotactics.exceptions,
       orthographyNotes: props.details.orthography.notes,
+      grammarNotes: props.details.grammar.notes,
 
       allowDuplicates: props.settings.allowDuplicates,
       caseSensitive: props.settings.caseSensitive,
@@ -104,6 +105,7 @@ export class EditDictionaryModal extends Component {
             coda={ this.state.coda }
             exceptions={ this.state.exceptions }
             orthographyNotes={ this.state.orthographyNotes }
+            grammarNotes={ this.state.grammarNotes }
           />
         );
         break;
@@ -208,6 +210,10 @@ export class EditDictionaryModal extends Component {
 
     if (this.state.orthographyNotes !== this.props.details.orthography.notes) {
       updatedDetails['orthographyNotes'] = this.state.orthographyNotes;
+    }
+
+    if (this.state.grammarNotes !== this.props.details.grammar.notes) {
+      updatedDetails['grammarNotes'] = this.state.grammarNotes;
     }
 
     if (this.state.allowDuplicates !== this.props.settings.allowDuplicates) {

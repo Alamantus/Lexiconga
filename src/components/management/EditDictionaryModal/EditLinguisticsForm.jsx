@@ -16,6 +16,7 @@ export const EditLinguisticsForm = (props) => {
     coda: PropTypes.string.isRequired,
     exceptions: PropTypes.string.isRequired,
     orthographyNotes: PropTypes.string.isRequired,
+    grammarNotes: PropTypes.string.isRequired,
   }, props, 'prop', 'EditLinguisticsForm');
 
   const {
@@ -29,6 +30,7 @@ export const EditLinguisticsForm = (props) => {
     coda,
     exceptions,
     orthographyNotes,
+    grammarNotes,
   } = props;
   return (
     <div className='form'>
@@ -223,6 +225,32 @@ export const EditLinguisticsForm = (props) => {
               editDictionaryModal.setState({
                 orthographyNotes: event.target.value,
                 hasChanged: event.target.value != editDictionaryModal.props.details.orthography.notes,
+              });
+            }} />
+
+        </div>
+      </div>
+      
+      <h4 className='title as-4'>
+        Grammar
+      </h4>
+
+      <div className='columns'>
+        <div className='column'>
+
+          <LargeTextArea
+            label='Grammar Notes'
+            helpText={[
+              'Any explanation of grammar, ',
+              <a href={ MARKDOWN_LINK } target='_blank'>Markdown</a>,
+              ' enabled',
+            ]}
+            placeholder={ `- Word order is VSO\n- There is no definite article\n...` }
+            value={ grammarNotes }
+            onInput={ (event) => {
+              editDictionaryModal.setState({
+                grammarNotes: event.target.value,
+                hasChanged: event.target.value != editDictionaryModal.props.details.grammar.notes,
               });
             }} />
 

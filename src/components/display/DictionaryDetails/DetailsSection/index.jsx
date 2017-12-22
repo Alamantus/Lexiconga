@@ -128,7 +128,10 @@ export class DetailsSection extends Component {
           break;
         }
         case 'Grammar': {
-          detailsDisplay = 'Grammar content!';
+          detailsDisplay = (
+            <GrammarDisplay
+              grammarContent={ details.grammar } />
+          );
           break;
         }
       }

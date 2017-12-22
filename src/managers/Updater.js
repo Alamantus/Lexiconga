@@ -33,6 +33,7 @@ export class Updater {
         'coda',
         'exceptions',
         'orthographyNotes',
+        'grammarNotes',
       ];
       const settingKeys = [
         'allowDuplicates',

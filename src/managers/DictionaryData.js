@@ -25,14 +25,14 @@ const defaultDictionary = {
       notes: '',
     },
     grammar: {
-      content: '',
+      notes: '',
     },
-    custom: [
-      {
-        name: 'Example Tab',
-        content: `This is an _example_ tab to show how **tabs** work with [Markdown](${ MARKDOWN_LINK })!`,
-      }
-    ],
+    // custom: [
+    //   // {
+    //   //   name: 'Example Tab',
+    //   //   content: `This is an _example_ tab to show how **tabs** work with [Markdown](${ MARKDOWN_LINK })!`,
+    //   // }
+    // ],
   },
   settings: {
     allowDuplicates: false,
@@ -230,6 +230,18 @@ class DictionaryData {
     assert(typeof value === 'string', 'Orthography Notes must be passed as a string.');
     const updatedValues = store.get('Lexiconga');
     updatedValues.details.orthography.notes = value.trim();
+    return store.set('Lexiconga', updatedValues);
+  }
+
+  get grammarNotes () {
+    return store.get('Lexiconga').details.grammar.notes
+      || defaultDictionary.details.grammar.notes;
+  }
+
+  set grammarNotes (value) {
+    assert(typeof value === 'string', 'Grammar Notes must be passed as a string.');
+    const updatedValues = store.get('Lexiconga');
+    updatedValues.details.grammar.notes = value.trim();
     return store.set('Lexiconga', updatedValues);
   }
 
