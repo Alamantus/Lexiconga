@@ -95,9 +95,7 @@ class App extends Component {
           ignoreDiacritics,
           filteredPartsOfSpeech
         } = searchConfig;
-
-        console.log('search config', searchConfig);
-        // displayedWords = words;
+        
         displayedWords = words.filter((word) => {
           const wordPartOfSpeech = word.partOfSpeech === '' ? 'Uncategorized' : word.partOfSpeech;
           if (!filteredPartsOfSpeech.includes(wordPartOfSpeech)) {
