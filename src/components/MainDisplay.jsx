@@ -16,6 +16,7 @@ export class MainDisplay extends Component {
     PropTypes.checkPropTypes({
       dictionaryInfo: PropTypes.object.isRequired,
       wordsToDisplay: PropTypes.array.isRequired,
+      wordsAreFiltered: PropTypes.bool,
       updateDisplay: PropTypes.func.isRequired,
       updater: PropTypes.object.isRequired,
     }, props, 'prop', 'MainDisplay');
@@ -47,7 +48,13 @@ export class MainDisplay extends Component {
   }
 
   render () {
-    const { dictionaryInfo, wordsToDisplay, updateDisplay, updater } = this.props;
+    const {
+      dictionaryInfo,
+      wordsToDisplay,
+      wordsAreFiltered,
+      updateDisplay,
+      updater,
+    } = this.props;
     const { isMobile, wordFormIsOpen } = this.state;
     const wordFormIsDisabled = dictionaryInfo.settings.isComplete;
 
@@ -81,6 +88,13 @@ export class MainDisplay extends Component {
                 alphabeticalOrder={ dictionaryInfo.alphabeticalOrder }
                 updateDisplay={ updateDisplay }
               />
+
+              {wordsAreFiltered
+                && (
+                  <div className='notification'>
+                    Words are filtered&mdash;displaying {wordsToDisplay.length} word{wordsToDisplay.length !== 1 && 's'}
+                  </div>
+                )}
 
               <WordsList
                 words={ wordsToDisplay }

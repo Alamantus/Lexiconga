@@ -74,6 +74,12 @@ class App extends Component {
     };
   }
 
+  get isUsingFilter () {
+    const partsOfSpeechForFilter = [...this.state.partsOfSpeech, 'Uncategorized'];
+    return this.state.searchConfig.searchTerm !== ''
+        || partsOfSpeechForFilter.length !== this.state.searchConfig.filteredPartsOfSpeech.length;
+  }
+
   updatePartsOfSpeech () {
     this.setState({
       partsOfSpeech: dictionary.partsOfSpeech,
@@ -85,8 +91,7 @@ class App extends Component {
       const { searchConfig, partsOfSpeech } = this.state;
       const partsOfSpeechForFilter = [...partsOfSpeech, 'Uncategorized'];
       let displayedWords;
-      if (searchConfig.searchTerm !== ''
-        || partsOfSpeechForFilter.length !== searchConfig.filteredPartsOfSpeech.length) {
+      if (this.isUsingFilter) {
         const {
           searchingIn,
           searchTerm,
@@ -95,7 +100,7 @@ class App extends Component {
           ignoreDiacritics,
           filteredPartsOfSpeech
         } = searchConfig;
-        
+
         displayedWords = words.filter((word) => {
           const wordPartOfSpeech = word.partOfSpeech === '' ? 'Uncategorized' : word.partOfSpeech;
           if (!filteredPartsOfSpeech.includes(wordPartOfSpeech)) {
@@ -180,6 +185,7 @@ class App extends Component {
         <MainDisplay
           dictionaryInfo={ this.dictionaryInfo }
           wordsToDisplay={ this.state.displayedWords }
+          wordsAreFiltered={ this.isUsingFilter }
           updateDisplay={ this.updateDisplayedWords.bind(this) }
           updater={ this.updater }
         />
