@@ -1,11 +1,11 @@
 <?php
-require_once('./Db');
-require_once('./Token');
+require_once('./Db.php');
+require_once('./Token.php');
 
 class User {
   private $db;
   private $token;
-  function _construct () {
+  function __construct () {
     $this->db = new Db();
     $this->token = new Token();
   }
@@ -32,63 +32,58 @@ class User {
     return false;
   }
 
+  public function emailExists ($email) {
+    $query = 'SELECT * FROM users WHERE email=?';
+    $user = $this->db->query($query, array($email));
+    return $user->rowCount() > 0;
+  }
+
   public function create ($email, $password) {
     $insert_user_query = 'INSERT INTO users (email, password) VALUES (?, ?)';
     $password_hash = password_hash($password, PASSWORD_DEFAULT);
 
-    // Use a transaction to make sure all pieces are created successfully.
-    $this->db->dbh->beginTransaction();
-
-    $insert_user = $this->db->query($insert_user_query, array($email, $password_hash));
+    $insert_user = $this->db->execute($insert_user_query, array($email, $password_hash));
     if ($insert_user === true) {
       $new_user_id = $this->db->lastInsertId();
 
       $token = $this->createDictionary($new_user_id);
 
       if ($token !== false) {
-        if ($this->db->dbh->commit()) {
-          return $token;
-        }
+        return $token;
       }
     }
 
-    $this->db->dbh->rollBack();
     return false;
   }
 
   public function createDictionary ($user) {
-    $this->db->dbh->beginTransaction();
-
     $insert_dictionary_query = "INSERT INTO dictionaries (user) VALUES ($user)";
-    $insert_dictionary = $this->db->query($insert_dictionary_query);
+    $insert_dictionary = $this->db->execute($insert_dictionary_query);
 
     if ($insert_dictionary === true) {
       $new_dictionary_id = $this->db->lastInsertId();
 
       $insert_linguistics_query = "INSERT INTO dictionary_linguistics (dictionary) VALUES ($new_dictionary_id)";
-      $insert_linguistics = $this->db->query($insert_dictionary_query);
+      $insert_linguistics = $this->db->execute($insert_linguistics_query);
 
       if ($insert_linguistics === true) {
         if ($this->changeCurrentDictionary($user, $new_dictionary_id)) {
-          if ($this->db->dbh->commit()) {
-            $user_data = array(
-              'id' => $user,
-              'isMember' => $this->hasMembership($user['id']),
-              'dictionary' => $new_dictionary_id,
-            );
-            return $this->token->encode($user_data);
-          }
+          $user_data = array(
+            'id' => $user,
+            'isMember' => $this->hasMembership($user),
+            'dictionary' => $new_dictionary_id,
+          );
+          return $this->token->encode($user_data);
         }
       }
     }
 
-    $this->db->dbh->rollBack();
     return false;
   }
 
   public function changeCurrentDictionary ($user, $dictionary) {
     $update_query = 'UPDATE users SET current_dictionary=? WHERE id=?';
-    $update = $this->db->query($update_query, array($user, $dictionary));
+    $update = $this->db->query($update_query, array($dictionary, $user));
     if ($update->rowCount() > 0) {
       return true;
     }

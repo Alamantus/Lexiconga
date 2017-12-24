@@ -4,7 +4,7 @@ use \Firebase\JWT\JWT;
 
 class Token {
   private $key;
-  function _construct() {
+  function __construct() {
     $this->key = 'ˈkɑːn.læŋ.ɪŋ_4eva';
   }
 

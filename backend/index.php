@@ -2,48 +2,61 @@
 require_once('./Response.php');
 require_once('./User.php');
 
-$action = $_POST['action'];
-$token = $_POST['token'];
+$inputJSON = file_get_contents('php://input');
+$request= json_decode($inputJSON, true);
+
+$action = isset($request['action']) ? $request['action'] : '';
+$token = isset($request['token']) ? $request['token'] : '';
 
 switch ($action) {
   case 'login': {
-    if ($_POST['email'] && $_POST['password']) {
+    if (isset($request['email']) && isset($request['password'])) {
       $user = new User();
-      $token = $user->logIn($_POST['email'], $_POST['password']);
+      $token = $user->logIn($request['email'], $request['password']);
       if ($token !== false) {
-        return Response::out(array(
+        return Response::json(array(
           'data' => $token,
           'error' => false,
         ), 200);
       }
-      return Response::out(array(
+      return Response::json(array(
         'data' => 'Could not log in: incorrect data',
         'error' => true,
-      ), 400);
+      ), 401);
     }
-    return Response::out(array(
+    return Response::json(array(
       'data' => 'Could not log in: required information missing',
       'error' => true,
-    ), 500);
+    ), 400);
   }
   case 'create-account': {
-    if ($_POST['email'] && $_POST['password']) {
+    if (isset($request['email']) && isset($request['password'])) {
       $user = new User();
-      $token = $user->create($_POST['email'], $_POST['password']);
-      if ($token !== false) {
-        return Response::out(array(
-          'data' => $token,
-          'error' => false,
-        ), 200);
+      if (!$user->emailExists($request['email'])) {
+        $token = $user->create($request['email'], $request['password']);
+        if ($token !== false) {
+          return Response::json(array(
+            'data' => $token,
+            'error' => false,
+          ), 201);
+        }
+        return Response::json(array(
+          'data' => 'Could not create account: database error',
+          'error' => true,
+        ), 500);
       }
-      return Response::out(array(
-        'data' => 'Could not create account: incorrect data',
+      return Response::json(array(
+        'data' => 'Could not create account: duplicate email',
         'error' => true,
-      ), 400);
+      ), 403);
     }
-    return Response::out(array(
+    return Response::json(array(
       'data' => 'Could not create account: required information missing',
       'error' => true,
-    ), 500);
+    ), 400);
+  }
+
+  default: {
+    return Response::html('Hi!');
   }
 }
