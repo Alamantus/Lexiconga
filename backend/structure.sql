@@ -10,7 +10,7 @@ SET time_zone = "+00:00";
 CREATE TABLE IF NOT EXISTS `dictionaries` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user` int(11) NOT NULL,
-  `name` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `name` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'New',
   `specification` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'Dictionary',
   `description` text COLLATE utf8_unicode_ci NOT NULL COMMENT 'Markdown',
   `allow_duplicates` tinyint(1) NOT NULL DEFAULT '0',
@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `password` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
   `public_name` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'Someone',
   `username` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `current_dictionary` int(11) NOT NULL,
+  `current_dictionary` int(11) DEFAULT NULL,
   `allow_email` tinyint(1) NOT NULL DEFAULT '1',
   `last_login` timestamp NULL DEFAULT NULL,
   `password_reset_code` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
