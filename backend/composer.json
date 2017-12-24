@@ -1,0 +1,14 @@
+{
+    "name": "lexiconga/backend",
+    "description": "The PHP backend API for Lexiconga (lexicon.ga)",
+    "type": "project",
+    "require": {
+        "firebase/php-jwt": "^5.0"
+    },
+    "authors": [
+        {
+            "name": "Robbie Antenesse",
+            "email": "dev@alamantus.com"
+        }
+    ]
+}
