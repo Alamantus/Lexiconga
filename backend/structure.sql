@@ -22,11 +22,13 @@ CREATE TABLE IF NOT EXISTS `dictionaries` (
   `created_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=352 ;
-DROP TRIGGER IF EXISTS `delete_words`;
+DROP TRIGGER IF EXISTS `delete_dictionary_parts`;
 DELIMITER //
-CREATE TRIGGER `delete_words` AFTER DELETE ON `dictionaries`
- FOR EACH ROW DELETE FROM words
-    WHERE words.dictionary=old.id
+CREATE TRIGGER `delete_dictionary_parts` AFTER DELETE ON `dictionaries`
+ FOR EACH ROW BEGIN
+	DELETE FROM words WHERE words.dictionary=old.id;
+	DELETE FROM dictionary_linguistics WHERE dictionary_linguistics.dictionary=old.id;
+END
 //
 DELIMITER ;
 
