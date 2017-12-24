@@ -3,7 +3,8 @@
     "description": "The PHP backend API for Lexiconga (lexicon.ga)",
     "type": "project",
     "require": {
-        "firebase/php-jwt": "^5.0"
+        "firebase/php-jwt": "^5.0",
+        "hashids/hashids": "^1.0"
     },
     "authors": [
         {
