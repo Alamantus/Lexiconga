@@ -14,7 +14,7 @@ class User {
     $query = 'SELECT * FROM users WHERE email=?';
     $user = $this->db->query($query, array($email))->fetch();
     if ($user) {
-      if ($user['old_password'] !== 'NULL') {
+      if ($user['old_password'] !== null) {
         if ($user['old_password'] === crypt($password, $email)) {
           if ($this->upgradePassword($password)) {
             return $this->logIn($email, $password);
@@ -90,9 +90,28 @@ class User {
     return false;
   }
 
+  public function getAllDictionaries ($token) {
+    $user_data = $this->token->decode($token);
+    if ($user_data !== false) {
+      $id = $user_data->id;
+      $query = "SELECT id, name FROM dictionaries WHERE user=$id";
+      $results = $this->db->query($query)->fetchAll();
+      if ($results) {
+        return array_map(function($result) {
+          return array(
+            'id' => $this->token->hash($result['id']),
+            'name' => $result['name'],
+          );
+        }, $results);
+      }
+      return array();
+    }
+    return false;
+  }
+
   private function hasMembership ($id) {
     $current_membership = "SELECT * FROM memberships WHERE user=$id AND start_date>=CURRENT_TIMESTAMP AND CURRENT_TIMESTAMP<expire_date";
-    $stmt = $this->db->query($current_membership)->rowCount() > 0;
+    return $this->db->query($current_membership)->rowCount() > 0;
   }
 
   private function upgradePassword ($password) {

@@ -6,7 +6,7 @@ $inputJSON = file_get_contents('php://input');
 $request= json_decode($inputJSON, true);
 
 $action = isset($request['action']) ? $request['action'] : '';
-$token = isset($request['token']) ? $request['token'] : '';
+$token = isset($request['token']) ? $request['token'] : false;
 
 switch ($action) {
   case 'login': {
@@ -54,6 +54,26 @@ switch ($action) {
       'data' => 'Could not create account: required information missing',
       'error' => true,
     ), 400);
+  }
+  case 'get-all-dictionaries': {
+    if ($token !== false) {
+      $user = new User();
+      $all_dictionaries = $user->getAllDictionaries($token);
+      if ($all_dictionaries !== false) {
+        return Response::json(array(
+          'data' => $all_dictionaries,
+          'error' => false,
+        ), 200);
+      }
+      return Response::json(array(
+        'data' => 'Could not get dictionaries: invalid token',
+        'error' => true,
+      ), 400);
+    }
+    return Response::json(array(
+      'data' => 'Could not get dictionaries: no token provided',
+      'error' => true,
+    ), 403);
   }
 
   default: {
