@@ -23,12 +23,7 @@ class User {
           }
         }
       } else if (password_verify($password, $user['password'])) {
-        $user_data = array(
-          'id' => $user['id'],
-          'isMember' => $this->hasMembership($user['id']),
-          'dictionary' => $user['current_dictionary'],
-        );
-        return $this->token->encode($user_data);
+        return $this->generateUserToken($user['id'], $user['current_dictionary']);
       }
     }
     return false;
@@ -48,10 +43,10 @@ class User {
     if ($insert_user === true) {
       $new_user_id = $this->db->lastInsertId();
 
-      $token = $this->dictionary->create($new_user_id);
+      $new_dictionary = $this->dictionary->create($new_user_id);
 
-      if ($token !== false) {
-        return $token;
+      if ($new_dictionary !== false) {
+        return $this->generateUserToken($new_user_id, $new_dictionary);
       }
     }
 
@@ -62,16 +57,25 @@ class User {
     $user_data = $this->token->decode($token);
     if ($user_data !== false) {
       $id = $user_data->id;
-      return $this->dictionary->create($id);
+      $new_dictionary = $this->dictionary->create($id);
+      if ($new_dictionary !== false) {
+        return $this->generateUserToken($id, $new_dictionary);
+      }
     }
     return false;
   }
 
-  public function changeCurrentDictionary ($user, $dictionary) {
-    $update_query = 'UPDATE users SET current_dictionary=? WHERE id=?';
-    $update = $this->db->query($update_query, array($dictionary, $user));
-    if ($update->rowCount() > 0) {
-      return true;
+  public function changeCurrentDictionary ($token, $dictionary_hash) {
+    $user_data = $this->token->decode($token);
+    if ($user_data !== false) {
+      $id = $user_data->id;
+      $dictionary_id = $this->token->unhash($dictionary_hash);
+      if ($dictionary_id !== false) {
+        $changed_dictionary = $this->dictionary->changeCurrent($id, $dictionary_id);
+        if ($changed_dictionary !== false) {
+          return $this->generateUserToken($id, $changed_dictionary);
+        }
+      }
     }
     return false;
   }
@@ -83,6 +87,15 @@ class User {
       return $this->dictionary->getAllNames($id);
     }
     return false;
+  }
+
+  private function generateUserToken ($user_id, $dictionary_id) {
+    $user_data = array(
+      'id' => intval($user_id),
+      'isMember' => $this->hasMembership($user_id),
+      'dictionary' => intval($dictionary_id),
+    );
+    return $this->token->encode($user_data);
   }
 
   private function hasMembership ($id) {

@@ -21,14 +21,7 @@ class Dictionary {
       $insert_linguistics = $this->db->execute($insert_linguistics_query);
 
       if ($insert_linguistics === true) {
-        if ($this->changeCurrentDictionary($user, $new_dictionary_id)) {
-          $user_data = array(
-            'id' => $user,
-            'isMember' => $this->hasMembership($user),
-            'dictionary' => $new_dictionary_id,
-          );
-          return $this->token->encode($user_data);
-        }
+        return $this->changeCurrent($user, $new_dictionary_id);
       }
     }
 
@@ -39,7 +32,7 @@ class Dictionary {
     $update_query = 'UPDATE users SET current_dictionary=? WHERE id=?';
     $update = $this->db->query($update_query, array($dictionary, $user));
     if ($update->rowCount() > 0) {
-      return true;
+      return $dictionary;
     }
     return false;
   }
