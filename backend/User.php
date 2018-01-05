@@ -89,6 +89,19 @@ class User {
     return false;
   }
 
+  public function getCurrentDictionary ($token) {
+    $user_data = $this->token->decode($token);
+    if ($user_data !== false) {
+      $user = $user_data->id;
+      $dictionary = $user_data->current_dictionary;
+      return array(
+        'details' => $this->dictionary->getDetails($user, $dictionary),
+        'words' => $this->dictionary->getWords($user, $dictionary),
+      );
+    }
+    return false;
+  }
+
   private function generateUserToken ($user_id, $dictionary_id) {
     $user_data = array(
       'id' => intval($user_id),
