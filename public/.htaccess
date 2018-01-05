@@ -1,0 +1,13 @@
+RewriteEngine On    # Turn on the rewriting engine
+
+RewriteRule    ^view/([0-9]+)/([0-9]+)/?$    index.php?dict=$1&word=$2    [NC,L]    # Handle word ids.
+
+RewriteRule    ^([0-9]+)/([0-9]+)/?$    index.php?dict=$1&word=$2    [NC,L]    # Handle word ids.
+
+RewriteRule    ^view/([0-9]+)/?$    index.php?dict=$1    [NC,L]    # Handle dictionary ids.
+
+RewriteRule    ^([0-9]+)/?$    index.php?dict=$1    [NC,L]    # Handle dictionary ids.
+
+RewriteRule ^issues/?$ https://gitlab.com/Alamantus/Lexiconga/issues [R=301,L] # Shorten issues url.
+
+RewriteRule ^updates/?$ https://gitlab.com/Alamantus/Lexiconga/wikis/updates [R=301,L] # Shorten updates url.
