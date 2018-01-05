@@ -1,6 +1,7 @@
 <?php
 require_once('./Db.php');
 require_once('./Token.php');
+require_once('./Dictionary.php');
 
 class User {
   private $db;
@@ -8,6 +9,7 @@ class User {
   function __construct () {
     $this->db = new Db();
     $this->token = new Token();
+    $this->dictionary = new Dictionary();
   }
 
   public function logIn ($email, $password) {
@@ -46,7 +48,7 @@ class User {
     if ($insert_user === true) {
       $new_user_id = $this->db->lastInsertId();
 
-      $token = $this->createDictionary($new_user_id);
+      $token = $this->dictionary->create($new_user_id);
 
       if ($token !== false) {
         return $token;
@@ -56,28 +58,12 @@ class User {
     return false;
   }
 
-  public function createDictionary ($user) {
-    $insert_dictionary_query = "INSERT INTO dictionaries (user) VALUES ($user)";
-    $insert_dictionary = $this->db->execute($insert_dictionary_query);
-
-    if ($insert_dictionary === true) {
-      $new_dictionary_id = $this->db->lastInsertId();
-
-      $insert_linguistics_query = "INSERT INTO dictionary_linguistics (dictionary) VALUES ($new_dictionary_id)";
-      $insert_linguistics = $this->db->execute($insert_linguistics_query);
-
-      if ($insert_linguistics === true) {
-        if ($this->changeCurrentDictionary($user, $new_dictionary_id)) {
-          $user_data = array(
-            'id' => $user,
-            'isMember' => $this->hasMembership($user),
-            'dictionary' => $new_dictionary_id,
-          );
-          return $this->token->encode($user_data);
-        }
-      }
+  public function createNewDictionary ($token) {
+    $user_data = $this->token->decode($token);
+    if ($user_data !== false) {
+      $id = $user_data->id;
+      return $this->dictionary->create($id);
     }
-
     return false;
   }
 
@@ -90,21 +76,11 @@ class User {
     return false;
   }
 
-  public function getAllDictionaries ($token) {
+  public function listAllDictionaryNames ($token) {
     $user_data = $this->token->decode($token);
     if ($user_data !== false) {
       $id = $user_data->id;
-      $query = "SELECT id, name FROM dictionaries WHERE user=$id";
-      $results = $this->db->query($query)->fetchAll();
-      if ($results) {
-        return array_map(function($result) {
-          return array(
-            'id' => $this->token->hash($result['id']),
-            'name' => $result['name'],
-          );
-        }, $results);
-      }
-      return array();
+      return $this->dictionary->getAllNames($id);
     }
     return false;
   }

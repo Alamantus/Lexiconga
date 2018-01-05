@@ -55,10 +55,10 @@ switch ($action) {
       'error' => true,
     ), 400);
   }
-  case 'get-all-dictionaries': {
+  case 'get-all-dictionary-names': {
     if ($token !== false) {
       $user = new User();
-      $all_dictionaries = $user->getAllDictionaries($token);
+      $all_dictionaries = $user->listAllDictionaryNames($token);
       if ($all_dictionaries !== false) {
         return Response::json(array(
           'data' => $all_dictionaries,
