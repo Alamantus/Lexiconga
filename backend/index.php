@@ -75,6 +75,46 @@ switch ($action) {
       'error' => true,
     ), 403);
   }
+  case 'create-new-dictionary': {
+    if ($token !== false) {
+      $user = new User();
+      $new_token = $user->createNewDictionary($token);
+      if ($new_token !== false) {
+        return Response::json(array(
+          'data' => $new_token,
+          'error' => false,
+        ), 200);
+      }
+      return Response::json(array(
+        'data' => 'Could not create dictionary: incorrect data',
+        'error' => true,
+      ), 401);
+    }
+    return Response::json(array(
+      'data' => 'Could not create dictionary: no token provided',
+      'error' => true,
+    ), 400);
+  }
+  case 'change-dictionary': {
+    if ($token !== false && isset($request['dictionary'])) {
+      $user = new User();
+      $new_token = $user->changeCurrentDictionary($token, $request['dictionary']);
+      if ($new_token !== false) {
+        return Response::json(array(
+          'data' => $new_token,
+          'error' => false,
+        ), 200);
+      }
+      return Response::json(array(
+        'data' => 'Could not create dictionary: incorrect data',
+        'error' => true,
+      ), 401);
+    }
+    return Response::json(array(
+      'data' => 'Could not create dictionary: no token provided',
+      'error' => true,
+    ), 400);
+  }
 
   default: {
     return Response::html('Hi!');
