@@ -35,6 +35,10 @@ class Token {
   }
 
   public function unhash ($hash) {
-    return $this->hashids->decode($hash);
+    $unhashed = $this->hashids->decode($hash);
+    if (count($unhashed) > 0) {
+      return $unhashed[0];
+    }
+    return false;
   }
 }
