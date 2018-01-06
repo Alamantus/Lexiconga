@@ -59,7 +59,10 @@ class User {
       $id = $user_data->id;
       $new_dictionary = $this->dictionary->create($id);
       if ($new_dictionary !== false) {
-        return $this->generateUserToken($id, $new_dictionary);
+        return array(
+            'token' => $this->generateUserToken($id, $new_dictionary),
+            'dictionary' => $this->getCurrentDictionary($token),
+          );
       }
     }
     return false;
@@ -73,7 +76,10 @@ class User {
       if ($dictionary_id !== false) {
         $changed_dictionary = $this->dictionary->changeCurrent($id, $dictionary_id);
         if ($changed_dictionary !== false) {
-          return $this->generateUserToken($id, $changed_dictionary);
+          return array(
+            'token' => $this->generateUserToken($id, $changed_dictionary),
+            'dictionary' => $this->getCurrentDictionary($token),
+          );
         }
       }
     }
@@ -98,6 +104,38 @@ class User {
         'details' => $this->dictionary->getDetails($user, $dictionary),
         'words' => $this->dictionary->getWords($user, $dictionary),
       );
+    }
+    return false;
+  }
+
+  public function saveWholeCurrentDictionary ($token, $dictionary_data) {
+    $user_data = $this->token->decode($token);
+    if ($user_data !== false) {
+      $user = $user_data->id;
+      $dictionary = $user_data->dictionary;
+      $details_updated = $this->dictionary->setDetails($user, $dictionary, $dictionary_data['details']);
+      $words_updated = $this->dictionary->setWords($dictionary, $dictionary_data['words']);
+      return $details_updated && $words_updated;
+    }
+    return false;
+  }
+
+  public function updateCurrentDictionaryDetails ($token, $dictionary_details) {
+    $user_data = $this->token->decode($token);
+    if ($user_data !== false) {
+      $user = $user_data->id;
+      $dictionary = $user_data->dictionary;
+      return $this->dictionary->setDetails($user, $dictionary, $dictionary_details);
+    }
+    return false;
+  }
+
+  public function updateOrAddWordsToCurrentDictionary ($token, $words) {
+    // Useful even for just one word
+    $user_data = $this->token->decode($token);
+    if ($user_data !== false) {
+      $dictionary = $user_data->dictionary;
+      return $this->dictionary->setWords($dictionary, $words);
     }
     return false;
   }

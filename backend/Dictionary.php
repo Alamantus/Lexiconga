@@ -108,6 +108,52 @@ VALUES ($new_dictionary_id, ?, ?)";
     return false;
   }
 
+  public function setDetails ($user, $dictionary, $dictionary_object) {
+    $query1 = "UPDATE dictionaries
+SET name=:name,
+  specification=:specification,
+  description=:description,
+  allow_duplicates=:allow_duplicates,
+  case_sensitive=:case_sensitive,
+  sort_by_definition=:sort_by_definition,
+  is_complete=:is_complete,
+  is_public=:is_public,
+  last_updated=NOW()
+WHERE user=$user AND id=$dictionary";
+
+    $result1 = $this->db->execute($query1, array(
+      ':name' => $dictionary_object['name'],
+      ':specification' => $dictionary_object['specification'],
+      ':description' => $dictionary_object['description'],
+      ':allow_duplicates' => $dictionary_object['settings']['allowDuplicates'],
+      ':case_sensitive' => $dictionary_object['settings']['caseSensitive'],
+      ':sort_by_definition' => $dictionary_object['settings']['sortByDefinition'],
+      ':is_complete' => $dictionary_object['settings']['isComplete'],
+      ':is_public' => $dictionary_object['settings']['isPublic'],
+    ));
+    if ($result1->rowCount() > 0) {
+      $linguistics = $dictionary_object['details'];
+      $query2 = "UPDATE dictionary_linguistics
+SET parts_of_speech=:parts_of_speech,
+  phonology=:phonology,
+  orthography_notes=:orthography_notes,
+  grammar_notes=:grammar_notes
+WHERE dictionary=$dictionary";
+
+      $result2 = $this->db->execute($query2, array(
+        ':parts_of_speech' => json_encode($dictionary_object['partsOfSpeech']),
+        ':phonology' => json_encode($linguistics['phonology']),
+        ':orthography_notes' => $linguistics['orthographyNotes'],
+        ':grammar_notes' => $linguistics['grammarNotes'],
+      ));
+
+      if ($result2->rowCount() > 0) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   public function getWords ($user, $dictionary) {
     $query = "SELECT words.* FROM words JOIN dictionaries ON id = dictionary WHERE dictionary=$dictionary AND user=$user";
     $results = $this->db->query($query)->fetchAll();
@@ -126,5 +172,32 @@ VALUES ($new_dictionary_id, ?, ?)";
       }, $results);
     }
     return array();
+  }
+
+  public function setWords ($dictionary, $words = array()) {
+    $query = 'INSERT INTO words (word_id, name, pronunciation, part_of_speech, definition, details, createdOn) VALUES ';
+    $params = array();
+    foreach($words as $word) {
+      $query .= "(?, ?, ?, ?, ?, ?, NOW()), ";
+      array_push(
+        $params,
+        $word['id'],
+        $word['name'],
+        $word['pronunciation'],
+        $word['partOfSpeech'],
+        $word['definition'],
+        $word['details']
+      );
+    }
+    $query .= trim($query, ', ') . ' ON DUPLICATE KEY UPDATE
+name=VALUES(name),
+pronunciation=VALUE(pronunciation),
+part_of_speech=VALUE(part_of_speech),
+definition=VALUE(definition),
+details=VALUE(details),
+last_updated=NOW()';
+    
+    $results = $this->db->execute($query);
+    return $results->rowCount() > 0;
   }
 }

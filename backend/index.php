@@ -78,10 +78,10 @@ switch ($action) {
   case 'create-new-dictionary': {
     if ($token !== false) {
       $user = new User();
-      $new_token = $user->createNewDictionary($token);
-      if ($new_token !== false) {
+      $new_data = $user->createNewDictionary($token);
+      if ($new_data !== false) {
         return Response::json(array(
-          'data' => $new_token,
+          'data' => $new_data,
           'error' => false,
         ), 200);
       }
@@ -98,10 +98,10 @@ switch ($action) {
   case 'change-dictionary': {
     if ($token !== false && isset($request['dictionary'])) {
       $user = new User();
-      $new_token = $user->changeCurrentDictionary($token, $request['dictionary']);
-      if ($new_token !== false) {
+      $new_data = $user->changeCurrentDictionary($token, $request['dictionary']);
+      if ($new_data !== false) {
         return Response::json(array(
-          'data' => $new_token,
+          'data' => $new_data,
           'error' => false,
         ), 200);
       }
@@ -132,6 +132,66 @@ switch ($action) {
     }
     return Response::json(array(
       'data' => 'Could not get dictionary: no token provided',
+      'error' => true,
+    ), 400);
+  }
+  case 'set-whole-current-dictionary': {
+    if ($token !== false && isset($request['dictionary'])) {
+      $user = new User();
+      $dictionary_data = $user->saveWholeCurrentDictionary($token, $request['dictionary']);
+      if ($dictionary_data !== false) {
+        return Response::json(array(
+          'data' => 'Updated successfully',
+          'error' => false,
+        ), 200);
+      }
+      return Response::json(array(
+        'data' => 'Could not set dictionary: invalid token',
+        'error' => true,
+      ), 401);
+    }
+    return Response::json(array(
+      'data' => 'Could not set dictionary: required data missing',
+      'error' => true,
+    ), 400);
+  }
+  case 'set-dictionary-details': {
+    if ($token !== false && isset($request['details'])) {
+      $user = new User();
+      $update_details_success = $user->updateCurrentDictionaryDetails($token, $request['details']);
+      if ($update_details_success !== false) {
+        return Response::json(array(
+          'data' => 'Updated successfully',
+          'error' => false,
+        ), 200);
+      }
+      return Response::json(array(
+        'data' => 'Could not set dictionary: invalid token',
+        'error' => true,
+      ), 401);
+    }
+    return Response::json(array(
+      'data' => 'Could not set dictionary: required data missing',
+      'error' => true,
+    ), 400);
+  }
+  case 'set-dictionary-words': {
+    if ($token !== false && isset($request['words'])) {
+      $user = new User();
+      $update_words_success = $user->updateOrAddWordsToCurrentDictionary($token, $request['words']);
+      if ($update_words_success !== false) {
+        return Response::json(array(
+          'data' => 'Updated successfully',
+          'error' => false,
+        ), 200);
+      }
+      return Response::json(array(
+        'data' => 'Could not set dictionary: invalid token',
+        'error' => true,
+      ), 401);
+    }
+    return Response::json(array(
+      'data' => 'Could not set dictionary: required data missing',
       'error' => true,
     ), 400);
   }
