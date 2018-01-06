@@ -93,7 +93,7 @@ class User {
     $user_data = $this->token->decode($token);
     if ($user_data !== false) {
       $user = $user_data->id;
-      $dictionary = $user_data->current_dictionary;
+      $dictionary = $user_data->dictionary;
       return array(
         'details' => $this->dictionary->getDetails($user, $dictionary),
         'words' => $this->dictionary->getWords($user, $dictionary),

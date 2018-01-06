@@ -115,6 +115,26 @@ switch ($action) {
       'error' => true,
     ), 400);
   }
+  case 'get-current-dictionary': {
+    if ($token !== false) {
+      $user = new User();
+      $dictionary_data = $user->getCurrentDictionary($token);
+      if ($dictionary_data !== false) {
+        return Response::json(array(
+          'data' => $dictionary_data,
+          'error' => false,
+        ), 200);
+      }
+      return Response::json(array(
+        'data' => 'Could not get dictionary: invalid token',
+        'error' => true,
+      ), 401);
+    }
+    return Response::json(array(
+      'data' => 'Could not get dictionary: no token provided',
+      'error' => true,
+    ), 400);
+  }
 
   default: {
     return Response::html('Hi!');

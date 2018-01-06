@@ -5,9 +5,25 @@ require_once('./Token.php');
 class Dictionary {
   private $db;
   private $token;
+  private $defaults;
   function __construct () {
     $this->db = new Db();
     $this->token = new Token();
+
+    $this->defaults = array(
+      'partsOfSpeech' => array("Noun","Adjective","Verb"),
+      'phonology'=> array(
+        'consonants' => array(),
+        'vowels' => array(),
+        'blends' => array(),
+        'phonotactics' => array(
+          'onset' => array(),
+          'nucleus' => array(),
+          'coda' => array(),
+          'exceptions' => '',
+        ),
+      ),
+    );
   }
 
   public function create ($user) {
@@ -17,8 +33,12 @@ class Dictionary {
     if ($insert_dictionary === true) {
       $new_dictionary_id = $this->db->lastInsertId();
 
-      $insert_linguistics_query = "INSERT INTO dictionary_linguistics (dictionary) VALUES ($new_dictionary_id)";
-      $insert_linguistics = $this->db->execute($insert_linguistics_query);
+      $insert_linguistics_query = "INSERT INTO dictionary_linguistics (dictionary, partsOfSpeech, phonology)
+VALUES ($new_dictionary_id, ?, ?)";
+      $insert_linguistics = $this->db->execute($insert_linguistics_query, array(
+        json_encode($this->defaults['partsOfSpeech']),
+        json_encode($this->defaults['phonotactics']),
+      ));
 
       if ($insert_linguistics === true) {
         return $this->changeCurrent($user, $new_dictionary_id);
@@ -55,14 +75,18 @@ class Dictionary {
     $query = "SELECT * FROM dictionaries JOIN dictionary_linguistics ON dictionary = id WHERE user=$user AND id=$dictionary";
     $result = $this->db->query($query)->fetch();
     if ($result) {
+      // Default json values in case they are somehow not created by front end first
+      $partsOfSpeech = $result['parts_of_speech'] !== '' ? json_decode($result['parts_of_speech']) : $this->defaults['partsOfSpeech'];
+      $phonology = $result['phonology'] !== '' ? json_decode($result['phonology']) : $this->defaults['phonology'];
+
       return array(
         'id' => $this->token->hash($result['id']),
         'name' => $result['name'],
         'specification' => $result['specification'],
         'description' => $result['description'],
-        'partsOfSpeech' => json_decode($result['parts_of_speech']),
+        'partsOfSpeech' => $partsOfSpeech,
         'details' => array(
-          'phonology' => json_decode($result['phonology']),
+          'phonology' => $phonology,
           'orthography' => array(
             'notes' => $result['orthography_notes'],
           ),
@@ -101,6 +125,6 @@ class Dictionary {
         );
       }, $results);
     }
-    return false;
+    return array();
   }
 }
