@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import store from 'store';
 import wordDb from './WordDatabase';
+import {timestampInSeconds} from '../Helpers';
 
 export class Word {
   constructor (values = {}) {
@@ -11,8 +12,8 @@ export class Word {
       partOfSpeech: PropTypes.string,
       definition: PropTypes.string,
       details: PropTypes.string,
-      createdTime: PropTypes.number,
-      modifiedTime: PropTypes.number,
+      createdOn: PropTypes.number,
+      lastUpdated: PropTypes.number,
     }, values, 'value', 'Word');
     
     const {
@@ -22,8 +23,8 @@ export class Word {
       partOfSpeech = '',
       definition = '',
       details = '',
-      createdTime = null,
-      modifiedTime = null,
+      createdOn = null,
+      lastUpdated = null,
     } = values;
 
     this.name = name;
@@ -31,16 +32,15 @@ export class Word {
     this.partOfSpeech = partOfSpeech;
     this.definition = definition;
     this.details = details;
-    this.createdTime = createdTime;
-    this.modifiedTime = modifiedTime;
+    this.createdOn = createdOn;
+    this.lastUpdated = lastUpdated;
 
     // Only create an id property if an ID exists.
     if (id) this.id = id;
   }
 
   create () {
-    const timestampInSeconds = Math.round(Date.now() / 1000);
-    this.createdTime = timestampInSeconds;
+    this.createdOn = timestampInSeconds();
 
     // Delete id if it exists to allow creation of new word.
     if (this.hasOwnProperty('id')) delete this.id;
@@ -56,8 +56,7 @@ export class Word {
   }
 
   update () {
-    const timestampInSeconds = Math.round(Date.now() / 1000);
-    this.modifiedTime = timestampInSeconds;
+    this.lastUpdated = timestampInSeconds();
 
     return wordDb.words.put(this)
     .then((id) => {

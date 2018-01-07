@@ -1,3 +1,5 @@
+import { timestampInSeconds } from "../Helpers";
+
 export class Updater {
   constructor (appWithDictionaryState, dictionary) {
     this.app = appWithDictionaryState;
@@ -64,6 +66,8 @@ export class Updater {
       if (updatedDetails.isEmpty()) {
         reject('No dictionary details have changed.');
       } else {
+        this.dictionary.lastUpdated = timestampInSeconds();
+        updatedDetails.lastUpdated = this.dictionary.lastUpdated;
         this.app.setState(updatedDetails, () => {
           if (updatedDetails.hasOwnProperty('settings')) {
             this.app.updateDisplayedWords();

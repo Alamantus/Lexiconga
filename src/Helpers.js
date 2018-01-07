@@ -109,6 +109,10 @@ export function characterIsUppercase (character) {
   return character === character.toUpperCase();
 }
 
+export function timestampInSeconds () {
+  return Math.round(Date.now() / 1000);
+}
+
 export function getWordsStats (words, partsOfSpeech, isCaseSensitive = false) {
   const wordStats = {
     numberOfWords: [

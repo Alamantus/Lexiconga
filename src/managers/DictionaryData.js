@@ -2,6 +2,7 @@ import assert from 'assert';
 import store from 'store';
 import wordDb from './WordDatabase';
 import idManager from './IDManager';
+import { timestampInSeconds } from '../Helpers';
 
 const defaultDictionary = {
   name: 'New',
@@ -41,6 +42,8 @@ const defaultDictionary = {
     isComplete: false,
     isPublic: false,
   },
+  lastUpdated: null,
+  createdOn: timestampInSeconds(),
 };
 
 class DictionaryData {
@@ -321,6 +324,18 @@ class DictionaryData {
     assert(typeof value === 'boolean', 'isPublic must be passed as a boolean.');
     const updatedValues = store.get('Lexiconga');
     updatedValues.settings.isPublic = value;
+    return store.set('Lexiconga', updatedValues);
+  }
+
+  get lastUpdated () {
+    return store.get('Lexiconga').lastUpdated
+      || defaultDictionary.lastUpdated;
+  }
+
+  set lastUpdated (value) {
+    assert(typeof value === 'number', 'lastUpdated must be passed as a number.');
+    const updatedValues = store.get('Lexiconga');
+    updatedValues.lastUpdated = value;
     return store.set('Lexiconga', updatedValues);
   }
 
