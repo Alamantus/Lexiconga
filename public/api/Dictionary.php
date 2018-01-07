@@ -143,8 +143,8 @@ WHERE dictionary=$dictionary";
       $result2 = $this->db->query($query2, array(
         ':parts_of_speech' => json_encode($dictionary_object['partsOfSpeech']),
         ':phonology' => json_encode($linguistics['phonology']),
-        ':orthography_notes' => $linguistics['orthographyNotes'],
-        ':grammar_notes' => $linguistics['grammarNotes'],
+        ':orthography_notes' => $linguistics['orthography']['notes'],
+        ':grammar_notes' => $linguistics['grammar']['notes'],
       ));
 
       if ($result2->rowCount() > 0) {

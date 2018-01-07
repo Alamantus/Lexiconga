@@ -6,6 +6,6 @@ public/*.js
 public/*.map
 public/assets/
 
-backend/vendor/
+public/api/vendor/
 
 *.log*
