@@ -20,4 +20,8 @@ class Db {
   public function lastInsertId () {
     return $this->dbh->lastInsertId();
   }
+
+  public function errorInfo () {
+    return $this->dbh->errorInfo();
+  }
 }

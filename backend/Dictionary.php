@@ -101,8 +101,8 @@ VALUES ($new_dictionary_id, ?, ?)";
           'isComplete' => $result['is_complete'] === '1' ? true : false,
           'isPublic' => $result['is_public'] === '1' ? true : false,
         ),
-        'lastUpdated' => $result['last_updated'],
-        'createdOn' => $result['created_on'],
+        'lastUpdated' => is_null($result['last_updated']) ? null : strtotime($result['last_updated']),
+        'createdOn' => strtotime($result['created_on']),
       );
     }
     return false;
@@ -121,7 +121,7 @@ SET name=:name,
   last_updated=NOW()
 WHERE user=$user AND id=$dictionary";
 
-    $result1 = $this->db->execute($query1, array(
+    $result1 = $this->db->query($query1, array(
       ':name' => $dictionary_object['name'],
       ':specification' => $dictionary_object['specification'],
       ':description' => $dictionary_object['description'],
@@ -140,7 +140,7 @@ SET parts_of_speech=:parts_of_speech,
   grammar_notes=:grammar_notes
 WHERE dictionary=$dictionary";
 
-      $result2 = $this->db->execute($query2, array(
+      $result2 = $this->db->query($query2, array(
         ':parts_of_speech' => json_encode($dictionary_object['partsOfSpeech']),
         ':phonology' => json_encode($linguistics['phonology']),
         ':orthography_notes' => $linguistics['orthographyNotes'],
@@ -166,8 +166,8 @@ WHERE dictionary=$dictionary";
           'partOfSpeech' => $result['part_of_speech'],
           'definition' => $result['definition'],
           'details' => $result['details'],
-          'lastUpdated' => $result['last_updated'],
-          'createdOn' => $result['created_on'],
+          'lastUpdated' => is_null($result['last_updated']) ? null : strtotime($result['last_updated']),
+          'createdOn' => strtotime($result['created_on']),
         );
       }, $results);
     }
@@ -175,29 +175,28 @@ WHERE dictionary=$dictionary";
   }
 
   public function setWords ($dictionary, $words = array()) {
-    $query = 'INSERT INTO words (word_id, name, pronunciation, part_of_speech, definition, details, createdOn) VALUES ';
+    $query = 'INSERT INTO words (word_id, name, pronunciation, part_of_speech, definition, details, last_updated, created_on) VALUES ';
     $params = array();
     foreach($words as $word) {
-      $query .= "(?, ?, ?, ?, ?, ?, NOW()), ";
-      array_push(
-        $params,
-        $word['id'],
-        $word['name'],
-        $word['pronunciation'],
-        $word['partOfSpeech'],
-        $word['definition'],
-        $word['details']
-      );
+      $query .= "(?, ?, ?, ?, ?, ?, FROM_UNIXTIME(?), FROM_UNIXTIME(?)), ";
+      $params[] = $word['id'];
+      $params[] = $word['name'];
+      $params[] = $word['pronunciation'];
+      $params[] = $word['partOfSpeech'];
+      $params[] = $word['definition'];
+      $params[] = $word['details'];
+      $params[] = is_null($word['lastUpdated']) ? $word['createdOn'] : $word['lastUpdated'];
+      $params[] = $word['createdOn'];
     }
-    $query .= trim($query, ', ') . ' ON DUPLICATE KEY UPDATE
+    $query = trim($query, ', ') . ' ON DUPLICATE KEY UPDATE
 name=VALUES(name),
-pronunciation=VALUE(pronunciation),
-part_of_speech=VALUE(part_of_speech),
-definition=VALUE(definition),
-details=VALUE(details),
-last_updated=NOW()';
+pronunciation=VALUES(pronunciation),
+part_of_speech=VALUES(part_of_speech),
+definition=VALUES(definition),
+details=VALUES(details),
+last_updated=VALUES(last_updated)';
     
-    $results = $this->db->execute($query);
-    return $results->rowCount() > 0;
+    $results = $this->db->query($query, $params);
+    return $results->rowCount();
   }
 }
