@@ -55,7 +55,7 @@ class DictionaryData {
     }
 
     if (!store.get('Lexiconga')) {
-      store.set('Lexiconga', defaultDictionary);
+      this.storedData = defaultDictionary;
     } else {
       wordDb.words
       .orderBy('id').reverse()
@@ -73,270 +73,278 @@ class DictionaryData {
     }
   }
 
+  get storedData () {
+    return store.get('Lexiconga');
+  }
+
+  set storedData (updatedValues) {
+    store.set('Lexiconga', updatedValues);
+  }
+
   get name () {
-    return store.get('Lexiconga').name
+    return this.storedData.name
       || defaultDictionary.name;
   }
 
   set name (value) {
     assert(typeof value === 'string', 'Name must be passed as a string.');
-    const updatedValues = store.get('Lexiconga');
+    const updatedValues = this.storedData;
     updatedValues.name = value.trim();
-    return store.set('Lexiconga', updatedValues);
+    this.storedData = updatedValues;
   }
 
   get specification () {
-    return store.get('Lexiconga').specification
+    return this.storedData.specification
       || defaultDictionary.specification;
   }
 
   set specification (value) {
     assert(typeof value === 'string', 'Specification must be passed as a string.');
-    const updatedValues = store.get('Lexiconga');
+    const updatedValues = this.storedData;
     updatedValues.specification = value.trim();
-    return store.set('Lexiconga', updatedValues);
+    this.storedData = updatedValues;
   }
 
   get description () {
-    return store.get('Lexiconga').description
+    return this.storedData.description
       || defaultDictionary.description;
   }
 
   set description (value) {
     assert(typeof value === 'string', 'Description must be passed as a string.');
-    const updatedValues = store.get('Lexiconga');
+    const updatedValues = this.storedData;
     updatedValues.description = value.trim();
-    return store.set('Lexiconga', updatedValues);
+    this.storedData = updatedValues;
   }
 
   get partsOfSpeech () {
-    return store.get('Lexiconga').partsOfSpeech
+    return this.storedData.partsOfSpeech
       || defaultDictionary.partsOfSpeech;
   }
 
   set partsOfSpeech (array) {
     assert(Array.isArray(array), 'Parts of Speech must be passed as an array');
-    const updatedValues = store.get('Lexiconga');
+    const updatedValues = this.storedData;
     updatedValues.partsOfSpeech = array
       .filter((value) => { return value !== '' })
       .map((value) => { return value.trim() });
-    return store.set('Lexiconga', updatedValues);
+    this.storedData = updatedValues;
   }
 
   get details () {
-    return store.get('Lexiconga').details
+    return this.storedData.details
       || defaultDictionary.details;
   }
 
   get consonants () {
-    return store.get('Lexiconga').details.phonology.consonants
+    return this.storedData.details.phonology.consonants
       || defaultDictionary.details.phonology.consonants;
   }
 
   set consonants (array) {
     assert(Array.isArray(array), 'Consonants must be passed as an array');
-    const updatedValues = store.get('Lexiconga');
+    const updatedValues = this.storedData;
     updatedValues.details.phonology.consonants = array
       .filter((value) => { return value !== '' })
       .map((value) => { return value.trim() });
-    return store.set('Lexiconga', updatedValues);
+    this.storedData = updatedValues;
   }
 
   get vowels () {
-    return store.get('Lexiconga').details.phonology.vowels
+    return this.storedData.details.phonology.vowels
       || defaultDictionary.details.phonology.vowels;
   }
 
   set vowels (array) {
     assert(Array.isArray(array), 'Vowels must be passed as an array');
-    const updatedValues = store.get('Lexiconga');
+    const updatedValues = this.storedData;
     updatedValues.details.phonology.vowels = array
       .filter((value) => { return value !== '' })
       .map((value) => { return value.trim() });
-    return store.set('Lexiconga', updatedValues);
+    this.storedData = updatedValues;
   }
 
   get blends () {
-    return store.get('Lexiconga').details.phonology.blends
+    return this.storedData.details.phonology.blends
       || defaultDictionary.details.phonology.blends;
   }
 
   set blends (array) {
     assert(Array.isArray(array), 'Blends must be passed as an array');
-    const updatedValues = store.get('Lexiconga');
+    const updatedValues = this.storedData;
     updatedValues.details.phonology.blends = array
       .filter((value) => { return value !== '' })
       .map((value) => { return value.trim() });
-    return store.set('Lexiconga', updatedValues);
+    this.storedData = updatedValues;
   }
 
   get onset () {
-    return store.get('Lexiconga').details.phonology.phonotactics.onset
+    return this.storedData.details.phonology.phonotactics.onset
       || defaultDictionary.details.phonology.phonotactics.onset;
   }
 
   set onset (array) {
     assert(Array.isArray(array), 'Onset must be passed as an array');
-    const updatedValues = store.get('Lexiconga');
+    const updatedValues = this.storedData;
     updatedValues.details.phonology.phonotactics.onset = array
       .filter((value) => { return value !== '' })
       .map((value) => { return value.trim() });
-    return store.set('Lexiconga', updatedValues);
+    this.storedData = updatedValues;
   }
 
   get nucleus () {
-    return store.get('Lexiconga').details.phonology.phonotactics.nucleus
+    return this.storedData.details.phonology.phonotactics.nucleus
       || defaultDictionary.details.phonology.phonotactics.nucleus;
   }
 
   set nucleus (array) {
     assert(Array.isArray(array), 'Nucleus must be passed as an array');
-    const updatedValues = store.get('Lexiconga');
+    const updatedValues = this.storedData;
     updatedValues.details.phonology.phonotactics.nucleus = array
       .filter((value) => { return value !== '' })
       .map((value) => { return value.trim() });
-    return store.set('Lexiconga', updatedValues);
+    this.storedData = updatedValues;
   }
 
   get coda () {
-    return store.get('Lexiconga').details.phonology.phonotactics.coda
+    return this.storedData.details.phonology.phonotactics.coda
       || defaultDictionary.details.phonology.phonotactics.coda;
   }
 
   set coda (array) {
     assert(Array.isArray(array), 'Coda must be passed as an array');
-    const updatedValues = store.get('Lexiconga');
+    const updatedValues = this.storedData;
     updatedValues.details.phonology.phonotactics.coda = array
       .filter((value) => { return value !== '' })
       .map((value) => { return value.trim() });
-    return store.set('Lexiconga', updatedValues);
+    this.storedData = updatedValues;
   }
 
   get exceptions () {
-    return store.get('Lexiconga').details.phonology.phonotactics.exceptions
+    return this.storedData.details.phonology.phonotactics.exceptions
       || defaultDictionary.details.phonology.phonotactics.exceptions;
   }
 
   set exceptions (value) {
     assert(typeof value === 'string', 'Exceptions must be passed as a string.');
-    const updatedValues = store.get('Lexiconga');
+    const updatedValues = this.storedData;
     updatedValues.details.phonology.phonotactics.exceptions = value.trim();
-    return store.set('Lexiconga', updatedValues);
+    this.storedData = updatedValues;
   }
 
   get orthographyNotes () {
-    return store.get('Lexiconga').details.orthography.notes
+    return this.storedData.details.orthography.notes
       || defaultDictionary.details.orthography.notes;
   }
 
   set orthographyNotes (value) {
     assert(typeof value === 'string', 'Orthography Notes must be passed as a string.');
-    const updatedValues = store.get('Lexiconga');
+    const updatedValues = this.storedData;
     updatedValues.details.orthography.notes = value.trim();
-    return store.set('Lexiconga', updatedValues);
+    this.storedData = updatedValues;
   }
 
   get grammarNotes () {
-    return store.get('Lexiconga').details.grammar.notes
+    return this.storedData.details.grammar.notes
       || defaultDictionary.details.grammar.notes;
   }
 
   set grammarNotes (value) {
     assert(typeof value === 'string', 'Grammar Notes must be passed as a string.');
-    const updatedValues = store.get('Lexiconga');
+    const updatedValues = this.storedData;
     updatedValues.details.grammar.notes = value.trim();
-    return store.set('Lexiconga', updatedValues);
+    this.storedData = updatedValues;
   }
 
   get alphabeticalOrder () {
-    return store.get('Lexiconga').alphabeticalOrder
+    return this.storedData.alphabeticalOrder
       || defaultDictionary.alphabeticalOrder;
   }
 
   set alphabeticalOrder (array) {
     assert(Array.isArray(array), 'Alphabetical Order must be passed as an array');
-    const updatedValues = store.get('Lexiconga');
+    const updatedValues = this.storedData;
     updatedValues.alphabeticalOrder = array
       .filter((value) => { return value !== '' })
       .map((value) => { return value.trim() });
-    return store.set('Lexiconga', updatedValues);
+    this.storedData = updatedValues;
   }
 
   get settings () {
-    return store.get('Lexiconga').settings
+    return this.storedData.settings
       || defaultDictionary.settings;
   }
 
   get allowDuplicates () {
-    return store.get('Lexiconga').settings.allowDuplicates
+    return this.storedData.settings.allowDuplicates
       || defaultDictionary.settings.allowDuplicates;
   }
 
   set allowDuplicates (value) {
     assert(typeof value === 'boolean', 'allowDuplicates must be passed as a boolean.');
-    const updatedValues = store.get('Lexiconga');
+    const updatedValues = this.storedData;
     updatedValues.settings.allowDuplicates = value;
-    return store.set('Lexiconga', updatedValues);
+    this.storedData = updatedValues;
   }
 
   get caseSensitive () {
-    return store.get('Lexiconga').settings.caseSensitive
+    return this.storedData.settings.caseSensitive
       || defaultDictionary.settings.caseSensitive;
   }
 
   set caseSensitive (value) {
     assert(typeof value === 'boolean', 'caseSensitive must be passed as a boolean.');
-    const updatedValues = store.get('Lexiconga');
+    const updatedValues = this.storedData;
     updatedValues.settings.caseSensitive = value;
-    return store.set('Lexiconga', updatedValues);
+    this.storedData = updatedValues;
   }
 
   get sortByDefinition () {
-    return store.get('Lexiconga').settings.sortByDefinition
+    return this.storedData.settings.sortByDefinition
       || defaultDictionary.settings.sortByDefinition;
   }
 
   set sortByDefinition (value) {
     assert(typeof value === 'boolean', 'sortByDefinition must be passed as a boolean.');
-    const updatedValues = store.get('Lexiconga');
+    const updatedValues = this.storedData;
     updatedValues.settings.sortByDefinition = value;
-    return store.set('Lexiconga', updatedValues);
+    this.storedData = updatedValues;
   }
 
   get isComplete () {
-    return store.get('Lexiconga').settings.isComplete
+    return this.storedData.settings.isComplete
       || defaultDictionary.settings.isComplete;
   }
 
   set isComplete (value) {
     assert(typeof value === 'boolean', 'isComplete must be passed as a boolean.');
-    const updatedValues = store.get('Lexiconga');
+    const updatedValues = this.storedData;
     updatedValues.settings.isComplete = value;
-    return store.set('Lexiconga', updatedValues);
+    this.storedData = updatedValues;
   }
 
   get isPublic () {
-    return store.get('Lexiconga').settings.isPublic
+    return this.storedData.settings.isPublic
       || defaultDictionary.settings.isPublic;
   }
 
   set isPublic (value) {
     assert(typeof value === 'boolean', 'isPublic must be passed as a boolean.');
-    const updatedValues = store.get('Lexiconga');
+    const updatedValues = this.storedData;
     updatedValues.settings.isPublic = value;
-    return store.set('Lexiconga', updatedValues);
+    this.storedData = updatedValues;
   }
 
   get lastUpdated () {
-    return store.get('Lexiconga').lastUpdated
+    return this.storedData.lastUpdated
       || defaultDictionary.lastUpdated;
   }
 
   set lastUpdated (value) {
     assert(typeof value === 'number', 'lastUpdated must be passed as a number.');
-    const updatedValues = store.get('Lexiconga');
+    const updatedValues = this.storedData;
     updatedValues.lastUpdated = value;
-    return store.set('Lexiconga', updatedValues);
+    this.storedData = updatedValues;
   }
 
   get wordsPromise () {
