@@ -328,7 +328,7 @@ class DictionaryData {
     if (this.sortByDefinition) {
       return wordDb.words.toCollection().sortBy('definition');
     }
-    return wordDb.words.toArray();
+    return wordDb.words.orderBy('name').toArray();
   }
 
   wordsWithPartOfSpeech (partOfSpeech) {
