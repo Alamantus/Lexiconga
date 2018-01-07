@@ -69,12 +69,55 @@ export class Updater {
         this.dictionary.lastUpdated = timestampInSeconds();
         updatedDetails.lastUpdated = this.dictionary.lastUpdated;
         this.app.setState(updatedDetails, () => {
-          if (updatedDetails.hasOwnProperty('settings')) {
-            this.app.updateDisplayedWords();
-          }
-          resolve();
+          // if (updatedDetails.hasOwnProperty('settings')) {
+          //   this.app.updateDisplayedWords();
+          // }
+          this.sendDictionaryDetails(this.dictionary.storedData).then(() => {
+            resolve();
+          })
+          .catch(reason => {
+            reject(reason);
+          });
         });
       }
+    });
+  }
+
+  sendDictionaryDetails (dictionaryDetails) {
+    const request = new Request('./api/', {
+      method: 'POST',
+      mode: 'cors',
+      redirect: 'follow',
+      headers: new Headers({
+        'Content-Type': 'application/json'
+      }),
+      body: JSON.stringify({
+        action: 'set-dictionary-details',
+        token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MTUxLCJpc01lbWJlciI6ZmFsc2UsImRpY3Rpb25hcnkiOjM1M30.4HRuWY8arkjjYLgQ0Cq4a6v-eXwLTD24oENL8E4I5o0',
+        details: dictionaryDetails,
+      }),
+    });
+    return fetch(request).then(response => response.json()).then(responseJSON => {
+      console.log(responseJSON);
+    });
+  }
+
+  sendWords (words) {
+    const request = new Request('./api/', {
+      method: 'POST',
+      mode: 'cors',
+      redirect: 'follow',
+      headers: new Headers({
+        'Content-Type': 'application/json'
+      }),
+      body: JSON.stringify({
+        action: 'set-dictionary-words',
+        token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MTUxLCJpc01lbWJlciI6ZmFsc2UsImRpY3Rpb25hcnkiOjM1M30.4HRuWY8arkjjYLgQ0Cq4a6v-eXwLTD24oENL8E4I5o0',
+        words: words,
+      }),
+    });
+    return fetch(request).then(response => response.json()).then(responseJSON => {
+      console.log(responseJSON);
     });
   }
 }
