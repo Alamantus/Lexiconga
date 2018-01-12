@@ -118,7 +118,7 @@ SET name=:name,
   sort_by_definition=:sort_by_definition,
   is_complete=:is_complete,
   is_public=:is_public,
-  last_updated=NOW()
+  last_updated=:last_updated
 WHERE user=$user AND id=$dictionary";
 
     $result1 = $this->db->query($query1, array(
@@ -130,6 +130,7 @@ WHERE user=$user AND id=$dictionary";
       ':sort_by_definition' => $dictionary_object['settings']['sortByDefinition'],
       ':is_complete' => $dictionary_object['settings']['isComplete'],
       ':is_public' => $dictionary_object['settings']['isPublic'],
+      ':last_updated' => $dictionary_object['lastUpdated'],
     ));
     if ($result1->rowCount() > 0) {
       $linguistics = $dictionary_object['details'];
@@ -140,14 +141,14 @@ SET parts_of_speech=:parts_of_speech,
   grammar_notes=:grammar_notes
 WHERE dictionary=$dictionary";
 
-      $result2 = $this->db->query($query2, array(
+      $result2 = $this->db->execute($query2, array(
         ':parts_of_speech' => json_encode($dictionary_object['partsOfSpeech']),
         ':phonology' => json_encode($linguistics['phonology']),
         ':orthography_notes' => $linguistics['orthography']['notes'],
         ':grammar_notes' => $linguistics['grammar']['notes'],
       ));
 
-      if ($result2->rowCount() > 0) {
+      if ($result2) {
         return true;
       }
     }
@@ -160,14 +161,14 @@ WHERE dictionary=$dictionary";
     if ($results) {
       return array_map(function ($row) {
         return array(
-          'id' => $result['word_id'],
-          'name' => $result['name'],
-          'pronunciation' => $result['pronunciation'],
-          'partOfSpeech' => $result['part_of_speech'],
-          'definition' => $result['definition'],
-          'details' => $result['details'],
-          'lastUpdated' => is_null($result['last_updated']) ? null : strtotime($result['last_updated']),
-          'createdOn' => strtotime($result['created_on']),
+          'id' => intval($row['word_id']),
+          'name' => $row['name'],
+          'pronunciation' => $row['pronunciation'],
+          'partOfSpeech' => $row['part_of_speech'],
+          'definition' => $row['definition'],
+          'details' => $row['details'],
+          'lastUpdated' => is_null($row['last_updated']) ? null : strtotime($row['last_updated']),
+          'createdOn' => strtotime($row['created_on']),
         );
       }, $results);
     }
@@ -175,10 +176,11 @@ WHERE dictionary=$dictionary";
   }
 
   public function setWords ($dictionary, $words = array()) {
-    $query = 'INSERT INTO words (word_id, name, pronunciation, part_of_speech, definition, details, last_updated, created_on) VALUES ';
+    $query = 'INSERT INTO words (dictionary, word_id, name, pronunciation, part_of_speech, definition, details, last_updated, created_on) VALUES ';
     $params = array();
     foreach($words as $word) {
-      $query .= "(?, ?, ?, ?, ?, ?, FROM_UNIXTIME(?), FROM_UNIXTIME(?)), ";
+      $query .= "(?, ?, ?, ?, ?, ?, ?, ?, ?), ";
+      $params[] = $dictionary;
       $params[] = $word['id'];
       $params[] = $word['name'];
       $params[] = $word['pronunciation'];
@@ -196,7 +198,7 @@ definition=VALUES(definition),
 details=VALUES(details),
 last_updated=VALUES(last_updated)';
     
-    $results = $this->db->query($query, $params);
-    return $results->rowCount();
+    $results = $this->db->execute($query, $params);
+    return $results;
   }
 }

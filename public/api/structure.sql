@@ -18,8 +18,8 @@ CREATE TABLE IF NOT EXISTS `dictionaries` (
   `sort_by_definition` tinyint(1) NOT NULL DEFAULT '0',
   `is_complete` tinyint(1) NOT NULL DEFAULT '0',
   `is_public` tinyint(1) NOT NULL DEFAULT '0',
-  `last_updated` timestamp NULL DEFAULT NULL,
-  `created_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `last_updated` int(11) DEFAULT NULL,
+  `created_on` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=352 ;
 DROP TRIGGER IF EXISTS `delete_dictionary_parts`;
@@ -65,7 +65,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=151 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=152 ;
 DROP TRIGGER IF EXISTS `Delete_User_Dictionaries`;
 DELIMITER //
 CREATE TRIGGER `Delete_User_Dictionaries` AFTER DELETE ON `users`
@@ -81,8 +81,8 @@ CREATE TABLE IF NOT EXISTS `words` (
   `part_of_speech` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `definition` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `details` text COLLATE utf8_unicode_ci NOT NULL COMMENT 'Markdown',
-  `last_updated` timestamp NULL DEFAULT NULL,
-  `created_on` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `last_updated` int(11) DEFAULT NULL,
+  `created_on` int(11) NOT NULL,
   UNIQUE KEY `unique_index` (`dictionary`,`word_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
