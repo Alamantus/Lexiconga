@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS `dictionaries` (
   `description` text COLLATE utf8_unicode_ci NOT NULL COMMENT 'Markdown',
   `allow_duplicates` tinyint(1) NOT NULL DEFAULT '0',
   `case_sensitive` tinyint(1) NOT NULL DEFAULT '0',
-  `sort_by_equivalent` tinyint(1) NOT NULL DEFAULT '0',
+  `sort_by_definition` tinyint(1) NOT NULL DEFAULT '0',
   `is_complete` tinyint(1) NOT NULL DEFAULT '0',
   `is_public` tinyint(1) NOT NULL DEFAULT '0',
   `last_updated` timestamp NULL DEFAULT NULL,
