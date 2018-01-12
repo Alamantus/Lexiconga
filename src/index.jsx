@@ -180,6 +180,7 @@ class App extends Component {
         <Header
           partsOfSpeech={ this.state.partsOfSpeech }
           search={ (searchConfig) => this.search(searchConfig) }
+          updater={ this.updater }
         />
 
         <MainDisplay

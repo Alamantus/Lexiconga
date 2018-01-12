@@ -1,3 +1,5 @@
+import store from 'store';
+
 import { timestampInSeconds } from "../Helpers";
 
 export class Updater {
@@ -93,7 +95,7 @@ export class Updater {
       }),
       body: JSON.stringify({
         action: 'set-dictionary-details',
-        token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MTUxLCJpc01lbWJlciI6ZmFsc2UsImRpY3Rpb25hcnkiOjM1M30.4HRuWY8arkjjYLgQ0Cq4a6v-eXwLTD24oENL8E4I5o0',
+        token: store.get('LexicongaToken'),
         details: dictionaryDetails,
       }),
     });
@@ -112,12 +114,92 @@ export class Updater {
       }),
       body: JSON.stringify({
         action: 'set-dictionary-words',
-        token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MTUxLCJpc01lbWJlciI6ZmFsc2UsImRpY3Rpb25hcnkiOjM1M30.4HRuWY8arkjjYLgQ0Cq4a6v-eXwLTD24oENL8E4I5o0',
-        words: words,
+        token: store.get('LexicongaToken'),
+        words,
       }),
     });
     return fetch(request).then(response => response.json()).then(responseJSON => {
       console.log(responseJSON);
+    });
+  }
+
+  sync () {
+    const request = new Request('./api/', {
+      method: 'POST',
+      mode: 'cors',
+      redirect: 'follow',
+      headers: new Headers({
+        'Content-Type': 'application/json'
+      }),
+      body: JSON.stringify({
+        action: 'get-current-dictionary',
+        token: store.get('LexicongaToken'),
+      }),
+    });
+    return fetch(request).then(response => response.json()).then(responseJSON => {
+      const {data, error} = responseJSON;
+      if (error) {
+        console.error(data);
+      } else {
+        this.compareDetails(data.details);
+        this.compareWords(data.words);
+      }
+    });
+  }
+
+  compareDetails (externalDetails) {
+    if (externalDetails.lastUpdated) {
+      if (externalDetails.lastUpdated > store.get('Lexiconga').lastUpdated) {
+        this.app.setState(externalDetails, () => {
+          this.dictionary.storedData = externalDetails;
+          console.log('updated local');
+        });
+      } else if (externalDetails.lastUpdated < store.get('Lexiconga').lastUpdated) {
+        this.sendDictionaryDetails(this.app.state);
+      }
+    }
+  }
+
+  compareWords (externalWords) {
+    const wordsToSend = [];
+    const wordsToAdd = [];
+    const wordsToUpdate = [];
+    const localWordsPromise = this.dictionary.wordsPromise.then(localWords => {
+      externalWords.forEach(externalWord => {
+        if (externalWord.lastUpdated) {
+          const matchingWord = localWords.find(word => word.id === externalWord.id);
+          if (matchingWord) {
+            if (externalWord.lastUpdated > matchingWord.lastUpdated) {
+              wordsToUpdate.push(externalWord);
+            } else if (externalWord.lastUpdated < matchingWord.lastUpdated) {
+              wordsToSend.push(matchingWord);
+            }
+          } else {
+            wordsToAdd.push(externalWord);
+          }
+        }
+      });
+      // Find words not in external database and add them to send.
+      localWords.forEach(localWord => {
+        if (localWord.lastUpdated) {
+          const wordAlreadyChecked = externalWords.some(word => word.id === localWord.id);
+          if (!wordAlreadyChecked) {
+            wordsToSend.push(localWord);
+          }
+        }
+      });
+
+      wordsToAdd.forEach(newWord => {
+        new Word(newWord).create();
+      });
+      wordsToUpdate.forEach(updatedWord => {
+        new Word(updatedWord).update();
+      });
+      if (wordsToSend.length > 0) {
+        this.sendWords(wordsToSend);
+      }
+    }).then(() => {
+      this.app.updateDisplayedWords(() => console.log('synced words'));
     });
   }
 }

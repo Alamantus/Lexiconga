@@ -40,7 +40,7 @@ export class Word {
   }
 
   create () {
-    this.createdOn = timestampInSeconds();
+    this.createdOn = this.createdOn ? this.createdOn : timestampInSeconds();
 
     // Delete id if it exists to allow creation of new word.
     if (this.hasOwnProperty('id')) delete this.id;
@@ -57,7 +57,7 @@ export class Word {
   }
 
   update () {
-    this.lastUpdated = timestampInSeconds();
+    this.lastUpdated = this.lastUpdated ? this.lastUpdated : timestampInSeconds();
 
     return wordDb.words.put(this)
     .then((id) => {
@@ -89,7 +89,7 @@ export class Word {
       }),
       body: JSON.stringify({
         action: 'set-dictionary-words',
-        token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MTUxLCJpc01lbWJlciI6ZmFsc2UsImRpY3Rpb25hcnkiOjM1M30.4HRuWY8arkjjYLgQ0Cq4a6v-eXwLTD24oENL8E4I5o0',
+        token: store.get('LexicongaToken'),
         words: [this],
       }),
     });

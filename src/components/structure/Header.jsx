@@ -5,6 +5,7 @@ import marked from 'marked';
 
 import { Modal } from './Modal';
 import { SearchBox } from '../management/SearchBox';
+import { AccountManager } from '../management/AccountManager';
 
 import helpMarkdown from '../../assets/text/help.md';
 
@@ -15,6 +16,7 @@ export class Header extends Component {
     PropTypes.checkPropTypes({
       partsOfSpeech: PropTypes.array.isRequired,
       search: PropTypes.func.isRequired,
+      updater: PropTypes.object.isRequired,
     }, props, 'prop', 'Header');
 
     this.state = {
@@ -47,9 +49,7 @@ export class Header extends Component {
         <div className={`navbar-menu${ this.state.displayNavMenu ? ' is-active' : '' }`}>
           <div className='navbar-end'>
             <span className='navbar-item'>
-              <a className='button'>
-                Login
-              </a>
+              <AccountManager updater={ this.props.updater } />
             </span>
             <span className='navbar-item'>
               <Modal buttonText='Help' title='Lexiconga Help'>
