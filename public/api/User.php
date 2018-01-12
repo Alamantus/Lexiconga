@@ -137,12 +137,7 @@ class User {
       $dictionary = $user_data->dictionary;
       $updated_words = $this->dictionary->setWords($dictionary, $words);
       if ($updated_words > 0) {
-        if ($updated_words === count($words)) {
-          return true;
-        } else if ($updated_words < count($words)) {
-          // TODO: Handle this
-          return 'mostly';
-        }
+        return true;
       }
     }
     return false;

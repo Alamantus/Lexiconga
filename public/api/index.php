@@ -186,12 +186,12 @@ switch ($action) {
         ), 200);
       }
       return Response::json(array(
-        'data' => 'Could not set dictionary: invalid token',
+        'data' => 'Could not set words: invalid token',
         'error' => true,
       ), 401);
     }
     return Response::json(array(
-      'data' => 'Could not set dictionary: required data missing',
+      'data' => 'Could not set words: required data missing',
       'error' => true,
     ), 400);
   }

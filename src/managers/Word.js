@@ -49,6 +49,7 @@ export class Word {
     .then((id) => {
       this.id = id;
       console.log('Word added successfully');
+      this.send();
     })
     .catch(error => {
       console.error(error);
@@ -61,6 +62,7 @@ export class Word {
     return wordDb.words.put(this)
     .then((id) => {
       console.log('Word modified successfully');
+      this.send();
     })
     .catch(error => {
       console.error(error);
@@ -74,6 +76,25 @@ export class Word {
     })
     .catch(error => {
       console.error(error);
+    });
+  }
+
+  send () {
+    const request = new Request('./api/', {
+      method: 'POST',
+      mode: 'cors',
+      redirect: 'follow',
+      headers: new Headers({
+        'Content-Type': 'application/json'
+      }),
+      body: JSON.stringify({
+        action: 'set-dictionary-words',
+        token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MTUxLCJpc01lbWJlciI6ZmFsc2UsImRpY3Rpb25hcnkiOjM1M30.4HRuWY8arkjjYLgQ0Cq4a6v-eXwLTD24oENL8E4I5o0',
+        words: [this],
+      }),
+    });
+    return fetch(request).then(response => response.json()).then(responseJSON => {
+      console.log(responseJSON);
     });
   }
 }
