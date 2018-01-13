@@ -1,6 +1,6 @@
 import store from 'store';
 
-import { timestampInSeconds } from "../Helpers";
+import { timestampInSeconds, request } from "../Helpers";
 
 export class Updater {
   constructor (appWithDictionaryState, dictionary) {
@@ -86,58 +86,24 @@ export class Updater {
   }
 
   sendDictionaryDetails (dictionaryDetails) {
-    const request = new Request('./api/', {
-      method: 'POST',
-      mode: 'cors',
-      redirect: 'follow',
-      headers: new Headers({
-        'Content-Type': 'application/json'
-      }),
-      body: JSON.stringify({
-        action: 'set-dictionary-details',
-        token: store.get('LexicongaToken'),
-        details: dictionaryDetails,
-      }),
-    });
-    return fetch(request).then(response => response.json()).then(responseJSON => {
-      console.log(responseJSON);
-    });
+    return request('set-dictionary-details', {
+      token: store.get('LexicongaToken'),
+      details: dictionaryDetails,
+    }, response => console.log(response))
   }
 
   sendWords (words) {
-    const request = new Request('./api/', {
-      method: 'POST',
-      mode: 'cors',
-      redirect: 'follow',
-      headers: new Headers({
-        'Content-Type': 'application/json'
-      }),
-      body: JSON.stringify({
-        action: 'set-dictionary-words',
-        token: store.get('LexicongaToken'),
-        words,
-      }),
-    });
-    return fetch(request).then(response => response.json()).then(responseJSON => {
-      console.log(responseJSON);
-    });
+    return request('set-dictionary-words', {
+      token: store.get('LexicongaToken'),
+      words,
+    }, response => console.log(response));
   }
 
   sync () {
-    const request = new Request('./api/', {
-      method: 'POST',
-      mode: 'cors',
-      redirect: 'follow',
-      headers: new Headers({
-        'Content-Type': 'application/json'
-      }),
-      body: JSON.stringify({
-        action: 'get-current-dictionary',
-        token: store.get('LexicongaToken'),
-      }),
-    });
-    return fetch(request).then(response => response.json()).then(responseJSON => {
-      const {data, error} = responseJSON;
+    return request('get-current-dictionary', {
+      token: store.get('LexicongaToken'),
+    }, response => {
+      const { data, error } = response;
       if (error) {
         console.error(data);
       } else {

@@ -7,7 +7,7 @@ import store from 'store';
 import { Modal } from '../../structure/Modal';
 import { LoginForm } from './LoginForm';
 
-import helpMarkdown from '../../../assets/text/help.md';
+import { request } from '../../../Helpers';
 
 export class AccountManager extends Component {
   constructor (props) {
@@ -23,21 +23,8 @@ export class AccountManager extends Component {
   }
 
   logIn (email, password) {
-    const request = new Request('./api/', {
-      method: 'POST',
-      mode: 'cors',
-      redirect: 'follow',
-      headers: new Headers({
-        'Content-Type': 'application/json'
-      }),
-      body: JSON.stringify({
-        action: 'login',
-        email,
-        password,
-      }),
-    });
-    return fetch(request).then(response => response.json()).then(responseJSON => {
-      const {data, error} = responseJSON;
+    return request('login', { email, password }, response => {
+      const { data, error } = response;
       if (error) {
         console.error(data);
       } else {

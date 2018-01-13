@@ -7,7 +7,7 @@ import store from 'store';
 import { Modal } from '../../structure/Modal';
 import { SearchBox } from '../../management/SearchBox';
 
-import helpMarkdown from '../../../assets/text/help.md';
+import { request } from '../../../Helpers';
 
 export class LoginForm extends Component {
   constructor (props) {
@@ -81,30 +81,10 @@ export class LoginForm extends Component {
     if (uniqueFields.includes(field)) {
       const errorFieldName = `${field}Error`;
 
-      const request = new Request('./api/', {
-        method: 'POST',
-        mode: 'cors',
-        redirect: 'follow',
-        headers: new Headers({
-          'Content-Type': 'application/json'
-        }),
-        body: JSON.stringify({
-          action: 'login',
-          email,
-          password,
-        }),
+      request('check-email', value, (response) => {
+
       });
-      return fetch(request).then(response => response.json()).then(responseJSON => {
-        const { data, error } = responseJSON;
-        if (error) {
-          console.error(data);
-        } else {
-          store.set('LexicongaToken', data);
-          this.setState({ isLoggedIn: true }, () => {
-            this.props.updater.sync();
-          });
-        }
-      });
+      
       if (value === '') {
         isUnique = false;
         fieldUpdate[errorFieldName] = 'This field must not be blank';

@@ -199,3 +199,16 @@ export function getWordsStats (words, partsOfSpeech, isCaseSensitive = false) {
 
   return wordStats;
 }
+
+export function request (action, data, callback) {
+  const request = new Request('./api/', {
+    method: 'POST',
+    mode: 'cors',
+    redirect: 'follow',
+    headers: new Headers({
+      'Content-Type': 'application/json'
+    }),
+    body: JSON.stringify(Object.assign({action}, data)),
+  });
+  return fetch(request).then(response => response.json()).then(callback);
+}

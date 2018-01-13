@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import store from 'store';
 import wordDb from './WordDatabase';
-import {timestampInSeconds} from '../Helpers';
+import { timestampInSeconds, request } from '../Helpers';
 
 export class Word {
   constructor (values = {}) {
@@ -80,21 +80,12 @@ export class Word {
   }
 
   send () {
-    const request = new Request('./api/', {
-      method: 'POST',
-      mode: 'cors',
-      redirect: 'follow',
-      headers: new Headers({
-        'Content-Type': 'application/json'
-      }),
-      body: JSON.stringify({
-        action: 'set-dictionary-words',
+    const token = store.get('LexicongaToken');
+    if (token) {
+      return request('set-dictionary-words', {
         token: store.get('LexicongaToken'),
         words: [this],
-      }),
-    });
-    return fetch(request).then(response => response.json()).then(responseJSON => {
-      console.log(responseJSON);
-    });
+      }, response => console.log(response));
+    }
   }
 }
