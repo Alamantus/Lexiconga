@@ -36,7 +36,8 @@ export class LoginForm extends Component {
       signupConfirmError: '',
       signupEmailChecking: false,
       signupUsernameChecking: false,
-      takenUsernames: [],
+      signupEmailIsUnique: true,
+      signupUsernameIsUnique: true,
     };
   }
 
@@ -48,9 +49,9 @@ export class LoginForm extends Component {
     const requiredFields = ['loginEmail', 'loginPassword', 'signupEmail', 'signupPassword', 'signupConfirm'];
     const {value, checked} = event.target;
     const fieldUpdate = {};
+    const errorFieldName = `${field}Error`;
     let isValid = true;
     if (requiredFields.includes(field)) {
-      const errorFieldName = `${field}Error`;
       if (value === '') {
         isValid = false;
         fieldUpdate[errorFieldName] = 'This field must not be blank';
@@ -64,50 +65,56 @@ export class LoginForm extends Component {
         || (field === 'signupConfirm' && value !== this.state.signupPassword)) {
         isValid = false;
         fieldUpdate[errorFieldName] = 'Your passwords must match';
+      }
+    }
+
+    if (field === 'signupUsername') {
+      if (value !== '' && /[^a-zA-Z0-9]+/g.test(value)) {
+        isValid = false;
+        fieldUpdate[errorFieldName] = 'Please use only letters and numbers';
       }
     }
 
     if (isValid) {
-      fieldUpdate[field] = (field === 'signupAllowEmail') ? checked : value;
+      fieldUpdate[errorFieldName] = '';
     }
+    fieldUpdate[field] = (field === 'signupAllowEmail') ? checked : value;
     this.setState(fieldUpdate);
   }
 
   checkFieldUnique (field, event) {
-    const uniqueFields = ['signupEmail', 'signupUsername'];
     const {value} = event.target;
     const fieldUpdate = {};
-    let isUnique = true;
-    if (uniqueFields.includes(field)) {
-      const errorFieldName = `${field}Error`;
-
-      request('check-email', value, (response) => {
-
+    const errorFieldName = `${field}Error`;
+    if (field === 'signupEmail') {
+      this.setState({ signupEmailChecking: true }, () => {
+        request('check-email', { email: value }, (response) => {
+          const { data, error } = response;
+          fieldUpdate['signupEmailChecking'] = false;
+          if (error) {
+            console.error(data);
+          } else {
+            fieldUpdate['signupEmailIsUnique'] = !data;
+          }
+        }).then(() => {
+          this.setState(fieldUpdate);
+        });
       });
-      
-      if (value === '') {
-        isUnique = false;
-        fieldUpdate[errorFieldName] = 'This field must not be blank';
-      } else if (field.includes('Email') && !/.+@.+/g.test(value)) {
-        isUnique = false;
-        fieldUpdate[errorFieldName] = 'The email address you entered looks wrong';
-      } else if (field === 'signupPassword' && value.length < 6) {
-        isUnique = false;
-        fieldUpdate[errorFieldName] = 'Please make your password at least 6 characters long';
-      } else if ((field === 'signupPassword' && value !== this.state.signupConfirm)
-        || (field === 'signupConfirm' && value !== this.state.signupPassword)) {
-        isUnique = false;
-        fieldUpdate[errorFieldName] = 'Your passwords must match';
-      }
+    } else if (field === 'signupUsername') {
+      this.setState({ signupUsernameChecking: true }, () => {
+        request('check-username', { username: value }, (response) => {
+          const { data, error } = response;
+          fieldUpdate['signupUsernameChecking'] = false;
+          if (error) {
+            console.error(data);
+          } else {
+            fieldUpdate['signupUsernameIsUnique'] = !data;
+          }
+        }).then(() => {
+          this.setState(fieldUpdate);
+        });
+      });
     }
-
-    if (field === 'signupUsername' && value !== '') {
-      if (this.state.takenUsernames.length < 1) {
-        fetch()
-      }
-    }
-
-    this.setState(fieldUpdate);
   }
 
   render () {
@@ -181,9 +188,20 @@ export class LoginForm extends Component {
                       <label className='label'>
                         Email Address<sup>*</sup>
                       </label>
-                      <div className='control'>
-                        <input className='input' type='email' value={this.state.signupEmail}
-                          onInput={(event) => this.updateField('signupEmail', event)} />
+                      <div className={`control ${this.state.signupEmailChecking && 'is-loading'}`}>
+                        <input className={`input ${(this.state.signupEmailError !== '' || !this.state.signupEmailIsUnique) && 'is-danger'}`}
+                          type='email' value={this.state.signupEmail}
+                          onInput={(event) => this.updateField('signupEmail', event)}
+                          onBlur={(event) => this.checkFieldUnique('signupEmail', event)} />
+                        {
+                          (this.state.signupEmailError !== '' || !this.state.signupEmailIsUnique)
+                          ? (
+                            <div className='help is-danger'>
+                              {!this.state.signupEmailIsUnique && <p>This email address is already in use</p>}
+                              {this.state.signupEmailError}
+                            </div>
+                          ) : null
+                        }
                       </div>
                     </div>
                     <div className='field'>
@@ -193,9 +211,20 @@ export class LoginForm extends Component {
                       <div className='help'>
                         This is your unique identifier that appears in the URL if you ever decide to share your dictionaries publicly.
                       </div>
-                      <div className='control'>
-                        <input className='input' type='text' value={this.state.signupUsername}
-                          onInput={(event) => this.updateField('signupUsername', event)} />
+                      <div className={`control ${this.state.signupUsernameChecking && 'is-loading'}`}>
+                        <input className={`input ${!this.state.signupUsernameIsUnique && 'is-danger'}`}
+                          type='text' value={this.state.signupUsername}
+                          onInput={(event) => this.updateField('signupUsername', event)}
+                          onBlur={(event) => this.checkFieldUnique('signupUsername', event)} />
+                        {
+                          (this.state.signupUsernameError !== '' || !this.state.signupUsernameIsUnique)
+                            ? (
+                              <div className='help is-danger'>
+                                {!this.state.signupUsernameIsUnique && <p>This username address is already in use</p>}
+                                {this.state.signupUsernameError}
+                              </div>
+                            ) : null
+                        }
                       </div>
                     </div>
                     <div className='field'>
@@ -206,7 +235,8 @@ export class LoginForm extends Component {
                         This is the name we greet you with and what we display if you ever decide to share your dictionaries publicly.
                       </div>
                       <div className='control'>
-                        <input className='input' type='text' value={this.state.signupPublicName}
+                        <input className='input'
+                          type='text' value={this.state.signupPublicName}
                           onInput={(event) => this.updateField('signupPublicName', event)} />
                       </div>
                     </div>
@@ -215,8 +245,17 @@ export class LoginForm extends Component {
                         Password<sup>*</sup>
                       </label>
                       <div className='control'>
-                        <input className='input' type='password' value={this.state.signupPassword}
+                        <input className={`input ${this.state.signupPasswordError !== '' && 'is-danger'}`}
+                          type='password' value={this.state.signupPassword}
                           onInput={(event) => this.updateField('signupPassword', event)} />
+                        {
+                          this.state.signupPasswordError !== ''
+                            ? (
+                              <div className='help is-danger'>
+                                {this.state.signupPasswordError}
+                              </div>
+                            ) : null
+                        }
                       </div>
                     </div>
                     <div className='field'>
@@ -224,8 +263,17 @@ export class LoginForm extends Component {
                         Confirm Password<sup>*</sup>
                       </label>
                       <div className='control'>
-                        <input className='input' type='password' value={this.state.signupConfirm}
+                        <input className={`input ${this.state.signupConfirmError !== '' && 'is-danger'}`}
+                          type='password' value={this.state.signupConfirm}
                           onInput={(event) => this.updateField('signupConfirm', event)} />
+                        {
+                          this.state.signupConfirmError !== ''
+                            ? (
+                              <div className='help is-danger'>
+                                {this.state.signupConfirmError}
+                              </div>
+                            ) : null
+                        }
                       </div>
                     </div>
                     <div className='field'>

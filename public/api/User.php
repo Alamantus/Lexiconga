@@ -35,6 +35,12 @@ class User {
     return $user->rowCount() > 0;
   }
 
+  public function usernameExists ($username) {
+    $query = 'SELECT * FROM users WHERE username=?';
+    $user = $this->db->query($query, array($username));
+    return $user->rowCount() > 0;
+  }
+
   public function create ($email, $password) {
     $insert_user_query = 'INSERT INTO users (email, password) VALUES (?, ?)';
     $password_hash = password_hash($password, PASSWORD_DEFAULT);

@@ -55,6 +55,34 @@ switch ($action) {
       'error' => true,
     ), 400);
   }
+  case 'check-email': {
+    if (isset($request['email'])) {
+      $user = new User();
+      $email_exists = $user->emailExists($request['email']);
+      return Response::json(array(
+        'data' => $email_exists,
+        'error' => false,
+      ), 200);
+    }
+    return Response::json(array(
+      'data' => 'Could not check: required information missing',
+      'error' => true,
+    ), 400);
+  }
+  case 'check-username': {
+    if (isset($request['username'])) {
+      $user = new User();
+      $username_exists = $user->usernameExists($request['username']);
+      return Response::json(array(
+        'data' => $username_exists,
+        'error' => false,
+      ), 200);
+    }
+    return Response::json(array(
+      'data' => 'Could not check: required information missing',
+      'error' => true,
+    ), 400);
+  }
   case 'get-all-dictionary-names': {
     if ($token !== false) {
       $user = new User();
