@@ -5,7 +5,7 @@ import marked from 'marked';
 import store from 'store';
 
 import { Modal } from '../../structure/Modal';
-import { SearchBox } from '../../management/SearchBox';
+import { LoginForm } from './LoginForm';
 
 import helpMarkdown from '../../../assets/text/help.md';
 
@@ -73,11 +73,7 @@ export class AccountManager extends Component {
     }
     return (
       <Modal buttonText='Log In/Sign Up' title='Log In/Sign Up'>
-        <div className='content has-text-left'>
-          <a className='button' onClick={() => this.logIn('test1@robbie.com', 'password')}>
-            Test that login!
-          </a>
-        </div>
+        <LoginForm logIn={this.logIn.bind(this)} signUp={() => {}} />
       </Modal>
     );
   }
