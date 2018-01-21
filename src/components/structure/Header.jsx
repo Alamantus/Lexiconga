@@ -48,10 +48,10 @@ export class Header extends Component {
 
         <div className={`navbar-menu${ this.state.displayNavMenu ? ' is-active' : '' }`}>
           <div className='navbar-end'>
-            <span className='navbar-item'>
+            <span className='navbar-item has-text-right-touch'>
               <AccountManager updater={ this.props.updater } />
             </span>
-            <span className='navbar-item'>
+            <span className='navbar-item has-text-right-touch'>
               <Modal buttonText='Help' title='Lexiconga Help'>
                 <div className='content has-text-left'>
                   <div dangerouslySetInnerHTML={{

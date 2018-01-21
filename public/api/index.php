@@ -33,7 +33,7 @@ switch ($action) {
     if (isset($request['email']) && isset($request['password'])) {
       $user = new User();
       if (!$user->emailExists($request['email'])) {
-        $token = $user->create($request['email'], $request['password']);
+        $token = $user->create($request['email'], $request['password'], $request['userData']);
         if ($token !== false) {
           return Response::json(array(
             'data' => $token,

@@ -13,8 +13,8 @@ class User {
   }
 
   public function logIn ($email, $password) {
-    $query = 'SELECT * FROM users WHERE email=?';
-    $user = $this->db->query($query, array($email))->fetch();
+    $query = 'SELECT * FROM users WHERE email=:email OR username=:email';
+    $user = $this->db->query($query, array(':email' => $email))->fetch();
     if ($user) {
       if ($user['old_password'] !== null) {
         if ($user['old_password'] === crypt($password, $email)) {
@@ -23,6 +23,7 @@ class User {
           }
         }
       } else if (password_verify($password, $user['password'])) {
+        $this->db->execute('UPDATE users SET last_login=' . time() . ' WHERE id=' . $user['id']);
         return $this->generateUserToken($user['id'], $user['current_dictionary']);
       }
     }
@@ -41,11 +42,18 @@ class User {
     return $user->rowCount() > 0;
   }
 
-  public function create ($email, $password) {
-    $insert_user_query = 'INSERT INTO users (email, password) VALUES (?, ?)';
+  public function create ($email, $password, $user_data) {
+    $insert_user_query = 'INSERT INTO users (email, password, public_name, username, allow_email, created_on)
+VALUES (?, ?, ?, ?, ?, '. time() .')';
     $password_hash = password_hash($password, PASSWORD_DEFAULT);
 
-    $insert_user = $this->db->execute($insert_user_query, array($email, $password_hash));
+    $insert_user = $this->db->execute($insert_user_query, array(
+      $email,
+      $password_hash,
+      $user_data['publicName'] !== '' ? $user_data['publicName'] : null,
+      $user_data['username'] !== '' ? $user_data['username'] : null,
+      $user_data['allowEmail'] ? 1 : 0,
+    ));
     if ($insert_user === true) {
       $new_user_id = $this->db->lastInsertId();
 

@@ -33,11 +33,11 @@ class Dictionary {
     if ($insert_dictionary === true) {
       $new_dictionary_id = $this->db->lastInsertId();
 
-      $insert_linguistics_query = "INSERT INTO dictionary_linguistics (dictionary, partsOfSpeech, phonology)
+      $insert_linguistics_query = "INSERT INTO dictionary_linguistics (dictionary, parts_of_speech, phonology)
 VALUES ($new_dictionary_id, ?, ?)";
       $insert_linguistics = $this->db->execute($insert_linguistics_query, array(
         json_encode($this->defaults['partsOfSpeech']),
-        json_encode($this->defaults['phonotactics']),
+        json_encode($this->defaults['phonology']),
       ));
 
       if ($insert_linguistics === true) {

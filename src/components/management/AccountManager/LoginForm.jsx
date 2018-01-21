@@ -24,6 +24,7 @@ export class LoginForm extends Component {
       loginPassword: '',
       loginEmailError: '',
       loginPasswordError: '',
+      loginFormIsValid: true,
       signupEmail: '',
       signupUsername: '',
       signupPublicName: '',
@@ -38,7 +39,33 @@ export class LoginForm extends Component {
       signupUsernameChecking: false,
       signupEmailIsUnique: true,
       signupUsernameIsUnique: true,
+      signupFormIsValid: true,
     };
+  }
+
+  get loginFormIsValid () {
+    const {
+      loginEmailError,
+      loginPasswordError,
+    } = this.state;
+    return loginEmailError === '' && loginPasswordError === '';
+  }
+
+  get signupFormIsValid () {
+    const {
+      signupEmailError,
+      signupEmailChecking,
+      signupEmailIsUnique,
+      signupUsernameError,
+      signupUsernameChecking,
+      signupUsernameIsUnique,
+      signupPasswordError,
+      signupConfirmError,
+    } = this.state;
+    return !signupEmailChecking && !signupUsernameChecking
+      && signupEmailIsUnique && signupUsernameIsUnique
+      && signupEmailError === '' && signupUsernameError === ''
+      && signupPasswordError === '' && signupConfirmError === '';
   }
 
   changeTab (tab) {
@@ -46,40 +73,70 @@ export class LoginForm extends Component {
   }
 
   updateField (field, event) {
-    const requiredFields = ['loginEmail', 'loginPassword', 'signupEmail', 'signupPassword', 'signupConfirm'];
     const {value, checked} = event.target;
     const fieldUpdate = {};
+    const fieldErrors = this.validateField(field, value);
+    fieldUpdate[field] = (field === 'signupAllowEmail') ? checked : value;
+    this.setState(Object.assign(fieldUpdate, fieldErrors));
+  }
+
+  validateField (field, value) {
+    const fieldErrors = {};
     const errorFieldName = `${field}Error`;
     let isValid = true;
+    const requiredFields = ['loginEmail', 'loginPassword', 'signupEmail', 'signupPassword', 'signupConfirm'];
     if (requiredFields.includes(field)) {
       if (value === '') {
         isValid = false;
-        fieldUpdate[errorFieldName] = 'This field must not be blank';
-      } else if (field.includes('Email') && !/.+@.+/g.test(value)) {
+        fieldErrors[errorFieldName] = 'This field must not be blank';
+      } else if (field === 'signupEmail' && !/.+@.+/g.test(value)) {
         isValid = false;
-        fieldUpdate[errorFieldName] = 'The email address you entered looks wrong';
+        fieldErrors[errorFieldName] = 'The email address you entered looks wrong';
       } else if (field === 'signupPassword' && value.length < 6) {
         isValid = false;
-        fieldUpdate[errorFieldName] = 'Please make your password at least 6 characters long';
-      } else if ((field === 'signupPassword' && value !== this.state.signupConfirm)
-        || (field === 'signupConfirm' && value !== this.state.signupPassword)) {
+        fieldErrors[errorFieldName] = 'Please make your password at least 6 characters long';
+      } else if (field === 'signupConfirm' && value !== this.state.signupPassword) {
         isValid = false;
-        fieldUpdate[errorFieldName] = 'Your passwords must match';
+        fieldErrors[errorFieldName] = 'Your passwords must match';
       }
     }
 
     if (field === 'signupUsername') {
       if (value !== '' && /[^a-zA-Z0-9]+/g.test(value)) {
         isValid = false;
-        fieldUpdate[errorFieldName] = 'Please use only letters and numbers';
+        fieldErrors[errorFieldName] = 'Please use only letters and numbers';
       }
     }
 
     if (isValid) {
-      fieldUpdate[errorFieldName] = '';
+      fieldErrors[errorFieldName] = '';
     }
-    fieldUpdate[field] = (field === 'signupAllowEmail') ? checked : value;
-    this.setState(fieldUpdate);
+    return fieldErrors;
+  }
+
+  validateSignupForm (callback) {
+    const fields = ['signupEmail', 'signupUsername', 'signupPassword', 'signupConfirm'];
+    let errors = {};
+    fields.forEach(field => {
+      const fieldErrors = this.validateField(field, this.state[field]);
+      errors = Object.assign(errors, fieldErrors);
+    });
+    errors.signupFormIsValid = !signupEmailChecking && !signupUsernameChecking
+      && signupEmailIsUnique && signupUsernameIsUnique
+      && Object.keys(errors).every(field => errors[field] === '');
+    this.setState(errors, callback);
+  }
+
+  validateLoginForm (callback) {
+    const fields = ['loginEmail','loginPassword'];
+    let errors = {};
+    fields.forEach(field => {
+      errors = Object.assign(errors, this.validateField(field, this.state[field]));
+    });
+    errors.loginFormIsValid = Object.keys(errors).every(field => {
+      return errors[field] === '';
+    });
+    this.setState(errors, callback);
   }
 
   checkFieldUnique (field, event) {
@@ -117,6 +174,34 @@ export class LoginForm extends Component {
     }
   }
 
+  logIn () {
+    this.validateLoginForm(() => {
+      if (this.loginFormIsValid) {
+        const { loginEmail, loginPassword } = this.state;
+        this.props.logIn(loginEmail, loginPassword);
+      }
+    });
+  }
+
+  createAccount () {
+    this.validateSignupForm(() => {
+      if (this.signupFormIsValid) {
+        const {
+          signupEmail,
+          signupUsername,
+          signupPublicName,
+          signupPassword,
+          signupAllowEmail
+        } = this.state;
+        this.props.signUp(signupEmail, signupPassword, {
+          username: signupUsername,
+          publicName: signupPublicName,
+          allowEmail: signupAllowEmail,
+        });
+      }
+    });
+  }
+
   render () {
     return (
       <div className='columns'>
@@ -137,7 +222,7 @@ export class LoginForm extends Component {
           </div>
           {this.state.visibleTab === 'login'
             ? (
-              <div>
+              <div className="has-text-left">
                 <h3 className='title is-3'>
                   Log In
                 </h3>
@@ -146,7 +231,16 @@ export class LoginForm extends Component {
                     Email/Username
                   </label>
                   <div className='control'>
-                    <input className='input' type='email' />
+                    <input className={`input ${this.state.loginEmailError !== '' && 'is-danger'}`}
+                      type='email' onInput={(event) => this.updateField('loginEmail', event)} />
+                    {
+                      this.state.loginEmailError !== ''
+                        ? (
+                          <div className='help is-danger'>
+                            {this.state.loginEmailError}
+                          </div>
+                        ) : null
+                    }
                   </div>
                 </div>
                 <div className='field'>
@@ -154,12 +248,28 @@ export class LoginForm extends Component {
                     Password
                   </label>
                   <div className='control'>
-                    <input className='input' type='password' />
+                    <input className={`input ${this.state.loginPasswordError !== '' && 'is-danger'}`}
+                      type='password' onInput={(event) => this.updateField('loginPassword', event)}
+                      onChange={this.validateLoginForm.bind(this)} />
+                    {
+                      this.state.loginPasswordError !== ''
+                        ? (
+                          <div className='help is-danger'>
+                            {this.state.loginPasswordError}
+                          </div>
+                        ) : null
+                    }
                   </div>
+                </div>
+                <div className='field'>
+                  <a className='button is-success'
+                    onClick={this.logIn.bind(this)}>
+                    Log In
+                  </a>
                 </div>
               </div>
             ) : (
-              <div>
+              <div className="has-text-left">
                 <h3 className='title is-3'>
                   Create a New Account
                 </h3>
@@ -283,6 +393,14 @@ export class LoginForm extends Component {
                             onClick={(event) => this.updateField('signupAllowEmail', event)} />
                           Allow Emails
                         </label>
+                      </div>
+                    </div>
+                    <div className='field'>
+                      <div className='control'>
+                        <a className='button is-success'
+                          onClick={this.createAccount.bind(this)}>
+                          Create Account
+                        </a>
                       </div>
                     </div>
                   </div>

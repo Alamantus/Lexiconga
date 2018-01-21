@@ -23,22 +23,32 @@ export class AccountManager extends Component {
   }
 
   logIn (email, password) {
-    return request('login', { email, password }, response => {
-      const { data, error } = response;
-      if (error) {
-        console.error(data);
-      } else {
-        store.set('LexicongaToken', data);
-        this.setState({ isLoggedIn: true }, () => {
-          this.props.updater.sync();
-        });
-      }
-    });
+    return request('login', { email, password }, this.handleResponse.bind(this));
   }
 
   logOut () {
     store.remove('LexicongaToken');
     this.setState({ isLoggedIn: false });
+  }
+
+  signUp (email, password, userData) {
+    request('create-account', {
+      email,
+      password,
+      userData,
+    }, this.handleResponse.bind(this));
+  }
+
+  handleResponse (response) {
+    const { data, error } = response;
+    if (error) {
+      console.error(data);
+    } else {
+      store.set('LexicongaToken', data);
+      this.setState({ isLoggedIn: true }, () => {
+        this.props.updater.sync();
+      });
+    }
   }
 
   render () {
@@ -60,7 +70,7 @@ export class AccountManager extends Component {
     }
     return (
       <Modal buttonText='Log In/Sign Up' title='Log In/Sign Up'>
-        <LoginForm logIn={this.logIn.bind(this)} signUp={() => {}} />
+        <LoginForm logIn={this.logIn.bind(this)} signUp={this.signUp.bind(this)} />
       </Modal>
     );
   }
