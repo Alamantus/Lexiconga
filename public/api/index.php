@@ -189,7 +189,8 @@ switch ($action) {
       $update_details_success = $user->updateCurrentDictionaryDetails($token, $request['details']);
       if ($update_details_success !== false) {
         return Response::json(array(
-          'data' => 'Updated successfully',
+          // 'data' => 'Updated successfully',
+          'data' => $update_details_success,
           'error' => false,
         ), 200);
       }

@@ -3,6 +3,7 @@ import './sass/main.scss';
 
 import Inferno from 'inferno';
 import Component from 'inferno-component';
+import store from 'store';
 
 import removeDiacritics from '../vendor/StackOverflow/removeDiacritics';
 import { addHelpfulPrototypes, getWordsStats } from './Helpers';
@@ -47,7 +48,9 @@ class App extends Component {
 
     this.updater = new Updater(this, dictionary);
 
-    this.updateDisplayedWords();
+    this.updateDisplayedWords(() => {
+      if (store.get('LexicongaToken')) this.updater.sync();
+    });
   }
 
   get dictionaryInfo () {

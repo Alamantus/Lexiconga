@@ -27,7 +27,7 @@ class Dictionary {
   }
 
   public function create ($user) {
-    $insert_dictionary_query = "INSERT INTO dictionaries (user) VALUES ($user)";
+    $insert_dictionary_query = "INSERT INTO dictionaries (user, created_on) VALUES ($user, " . time() . ")";
     $insert_dictionary = $this->db->execute($insert_dictionary_query);
 
     if ($insert_dictionary === true) {
@@ -101,8 +101,8 @@ VALUES ($new_dictionary_id, ?, ?)";
           'isComplete' => $result['is_complete'] === '1' ? true : false,
           'isPublic' => $result['is_public'] === '1' ? true : false,
         ),
-        'lastUpdated' => is_null($result['last_updated']) ? null : strtotime($result['last_updated']),
-        'createdOn' => strtotime($result['created_on']),
+        'lastUpdated' => is_null($result['last_updated']) ? null : $result['last_updated'],
+        'createdOn' => $result['created_on'],
       );
     }
     return false;
@@ -118,10 +118,12 @@ SET name=:name,
   sort_by_definition=:sort_by_definition,
   is_complete=:is_complete,
   is_public=:is_public,
-  last_updated=:last_updated
+  last_updated=:last_updated,
+  created_on=:created_on
 WHERE user=$user AND id=$dictionary";
 
-    $result1 = $this->db->query($query1, array(
+    // $result1 = $this->db->query($query1, array(
+    $result1 = $this->db->execute($query1, array(
       ':name' => $dictionary_object['name'],
       ':specification' => $dictionary_object['specification'],
       ':description' => $dictionary_object['description'],
@@ -131,8 +133,10 @@ WHERE user=$user AND id=$dictionary";
       ':is_complete' => $dictionary_object['settings']['isComplete'],
       ':is_public' => $dictionary_object['settings']['isPublic'],
       ':last_updated' => $dictionary_object['lastUpdated'],
+      ':created_on' => $dictionary_object['createdOn'],
     ));
-    if ($result1->rowCount() > 0) {
+    // if ($result1->rowCount() > 0) {
+    if ($result1 === true) {
       $linguistics = $dictionary_object['details'];
       $query2 = "UPDATE dictionary_linguistics
 SET parts_of_speech=:parts_of_speech,
@@ -141,6 +145,7 @@ SET parts_of_speech=:parts_of_speech,
   grammar_notes=:grammar_notes
 WHERE dictionary=$dictionary";
 
+      // $result2 = $this->db->query($query2, array(
       $result2 = $this->db->execute($query2, array(
         ':parts_of_speech' => json_encode($dictionary_object['partsOfSpeech']),
         ':phonology' => json_encode($linguistics['phonology']),
@@ -148,10 +153,13 @@ WHERE dictionary=$dictionary";
         ':grammar_notes' => $linguistics['grammar']['notes'],
       ));
 
-      if ($result2) {
+      // if ($result2->rowCount() > 0) {
+      if ($result2 === true) {
         return true;
       }
+      // return $result2->errorInfo();
     }
+    // return $result1->errorInfo();
     return false;
   }
 
@@ -167,8 +175,8 @@ WHERE dictionary=$dictionary";
           'partOfSpeech' => $row['part_of_speech'],
           'definition' => $row['definition'],
           'details' => $row['details'],
-          'lastUpdated' => is_null($row['last_updated']) ? null : strtotime($row['last_updated']),
-          'createdOn' => strtotime($row['created_on']),
+          'lastUpdated' => is_null($row['last_updated']) ? null : $row['last_updated'],
+          'createdOn' => $row['created_on'],
         );
       }, $results);
     }

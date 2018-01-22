@@ -89,7 +89,7 @@ export class Updater {
     return request('set-dictionary-details', {
       token: store.get('LexicongaToken'),
       details: dictionaryDetails,
-    }, response => console.log(response))
+    }, response => console.log(response));
   }
 
   sendWords (words) {
@@ -114,15 +114,16 @@ export class Updater {
   }
 
   compareDetails (externalDetails) {
-    if (externalDetails.lastUpdated) {
-      if (externalDetails.lastUpdated > store.get('Lexiconga').lastUpdated) {
-        this.app.setState(externalDetails, () => {
-          this.dictionary.storedData = externalDetails;
-          console.log('updated local');
-        });
-      } else if (externalDetails.lastUpdated < store.get('Lexiconga').lastUpdated) {
-        this.sendDictionaryDetails(this.app.state);
-      }
+    console.log('external details', externalDetails);
+    if (!externalDetails.lastUpdated
+      || externalDetails.lastUpdated < this.dictionary.storedData.lastUpdated) {
+      this.sendDictionaryDetails(this.dictionary.storedData);
+    } else if (externalDetails.lastUpdated
+      && externalDetails.lastUpdated > this.dictionary.storedData.lastUpdated) {
+      this.app.setState(externalDetails, () => {
+        this.dictionary.storedData = externalDetails;
+        console.log('updated local');
+      });
     }
   }
 
