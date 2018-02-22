@@ -3,19 +3,10 @@ import { Component } from 'inferno';
 import PropTypes from 'prop-types';
 import marked from 'marked';
 
-// npm lazyload-inferno-component uses outdated inferno dependencies, so just using the script.
-import LazyLoader from '../../../vendor/LGabAnnell/lazyload-inferno-component/lazyload-component';
-
 import idManager from '../../managers/IDManager';
 
+import { Ad } from './Ad';
 import { WordDisplay } from './WordDisplay';
-
-const loadAd = (callback, { props, router }) => {
-  require.ensure([], (require) => {
-    const component = require("./Ad").Ad;
-    callback(component);
-  });
-};
 
 export class WordsList extends Component {
   constructor (props) {
@@ -39,7 +30,7 @@ export class WordsList extends Component {
             return (
               <div key={ `word_${word.id}` }>
                 {index % adsEveryXWords == 1
-                  && <LazyLoader key={ index } lazyLoad={ loadAd } />
+                  && <Ad key={ index } />
                 }
                 
                 <WordDisplay word={ word }
