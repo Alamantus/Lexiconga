@@ -1,5 +1,5 @@
 import Inferno from 'inferno';
-import Component from 'inferno-component';
+import { Component } from 'inferno';
 import PropTypes from 'prop-types';
 import marked from 'marked';
 import store from 'store';

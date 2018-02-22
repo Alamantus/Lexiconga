@@ -2,7 +2,7 @@
 import './sass/main.scss';
 
 import Inferno from 'inferno';
-import Component from 'inferno-component';
+import { Component, render } from 'inferno';
 import store from 'store';
 
 import removeDiacritics from '../vendor/StackOverflow/removeDiacritics';
@@ -223,4 +223,4 @@ class App extends Component {
   }
 }
 
-Inferno.render(<App />, document.getElementById('site'));
+render(<App />, document.getElementById('site'));

@@ -73,7 +73,7 @@ const webpackConfig = {
             loader: 'babel-loader',
             options: {
               presets: [
-                'es2016',
+                'env',
               ],
               plugins: [
                 'inferno',

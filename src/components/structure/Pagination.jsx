@@ -5,7 +5,7 @@ export const Pagination = (props) => {
   PropTypes.checkPropTypes({
     currentPage: PropTypes.number.isRequired,
     itemsPerPage: PropTypes.number.isRequired,
-    stats: PropTypes.number,
+    stats: PropTypes.object.isRequired,
     setPage: PropTypes.func.isRequired,
   }, props, 'prop', 'Pagination');
 

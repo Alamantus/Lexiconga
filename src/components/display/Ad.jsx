@@ -1,5 +1,5 @@
 import Inferno from 'inferno';
-import Component from 'inferno-component';
+import { Component } from 'inferno';
 
 export class Ad extends Component {
   constructor (props) {
