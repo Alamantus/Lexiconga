@@ -36,6 +36,8 @@ class App extends Component {
       alphabeticalOrder: dictionary.alphabeticalOrder,
 
       displayedWords: [],
+      currentPage: 0,
+      itemsPerPage: 30,
       searchConfig: {
         searchingIn: 'name',
         searchMethod: SEARCH_METHOD.contains,
@@ -90,9 +92,12 @@ class App extends Component {
   }
 
   updateDisplayedWords (callback = () => {}) {
+    const {currentPage, itemsPerPage} = this.state;
     dictionary.wordsPromise.then(words => {
-      const { searchConfig, partsOfSpeech } = this.state;
+      const { searchConfig, partsOfSpeech, currentPage, itemsPerPage } = this.state;
       const partsOfSpeechForFilter = [...partsOfSpeech, 'Uncategorized'];
+      const pageStart = currentPage * itemsPerPage;
+      const pageEnd = pageStart + itemsPerPage;
       let displayedWords;
       if (this.isUsingFilter) {
         const {
@@ -104,7 +109,10 @@ class App extends Component {
           filteredPartsOfSpeech
         } = searchConfig;
 
-        displayedWords = words.filter((word) => {
+        displayedWords = words.filter((word, index) => {
+          if (index < pageStart || index >= pageEnd) {
+            return false;
+          }
           const wordPartOfSpeech = word.partOfSpeech === '' ? 'Uncategorized' : word.partOfSpeech;
           if (!filteredPartsOfSpeech.includes(wordPartOfSpeech)) {
             return false;
@@ -161,7 +169,12 @@ class App extends Component {
           }
         });
       } else {
-       displayedWords = words;
+        displayedWords = words.filter((word, index) => {
+          if (index < pageStart || index >= pageEnd) {
+            return false;
+          }
+          return true;
+        });
       }
 
       this.setState({
@@ -174,6 +187,12 @@ class App extends Component {
   search (searchConfig) {
     this.setState({
       searchConfig: searchConfig,
+    }, () => this.updateDisplayedWords());
+  }
+
+  setPage (newPage) {
+    this.setState({
+      currentPage: newPage,
     }, () => this.updateDisplayedWords());
   }
 
@@ -190,6 +209,10 @@ class App extends Component {
           dictionaryInfo={ this.dictionaryInfo }
           wordsToDisplay={ this.state.displayedWords }
           wordsAreFiltered={ this.isUsingFilter }
+          currentPage={ this.state.currentPage }
+          itemsPerPage={ this.state.itemsPerPage }
+          stats={ this.state.stats }
+          setPage={ this.setPage.bind(this) }
           updateDisplay={ this.updateDisplayedWords.bind(this) }
           updater={ this.updater }
         />

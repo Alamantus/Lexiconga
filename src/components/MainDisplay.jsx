@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 
 import { LeftColumn } from './structure/LeftColumn';
 import { RightColumn } from './structure/RightColumn';
+import { Pagination } from './structure/Pagination';
 
 import { WordForm } from './management/WordForm';
 import { DictionaryDetails } from './display/DictionaryDetails';
@@ -17,6 +18,10 @@ export class MainDisplay extends Component {
       dictionaryInfo: PropTypes.object.isRequired,
       wordsToDisplay: PropTypes.array.isRequired,
       wordsAreFiltered: PropTypes.bool,
+      currentPage: PropTypes.number,
+      itemsPerPage: PropTypes.number,
+      stats: PropTypes.object.isRequired,
+      setPage: PropTypes.func.isRequired,
       updateDisplay: PropTypes.func.isRequired,
       updater: PropTypes.object.isRequired,
     }, props, 'prop', 'MainDisplay');
@@ -52,6 +57,10 @@ export class MainDisplay extends Component {
       dictionaryInfo,
       wordsToDisplay,
       wordsAreFiltered,
+      currentPage,
+      itemsPerPage,
+      stats,
+      setPage,
       updateDisplay,
       updater,
     } = this.props;
@@ -100,6 +109,13 @@ export class MainDisplay extends Component {
                 words={ wordsToDisplay }
                 adsEveryXWords={ 10 }
                 updateDisplay={ updateDisplay } />
+              
+              <Pagination
+                currentPage={currentPage}
+                itemsPerPage={itemsPerPage}
+                totalWords={stats.hasOwnProperty('numberOfWords')
+                  ? stats.numberOfWords.find(group => group.name === 'Total').value : null}
+                setPage={ setPage } />
             </RightColumn>
             
           </div>
