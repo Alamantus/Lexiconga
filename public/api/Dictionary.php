@@ -175,8 +175,8 @@ WHERE dictionary=$dictionary";
           'partOfSpeech' => $row['part_of_speech'],
           'definition' => $row['definition'],
           'details' => $row['details'],
-          'lastUpdated' => is_null($row['last_updated']) ? null : $row['last_updated'],
-          'createdOn' => $row['created_on'],
+          'lastUpdated' => is_null($row['last_updated']) ? null : intval($row['last_updated']),
+          'createdOn' => intval($row['created_on']),
         );
       }, $results);
     }

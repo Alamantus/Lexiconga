@@ -2,6 +2,8 @@ import store from 'store';
 
 import { timestampInSeconds, request } from "../Helpers";
 
+import { Word } from './Word';
+
 export class Updater {
   constructor (appWithDictionaryState, dictionary) {
     this.app = appWithDictionaryState;
