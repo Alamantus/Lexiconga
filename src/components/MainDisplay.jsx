@@ -113,8 +113,7 @@ export class MainDisplay extends Component {
               <Pagination
                 currentPage={currentPage}
                 itemsPerPage={itemsPerPage}
-                totalWords={stats.hasOwnProperty('numberOfWords')
-                  ? stats.numberOfWords.find(group => group.name === 'Total').value : null}
+                stats={stats}
                 setPage={ setPage } />
             </RightColumn>
             

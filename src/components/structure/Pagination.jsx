@@ -5,12 +5,15 @@ export const Pagination = (props) => {
   PropTypes.checkPropTypes({
     currentPage: PropTypes.number.isRequired,
     itemsPerPage: PropTypes.number.isRequired,
-    totalWords: PropTypes.number,
+    stats: PropTypes.number,
     setPage: PropTypes.func.isRequired,
   }, props, 'prop', 'Pagination');
 
-  const { currentPage, itemsPerPage, totalWords, setPage } = props;
+  const { currentPage, itemsPerPage, stats, setPage } = props;
 
+  const totalWords = stats.hasOwnProperty('numberOfWords')
+    ? stats.numberOfWords.find(group => group.name === 'Total').value : null;
+  
   if (totalWords === null) {
     return <div className="loader"></div>;
   }
