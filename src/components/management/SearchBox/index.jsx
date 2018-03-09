@@ -23,7 +23,7 @@ export class SearchBox extends Component {
       searchTerm: '',
       caseSensitive: false,
       ignoreDiacritics: false,
-      filteredPartsOfSpeech: [...props.partsOfSpeech, 'Uncategorized'],
+      filteredPartsOfSpeech: this.partsOfSpeechForFilter,
       showHeader: false,
       showAdvanced: false,
     };
@@ -62,7 +62,7 @@ export class SearchBox extends Component {
   }
 
   togglePartOfSpeech (event) {
-    const uniquePartsOfSpeech = new Set(this.partsOfSpeechForFilter);
+    const uniquePartsOfSpeech = new Set(this.state.filteredPartsOfSpeech);
     if (event.target.checked) {
       uniquePartsOfSpeech.add(event.target.value);
     } else {
@@ -314,6 +314,8 @@ export class SearchBox extends Component {
   showHeader () {
     this.setState({
       showHeader: true,
+    }, () => {
+      this.searchBox.focus();
     });
   }
 
