@@ -18,6 +18,7 @@ export class MainDisplay extends Component {
       dictionaryInfo: PropTypes.object.isRequired,
       wordsToDisplay: PropTypes.array.isRequired,
       wordsAreFiltered: PropTypes.bool,
+      wordsInCurrentList: PropTypes.number,
       currentPage: PropTypes.number,
       itemsPerPage: PropTypes.number,
       stats: PropTypes.object.isRequired,
@@ -57,6 +58,7 @@ export class MainDisplay extends Component {
       dictionaryInfo,
       wordsToDisplay,
       wordsAreFiltered,
+      wordsInCurrentList,
       currentPage,
       itemsPerPage,
       stats,
@@ -105,6 +107,14 @@ export class MainDisplay extends Component {
                   </div>
                 )}
 
+              <Pagination
+                currentPage={ currentPage }
+                itemsPerPage={ itemsPerPage }
+                stats={ stats }
+                setPage={ setPage }
+                wordsInCurrentList={ wordsInCurrentList }
+                isTop />
+
               <WordsList
                 words={ wordsToDisplay }
                 adsEveryXWords={ 10 }
@@ -114,7 +124,8 @@ export class MainDisplay extends Component {
                 currentPage={currentPage}
                 itemsPerPage={itemsPerPage}
                 stats={stats}
-                setPage={ setPage } />
+                setPage={setPage}
+                wordsInCurrentList={wordsInCurrentList} />
             </RightColumn>
             
           </div>

@@ -1,24 +1,25 @@
 import Inferno from 'inferno';
 import PropTypes from 'prop-types';
 
+import './styles.scss';
+
 export const Pagination = (props) => {
   PropTypes.checkPropTypes({
     currentPage: PropTypes.number.isRequired,
     itemsPerPage: PropTypes.number.isRequired,
     stats: PropTypes.object.isRequired,
     setPage: PropTypes.func.isRequired,
+    wordsInCurrentList: PropTypes.number,
+    isTop: PropTypes.bool,
   }, props, 'prop', 'Pagination');
 
-  const { currentPage, itemsPerPage, stats, setPage } = props;
-
-  const totalWords = stats.hasOwnProperty('numberOfWords')
-    ? stats.numberOfWords.find(group => group.name === 'Total').value : null;
+  const { currentPage, itemsPerPage, stats, setPage, wordsInCurrentList, isTop } = props;
   
-  if (totalWords === null) {
+  if (wordsInCurrentList === null) {
     return <div className="loader"></div>;
   }
 
-  const lastPage = Math.floor(totalWords / itemsPerPage);
+  const lastPage = Math.floor(wordsInCurrentList / itemsPerPage);
   const nextPage = currentPage + 1 > lastPage ? lastPage : currentPage + 1;
   const prevPage = currentPage - 1 < 0 ? 0 : currentPage - 1;
 
@@ -29,7 +30,7 @@ export const Pagination = (props) => {
   }
 
   return (
-    <nav className="pagination is-centered" role="navigation" aria-label="pagination">
+    <nav className={`pagination is-centered ${isTop ? 'is-top' : ''}`} role="navigation" aria-label="pagination">
       <a className="pagination-previous" aria-label="Goto page 1"
         Disabled={currentPage === 0 ? 'disabled' : null}
         onClick={() => changePage(prevPage)}>
