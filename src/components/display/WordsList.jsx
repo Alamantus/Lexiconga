@@ -13,6 +13,7 @@ export class WordsList extends Component {
     super(props);
 
     PropTypes.checkPropTypes({
+      isLoadingWords: PropTypes.bool,
       adsEveryXWords: PropTypes.number,
       words: PropTypes.array,
       updateDisplay: PropTypes.func.isRequired,
@@ -22,6 +23,12 @@ export class WordsList extends Component {
   render () {
     const adsEveryXWords = this.props.adsEveryXWords || 10;
 
+    if (this.props.isLoadingWords) {
+      return <div className="content has-text-centered">
+        <div className="loader" style="display: inline-block; width: 60px; height: 60px;" />
+      </div>;
+    }
+    
     return (
       <div className='box'>
 

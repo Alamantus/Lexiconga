@@ -16,6 +16,7 @@ export class MainDisplay extends Component {
 
     PropTypes.checkPropTypes({
       dictionaryInfo: PropTypes.object.isRequired,
+      isLoadingWords: PropTypes.bool,
       wordsToDisplay: PropTypes.array.isRequired,
       wordsAreFiltered: PropTypes.bool,
       wordsInCurrentList: PropTypes.number,
@@ -56,6 +57,7 @@ export class MainDisplay extends Component {
   render () {
     const {
       dictionaryInfo,
+      isLoadingWords,
       wordsToDisplay,
       wordsAreFiltered,
       wordsInCurrentList,
@@ -116,6 +118,7 @@ export class MainDisplay extends Component {
                 isTop />
 
               <WordsList
+                isLoadingWords={ isLoadingWords }
                 words={ wordsToDisplay }
                 adsEveryXWords={ 10 }
                 updateDisplay={ updateDisplay } />

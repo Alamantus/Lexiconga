@@ -16,7 +16,7 @@ export const Pagination = (props) => {
   const { currentPage, itemsPerPage, stats, setPage, wordsInCurrentList, isTop } = props;
   
   if (wordsInCurrentList === null) {
-    return <div className="loader"></div>;
+    return null;
   }
 
   const lastPage = Math.floor(wordsInCurrentList / itemsPerPage);

@@ -46,6 +46,7 @@ class App extends Component {
         ignoreDiacritics: false,
         filteredPartsOfSpeech: [...dictionary.partsOfSpeech, 'Uncategorized'],
       },
+      isLoadingWords: true,
       wordsInCurrentList: null,
     }
 
@@ -181,18 +182,21 @@ class App extends Component {
         displayedWords,
         stats: getWordsStats(words, partsOfSpeech, this.state.settings.caseSensitive),
         wordsInCurrentList,
+        isLoadingWords: false,
       }, () => callback());
     });
   }
 
   search (searchConfig) {
     this.setState({
+      isLoadingWords: true,
       searchConfig: searchConfig,
     }, () => this.updateDisplayedWords());
   }
 
   setPage (newPage) {
     this.setState({
+      isLoadingWords: true,
       currentPage: newPage,
     }, () => this.updateDisplayedWords());
   }
@@ -208,6 +212,7 @@ class App extends Component {
 
         <MainDisplay
           dictionaryInfo={ this.dictionaryInfo }
+          isLoadingWords={ this.state.isLoadingWords }
           wordsToDisplay={ this.state.displayedWords }
           wordsAreFiltered={ this.isUsingFilter }
           wordsInCurrentList={ this.state.wordsInCurrentList }
