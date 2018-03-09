@@ -59,6 +59,8 @@ export class EditDictionaryModal extends Component {
 
       hasChanged: false,
     }
+
+    this.modal = null;
   }
 
   hasChanged () {
@@ -144,7 +146,7 @@ export class EditDictionaryModal extends Component {
     );
   }
 
-  save () {
+  save (callback = () => {}) {
     const updatedDetails = {};
 
     if (this.state.name !== this.props.name) {
@@ -252,7 +254,7 @@ export class EditDictionaryModal extends Component {
         this.setState({ hasChanged: false }, () => {
           // If setting that alters word display is changed, update the display.
           if (updatedDetails.hasOwnProperty('sortByDefinition')) {
-            this.props.updateDisplay();
+            this.props.updateDisplay(callback);
           }
         });
       })
@@ -278,9 +280,16 @@ export class EditDictionaryModal extends Component {
               >
                 Save
               </button>
+              <button className='button'
+                disabled={ !hasChanged }
+                onClick={ () => this.save(this.modal.hide())}
+              >
+                Save & Close
+              </button>
             </div>
           )
         }
+        ref={(modal) => this.modal = modal}
       >
 
         {!settings.isComplete
