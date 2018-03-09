@@ -111,7 +111,7 @@ export class SearchBox extends Component {
                             this.searchBox = input;
                           }}
                           value={ this.state.searchTerm }
-                          onChange={(event) => {
+                          onInput={(event) => {
                             this.setState({ searchTerm: event.target.value.trim() }, () => this.search());
                           }} />
                           <span className='icon is-small is-left'>
