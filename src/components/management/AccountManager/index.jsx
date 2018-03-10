@@ -6,7 +6,7 @@ import store from 'store';
 
 import { Modal } from '../../structure/Modal';
 import { LoginForm } from './LoginForm';
-// import { MyAccount } from './MyAccount';
+import { MyAccount } from './MyAccount';
 
 import { request } from '../../../Helpers';
 
@@ -124,17 +124,15 @@ export class AccountManager extends Component {
       return (
         <div>
           <Modal buttonText='Account' title='My Account' onShow={ this.getDictionaryNames.bind(this) }>
-            <div className='content has-text-left'>
-              <p>Hello My Account!</p>
-            </div>
-            {/* <MyAccount
+            <MyAccount
               email={ userData.email }
               username={ userData.username }
               publicName={ userData.publicName }
               allowEmails={ userData.allowEmails }
               useIPAPronunciation={ userData.useIPAPronunciation }
+              userDictionaries={ this.state.userDictionaries }
               updateUserData={ this.updateUserData.bind(this) }
-              changeDictionary={ () => {} } /> */}
+              changeDictionary={ () => {} } />
           </Modal>
           <a className='button' onClick={this.logOut.bind(this)}>
             Log Out
