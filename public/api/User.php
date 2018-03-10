@@ -24,7 +24,10 @@ class User {
         }
       } else if (password_verify($password, $user['password'])) {
         $this->db->execute('UPDATE users SET last_login=' . time() . ' WHERE id=' . $user['id']);
-        return $this->generateUserToken($user['id'], $user['current_dictionary']);
+        return array(
+          'token' => $this->generateUserToken($user['id'], $user['current_dictionary']),
+          'user' => $this->getUserData($user['id']),
+        );
       }
     }
     return false;
@@ -60,8 +63,52 @@ VALUES (?, ?, ?, ?, ?, '. time() .')';
       $new_dictionary = $this->dictionary->create($new_user_id);
 
       if ($new_dictionary !== false) {
-        return $this->generateUserToken($new_user_id, $new_dictionary);
+        return array(
+          'token' => $this->generateUserToken($new_user_id, $new_dictionary),
+          'user' => $this->getUserData($new_user_id),
+        );
       }
+    }
+
+    return false;
+  }
+
+  public function setUserData ($token, $user_data) {
+    $token_data = $this->token->decode($token);
+    if ($token_data !== false) {
+      $query = 'UPDATE users SET email=?, public_name=?, username=?, allow_email=?, use_ipa=? WHERE id=?';
+      $properties = array(
+        $user_data['email'],
+        $user_data['publicName'],
+        $user_data['username'],
+        $user_data['allowEmail'],
+        $user_data['useIPAPronunciation'],
+        $user_id,
+      );
+      $update_success = $this->db->execute($query, $properties);
+      if ($update_success) {
+        return array(
+          'token' => $token,
+          'userData' => $user_data,
+        );
+      }
+    }
+
+    return false;
+  }
+
+  public function getUserData ($user_id) {
+    $query = 'SELECT * FROM users WHERE id=?';
+    $stmt = $this->db->query($query, array($user_id));
+    $user = $stmt->fetch();
+    if ($stmt && $user) {
+      return array(
+        'email' => $user['email'],
+        'username' => $user['username'],
+        'publicName' => $user['public_name'],
+        'allowEmails' => $user['allow_email'] == 1 ? true : false,
+        'useIPAPronunciation' => $user['use_ipa'] == 1 ? true : false,
+      );
     }
 
     return false;

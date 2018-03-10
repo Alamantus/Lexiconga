@@ -12,10 +12,10 @@ switch ($action) {
   case 'login': {
     if (isset($request['email']) && isset($request['password'])) {
       $user = new User();
-      $token = $user->logIn($request['email'], $request['password']);
-      if ($token !== false) {
+      $user_data = $user->logIn($request['email'], $request['password']);
+      if ($user_data !== false) {
         return Response::json(array(
-          'data' => $token,
+          'data' => $user_data,
           'error' => false,
         ), 200);
       }
@@ -33,10 +33,10 @@ switch ($action) {
     if (isset($request['email']) && isset($request['password'])) {
       $user = new User();
       if (!$user->emailExists($request['email'])) {
-        $token = $user->create($request['email'], $request['password'], $request['userData']);
-        if ($token !== false) {
+        $user_data = $user->create($request['email'], $request['password'], $request['userData']);
+        if ($user_data !== false) {
           return Response::json(array(
-            'data' => $token,
+            'data' => $user_data,
             'error' => false,
           ), 201);
         }
@@ -95,6 +95,26 @@ switch ($action) {
       }
       return Response::json(array(
         'data' => 'Could not get dictionaries: invalid token',
+        'error' => true,
+      ), 400);
+    }
+    return Response::json(array(
+      'data' => 'Could not get dictionaries: no token provided',
+      'error' => true,
+    ), 403);
+  }
+  case 'set-user-data': {
+    if ($token !== false && isset($request['userData'])) {
+      $user = new User();
+      $updated_user = $user->setUserData($token, $request['userData']);
+      if ($updated_user !== false) {
+        return Response::json(array(
+          'data' => $updated_user,
+          'error' => false,
+        ), 200);
+      }
+      return Response::json(array(
+        'data' => 'Could not set user data: missing data',
         'error' => true,
       ), 400);
     }

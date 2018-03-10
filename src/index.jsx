@@ -46,6 +46,8 @@ class App extends Component {
         ignoreDiacritics: false,
         filteredPartsOfSpeech: [...dictionary.partsOfSpeech, 'Uncategorized'],
       },
+      isLoadingWords: true,
+      wordsInCurrentList: null,
     }
 
     this.updater = new Updater(this, dictionary);
@@ -98,7 +100,7 @@ class App extends Component {
       const partsOfSpeechForFilter = [...partsOfSpeech, 'Uncategorized'];
       const pageStart = currentPage * itemsPerPage;
       const pageEnd = pageStart + itemsPerPage;
-      let displayedWords;
+      let displayedWords = words;
       if (this.isUsingFilter) {
         const {
           searchingIn,
@@ -109,10 +111,7 @@ class App extends Component {
           filteredPartsOfSpeech
         } = searchConfig;
 
-        displayedWords = words.filter((word, index) => {
-          if (index < pageStart || index >= pageEnd) {
-            return false;
-          }
+        displayedWords = displayedWords.filter((word, index) => {
           const wordPartOfSpeech = word.partOfSpeech === '' ? 'Uncategorized' : word.partOfSpeech;
           if (!filteredPartsOfSpeech.includes(wordPartOfSpeech)) {
             return false;
@@ -168,30 +167,36 @@ class App extends Component {
             }
           }
         });
-      } else {
-        displayedWords = words.filter((word, index) => {
-          if (index < pageStart || index >= pageEnd) {
-            return false;
-          }
-          return true;
-        });
       }
+
+      const wordsInCurrentList = displayedWords.length;
+
+      displayedWords = displayedWords.filter((word, index) => {
+        if (index < pageStart || index >= pageEnd) {
+          return false;
+        }
+        return true;
+      });
 
       this.setState({
         displayedWords,
         stats: getWordsStats(words, partsOfSpeech, this.state.settings.caseSensitive),
+        wordsInCurrentList,
+        isLoadingWords: false,
       }, () => callback());
     });
   }
 
   search (searchConfig) {
     this.setState({
+      isLoadingWords: true,
       searchConfig: searchConfig,
     }, () => this.updateDisplayedWords());
   }
 
   setPage (newPage) {
     this.setState({
+      isLoadingWords: true,
       currentPage: newPage,
     }, () => this.updateDisplayedWords());
   }
@@ -207,8 +212,10 @@ class App extends Component {
 
         <MainDisplay
           dictionaryInfo={ this.dictionaryInfo }
+          isLoadingWords={ this.state.isLoadingWords }
           wordsToDisplay={ this.state.displayedWords }
           wordsAreFiltered={ this.isUsingFilter }
+          wordsInCurrentList={ this.state.wordsInCurrentList }
           currentPage={ this.state.currentPage }
           itemsPerPage={ this.state.itemsPerPage }
           stats={ this.state.stats }

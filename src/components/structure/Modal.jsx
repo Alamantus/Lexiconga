@@ -13,6 +13,8 @@ export class Modal extends Component {
     children: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
     footerAlign: PropTypes.string,
     footerContent: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+    onShow: PropTypes.func,
+    onHide: PropTypes.func,
   }, props, 'prop', 'Modal');
 
     this.state = {
@@ -23,12 +25,20 @@ export class Modal extends Component {
   show () {
     this.setState({
       isVisible: true,
+    }, () => {
+      if (this.props.onShow) {
+        this.props.onShow();
+      }
     });
   }
 
   hide () {
     this.setState({
       isVisible: false,
+    }, () => {
+      if (this.props.onHide) {
+        this.props.onHide();
+      }
     });
   }
 

@@ -45,6 +45,7 @@
   "dependencies": {
     "babel-polyfill": "^6.26.0",
     "bulma": "^0.6.2",
+    "bulma-checkradio": "^1.0.1",
     "dexie": "^2.0.1",
     "font-awesome": "^4.7.0",
     "inferno": "^4.0.4",

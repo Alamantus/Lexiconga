@@ -30,17 +30,16 @@ export const EditSettingsForm = (props) => {
     
       <div className='field'>
         <div className='control'>
-          <label className='checkbox'>
+          <input className='is-checkradio is-rtl' type='checkbox' id='allowDuplicates'
+            defaultChecked={ allowDuplicates }
+            onChange={ (event) => {
+              editDictionaryModal.setState({
+                allowDuplicates: event.target.checked,
+                hasChanged: event.target.checked != editDictionaryModal.props.allowDuplicates,
+              });
+            }} />
+          <label class='label is-unselectable' htmlFor='allowDuplicates'>
             Allow Duplicate Words
-            { ' ' }
-            <input type='checkbox'
-              defaultChecked={ allowDuplicates }
-              onChange={ (event) => {
-                editDictionaryModal.setState({
-                  allowDuplicates: event.target.checked,
-                  hasChanged: event.target.checked != editDictionaryModal.props.allowDuplicates,
-                });
-              }} />
           </label>
           <div className='help'>
             Checking this box will allow any number of the exact same spelling of a word to be added
@@ -50,20 +49,19 @@ export const EditSettingsForm = (props) => {
     
       <div className='field'>
         <div className='control'>
-          <label className='checkbox'
-            Disabled={ allowDuplicates ? 'disabled' : null }
-            title={ allowDuplicates ? 'Disabled because allowing duplicates makes this unnecessary' : null}>
+          <input className='is-checkradio is-rtl' type='checkbox' id='caseSensitive'
+            defaultChecked={ caseSensitive }
+            disabled={ allowDuplicates }
+            onChange={ (event) => {
+              editDictionaryModal.setState({
+                caseSensitive: event.target.checked,
+                hasChanged: event.target.checked != editDictionaryModal.props.caseSensitive,
+              });
+            }} />
+          <label className='label is-unselectable' htmlFor='caseSensitive'
+            Disabled={allowDuplicates ? 'disabled' : null}
+            title={allowDuplicates ? 'Disabled because allowing duplicates makes this unnecessary' : null}>
             Words are Case-Sensitive
-            { ' ' }
-            <input type='checkbox'
-              defaultChecked={ caseSensitive }
-              disabled={ allowDuplicates }
-              onChange={ (event) => {
-                editDictionaryModal.setState({
-                  caseSensitive: event.target.checked,
-                  hasChanged: event.target.checked != editDictionaryModal.props.caseSensitive,
-                });
-              }} />
           </label>
           <div className='help'>
             Checking this box will allow any words spelled the same but with different capitalization to be added.
@@ -73,17 +71,16 @@ export const EditSettingsForm = (props) => {
     
       <div className='field'>
         <div className='control'>
-          <label className='checkbox'>
+          <input className='is-checkradio is-rtl' type='checkbox' id='sortByDefinition'
+            defaultChecked={ sortByDefinition }
+            onChange={ (event) => {
+              editDictionaryModal.setState({
+                sortByDefinition: event.target.checked,
+                hasChanged: event.target.checked != editDictionaryModal.props.sortByDefinition,
+              });
+            }} />
+          <label className='label is-unselectable' htmlFor='sortByDefinition'>
             Sort by Definition
-            { ' ' }
-            <input type='checkbox'
-              defaultChecked={ sortByDefinition }
-              onChange={ (event) => {
-                editDictionaryModal.setState({
-                  sortByDefinition: event.target.checked,
-                  hasChanged: event.target.checked != editDictionaryModal.props.sortByDefinition,
-                });
-              }} />
           </label>
           <div className='help'>
             Checking this box will sort the words in alphabetical order based on the Definition instead of the Word.
@@ -93,20 +90,19 @@ export const EditSettingsForm = (props) => {
     
       <div className='field'>
         <div className='control'>
-          <label className='checkbox'>
+          <input className='is-checkradio is-rtl' type='checkbox' id='isComplete'
+            defaultChecked={ isComplete }
+            onChange={ (event) => {
+              editDictionaryModal.setState({
+                isComplete: event.target.checked,
+                hasChanged: event.target.checked != editDictionaryModal.props.isComplete,
+              });
+            }} />
+          <label className='label is-unselectable' htmlFor='isComplete'>
             Mark Complete
-            { ' ' }
-            <input type='checkbox'
-              defaultChecked={ isComplete }
-              onChange={ (event) => {
-                editDictionaryModal.setState({
-                  isComplete: event.target.checked,
-                  hasChanged: event.target.checked != editDictionaryModal.props.isComplete,
-                });
-              }} />
           </label>
           <div className='help'>
-            Checking this box will mark your { specification } as "complete" and prevent any changes from being made.
+            Checking this box will mark your { specification } as 'complete' and prevent any changes from being made.
           </div>
         </div>
       </div>
@@ -115,17 +111,16 @@ export const EditSettingsForm = (props) => {
         && (
           <div className='field'>
             <div className='control'>
-              <label className='checkbox'>
+              <input className='is-checkradio is-rtl' type='checkbox' id='isPublic'
+                defaultChecked={ isPublic }
+                onChange={ (event) => {
+                  editDictionaryModal.setState({
+                    isPublic: event.target.checked,
+                    hasChanged: event.target.checked != editDictionaryModal.props.isPublic,
+                  });
+                }} />
+              <label className='label is-unselectable' htmlFor='isPublic'>
                 Make Public
-                { ' ' }
-                <input type='checkbox'
-                  defaultChecked={ isPublic }
-                  onChange={ (event) => {
-                    editDictionaryModal.setState({
-                      isPublic: event.target.checked,
-                      hasChanged: event.target.checked != editDictionaryModal.props.isPublic,
-                    });
-                  }} />
               </label>
               <div className='help'>
                 Checking this box will make your { specification } as public.

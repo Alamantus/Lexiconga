@@ -109,7 +109,7 @@ export class WordForm extends Component {
             <input className={ `input${(!this.state.nameIsValid) ? ' is-danger' : ''}` }
               type='text' placeholder='Required'
               value={ this.state.wordName }
-              onChange={(event) => {
+              onInput={(event) => {
                 this.setState({ wordName: event.target.value });
               }} />
               {(!this.state.nameIsValid)
@@ -149,7 +149,7 @@ export class WordForm extends Component {
             <input className={ `input${(!this.state.definitionIsValid) ? ' is-danger' : ''}` }
               type='text' placeholder='Equivalent word(s)'
               value={ this.state.wordDefinition }
-              onChange={(event) => {
+              onInput={(event) => {
                 this.setState({ wordDefinition: event.target.value })
               }} />
               {(!this.state.definitionIsValid)

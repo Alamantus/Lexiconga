@@ -16,8 +16,10 @@ export class MainDisplay extends Component {
 
     PropTypes.checkPropTypes({
       dictionaryInfo: PropTypes.object.isRequired,
+      isLoadingWords: PropTypes.bool,
       wordsToDisplay: PropTypes.array.isRequired,
       wordsAreFiltered: PropTypes.bool,
+      wordsInCurrentList: PropTypes.number,
       currentPage: PropTypes.number,
       itemsPerPage: PropTypes.number,
       stats: PropTypes.object.isRequired,
@@ -55,8 +57,10 @@ export class MainDisplay extends Component {
   render () {
     const {
       dictionaryInfo,
+      isLoadingWords,
       wordsToDisplay,
       wordsAreFiltered,
+      wordsInCurrentList,
       currentPage,
       itemsPerPage,
       stats,
@@ -105,7 +109,16 @@ export class MainDisplay extends Component {
                   </div>
                 )}
 
+              <Pagination
+                currentPage={ currentPage }
+                itemsPerPage={ itemsPerPage }
+                stats={ stats }
+                setPage={ setPage }
+                wordsInCurrentList={ wordsInCurrentList }
+                isTop />
+
               <WordsList
+                isLoadingWords={ isLoadingWords }
                 words={ wordsToDisplay }
                 adsEveryXWords={ 10 }
                 updateDisplay={ updateDisplay } />
@@ -114,7 +127,8 @@ export class MainDisplay extends Component {
                 currentPage={currentPage}
                 itemsPerPage={itemsPerPage}
                 stats={stats}
-                setPage={ setPage } />
+                setPage={setPage}
+                wordsInCurrentList={wordsInCurrentList} />
             </RightColumn>
             
           </div>

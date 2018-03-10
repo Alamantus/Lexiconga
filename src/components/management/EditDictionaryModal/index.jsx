@@ -13,6 +13,7 @@ const DISPLAY = {
   DETAILS: 1,
   LINGUISTICS: 2,
   SETTINGS: 3,
+  ACTIONS: 4,
 }
 
 export class EditDictionaryModal extends Component {
@@ -58,6 +59,8 @@ export class EditDictionaryModal extends Component {
 
       hasChanged: false,
     }
+
+    this.modal = null;
   }
 
   hasChanged () {
@@ -126,6 +129,14 @@ export class EditDictionaryModal extends Component {
         );
         break;
       }
+
+      case DISPLAY.ACTIONS : {
+        displayJSX = (
+          <div class="content">
+            <p>Actions like import, export, delete, etc.</p>
+          </div>
+        );
+      }
     }
 
     return (
@@ -135,7 +146,7 @@ export class EditDictionaryModal extends Component {
     );
   }
 
-  save () {
+  save (callback = () => {}) {
     const updatedDetails = {};
 
     if (this.state.name !== this.props.name) {
@@ -243,7 +254,7 @@ export class EditDictionaryModal extends Component {
         this.setState({ hasChanged: false }, () => {
           // If setting that alters word display is changed, update the display.
           if (updatedDetails.hasOwnProperty('sortByDefinition')) {
-            this.props.updateDisplay();
+            this.props.updateDisplay(callback);
           }
         });
       })
@@ -269,9 +280,16 @@ export class EditDictionaryModal extends Component {
               >
                 Save
               </button>
+              <button className='button'
+                disabled={ !hasChanged }
+                onClick={ () => this.save(this.modal.hide())}
+              >
+                Save & Close
+              </button>
             </div>
           )
         }
+        ref={(modal) => this.modal = modal}
       >
 
         {!settings.isComplete
@@ -291,6 +309,11 @@ export class EditDictionaryModal extends Component {
                   <li className={ (currentDisplay === DISPLAY.SETTINGS) ? 'is-active' : null }>
                     <a onClick={ this.toggleDisplay.bind(this, DISPLAY.SETTINGS) }>
                       Settings
+                    </a>
+                  </li>
+                  <li className={ (currentDisplay === DISPLAY.ACTIONS) ? 'is-active' : null }>
+                    <a onClick={ this.toggleDisplay.bind(this, DISPLAY.ACTIONS) }>
+                      Actions
                     </a>
                   </li>
                 </ul>
