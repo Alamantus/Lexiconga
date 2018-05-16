@@ -381,6 +381,18 @@ if ($display_mode != "build") {
                 <h2>Reset Your Password</h2>
                 <p style="font-size: 12px;">Click the button below to reload the page and show the Reset Password form. Filling out this form will instantly change your password, and you will need to log in using the new password from that point forward.</p>
                 <span id="resetPassword" class="clickable" onclick="this.innerHTML='Loading...';LoggedInResetPassword();" style="margin-top:20px;">Reset Password</span>
+                <br>
+                <h2>Request Your Data</h2>
+                <p style="font-size: 12px;">
+                    Per your <a href="https://www.eugdpr.org/" target="_blank">GDPR</a> rights in Articles 13–15 and 20, we allow you to request any and all data we have stored about you. The only data we have about you personally is your email address and your Public Name, if you decided to set one. All other data (your Dictionary data) is visible and accessible via the Export button under your Dictionary's Settings. Send an email to help@lexicon.ga to request your information.
+                </p>
+                <h2>Delete Your Account</h2>
+                <p style="font-size: 12px;">
+                    Per your <a href="https://www.eugdpr.org/" target="_blank">GDPR</a> rights in Articles 17, if you wish for your account to be deleted, please contact us at help@lexicon.ga, and we will delete your account and all associated dictionaries and words as quickly as possible. Note that you can delete dictionaries yourself via your Dictionary's Settings.
+                </p>
+                <p style="font-size: 12px;">
+                    Anything that is deleted from our system is permanently and irretrievably removed from our system and cannot be restored, though search engines or internet archives may retain a cached version of your content (there is nothing we can do about this, and you will need to seek out removal of that information by directly contacting the services that are caching your data).
+                </p>
             </div>
         </div>
     </div>

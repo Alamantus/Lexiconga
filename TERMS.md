@@ -1,6 +1,6 @@
 ## Terms of Service ("Terms")
 
-Last updated: November 1, 2015.
+Last updated: May 16, 2018 — Update to contact information.
 
 Please read these Terms of Service ("Terms", "Terms of Service") carefully before using the http://lexicon.ga website (the "Service") or the cloud account service (an "Account") operated by Robbie Antenesse and Alamantus GameDev ("us", "we", or "our").
 
@@ -37,4 +37,4 @@ We reserve the right, at our sole discretion, to modify or replace these Terms a
 By continuing to access or use our Service after those revisions become effective, you agree to be bound by the revised terms. If you do not agree to the new terms, please stop using the Service.
 
 ### Contact Us
-If you have any questions about these Terms, please contact us by email at help (at) lexicon (dot) ga or follow us on Twitter @alamantus.
+If you have any questions about these Terms, please contact us by email at `help (at) lexicon (dot) ga` or follow us on Twitter @Lexiconga.

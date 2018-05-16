@@ -1,6 +1,6 @@
 ## Privacy Policy
 
-This document was last updated on November 02, 2015.
+This document was last updated on May 16, 2018 to update contact information and add transparency to our hosting service and how your data is used (i.e. to display your dicitonaries and sometimes send you emails if you agree to receive them).
 
 This Privacy Policy governs the manner in which Lexiconga Dictionary Builder collects, uses, maintains and discloses information collected from users (each, a "User") of the http://lexicon.ga website ("Site") and its accounts ("Account").
 
@@ -15,10 +15,13 @@ Our Site does not use "cookies" to enhance User experience, but it does use "loc
 
 ### How we use collected information
 Lexiconga Dictionary Builder may collect and use Users personal information for the following purposes:  
+
 - **To run and operate our Site and personalize user experience:** We need your input to display content on the Site correctly, because it is a tool built entirely to display the content that you enter.
 
+We do not use your data in _any way_ other than to serve your content or to send the occasional update email—you may opt out of receiving emails at any time via your Account Settings! Your email address is tied directly to your account, however, so altering it _will change your login credentials_.
+
 ### How we protect your information
-If you are utilizing an Account, we protect your information by keeping your information on a trusted database server provided by the Site's web host. All data you save from an Account is uploaded to this database server from your browser.
+If you are utilizing an Account, we protect your information by keeping your information on a trusted database server provided by the Site's web host, [InfinityFree](https://infinityfree.net/). All data you save from an Account is uploaded to this database server from your browser. If we ever change web hosts, you will be notified via the on-site notification.
 
 If you utilize the ability to make dictionaries associated with an Account visible to the public, you accept all responsibility for its content being visible to anyone who might find it. We cannot protect what you willingly put in public, and we do not accept liability if information you place online is used against you somehow. Never put personal information online!
 
@@ -46,4 +49,4 @@ Lexiconga Dictionary Builder has the discretion to update this privacy policy at
 By using this Site, you signify your acceptance of this policy. If you do not agree to this policy, please do not use our Site. Your continued use of the Site following the posting of changes to this policy will be deemed your acceptance of those changes. This policy was originally generated using PrivacyPolicies.com and modified for our use.
 
 ### Contacting us
-If you have any questions about this Privacy Policy, the practices of this site, or your dealings with this site, please contact us by email at help (at) lexicon (dot) ga or follow us Twitter @alamantus.
+If you have any questions about this Privacy Policy, the practices of this site, or your dealings with this site, please contact us by email at `help (at) lexicon (dot) ga` or follow us Twitter @Lexiconga.
