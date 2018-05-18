@@ -87,6 +87,7 @@ export class LargeTextArea extends Component {
             aria-label={`Maximize ${label}`}
             onClick={ this.maximize.bind(this) }>
             <span className='icon'><i className='fa fa-expand' /></span>
+            <span className='is-hidden-touch'>Maximize</span>
           </a>
         </label>
         {helpText
