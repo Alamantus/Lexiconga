@@ -38,6 +38,7 @@ class App extends Component {
       displayedWords: [],
       currentPage: 0,
       itemsPerPage: 30,
+      useIpaPronunciationField: true,
       searchConfig: {
         searchingIn: 'name',
         searchMethod: SEARCH_METHOD.contains,
@@ -218,6 +219,7 @@ class App extends Component {
           wordsInCurrentList={ this.state.wordsInCurrentList }
           currentPage={ this.state.currentPage }
           itemsPerPage={ this.state.itemsPerPage }
+          useIpaPronunciationField={ this.state.useIpaPronunciationField }
           stats={ this.state.stats }
           setPage={ this.setPage.bind(this) }
           updateDisplay={ this.updateDisplayedWords.bind(this) }

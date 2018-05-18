@@ -22,6 +22,7 @@ export class IPAField extends Component {
       helpText: PropTypes.string,
       placeholder: PropTypes.string,
       isDisplayOnly: PropTypes.bool,
+      preventIPA: PropTypes.bool,
       onInput: PropTypes.func,
       onChange: PropTypes.func,
     }, props, 'prop', 'IPAField');
@@ -102,23 +103,28 @@ export class IPAField extends Component {
   }
 
   onInput (event) {
-    let val = event.target.value,
-    pos = this.field.selectionStart || val.length;
+    let val = event.target.value;
+    let pos;
+    if (!this.props.preventIPA) {
+      pos = this.field.selectionStart || val.length;
 
-    if (event.key) {
-      const key = event.key,
-        digraph = digraphs[val.substr(pos - 1, 1) + key];
+      if (event.key) {
+        const key = event.key,
+          digraph = digraphs[val.substr(pos - 1, 1) + key];
 
-      if (digraph) {
-        event.preventDefault();
-        val = val.slice(0, pos - 1) + digraph + val.slice(pos);
+        if (digraph) {
+          event.preventDefault();
+          val = val.slice(0, pos - 1) + digraph + val.slice(pos);
+        }
       }
     }
 
     if (val !== this.state.value) {
       this.setState({ value: val }, () => {
-        this.field.focus();
-        this.field.setSelectionRange(pos, pos);
+        if (!this.props.preventIPA) {
+          this.field.focus();
+          this.field.setSelectionRange(pos, pos);
+        }
 
         if (this.props.onInput) {
           this.props.onInput(this.state.value);
@@ -149,7 +155,7 @@ export class IPAField extends Component {
         }
         <div className='control'>
           <input className='input' id={ this.props.id || null } type='text'
-            placeholder={ this.props.placeholder || '[prə.ˌnʌn.si.ˈeɪ.ʃən]' }
+            placeholder={ this.props.placeholder || (!this.props.preventIPA ? '[prə.ˌnʌn.si.ˈeɪ.ʃən]' : 'pronunciation') }
             disabled={ !!this.props.isDisplayOnly }
             ref={ (input) => this.field = input }
             value={ this.state.value }
@@ -157,7 +163,7 @@ export class IPAField extends Component {
             onKeyDown={ (event) => this.onInput(event) }
             onChange={ () => this.onChange() } />
         </div>
-        { this.showButtons() }
+        { !this.props.preventIPA && this.showButtons() }
       </div>
     );
   }

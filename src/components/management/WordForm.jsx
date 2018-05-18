@@ -13,6 +13,7 @@ export class WordForm extends Component {
 
     PropTypes.checkPropTypes({
       word: PropTypes.object,
+      useIpaField: PropTypes.bool.isRequired,
       callback: PropTypes.func,
       updateDisplay: PropTypes.func,
     }, props, 'prop', 'WordForm');
@@ -120,6 +121,7 @@ export class WordForm extends Component {
         </div>
 
         <IPAField value={ this.state.wordPronunciation }
+          preventIPA={ !this.props.useIpaField }
           onChange={ (newValue) => this.setState({ wordPronunciation: newValue }) } />
 
         <div className='field'>

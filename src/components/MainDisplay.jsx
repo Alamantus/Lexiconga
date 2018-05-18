@@ -22,6 +22,7 @@ export class MainDisplay extends Component {
       wordsInCurrentList: PropTypes.number,
       currentPage: PropTypes.number,
       itemsPerPage: PropTypes.number,
+      useIpaPronunciationField: PropTypes.bool,
       stats: PropTypes.object.isRequired,
       setPage: PropTypes.func.isRequired,
       updateDisplay: PropTypes.func.isRequired,
@@ -63,6 +64,7 @@ export class MainDisplay extends Component {
       wordsInCurrentList,
       currentPage,
       itemsPerPage,
+      useIpaPronunciationField,
       stats,
       setPage,
       updateDisplay,
@@ -84,6 +86,7 @@ export class MainDisplay extends Component {
               closeWordForm={ this.closeWordForm.bind(this) }
             >
               <WordForm
+                useIpaField={ useIpaPronunciationField }
                 updateDisplay={ updateDisplay }
               />
             </LeftColumn>
@@ -121,6 +124,7 @@ export class MainDisplay extends Component {
                 isLoadingWords={ isLoadingWords }
                 words={ wordsToDisplay }
                 adsEveryXWords={ 10 }
+                useIpaFieldOnEdit={ useIpaPronunciationField }
                 updateDisplay={ updateDisplay } />
               
               <Pagination
