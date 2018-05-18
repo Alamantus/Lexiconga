@@ -1,8 +1,10 @@
 import Inferno from 'inferno';
 import { Component } from 'inferno';
 import PropTypes from 'prop-types';
+import store from 'store';
 
 import dictionaryData from '../../managers/DictionaryData';
+import { DEFAULT_USER_DATA } from '../../Constants';
 import { IPAField } from './IPAField';
 import { LargeTextArea } from './LargeTextArea';
 import { Word } from '../../managers/Word';
@@ -13,7 +15,6 @@ export class WordForm extends Component {
 
     PropTypes.checkPropTypes({
       word: PropTypes.object,
-      useIpaField: PropTypes.bool.isRequired,
       callback: PropTypes.func,
       updateDisplay: PropTypes.func,
     }, props, 'prop', 'WordForm');
@@ -102,6 +103,8 @@ export class WordForm extends Component {
   }
 
   render () {
+    const userData = store.get('LexicongaUserData');
+    const useIpaField = userData ? userData.useIPAPronunciation : DEFAULT_USER_DATA.useIPAPronunciation;
     return (
       <div className='box'>
         <div className='field'>
@@ -121,7 +124,7 @@ export class WordForm extends Component {
         </div>
 
         <IPAField value={ this.state.wordPronunciation }
-          preventIPA={ !this.props.useIpaField }
+          preventIPA={ !useIpaField }
           onChange={ (newValue) => this.setState({ wordPronunciation: newValue }) } />
 
         <div className='field'>

@@ -8,15 +8,8 @@ import { Modal } from '../../structure/Modal';
 import { LoginForm } from './LoginForm';
 import { MyAccount } from './MyAccount';
 
+import { DEFAULT_USER_DATA } from '../../../Constants';
 import { request } from '../../../Helpers';
-
-const defaultUserData = {
-  email: '',
-  username: '',
-  publicName: '',
-  allowEmails: true,
-  useIPAPronunciation: true,
-};
 
 export class AccountManager extends Component {
   constructor (props) {
@@ -31,11 +24,12 @@ export class AccountManager extends Component {
     this.state = {
       isLoggedIn: false,
       userData: {
-        email: userData ? userData.email : defaultUserData.email,
-        username: userData ? userData.username : defaultUserData.username,
-        publicName: userData ? userData.publicName : defaultUserData.publicName,
-        allowEmails: userData ? userData.allowEmails : defaultUserData.allowEmails,
-        useIPAPronunciation: userData ? userData.useIPAPronunciation : defaultUserData.useIPAPronunciation,
+        email: userData ? userData.email : DEFAULT_USER_DATA.email,
+        username: userData ? userData.username : DEFAULT_USER_DATA.username,
+        publicName: userData ? userData.publicName : DEFAULT_USER_DATA.publicName,
+        allowEmails: userData ? userData.allowEmails : DEFAULT_USER_DATA.allowEmails,
+        useIPAPronunciation: userData ? userData.useIPAPronunciation : DEFAULT_USER_DATA.useIPAPronunciation,
+        itemsPerPage: userData ? userData.itemsPerPage : DEFAULT_USER_DATA.itemsPerPage,
       },
       userDictionaries: [],
     };
@@ -52,7 +46,7 @@ export class AccountManager extends Component {
     store.remove('LexicongaUserData');
     this.setState({
       isLoggedIn: false,
-      userData: Object.assign({}, defaultUserData),
+      userData: Object.assign({}, DEFAULT_USER_DATA),
       userDictionaries: [],
     });
   }

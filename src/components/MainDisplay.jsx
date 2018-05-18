@@ -1,6 +1,7 @@
 import Inferno from 'inferno';
 import { Component } from 'inferno';
 import PropTypes from 'prop-types';
+import store from 'store';
 
 import { LeftColumn } from './structure/LeftColumn';
 import { RightColumn } from './structure/RightColumn';
@@ -9,6 +10,7 @@ import { Pagination } from './structure/Pagination';
 import { WordForm } from './management/WordForm';
 import { DictionaryDetails } from './display/DictionaryDetails';
 import { WordsList } from './display/WordsList';
+import { DEFAULT_USER_DATA } from '../Constants';
 
 export class MainDisplay extends Component {
   constructor (props) {
@@ -21,8 +23,6 @@ export class MainDisplay extends Component {
       wordsAreFiltered: PropTypes.bool,
       wordsInCurrentList: PropTypes.number,
       currentPage: PropTypes.number,
-      itemsPerPage: PropTypes.number,
-      useIpaPronunciationField: PropTypes.bool,
       stats: PropTypes.object.isRequired,
       setPage: PropTypes.func.isRequired,
       updateDisplay: PropTypes.func.isRequired,
@@ -56,6 +56,8 @@ export class MainDisplay extends Component {
   }
 
   render () {
+    const userData = store.get('LexicongaUserData');
+    const itemsPerPage = userData ? userData.itemsPerPage : DEFAULT_USER_DATA.itemsPerPage;
     const {
       dictionaryInfo,
       isLoadingWords,
@@ -63,7 +65,6 @@ export class MainDisplay extends Component {
       wordsAreFiltered,
       wordsInCurrentList,
       currentPage,
-      itemsPerPage,
       useIpaPronunciationField,
       stats,
       setPage,
@@ -86,7 +87,6 @@ export class MainDisplay extends Component {
               closeWordForm={ this.closeWordForm.bind(this) }
             >
               <WordForm
-                useIpaField={ useIpaPronunciationField }
                 updateDisplay={ updateDisplay }
               />
             </LeftColumn>
@@ -124,7 +124,6 @@ export class MainDisplay extends Component {
                 isLoadingWords={ isLoadingWords }
                 words={ wordsToDisplay }
                 adsEveryXWords={ 10 }
-                useIpaFieldOnEdit={ useIpaPronunciationField }
                 updateDisplay={ updateDisplay } />
               
               <Pagination

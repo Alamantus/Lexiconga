@@ -2,60 +2,18 @@ import assert from 'assert';
 import store from 'store';
 import wordDb from './WordDatabase';
 import idManager from './IDManager';
-import { timestampInSeconds } from '../Helpers';
-
-const defaultDictionary = {
-  name: 'New',
-  specification: 'Dictionary',
-  description: 'A new dictionary.',
-  partsOfSpeech: ['Noun', 'Adjective', 'Verb'],
-  alphabeticalOrder: [],
-  details: {
-    phonology: {
-      consonants: [],
-      vowels: [],
-      blends: [],
-      phonotactics: {
-        onset: [],
-        nucleus: [],
-        coda: [],
-        exceptions: '',
-      },
-    },
-    orthography: {
-      notes: '',
-    },
-    grammar: {
-      notes: '',
-    },
-    // custom: [
-    //   // {
-    //   //   name: 'Example Tab',
-    //   //   content: `This is an _example_ tab to show how **tabs** work with [Markdown](${ MARKDOWN_LINK })!`,
-    //   // }
-    // ],
-  },
-  settings: {
-    allowDuplicates: false,
-    caseSensitive: false,
-    sortByDefinition: false,
-    isComplete: false,
-    isPublic: false,
-  },
-  lastUpdated: null,
-  createdOn: timestampInSeconds(),
-};
+import { DEFAULT_DICTIONARY } from '../Constants';
 
 class DictionaryData {
   constructor () {
-    this.default = defaultDictionary;
+    this.default = DEFAULT_DICTIONARY;
 
     if (['emptydetails', 'donotsave'].includes(process.env.NODE_ENV)) {
       store.remove('Lexiconga');
     }
 
     if (!store.get('Lexiconga')) {
-      this.storedData = defaultDictionary;
+      this.storedData = DEFAULT_DICTIONARY;
     } else {
       wordDb.words
       .orderBy('id').reverse()
@@ -83,7 +41,7 @@ class DictionaryData {
 
   get name () {
     return this.storedData.name
-      || defaultDictionary.name;
+      || DEFAULT_DICTIONARY.name;
   }
 
   set name (value) {
@@ -95,7 +53,7 @@ class DictionaryData {
 
   get specification () {
     return this.storedData.specification
-      || defaultDictionary.specification;
+      || DEFAULT_DICTIONARY.specification;
   }
 
   set specification (value) {
@@ -107,7 +65,7 @@ class DictionaryData {
 
   get description () {
     return this.storedData.description
-      || defaultDictionary.description;
+      || DEFAULT_DICTIONARY.description;
   }
 
   set description (value) {
@@ -119,7 +77,7 @@ class DictionaryData {
 
   get partsOfSpeech () {
     return this.storedData.partsOfSpeech
-      || defaultDictionary.partsOfSpeech;
+      || DEFAULT_DICTIONARY.partsOfSpeech;
   }
 
   set partsOfSpeech (array) {
@@ -133,12 +91,12 @@ class DictionaryData {
 
   get details () {
     return this.storedData.details
-      || defaultDictionary.details;
+      || DEFAULT_DICTIONARY.details;
   }
 
   get consonants () {
     return this.storedData.details.phonology.consonants
-      || defaultDictionary.details.phonology.consonants;
+      || DEFAULT_DICTIONARY.details.phonology.consonants;
   }
 
   set consonants (array) {
@@ -152,7 +110,7 @@ class DictionaryData {
 
   get vowels () {
     return this.storedData.details.phonology.vowels
-      || defaultDictionary.details.phonology.vowels;
+      || DEFAULT_DICTIONARY.details.phonology.vowels;
   }
 
   set vowels (array) {
@@ -166,7 +124,7 @@ class DictionaryData {
 
   get blends () {
     return this.storedData.details.phonology.blends
-      || defaultDictionary.details.phonology.blends;
+      || DEFAULT_DICTIONARY.details.phonology.blends;
   }
 
   set blends (array) {
@@ -180,7 +138,7 @@ class DictionaryData {
 
   get onset () {
     return this.storedData.details.phonology.phonotactics.onset
-      || defaultDictionary.details.phonology.phonotactics.onset;
+      || DEFAULT_DICTIONARY.details.phonology.phonotactics.onset;
   }
 
   set onset (array) {
@@ -194,7 +152,7 @@ class DictionaryData {
 
   get nucleus () {
     return this.storedData.details.phonology.phonotactics.nucleus
-      || defaultDictionary.details.phonology.phonotactics.nucleus;
+      || DEFAULT_DICTIONARY.details.phonology.phonotactics.nucleus;
   }
 
   set nucleus (array) {
@@ -208,7 +166,7 @@ class DictionaryData {
 
   get coda () {
     return this.storedData.details.phonology.phonotactics.coda
-      || defaultDictionary.details.phonology.phonotactics.coda;
+      || DEFAULT_DICTIONARY.details.phonology.phonotactics.coda;
   }
 
   set coda (array) {
@@ -222,7 +180,7 @@ class DictionaryData {
 
   get exceptions () {
     return this.storedData.details.phonology.phonotactics.exceptions
-      || defaultDictionary.details.phonology.phonotactics.exceptions;
+      || DEFAULT_DICTIONARY.details.phonology.phonotactics.exceptions;
   }
 
   set exceptions (value) {
@@ -234,7 +192,7 @@ class DictionaryData {
 
   get orthographyNotes () {
     return this.storedData.details.orthography.notes
-      || defaultDictionary.details.orthography.notes;
+      || DEFAULT_DICTIONARY.details.orthography.notes;
   }
 
   set orthographyNotes (value) {
@@ -246,7 +204,7 @@ class DictionaryData {
 
   get grammarNotes () {
     return this.storedData.details.grammar.notes
-      || defaultDictionary.details.grammar.notes;
+      || DEFAULT_DICTIONARY.details.grammar.notes;
   }
 
   set grammarNotes (value) {
@@ -258,7 +216,7 @@ class DictionaryData {
 
   get alphabeticalOrder () {
     return this.storedData.alphabeticalOrder
-      || defaultDictionary.alphabeticalOrder;
+      || DEFAULT_DICTIONARY.alphabeticalOrder;
   }
 
   set alphabeticalOrder (array) {
@@ -272,12 +230,12 @@ class DictionaryData {
 
   get settings () {
     return this.storedData.settings
-      || defaultDictionary.settings;
+      || DEFAULT_DICTIONARY.settings;
   }
 
   get allowDuplicates () {
     return this.storedData.settings.allowDuplicates
-      || defaultDictionary.settings.allowDuplicates;
+      || DEFAULT_DICTIONARY.settings.allowDuplicates;
   }
 
   set allowDuplicates (value) {
@@ -289,7 +247,7 @@ class DictionaryData {
 
   get caseSensitive () {
     return this.storedData.settings.caseSensitive
-      || defaultDictionary.settings.caseSensitive;
+      || DEFAULT_DICTIONARY.settings.caseSensitive;
   }
 
   set caseSensitive (value) {
@@ -301,7 +259,7 @@ class DictionaryData {
 
   get sortByDefinition () {
     return this.storedData.settings.sortByDefinition
-      || defaultDictionary.settings.sortByDefinition;
+      || DEFAULT_DICTIONARY.settings.sortByDefinition;
   }
 
   set sortByDefinition (value) {
@@ -313,7 +271,7 @@ class DictionaryData {
 
   get isComplete () {
     return this.storedData.settings.isComplete
-      || defaultDictionary.settings.isComplete;
+      || DEFAULT_DICTIONARY.settings.isComplete;
   }
 
   set isComplete (value) {
@@ -325,7 +283,7 @@ class DictionaryData {
 
   get isPublic () {
     return this.storedData.settings.isPublic
-      || defaultDictionary.settings.isPublic;
+      || DEFAULT_DICTIONARY.settings.isPublic;
   }
 
   set isPublic (value) {
@@ -337,7 +295,7 @@ class DictionaryData {
 
   get lastUpdated () {
     return this.storedData.lastUpdated
-      || defaultDictionary.lastUpdated;
+      || DEFAULT_DICTIONARY.lastUpdated;
   }
 
   set lastUpdated (value) {

@@ -16,7 +16,6 @@ export class WordsList extends Component {
       isLoadingWords: PropTypes.bool,
       adsEveryXWords: PropTypes.number,
       words: PropTypes.array,
-      useIpaFieldOnEdit: PropTypes.bool,
       updateDisplay: PropTypes.func.isRequired,
     }, props, 'prop', 'WordList');
   }
@@ -42,7 +41,6 @@ export class WordsList extends Component {
                 }
                 
                 <WordDisplay word={ word }
-                  useIpaFieldOnEdit={ this.props.useIpaFieldOnEdit }
                   updateDisplay={ this.props.updateDisplay } />
               </div>
             );

@@ -6,6 +6,7 @@ import { Component, render } from 'inferno';
 import store from 'store';
 
 import removeDiacritics from '../vendor/StackOverflow/removeDiacritics';
+import { DEFAULT_USER_DATA } from './Constants';
 import { addHelpfulPrototypes, getWordsStats } from './Helpers';
 addHelpfulPrototypes();
 
@@ -37,8 +38,6 @@ class App extends Component {
 
       displayedWords: [],
       currentPage: 0,
-      itemsPerPage: 30,
-      useIpaPronunciationField: true,
       searchConfig: {
         searchingIn: 'name',
         searchMethod: SEARCH_METHOD.contains,
@@ -95,9 +94,10 @@ class App extends Component {
   }
 
   updateDisplayedWords (callback = () => {}) {
-    const {currentPage, itemsPerPage} = this.state;
     dictionary.wordsPromise.then(words => {
-      const { searchConfig, partsOfSpeech, currentPage, itemsPerPage } = this.state;
+      const userData = store.get('LexicongaUserData');
+      const itemsPerPage = userData ? userData.itemsPerPage : DEFAULT_USER_DATA.itemsPerPage;
+      const { searchConfig, partsOfSpeech, currentPage } = this.state;
       const partsOfSpeechForFilter = [...partsOfSpeech, 'Uncategorized'];
       const pageStart = currentPage * itemsPerPage;
       const pageEnd = pageStart + itemsPerPage;
@@ -218,8 +218,6 @@ class App extends Component {
           wordsAreFiltered={ this.isUsingFilter }
           wordsInCurrentList={ this.state.wordsInCurrentList }
           currentPage={ this.state.currentPage }
-          itemsPerPage={ this.state.itemsPerPage }
-          useIpaPronunciationField={ this.state.useIpaPronunciationField }
           stats={ this.state.stats }
           setPage={ this.setPage.bind(this) }
           updateDisplay={ this.updateDisplayedWords.bind(this) }

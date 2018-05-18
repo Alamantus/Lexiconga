@@ -17,7 +17,6 @@ export class WordDisplay extends Component {
 
     PropTypes.checkPropTypes({
       word: PropTypes.object.isRequired,
-      useIpaFieldOnEdit: PropTypes.bool,
       updateDisplay: PropTypes.func.isRequired,
     }, props, 'prop', 'WordDisplay');
 
@@ -66,13 +65,12 @@ export class WordDisplay extends Component {
 
   render () {
     const { menuIsOpen, isEditing } = this.state;
-    const { word, useIpaFieldOnEdit, updateDisplay } = this.props;
+    const { word, updateDisplay } = this.props;
 
     if (isEditing) {
       return (
         <WordForm
           word={word}
-          useIpaField={ useIpaFieldOnEdit }
           updateDisplay={updateDisplay}
           callback={() => {
             this.setState({
