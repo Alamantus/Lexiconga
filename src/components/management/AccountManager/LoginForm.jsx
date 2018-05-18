@@ -275,7 +275,7 @@ export class LoginForm extends Component {
                 </h3>
                 <div className='columns'>
                   <div className='column'>
-                    <div className='content is-small'>
+                    <div className='content'>
                       <p>
                         Creating an account allows you to save and switch between as many dictionaries as you need
                         and access them from any device for free! If you have a dictionary you've been working on
@@ -388,11 +388,15 @@ export class LoginForm extends Component {
                     </div>
                     <div className='field'>
                       <div className='control'>
-                        <label className='checkbox'>
-                          <input type='checkbox' checked={this.state.signupAllowEmail}
-                            onClick={(event) => this.updateField('signupAllowEmail', event)} />
+                        <input className='is-checkradio' id='signupAllowEmail' type='checkbox'
+                          checked={this.state.signupAllowEmail}
+                          onClick={(event) => this.updateField('signupAllowEmail', event)} />
+                        <label htmlFor='signupAllowEmail'>
                           Allow Emails
                         </label>
+                        <div className='help'>
+                          We only send occasional emails about updates to Lexiconga
+                        </div>
                       </div>
                     </div>
                     <div className='field'>
