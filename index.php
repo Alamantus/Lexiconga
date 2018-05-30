@@ -419,7 +419,7 @@ if ($display_mode != "build") {
     </contents>
     <footer>
         <div id="footer-content">
-        Dictionary Builder only guaranteed to work with most up-to-date HTML5 browsers. <a href="/issues" class="clickable inline-button" target="_blank">Issues</a> <a href="/updates" class="clickable inline-button" target="_blank">Updates</a> | <span class="clickable inline-button" onclick="ShowInfo('termsText')" style="font-size:12px;">Terms</span> <span class="clickable inline-button" onclick="ShowInfo('privacyText')" style="font-size:12px;">Privacy</span>
+        Lexiconga only guaranteed to work with most up-to-date HTML5 browsers. <a href="https://blog.lexicon.ga" class="clickable inline-button" target="_blank">Blog</a> <a href="/issues" class="clickable inline-button" target="_blank">Issues</a> <a href="/updates" class="clickable inline-button" target="_blank">Updates</a> | <span class="clickable inline-button" onclick="ShowInfo('termsText')" style="font-size:12px;">Terms</span> <span class="clickable inline-button" onclick="ShowInfo('privacyText')" style="font-size:12px;">Privacy</span>
         </div>
     </footer>
 
