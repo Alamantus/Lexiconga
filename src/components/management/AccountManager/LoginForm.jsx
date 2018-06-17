@@ -115,6 +115,12 @@ export class LoginForm extends Component {
   }
 
   validateSignupForm (callback) {
+    const {
+      signupEmailChecking,
+      signupEmailIsUnique,
+      signupUsernameChecking,
+      signupUsernameIsUnique,
+    } = this.state;
     const fields = ['signupEmail', 'signupUsername', 'signupPassword', 'signupConfirm'];
     let errors = {};
     fields.forEach(field => {
