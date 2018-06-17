@@ -24,12 +24,12 @@ export class AccountManager extends Component {
     this.state = {
       isLoggedIn: false,
       userData: {
-        email: userData ? userData.email : DEFAULT_USER_DATA.email,
-        username: userData ? userData.username : DEFAULT_USER_DATA.username,
-        publicName: userData ? userData.publicName : DEFAULT_USER_DATA.publicName,
-        allowEmails: userData ? userData.allowEmails : DEFAULT_USER_DATA.allowEmails,
-        useIPAPronunciation: userData ? userData.useIPAPronunciation : DEFAULT_USER_DATA.useIPAPronunciation,
-        itemsPerPage: userData ? userData.itemsPerPage : DEFAULT_USER_DATA.itemsPerPage,
+        email: userData && userData.hasOwnProperty('email') ? userData.email : DEFAULT_USER_DATA.email,
+        username: userData && userData.hasOwnProperty('username') ? userData.username : DEFAULT_USER_DATA.username,
+        publicName: userData && userData.hasOwnProperty('publicName') ? userData.publicName : DEFAULT_USER_DATA.publicName,
+        allowEmails: userData && userData.hasOwnProperty('allowEmails') ? userData.allowEmails : DEFAULT_USER_DATA.allowEmails,
+        useIPAPronunciation: userData && userData.hasOwnProperty('useIPAPronunciation') ? userData.useIPAPronunciation : DEFAULT_USER_DATA.useIPAPronunciation,
+        itemsPerPage: userData && userData.hasOwnProperty('itemsPerPage') ? userData.itemsPerPage : DEFAULT_USER_DATA.itemsPerPage,
       },
       userDictionaries: [],
     };

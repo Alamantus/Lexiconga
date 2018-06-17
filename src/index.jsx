@@ -96,7 +96,7 @@ class App extends Component {
   updateDisplayedWords (callback = () => {}) {
     dictionary.wordsPromise.then(words => {
       const userData = store.get('LexicongaUserData');
-      const itemsPerPage = userData ? userData.itemsPerPage : DEFAULT_USER_DATA.itemsPerPage;
+      const itemsPerPage = userData && userData.hasOwnProperty('itemsPerPage') ? userData.itemsPerPage : DEFAULT_USER_DATA.itemsPerPage;
       const { searchConfig, partsOfSpeech, currentPage } = this.state;
       const partsOfSpeechForFilter = [...partsOfSpeech, 'Uncategorized'];
       const pageStart = currentPage * itemsPerPage;

@@ -57,7 +57,7 @@ export class MainDisplay extends Component {
 
   render () {
     const userData = store.get('LexicongaUserData');
-    const itemsPerPage = userData ? userData.itemsPerPage : DEFAULT_USER_DATA.itemsPerPage;
+    const itemsPerPage = userData && userData.hasOwnProperty('itemsPerPage') ? userData.itemsPerPage : DEFAULT_USER_DATA.itemsPerPage;
     const {
       dictionaryInfo,
       isLoadingWords,
