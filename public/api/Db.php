@@ -1,19 +1,27 @@
 <?php
 class Db {
   private $dbh;
+  public $last_error_info;
   function __construct() {
     $this->dbh = new PDO('mysql:host=localhost;dbname=lexiconga;charset=utf8', 'root', 'password');
     $this->dbh->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+    $this->last_error_info = null;
   }
 
   public function execute ($query, $params = array()) {
     $stmt = $this->dbh->prepare($query);
-    return $stmt->execute($params);
+    if ($stmt->execute($params)) {
+      $this->last_error_info = null;
+      return true;
+    }
+    $this->last_error_info = $stmt->errorInfo();
+    return false;
   }
 
   public function query ($query, $params = array()) {
     $stmt = $this->dbh->prepare($query);
     $stmt->execute($params);
+    $this->last_error_info = $stmt->errorInfo();
     return $stmt;
   }
 

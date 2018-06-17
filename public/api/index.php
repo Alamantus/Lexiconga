@@ -34,14 +34,14 @@ switch ($action) {
       $user = new User();
       if (!$user->emailExists($request['email'])) {
         $user_data = $user->create($request['email'], $request['password'], $request['userData']);
-        if ($user_data !== false) {
+        if (!isset($user_data['error'])) {
           return Response::json(array(
             'data' => $user_data,
             'error' => false,
           ), 201);
         }
         return Response::json(array(
-          'data' => 'Could not create account: database error',
+          'data' => 'Could not create account: ' . $user_data['error'],
           'error' => true,
         ), 500);
       }
@@ -127,14 +127,14 @@ switch ($action) {
     if ($token !== false) {
       $user = new User();
       $new_data = $user->createNewDictionary($token);
-      if ($new_data !== false) {
+      if (!isset($new_data['error'])) {
         return Response::json(array(
           'data' => $new_data,
           'error' => false,
         ), 200);
       }
       return Response::json(array(
-        'data' => 'Could not create dictionary: incorrect data',
+        'data' => 'Could not create dictionary: ' . $new_data['error'],
         'error' => true,
       ), 401);
     }

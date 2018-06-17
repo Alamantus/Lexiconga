@@ -47,7 +47,7 @@ class User {
 
   public function create ($email, $password, $user_data) {
     $insert_user_query = 'INSERT INTO users (email, password, public_name, username, allow_email, created_on)
-VALUES (?, ?, ?, ?, ?, '. time() .')';
+VALUES (?, ?, ?, ?, ?, ?)';
     $password_hash = password_hash($password, PASSWORD_DEFAULT);
 
     $insert_user = $this->db->execute($insert_user_query, array(
@@ -56,13 +56,16 @@ VALUES (?, ?, ?, ?, ?, '. time() .')';
       $user_data['publicName'] !== '' ? $user_data['publicName'] : null,
       $user_data['username'] !== '' ? $user_data['username'] : null,
       $user_data['allowEmail'] ? 1 : 0,
+      time(),
     ));
     if ($insert_user === true) {
       $new_user_id = $this->db->lastInsertId();
 
       $new_dictionary = $this->dictionary->create($new_user_id);
 
-      if ($new_dictionary !== false) {
+      if (isset($new_dictionary['error'])) {
+        return $new_dictionary;
+      } else {
         return array(
           'token' => $this->generateUserToken($new_user_id, $new_dictionary),
           'user' => $this->getUserData($new_user_id),
@@ -70,7 +73,9 @@ VALUES (?, ?, ?, ?, ?, '. time() .')';
       }
     }
 
-    return false;
+    return array(
+      'error' => '"INSERT INTO users" failed: ' . $this->db->last_error_info[2],
+    );
   }
 
   public function setUserData ($token, $user_data) {
@@ -119,14 +124,18 @@ VALUES (?, ?, ?, ?, ?, '. time() .')';
     if ($user_data !== false) {
       $id = $user_data->id;
       $new_dictionary = $this->dictionary->create($id);
-      if ($new_dictionary !== false) {
+      if (!isset($new_dictionary['error'])) {
         return array(
             'token' => $this->generateUserToken($id, $new_dictionary),
             'dictionary' => $this->getCurrentDictionary($token),
           );
+      } else {
+        return $new_dictionary;
       }
     }
-    return false;
+    return array(
+      'error' => 'invalid token',
+    );
   }
 
   public function changeCurrentDictionary ($token, $dictionary_hash) {

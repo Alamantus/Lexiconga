@@ -27,8 +27,8 @@ class Dictionary {
   }
 
   public function create ($user) {
-    $insert_dictionary_query = "INSERT INTO dictionaries (user, created_on) VALUES ($user, " . time() . ")";
-    $insert_dictionary = $this->db->execute($insert_dictionary_query);
+    $insert_dictionary_query = "INSERT INTO dictionaries (user, created_on) VALUES (?, ?)";
+    $insert_dictionary = $this->db->execute($insert_dictionary_query, array($user, time()));
 
     if ($insert_dictionary === true) {
       $new_dictionary_id = $this->db->lastInsertId();
@@ -42,10 +42,16 @@ VALUES ($new_dictionary_id, ?, ?)";
 
       if ($insert_linguistics === true) {
         return $this->changeCurrent($user, $new_dictionary_id);
+      } else {
+        return array(
+          'error' => '"INSERT INTO dictionary_linguistics" failed: ' . $this->db->last_error_info[2],
+        );
       }
     }
 
-    return false;
+    return array(
+      'error' => '"INSERT INTO dictionaries" failed: ' . $this->db->last_error_info[2],
+    );
   }
 
   public function changeCurrent ($user, $dictionary) {
