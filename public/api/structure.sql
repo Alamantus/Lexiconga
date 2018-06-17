@@ -4,7 +4,7 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+/*!40101 SET NAMES utf8mb4 */;
 
 
 CREATE TABLE IF NOT EXISTS `dictionaries` (
@@ -21,15 +21,13 @@ CREATE TABLE IF NOT EXISTS `dictionaries` (
   `last_updated` int(11) DEFAULT NULL,
   `created_on` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=352 ;
-DROP TRIGGER IF EXISTS `delete_dictionary_parts`;
-DELIMITER //
-CREATE TRIGGER `delete_dictionary_parts` AFTER DELETE ON `dictionaries`
- FOR EACH ROW BEGIN
+) ENGINE=MyISAM AUTO_INCREMENT=421 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+DELIMITER $$
+CREATE TRIGGER `delete_dictionary_parts` AFTER DELETE ON `dictionaries` FOR EACH ROW BEGIN
 	DELETE FROM words WHERE words.dictionary=old.id;
 	DELETE FROM dictionary_linguistics WHERE dictionary_linguistics.dictionary=old.id;
 END
-//
+$$
 DELIMITER ;
 
 CREATE TABLE IF NOT EXISTS `dictionary_linguistics` (
@@ -47,7 +45,7 @@ CREATE TABLE IF NOT EXISTS `memberships` (
   `start_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `expire_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -58,19 +56,18 @@ CREATE TABLE IF NOT EXISTS `users` (
   `username` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `current_dictionary` int(11) DEFAULT NULL,
   `allow_email` tinyint(1) NOT NULL DEFAULT '1',
-  `last_login` timestamp NULL DEFAULT NULL,
+  `use_ipa` tinyint(1) NOT NULL DEFAULT '1',
+  `last_login` int(11) DEFAULT NULL,
   `password_reset_code` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `password_reset_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `created_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `password_reset_date` int(11) DEFAULT NULL,
+  `created_on` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=152 ;
-DROP TRIGGER IF EXISTS `Delete_User_Dictionaries`;
-DELIMITER //
-CREATE TRIGGER `Delete_User_Dictionaries` AFTER DELETE ON `users`
- FOR EACH ROW DELETE FROM dictionaries WHERE dictionaries.user = old.id
-//
+) ENGINE=MyISAM AUTO_INCREMENT=183 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+DELIMITER $$
+CREATE TRIGGER `Delete_User_Dictionaries` AFTER DELETE ON `users` FOR EACH ROW DELETE FROM dictionaries WHERE dictionaries.user = old.id
+$$
 DELIMITER ;
 
 CREATE TABLE IF NOT EXISTS `words` (
