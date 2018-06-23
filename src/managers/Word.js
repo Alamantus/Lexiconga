@@ -73,6 +73,10 @@ export class Word {
     return wordDb.words.delete(wordId)
     .then(() => {
       console.log('Word deleted successfully');
+      request('delete-word', {
+        token: store.get('LexicongaToken'),
+        word: wordId,
+      }, response => console.log(response));
     })
     .catch(error => {
       console.error(error);

@@ -244,6 +244,26 @@ switch ($action) {
       'error' => true,
     ), 400);
   }
+  case 'delete-word': {
+    if ($token !== false && isset($request['word'])) {
+      $user = new User();
+      $delete_word_success = $user->deleteWordFromCurrentDictionary($token, $request['word']);
+      if ($delete_word_success !== false) {
+        return Response::json(array(
+          'data' => 'Deleted successfully',
+          'error' => false,
+        ), 200);
+      }
+      return Response::json(array(
+        'data' => 'Could not delete word: invalid token',
+        'error' => true,
+      ), 401);
+    }
+    return Response::json(array(
+      'data' => 'Could not delete word: required data missing',
+      'error' => true,
+    ), 400);
+  }
 
   default: {
     return Response::html('Hi!');

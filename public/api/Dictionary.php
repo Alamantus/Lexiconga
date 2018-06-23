@@ -189,10 +189,12 @@ WHERE dictionary=$dictionary";
     return array();
   }
 
-  public function setWords ($dictionary, $words = array()) {
+  public function setWords ($user, $dictionary, $words = array()) {
     $query = 'INSERT INTO words (dictionary, word_id, name, pronunciation, part_of_speech, definition, details, last_updated, created_on) VALUES ';
     $params = array();
+    $word_ids = array();
     foreach($words as $word) {
+      $word_ids[] = $word['id'];
       $query .= "(?, ?, ?, ?, ?, ?, ?, ?, ?), ";
       $params[] = $dictionary;
       $params[] = $word['id'];
@@ -212,6 +214,29 @@ definition=VALUES(definition),
 details=VALUES(details),
 last_updated=VALUES(last_updated)';
     
+    $results = $this->db->execute($query, $params);
+
+    if ($results) {
+      $database_words = $this->getWords($user, $dictionary);
+      $database_ids = array_map(function($database_word) { return $database_word['id']; }, $database_words);
+      $words_to_delete = array_filter($database_ids, function($database_id) use($word_ids) { return !in_array($database_id, $word_ids); });
+      if ($words_to_delete) {
+        $delete_results = $this->deleteWords($dictionary, $words_to_delete);
+        return $delete_results;
+      }
+    }
+
+    return $results;
+  }
+
+  public function deleteWords ($dictionary, $word_ids) {
+    $query = 'DELETE FROM words WHERE dictionary=? AND word_id IN (';
+    $params = array($dictionary);
+    foreach($word_ids as $word_id) {
+      $query .= '?, ';
+      $params[] = $word_id;
+    }
+    $query = trim($query, ', ') . ')';
     $results = $this->db->execute($query, $params);
     return $results;
   }

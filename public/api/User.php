@@ -203,8 +203,23 @@ VALUES (?, ?, ?, ?, ?, ?)';
     $user_data = $this->token->decode($token);
     if ($user_data !== false) {
       $dictionary = $user_data->dictionary;
-      $updated_words = $this->dictionary->setWords($dictionary, $words);
-      if ($updated_words > 0) {
+      $user = $user_data->id;
+      $updated_words = $this->dictionary->setWords($user, $dictionary, $words);
+      if ($updated_words) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public function deleteWordFromCurrentDictionary ($token, $word_id) {
+    // Useful even for just one word
+    $user_data = $this->token->decode($token);
+    if ($user_data !== false) {
+      $dictionary = $user_data->dictionary;
+      $user = $user_data->id;
+      $deleted_word = $this->dictionary->deleteWords($dictionary, array($word_id));
+      if ($deleted_word) {
         return true;
       }
     }
