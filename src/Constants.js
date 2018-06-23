@@ -5,6 +5,9 @@ export const DEFAULT_USER_DATA = {
   username: '',
   publicName: '',
   allowEmails: true,
+};
+
+export const DEFAULT_PREFERENCES = {
   useIPAPronunciation: true,
   itemsPerPage: 30,
 };

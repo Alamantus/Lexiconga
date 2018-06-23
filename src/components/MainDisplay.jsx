@@ -10,7 +10,7 @@ import { Pagination } from './structure/Pagination';
 import { WordForm } from './management/WordForm';
 import { DictionaryDetails } from './display/DictionaryDetails';
 import { WordsList } from './display/WordsList';
-import { DEFAULT_USER_DATA } from '../Constants';
+import { DEFAULT_PREFERENCES } from '../Constants';
 
 export class MainDisplay extends Component {
   constructor (props) {
@@ -56,8 +56,8 @@ export class MainDisplay extends Component {
   }
 
   render () {
-    const userData = store.get('LexicongaUserData');
-    const itemsPerPage = userData && userData.hasOwnProperty('itemsPerPage') ? userData.itemsPerPage : DEFAULT_USER_DATA.itemsPerPage;
+    const preferences = store.get('LexicongaPreferences');
+    const itemsPerPage = preferences && preferences.hasOwnProperty('itemsPerPage') ? preferences.itemsPerPage : DEFAULT_PREFERENCES.itemsPerPage;
     const {
       dictionaryInfo,
       isLoadingWords,

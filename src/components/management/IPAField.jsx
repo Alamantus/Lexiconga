@@ -3,7 +3,7 @@ import { Component } from 'inferno';
 import PropTypes from 'prop-types';
 import store from 'store';
 
-import { DEFAULT_USER_DATA } from '../../Constants';
+import { DEFAULT_PREFERENCES } from '../../Constants';
 
 const phondueUsage = require('../../../vendor/KeyboardFire/phondue/usage.html');
 const digraphs = require('../../../vendor/KeyboardFire/phondue/digraphs.json');
@@ -48,18 +48,21 @@ export class IPAField extends Component {
 
   get useIPA() {
     if (this.props.useIPASetting) {
-      const userData = store.get('LexicongaUserData');
-      return userData && userData.hasOwnProperty('useIPAPronunciation')
-        ? userData.useIPAPronunciation : DEFAULT_USER_DATA.useIPAPronunciation;
+      const preferences = store.get('LexicongaPreferences');
+      return preferences && preferences.hasOwnProperty('useIPAPronunciation')
+        ? preferences.useIPAPronunciation : DEFAULT_PREFERENCES.useIPAPronunciation;
     }
     return true;
   }
 
   toggleIPA () {
-    const userData = store.get('LexicongaUserData');
-    userData.useIPAPronunciation = !this.useIPA;
-    this.setState({ useIPA: userData.useIPAPronunciation }, () => {
-      store.set('LexicongaUserData', userData);
+    let preferences = store.get('LexicongaPreferences');
+    if (!preferences) {
+      preferences = Object.assign({}, DEFAULT_PREFERENCES);
+    }
+    preferences.useIPAPronunciation = !this.useIPA;
+    this.setState({ useIPA: preferences.useIPAPronunciation }, () => {
+      store.set('LexicongaPreferences', preferences);
     });
   }
 

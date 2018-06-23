@@ -28,7 +28,6 @@ export class AccountManager extends Component {
         username: userData && userData.hasOwnProperty('username') ? userData.username : DEFAULT_USER_DATA.username,
         publicName: userData && userData.hasOwnProperty('publicName') ? userData.publicName : DEFAULT_USER_DATA.publicName,
         allowEmails: userData && userData.hasOwnProperty('allowEmails') ? userData.allowEmails : DEFAULT_USER_DATA.allowEmails,
-        itemsPerPage: userData && userData.hasOwnProperty('itemsPerPage') ? userData.itemsPerPage : DEFAULT_USER_DATA.itemsPerPage,
       },
       userDictionaries: [],
     };
@@ -119,7 +118,7 @@ export class AccountManager extends Component {
           <Modal buttonText='Account' title='My Account' onShow={ this.getDictionaryNames.bind(this) }>
             <MyAccount
               email={ userData.email }
-              username={ userData.username }
+              // username={ userData.username }
               publicName={ userData.publicName }
               allowEmails={ userData.allowEmails }
               userDictionaries={ this.state.userDictionaries }

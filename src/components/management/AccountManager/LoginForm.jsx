@@ -26,19 +26,19 @@ export class LoginForm extends Component {
       loginPasswordError: '',
       loginFormIsValid: true,
       signupEmail: '',
-      signupUsername: '',
+      // signupUsername: '',
       signupPublicName: '',
       signupPassword: '',
       signupConfirm: '',
       signupAllowEmail: true,
       signupEmailError: '',
-      signupUsernameError: '',
+      // signupUsernameError: '',
       signupPasswordError: '',
       signupConfirmError: '',
       signupEmailChecking: false,
-      signupUsernameChecking: false,
+      // signupUsernameChecking: false,
       signupEmailIsUnique: true,
-      signupUsernameIsUnique: true,
+      // signupUsernameIsUnique: true,
       signupFormIsValid: true,
     };
   }
@@ -56,15 +56,15 @@ export class LoginForm extends Component {
       signupEmailError,
       signupEmailChecking,
       signupEmailIsUnique,
-      signupUsernameError,
-      signupUsernameChecking,
-      signupUsernameIsUnique,
+      // signupUsernameError,
+      // signupUsernameChecking,
+      // signupUsernameIsUnique,
       signupPasswordError,
       signupConfirmError,
     } = this.state;
     return !signupEmailChecking && !signupUsernameChecking
-      && signupEmailIsUnique && signupUsernameIsUnique
-      && signupEmailError === '' && signupUsernameError === ''
+      && signupEmailIsUnique && signupEmailError === ''
+      // && signupUsernameIsUnique && signupUsernameError === ''
       && signupPasswordError === '' && signupConfirmError === '';
   }
 
@@ -101,12 +101,12 @@ export class LoginForm extends Component {
       }
     }
 
-    if (field === 'signupUsername') {
-      if (value !== '' && /[^a-zA-Z0-9]+/g.test(value)) {
-        isValid = false;
-        fieldErrors[errorFieldName] = 'Please use only letters and numbers';
-      }
-    }
+    // if (field === 'signupUsername') {
+    //   if (value !== '' && /[^a-zA-Z0-9]+/g.test(value)) {
+    //     isValid = false;
+    //     fieldErrors[errorFieldName] = 'Please use only letters and numbers';
+    //   }
+    // }
 
     if (isValid) {
       fieldErrors[errorFieldName] = '';
@@ -118,17 +118,22 @@ export class LoginForm extends Component {
     const {
       signupEmailChecking,
       signupEmailIsUnique,
-      signupUsernameChecking,
-      signupUsernameIsUnique,
+      // signupUsernameChecking,
+      // signupUsernameIsUnique,
     } = this.state;
-    const fields = ['signupEmail', 'signupUsername', 'signupPassword', 'signupConfirm'];
+    const fields = [
+      'signupEmail',
+      // 'signupUsername',
+      'signupPassword',
+      'signupConfirm'
+    ];
     let errors = {};
     fields.forEach(field => {
       const fieldErrors = this.validateField(field, this.state[field]);
       errors = Object.assign(errors, fieldErrors);
     });
-    errors.signupFormIsValid = !signupEmailChecking && !signupUsernameChecking
-      && signupEmailIsUnique && signupUsernameIsUnique
+    errors.signupFormIsValid = !signupEmailChecking && signupEmailIsUnique
+      // && !signupUsernameChecking && signupUsernameIsUnique
       && Object.keys(errors).every(field => errors[field] === '');
     this.setState(errors, callback);
   }
@@ -163,21 +168,22 @@ export class LoginForm extends Component {
           this.setState(fieldUpdate);
         });
       });
-    } else if (field === 'signupUsername') {
-      this.setState({ signupUsernameChecking: true }, () => {
-        request('check-username', { username: value }, (response) => {
-          const { data, error } = response;
-          fieldUpdate['signupUsernameChecking'] = false;
-          if (error) {
-            console.error(data);
-          } else {
-            fieldUpdate['signupUsernameIsUnique'] = !data;
-          }
-        }).then(() => {
-          this.setState(fieldUpdate);
-        });
-      });
     }
+    // else if (field === 'signupUsername') {
+    //   this.setState({ signupUsernameChecking: true }, () => {
+    //     request('check-username', { username: value }, (response) => {
+    //       const { data, error } = response;
+    //       fieldUpdate['signupUsernameChecking'] = false;
+    //       if (error) {
+    //         console.error(data);
+    //       } else {
+    //         fieldUpdate['signupUsernameIsUnique'] = !data;
+    //       }
+    //     }).then(() => {
+    //       this.setState(fieldUpdate);
+    //     });
+    //   });
+    // }
   }
 
   logIn () {
@@ -194,13 +200,13 @@ export class LoginForm extends Component {
       if (this.signupFormIsValid) {
         const {
           signupEmail,
-          signupUsername,
+          // signupUsername,
           signupPublicName,
           signupPassword,
           signupAllowEmail
         } = this.state;
         this.props.signUp(signupEmail, signupPassword, {
-          username: signupUsername,
+          // username: signupUsername,
           publicName: signupPublicName,
           allowEmail: signupAllowEmail,
         });
@@ -234,7 +240,7 @@ export class LoginForm extends Component {
                 </h3>
                 <div className='field'>
                   <label className='label'>
-                    Email/Username
+                    Email
                   </label>
                   <div className='control'>
                     <input className={`input ${this.state.loginEmailError !== '' && 'is-danger'}`}
@@ -320,7 +326,7 @@ export class LoginForm extends Component {
                         }
                       </div>
                     </div>
-                    <div className='field'>
+                    {/* <div className='field'>
                       <label className='label'>
                         Username
                       </label>
@@ -342,7 +348,7 @@ export class LoginForm extends Component {
                             ) : null
                         }
                       </div>
-                    </div>
+                    </div> */}
                     <div className='field'>
                       <label className='label'>
                         Public Name

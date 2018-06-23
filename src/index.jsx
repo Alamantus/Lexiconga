@@ -6,7 +6,7 @@ import { Component, render } from 'inferno';
 import store from 'store';
 
 import removeDiacritics from '../vendor/StackOverflow/removeDiacritics';
-import { DEFAULT_USER_DATA } from './Constants';
+import { DEFAULT_PREFERENCES } from './Constants';
 import { addHelpfulPrototypes, getWordsStats } from './Helpers';
 addHelpfulPrototypes();
 
@@ -95,8 +95,8 @@ class App extends Component {
 
   updateDisplayedWords (callback = () => {}) {
     dictionary.wordsPromise.then(words => {
-      const userData = store.get('LexicongaUserData');
-      const itemsPerPage = userData && userData.hasOwnProperty('itemsPerPage') ? userData.itemsPerPage : DEFAULT_USER_DATA.itemsPerPage;
+      const preferences = store.get('LexicongaPreferences');
+      const itemsPerPage = preferences && preferences.hasOwnProperty('itemsPerPage') ? preferences.itemsPerPage : DEFAULT_PREFERENCES.itemsPerPage;
       const { searchConfig, partsOfSpeech, currentPage } = this.state;
       const partsOfSpeechForFilter = [...partsOfSpeech, 'Uncategorized'];
       const pageStart = currentPage * itemsPerPage;
