@@ -189,11 +189,30 @@ WHERE dictionary=$dictionary";
     return array();
   }
 
+  public function getDeletedWords ($user, $dictionary) {
+    $query = "SELECT deleted_words.* FROM deleted_words JOIN dictionaries ON id = dictionary WHERE dictionary=$dictionary AND user=$user";
+    $results = $this->db->query($query)->fetchAll();
+    if ($results) {
+      return array_map(function ($row) {
+        return array(
+          'id' => intval($row['word_id']),
+          'deletedOn' => intval($row['deleted_on']),
+        );
+      }, $results);
+    }
+    return array();
+  }
+
   public function setWords ($user, $dictionary, $words = array()) {
     $query = 'INSERT INTO words (dictionary, word_id, name, pronunciation, part_of_speech, definition, details, last_updated, created_on) VALUES ';
     $params = array();
     $word_ids = array();
+    $most_recent_word_update = 0;
     foreach($words as $word) {
+      $last_updated = is_null($word['lastUpdated']) ? $word['createdOn'] : $word['lastUpdated'];
+      if ($most_recent_word_update < $last_updated) {
+        $most_recent_word_update = $last_updated;
+      }
       $word_ids[] = $word['id'];
       $query .= "(?, ?, ?, ?, ?, ?, ?, ?, ?), ";
       $params[] = $dictionary;
@@ -203,7 +222,7 @@ WHERE dictionary=$dictionary";
       $params[] = $word['partOfSpeech'];
       $params[] = $word['definition'];
       $params[] = $word['details'];
-      $params[] = is_null($word['lastUpdated']) ? $word['createdOn'] : $word['lastUpdated'];
+      $params[] = $last_updated;
       $params[] = $word['createdOn'];
     }
     $query = trim($query, ', ') . ' ON DUPLICATE KEY UPDATE
@@ -216,28 +235,42 @@ last_updated=VALUES(last_updated)';
     
     $results = $this->db->execute($query, $params);
 
-    if ($results) {
-      $database_words = $this->getWords($user, $dictionary);
-      $database_ids = array_map(function($database_word) { return $database_word['id']; }, $database_words);
-      $words_to_delete = array_filter($database_ids, function($database_id) use($word_ids) { return !in_array($database_id, $word_ids); });
-      if ($words_to_delete) {
-        $delete_results = $this->deleteWords($dictionary, $words_to_delete);
-        return $delete_results;
-      }
-    }
+    // if ($results) {
+    //   $database_words = $this->getWords($user, $dictionary);
+    //   $database_ids = array_map(function($database_word) { return $database_word['id']; }, $database_words);
+    //   $words_to_delete = array_filter($database_ids, function($database_id) use($word_ids) { return !in_array($database_id, $word_ids); });
+    //   if ($words_to_delete) {
+    //     $delete_results = $this->deleteWords($dictionary, $words_to_delete);
+    //     return $delete_results;
+    //   }
+    // }
 
     return $results;
   }
 
   public function deleteWords ($dictionary, $word_ids) {
-    $query = 'DELETE FROM words WHERE dictionary=? AND word_id IN (';
-    $params = array($dictionary);
+    $insert_query = 'INSERT INTO deleted_words (dictionary, word_id, deleted_on) VALUES ';
+    $insert_params = array();
+    $delete_query = 'DELETE FROM words WHERE dictionary=? AND word_id IN (';
+    $delete_params = array($dictionary);
     foreach($word_ids as $word_id) {
-      $query .= '?, ';
-      $params[] = $word_id;
+      $insert_query .= "(?, ?, ?), ";
+      $insert_params[] = $dictionary;
+      $insert_params[] = $word_id;
+      $insert_params[] = time();
+
+      $delete_query .= '?, ';
+      $delete_params[] = $word_id;
     }
-    $query = trim($query, ', ') . ')';
-    $results = $this->db->execute($query, $params);
-    return $results;
+
+    $insert_query = trim($insert_query, ', ') . ' ON DUPLICATE KEY UPDATE deleted_on=VALUES(deleted_on)';
+    $delete_query = trim($delete_query, ', ') . ')';
+    
+    $insert_results = $this->db->execute($insert_query, $insert_params);
+    if ($insert_results) {
+      $delete_results = $this->db->execute($delete_query, $delete_params);
+      return $delete_results;
+    }
+    return $insert_results;
   }
 }

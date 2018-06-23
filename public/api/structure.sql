@@ -7,6 +7,12 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 
+CREATE TABLE IF NOT EXISTS `deleted_words` (
+  `dictionary` int(11) NOT NULL,
+  `word_id` int(11) NOT NULL,
+  `deleted_on` int(11) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 CREATE TABLE IF NOT EXISTS `dictionaries` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user` int(11) NOT NULL,

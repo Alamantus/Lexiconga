@@ -42,10 +42,15 @@ export class Word {
   create () {
     this.createdOn = this.createdOn ? this.createdOn : timestampInSeconds();
 
+    let addPromise;
     // Delete id if it exists to allow creation of new word.
-    if (this.hasOwnProperty('id')) delete this.id;
+    if (this.hasOwnProperty('id')) {
+      addPromise = wordDb.words.put(this);
+    } else {
+      addPromise = wordDb.words.add(this);
+    }
 
-    return wordDb.words.add(this)
+    return addPromise
     .then((id) => {
       this.id = id;
       console.log('Word added successfully');
@@ -69,14 +74,26 @@ export class Word {
     });
   }
 
-  delete (wordId) {
+  delete (wordId, skipSend = false) {
     return wordDb.words.delete(wordId)
     .then(() => {
       console.log('Word deleted successfully');
-      request('delete-word', {
-        token: store.get('LexicongaToken'),
-        word: wordId,
-      }, response => console.log(response));
+      if (!skipSend) {
+        request('delete-word', {
+          token: store.get('LexicongaToken'),
+          word: wordId,
+        }, response => console.log(response));
+      }
+      wordDb.deletedWords.add({
+        id: wordId,
+        deletedOn: timestampInSeconds(),
+      })
+      .then(() => {
+        console.log('Word added to deleted list');
+      })
+      .catch(error => {
+        console.error(error);
+      });
     })
     .catch(error => {
       console.error(error);

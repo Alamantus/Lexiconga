@@ -171,6 +171,7 @@ VALUES (?, ?, ?, ?, ?, ?)';
       return array(
         'details' => $this->dictionary->getDetails($user, $dictionary),
         'words' => $this->dictionary->getWords($user, $dictionary),
+        'deletedWords' => $this->dictionary->getDeletedWords($user, $dictionary),
       );
     }
     return false;
@@ -212,13 +213,13 @@ VALUES (?, ?, ?, ?, ?, ?)';
     return false;
   }
 
-  public function deleteWordFromCurrentDictionary ($token, $word_id) {
+  public function deleteWordsFromCurrentDictionary ($token, $word_ids) {
     // Useful even for just one word
     $user_data = $this->token->decode($token);
     if ($user_data !== false) {
       $dictionary = $user_data->dictionary;
       $user = $user_data->id;
-      $deleted_word = $this->dictionary->deleteWords($dictionary, array($word_id));
+      $deleted_word = $this->dictionary->deleteWords($dictionary, $word_ids);
       if ($deleted_word) {
         return true;
       }

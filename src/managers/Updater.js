@@ -101,6 +101,13 @@ export class Updater {
     }, response => console.log(response));
   }
 
+  sendDeletedWords (words) {
+    return request('delete-words', {
+      token: store.get('LexicongaToken'),
+      words,
+    }, response => console.log(response));
+  }
+
   sync () {
     return request('get-current-dictionary', {
       token: store.get('LexicongaToken'),
@@ -110,7 +117,7 @@ export class Updater {
         console.error(data);
       } else {
         this.compareDetails(data.details);
-        this.compareWords(data.words);
+        this.compareWords(data.words, data.deletedWords);
       }
     });
   }
@@ -129,10 +136,11 @@ export class Updater {
     }
   }
 
-  compareWords (externalWords) {
+  compareWords (externalWords, deletedWords) {
     const wordsToSend = [];
     const wordsToAdd = [];
     const wordsToUpdate = [];
+    const wordsToDelete = [];
     const localWordsPromise = this.dictionary.wordsPromise.then(localWords => {
       externalWords.forEach(externalWord => {
         if (externalWord.lastUpdated) {
@@ -151,24 +159,61 @@ export class Updater {
       // Find words not in external database and add them to send.
       localWords.forEach(localWord => {
         if (localWord.lastUpdated) {
-          const wordAlreadyChecked = externalWords.some(word => word.id === localWord.id);
-          if (!wordAlreadyChecked) {
-            wordsToSend.push(localWord);
+          const wordDeleted = deletedWords.some(word => word.id === localWord.id);
+          if (wordDeleted) {
+            wordsToDelete.push(localWord);
+          } else {
+            const wordAlreadyChecked = externalWords.some(word => word.id === localWord.id);
+            if (!wordAlreadyChecked) {
+              wordsToSend.push(localWord);
+            }
           }
         }
       });
 
-      wordsToAdd.forEach(newWord => {
-        new Word(newWord).create();
+      return {
+        wordsToAdd,
+        wordsToUpdate,
+        wordsToDelete,
+        wordsToSend,
+      };
+    }).then(processedWords => {
+      let {
+        wordsToAdd,
+        wordsToUpdate,
+        wordsToDelete,
+        wordsToSend,
+      } = processedWords;
+
+      return this.dictionary.deletedWordsPromise.then(localDeletedWords => {
+        wordsToAdd = wordsToAdd.filter(word => !localDeletedWords.some(deleted => deleted.id === word.id));
+        wordsToUpdate = wordsToUpdate.filter(word => !localDeletedWords.some(deleted => deleted.id === word.id));
+        wordsToSend = wordsToSend.filter(word => !localDeletedWords.some(deleted => deleted.id === word.id));
+        const deletedWordsToSend = localDeletedWords.filter(local => !deletedWords.some(remote => remote.id === local.id));
+
+        wordsToAdd.forEach(newWord => {
+          new Word(newWord).create();
+        });
+        wordsToUpdate.forEach(updatedWord => {
+          new Word(updatedWord).update();
+        });
+        wordsToDelete.forEach(deletedWord => {
+          // Remove words deleted on server from local dictionary
+          new Word(deletedWord).delete(deletedWord.id, true);
+        });
+        if (wordsToSend.length > 0) {
+          this.sendWords(wordsToSend);
+        }
+        if (deletedWordsToSend.length > 0) {
+          this.sendDeletedWords(deletedWordsToSend.map(deletedWord => deletedWord.id));
+        }
+      }).catch(error => {
+        console.error(error);
       });
-      wordsToUpdate.forEach(updatedWord => {
-        new Word(updatedWord).update();
-      });
-      if (wordsToSend.length > 0) {
-        this.sendWords(wordsToSend);
-      }
     }).then(() => {
-      this.app.updateDisplayedWords(() => console.log('synced words'));
+        this.app.updateDisplayedWords(() => console.log('synced words'));
+      }).catch(error => {
+      console.error(error);
     });
   }
 }

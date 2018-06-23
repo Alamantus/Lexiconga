@@ -312,6 +312,10 @@ class DictionaryData {
     return wordDb.words.orderBy('name').toArray();
   }
 
+  get deletedWordsPromise () {
+    return wordDb.deletedWords.toArray();
+  }
+
   wordsWithPartOfSpeech (partOfSpeech) {
     let words = wordDb.words.where('partOfSpeech');
 
