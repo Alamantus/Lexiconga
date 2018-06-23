@@ -65,7 +65,6 @@ export class MainDisplay extends Component {
       wordsAreFiltered,
       wordsInCurrentList,
       currentPage,
-      useIpaPronunciationField,
       stats,
       setPage,
       updateDisplay,

@@ -81,13 +81,12 @@ VALUES (?, ?, ?, ?, ?, ?)';
   public function setUserData ($token, $user_data) {
     $token_data = $this->token->decode($token);
     if ($token_data !== false) {
-      $query = 'UPDATE users SET email=?, public_name=?, username=?, allow_email=?, use_ipa=? WHERE id=?';
+      $query = 'UPDATE users SET email=?, public_name=?, username=?, allow_email=? WHERE id=?';
       $properties = array(
         $user_data['email'],
         $user_data['publicName'],
         $user_data['username'],
         $user_data['allowEmail'],
-        $user_data['useIPAPronunciation'],
         $user_id,
       );
       $update_success = $this->db->execute($query, $properties);
@@ -112,7 +111,6 @@ VALUES (?, ?, ?, ?, ?, ?)';
         'username' => $user['username'],
         'publicName' => $user['public_name'],
         'allowEmails' => $user['allow_email'] == 1 ? true : false,
-        'useIPAPronunciation' => $user['use_ipa'] == 1 ? true : false,
       );
     }
 

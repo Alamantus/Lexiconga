@@ -103,9 +103,6 @@ export class WordForm extends Component {
   }
 
   render () {
-    const userData = store.get('LexicongaUserData');
-    const useIpaField = userData && userData.hasOwnProperty('useIPAPronunciation')
-      ? userData.useIPAPronunciation : DEFAULT_USER_DATA.useIPAPronunciation;
     return (
       <div className='box'>
         <div className='field'>
@@ -125,7 +122,7 @@ export class WordForm extends Component {
         </div>
 
         <IPAField value={ this.state.wordPronunciation }
-          preventIPA={ !useIpaField }
+          useIPASetting={ true }
           onChange={ (newValue) => this.setState({ wordPronunciation: newValue }) } />
 
         <div className='field'>

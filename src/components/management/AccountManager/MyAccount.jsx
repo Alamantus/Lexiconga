@@ -11,7 +11,6 @@ export class MyAccount extends Component {
       username: PropTypes.string.isRequired,
       publicName: PropTypes.string.isRequired,
       allowEmails: PropTypes.bool.isRequired,
-      useIPAPronunciation: PropTypes.bool.isRequired,
       userDictionaries: PropTypes.array.isRequired,
       updateUserData: PropTypes.func,
       changeDictionary: PropTypes.func,
@@ -22,7 +21,6 @@ export class MyAccount extends Component {
       username: this.props.username,
       publicName: this.props.publicName,
       allowEmails: this.props.allowEmails,
-      useIPAPronunciation: this.props.useIPAPronunciation,
       userDictionaries: this.props.userDictionaries,
     };
   }
@@ -58,14 +56,6 @@ export class MyAccount extends Component {
                   Allow Emails
                 </label>
               </div>
-            </div>
-            <div className='field'>
-              <input className='is-checkradio is-rtl' type='checkbox' id='useIPAPronunciation'
-                checked={this.state.useIPAPronunciation ? 'checked' : false}
-                onChange={(event) => { this.setState({ useIPAPronunciation: !this.state.useIPAPronunciation }) }} />
-              <label className='label is-unselectable' htmlFor='useIPAPronunciation'>
-                Use IPA in Pronunciation Fields
-              </label>
             </div>
           </div>
           

@@ -1,6 +1,9 @@
 import Inferno from 'inferno';
 import { Component } from 'inferno';
 import PropTypes from 'prop-types';
+import store from 'store';
+
+import { DEFAULT_USER_DATA } from '../../Constants';
 
 const phondueUsage = require('../../../vendor/KeyboardFire/phondue/usage.html');
 const digraphs = require('../../../vendor/KeyboardFire/phondue/digraphs.json');
@@ -22,7 +25,7 @@ export class IPAField extends Component {
       helpText: PropTypes.string,
       placeholder: PropTypes.string,
       isDisplayOnly: PropTypes.bool,
-      preventIPA: PropTypes.bool,
+      useIPASetting: PropTypes.bool,
       onInput: PropTypes.func,
       onChange: PropTypes.func,
     }, props, 'prop', 'IPAField');
@@ -31,6 +34,7 @@ export class IPAField extends Component {
       value: props.value || '',
       doShowHelp: false,
       doShowTable: false,
+      useIPA: this.useIPA,
     }
 
     this.field = null;
@@ -39,6 +43,23 @@ export class IPAField extends Component {
   componentWillReceiveProps (nextProps) {
     this.setState({
       value: nextProps.value,
+    });
+  }
+
+  get useIPA() {
+    if (this.props.useIPASetting) {
+      const userData = store.get('LexicongaUserData');
+      return userData && userData.hasOwnProperty('useIPAPronunciation')
+        ? userData.useIPAPronunciation : DEFAULT_USER_DATA.useIPAPronunciation;
+    }
+    return true;
+  }
+
+  toggleIPA () {
+    const userData = store.get('LexicongaUserData');
+    userData.useIPAPronunciation = !this.useIPA;
+    this.setState({ useIPA: userData.useIPAPronunciation }, () => {
+      store.set('LexicongaUserData', userData);
     });
   }
 
@@ -105,7 +126,7 @@ export class IPAField extends Component {
   onInput (event) {
     let val = event.target.value;
     let pos;
-    if (!this.props.preventIPA) {
+    if (this.state.useIPA) {
       pos = this.field.selectionStart || val.length;
 
       if (event.key) {
@@ -121,7 +142,7 @@ export class IPAField extends Component {
 
     if (val !== this.state.value) {
       this.setState({ value: val }, () => {
-        if (!this.props.preventIPA) {
+        if (this.state.useIPA) {
           this.field.focus();
           this.field.setSelectionRange(pos, pos);
         }
@@ -144,6 +165,19 @@ export class IPAField extends Component {
       <div className='field'>
         <label className='label' htmlFor={ this.props.id || null }>
           { this.props.label || 'Pronunciation' }
+          { this.props.useIPASetting && 
+            <a className='button is-small is-pulled-right is-inline'
+              title='Toggle IPA'
+              aria-label={`Toggle IPA`}
+              onClick={this.toggleIPA.bind(this)}>
+              <span className='icon'>
+                <i className={`fa fa-${this.state.useIPA ? 'ban' : 'check-circle-o'}`} />
+              </span>
+              <span className='is-hidden-touch'>
+                {this.state.useIPA ? 'Dis' : 'En' }able IPA
+              </span>
+            </a>
+          }
         </label>
         {
           this.props.helpText
@@ -155,7 +189,7 @@ export class IPAField extends Component {
         }
         <div className='control'>
           <input className='input' id={ this.props.id || null } type='text'
-            placeholder={ this.props.placeholder || (!this.props.preventIPA ? '[prə.ˌnʌn.si.ˈeɪ.ʃən]' : 'pronunciation') }
+            placeholder={ this.props.placeholder || (this.state.useIPA ? '[prə.ˌnʌn.si.ˈeɪ.ʃən]' : 'pronunciation') }
             disabled={ !!this.props.isDisplayOnly }
             ref={ (input) => this.field = input }
             value={ this.state.value }
@@ -163,7 +197,7 @@ export class IPAField extends Component {
             onKeyDown={ (event) => this.onInput(event) }
             onChange={ () => this.onChange() } />
         </div>
-        { !this.props.preventIPA && this.showButtons() }
+        { this.state.useIPA && this.showButtons() }
       </div>
     );
   }

@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS `dictionaries` (
   `last_updated` int(11) DEFAULT NULL,
   `created_on` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=421 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=422 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 DELIMITER $$
 CREATE TRIGGER `delete_dictionary_parts` AFTER DELETE ON `dictionaries` FOR EACH ROW BEGIN
 	DELETE FROM words WHERE words.dictionary=old.id;
@@ -56,7 +56,6 @@ CREATE TABLE IF NOT EXISTS `users` (
   `username` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `current_dictionary` int(11) DEFAULT NULL,
   `allow_email` tinyint(1) NOT NULL DEFAULT '1',
-  `use_ipa` tinyint(1) NOT NULL DEFAULT '1',
   `last_login` int(11) DEFAULT NULL,
   `password_reset_code` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
   `password_reset_date` int(11) DEFAULT NULL,
@@ -64,7 +63,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=MyISAM AUTO_INCREMENT=183 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=184 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 DELIMITER $$
 CREATE TRIGGER `Delete_User_Dictionaries` AFTER DELETE ON `users` FOR EACH ROW DELETE FROM dictionaries WHERE dictionaries.user = old.id
 $$
