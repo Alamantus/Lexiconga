@@ -64,7 +64,7 @@ export class Modal extends Component {
           <div className='modal-background' onClick={ this.hide.bind(this) } />
 
           <div className='modal-card'>
-            <header className='modal-card-head'>
+            <header className='modal-card-head has-text-left'>
               <h3 className='modal-card-title'>
                 { title || 'Modal' }
               </h3>
