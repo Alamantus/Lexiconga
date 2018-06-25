@@ -1,7 +1,6 @@
 import Inferno from 'inferno';
 import { Component } from 'inferno';
 import PropTypes from 'prop-types';
-import marked from 'marked';
 import store from 'store';
 import swal from 'sweetalert2';
 
@@ -36,7 +35,16 @@ export class AccountManager extends Component {
   }
 
   logIn (email, password) {
-    return request('login', { email, password }, this.handleResponse.bind(this));
+    return request('login', { email, password }, response => this.handleResponse(response, userData => {
+      const nameGreeting = userData.hasOwnProperty('publicName') && userData.publicName !== '' ? ', ' + userData.publicName : '';
+      swal({
+        title: `Welcome back${nameGreeting}!`,
+        text: 'You have been logged in successfully.',
+        type: 'success',
+        confirmButtonClass: 'button',
+        buttonsStyling: false,
+      });
+    }));
   }
 
   logOut () {
@@ -62,7 +70,16 @@ export class AccountManager extends Component {
       email,
       password,
       userData,
-    }, this.handleResponse.bind(this));
+    }, response => this.handleResponse(response, () => {
+      const nameGreeting = userData.hasOwnProperty('publicName') && userData.publicName !== '' ? ', ' + userData.publicName : '';
+      swal({
+        title: `Welcome${nameGreeting}!`,
+        text: 'Your account was created successfully! We hope you enjoy what a Lexiconga account can provide for you!',
+        type: 'success',
+        confirmButtonClass: 'button',
+        buttonsStyling: false,
+      });
+    }));
   }
 
   updateUserData (token, userData, callback = () => {}) {
@@ -76,12 +93,13 @@ export class AccountManager extends Component {
     });
   }
 
-  handleResponse (response) {
+  handleResponse (response, successCallback = () => {}) {
     const { data, error } = response;
     if (error) {
       console.error(data);
     } else {
       this.updateUserData(data.token, data.user, () => {
+        successCallback(data.user);
         this.getDictionaryNames();
         this.props.updater.sync();
       });

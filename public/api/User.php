@@ -13,7 +13,7 @@ class User {
   }
 
   public function logIn ($email, $password) {
-    $query = 'SELECT * FROM users WHERE email=:email OR username=:email';
+    $query = 'SELECT * FROM users WHERE email=:email';
     $user = $this->db->query($query, array(':email' => $email))->fetch();
     if ($user) {
       if ($user['old_password'] !== null) {
@@ -39,22 +39,15 @@ class User {
     return $user->rowCount() > 0;
   }
 
-  public function usernameExists ($username) {
-    $query = 'SELECT * FROM users WHERE username=?';
-    $user = $this->db->query($query, array($username));
-    return $user->rowCount() > 0;
-  }
-
   public function create ($email, $password, $user_data) {
-    $insert_user_query = 'INSERT INTO users (email, password, public_name, username, allow_email, created_on)
-VALUES (?, ?, ?, ?, ?, ?)';
+    $insert_user_query = 'INSERT INTO users (email, password, public_name, allow_email, created_on)
+VALUES (?, ?, ?, ?, ?)';
     $password_hash = password_hash($password, PASSWORD_DEFAULT);
 
     $insert_user = $this->db->execute($insert_user_query, array(
       $email,
       $password_hash,
       $user_data['publicName'] !== '' ? $user_data['publicName'] : null,
-      $user_data['username'] !== '' ? $user_data['username'] : null,
       $user_data['allowEmail'] ? 1 : 0,
       time(),
     ));
@@ -108,7 +101,6 @@ VALUES (?, ?, ?, ?, ?, ?)';
     if ($stmt && $user) {
       return array(
         'email' => $user['email'],
-        'username' => $user['username'],
         'publicName' => $user['public_name'],
         'allowEmails' => $user['allow_email'] == 1 ? true : false,
       );

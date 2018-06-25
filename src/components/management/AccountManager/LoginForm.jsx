@@ -1,11 +1,6 @@
 import Inferno from 'inferno';
 import { Component } from 'inferno';
 import PropTypes from 'prop-types';
-import marked from 'marked';
-import store from 'store';
-
-import { Modal } from '../../structure/Modal';
-import { SearchBox } from '../../management/SearchBox';
 
 import { request } from '../../../Helpers';
 
@@ -26,19 +21,15 @@ export class LoginForm extends Component {
       loginPasswordError: '',
       loginFormIsValid: true,
       signupEmail: '',
-      // signupUsername: '',
       signupPublicName: '',
       signupPassword: '',
       signupConfirm: '',
       signupAllowEmail: true,
       signupEmailError: '',
-      // signupUsernameError: '',
       signupPasswordError: '',
       signupConfirmError: '',
       signupEmailChecking: false,
-      // signupUsernameChecking: false,
       signupEmailIsUnique: true,
-      // signupUsernameIsUnique: true,
       signupFormIsValid: true,
     };
   }
@@ -56,15 +47,11 @@ export class LoginForm extends Component {
       signupEmailError,
       signupEmailChecking,
       signupEmailIsUnique,
-      // signupUsernameError,
-      // signupUsernameChecking,
-      // signupUsernameIsUnique,
       signupPasswordError,
       signupConfirmError,
     } = this.state;
-    return !signupEmailChecking && !signupUsernameChecking
+    return !signupEmailChecking
       && signupEmailIsUnique && signupEmailError === ''
-      // && signupUsernameIsUnique && signupUsernameError === ''
       && signupPasswordError === '' && signupConfirmError === '';
   }
 
@@ -101,13 +88,6 @@ export class LoginForm extends Component {
       }
     }
 
-    // if (field === 'signupUsername') {
-    //   if (value !== '' && /[^a-zA-Z0-9]+/g.test(value)) {
-    //     isValid = false;
-    //     fieldErrors[errorFieldName] = 'Please use only letters and numbers';
-    //   }
-    // }
-
     if (isValid) {
       fieldErrors[errorFieldName] = '';
     }
@@ -118,12 +98,9 @@ export class LoginForm extends Component {
     const {
       signupEmailChecking,
       signupEmailIsUnique,
-      // signupUsernameChecking,
-      // signupUsernameIsUnique,
     } = this.state;
     const fields = [
       'signupEmail',
-      // 'signupUsername',
       'signupPassword',
       'signupConfirm'
     ];
@@ -133,7 +110,6 @@ export class LoginForm extends Component {
       errors = Object.assign(errors, fieldErrors);
     });
     errors.signupFormIsValid = !signupEmailChecking && signupEmailIsUnique
-      // && !signupUsernameChecking && signupUsernameIsUnique
       && Object.keys(errors).every(field => errors[field] === '');
     this.setState(errors, callback);
   }
@@ -169,21 +145,6 @@ export class LoginForm extends Component {
         });
       });
     }
-    // else if (field === 'signupUsername') {
-    //   this.setState({ signupUsernameChecking: true }, () => {
-    //     request('check-username', { username: value }, (response) => {
-    //       const { data, error } = response;
-    //       fieldUpdate['signupUsernameChecking'] = false;
-    //       if (error) {
-    //         console.error(data);
-    //       } else {
-    //         fieldUpdate['signupUsernameIsUnique'] = !data;
-    //       }
-    //     }).then(() => {
-    //       this.setState(fieldUpdate);
-    //     });
-    //   });
-    // }
   }
 
   logIn () {
@@ -200,13 +161,11 @@ export class LoginForm extends Component {
       if (this.signupFormIsValid) {
         const {
           signupEmail,
-          // signupUsername,
           signupPublicName,
           signupPassword,
           signupAllowEmail
         } = this.state;
         this.props.signUp(signupEmail, signupPassword, {
-          // username: signupUsername,
           publicName: signupPublicName,
           allowEmail: signupAllowEmail,
         });
@@ -216,7 +175,7 @@ export class LoginForm extends Component {
 
   render () {
     return (
-      <div className='columns'>
+      <div className='columns has-text-left'>
         <div className='column'>
           <div className='tabs is-boxed'>
             <ul>
@@ -274,10 +233,10 @@ export class LoginForm extends Component {
                   </div>
                 </div>
                 <div className='field'>
-                  <a className='button is-success'
+                  <button className='button is-success'
                     onClick={this.logIn.bind(this)}>
                     Log In
-                  </a>
+                  </button>
                 </div>
               </div>
             ) : (
@@ -326,29 +285,7 @@ export class LoginForm extends Component {
                         }
                       </div>
                     </div>
-                    {/* <div className='field'>
-                      <label className='label'>
-                        Username
-                      </label>
-                      <div className='help'>
-                        This is your unique identifier that appears in the URL if you ever decide to share your dictionaries publicly.
-                      </div>
-                      <div className={`control ${this.state.signupUsernameChecking && 'is-loading'}`}>
-                        <input className={`input ${!this.state.signupUsernameIsUnique && 'is-danger'}`}
-                          type='text' value={this.state.signupUsername}
-                          onInput={(event) => this.updateField('signupUsername', event)}
-                          onBlur={(event) => this.checkFieldUnique('signupUsername', event)} />
-                        {
-                          (this.state.signupUsernameError !== '' || !this.state.signupUsernameIsUnique)
-                            ? (
-                              <div className='help is-danger'>
-                                {!this.state.signupUsernameIsUnique && <p>This username address is already in use</p>}
-                                {this.state.signupUsernameError}
-                              </div>
-                            ) : null
-                        }
-                      </div>
-                    </div> */}
+                    
                     <div className='field'>
                       <label className='label'>
                         Public Name
@@ -362,6 +299,7 @@ export class LoginForm extends Component {
                           onInput={(event) => this.updateField('signupPublicName', event)} />
                       </div>
                     </div>
+
                     <div className='field'>
                       <label className='label'>
                         Password<sup>*</sup>
@@ -380,6 +318,7 @@ export class LoginForm extends Component {
                         }
                       </div>
                     </div>
+
                     <div className='field'>
                       <label className='label'>
                         Confirm Password<sup>*</sup>
@@ -398,6 +337,7 @@ export class LoginForm extends Component {
                         }
                       </div>
                     </div>
+
                     <div className='field'>
                       <div className='control'>
                         <input className='is-checkradio' id='signupAllowEmail' type='checkbox'
@@ -411,12 +351,13 @@ export class LoginForm extends Component {
                         </div>
                       </div>
                     </div>
+
                     <div className='field'>
                       <div className='control'>
-                        <a className='button is-success'
+                        <button className='button is-success'
                           onClick={this.createAccount.bind(this)}>
                           Create Account
-                        </a>
+                        </button>
                       </div>
                     </div>
                   </div>
