@@ -25,7 +25,6 @@ export class AccountManager extends Component {
       isLoggedIn: false,
       userData: {
         email: userData && userData.hasOwnProperty('email') ? userData.email : DEFAULT_USER_DATA.email,
-        username: userData && userData.hasOwnProperty('username') ? userData.username : DEFAULT_USER_DATA.username,
         publicName: userData && userData.hasOwnProperty('publicName') ? userData.publicName : DEFAULT_USER_DATA.publicName,
         allowEmails: userData && userData.hasOwnProperty('allowEmails') ? userData.allowEmails : DEFAULT_USER_DATA.allowEmails,
       },
@@ -57,24 +56,30 @@ export class AccountManager extends Component {
     }, this.handleResponse.bind(this));
   }
 
+  updateUserData (token, userData, callback = () => {}) {
+    store.set('LexicongaToken', token);
+    store.set('LexicongaUserData', userData);
+    this.setState({
+      isLoggedIn: true,
+      userData,
+    }, () => {
+      callback();
+    });
+  }
+
   handleResponse (response) {
     const { data, error } = response;
     if (error) {
       console.error(data);
     } else {
-      store.set('LexicongaToken', data.token);
-      store.set('LexicongaUserData', data.user);
-      this.setState({
-        isLoggedIn: true,
-        userData: data.user,
-      }, () => {
+      this.updateUserData(data.token, data.user, () => {
         this.getDictionaryNames();
         this.props.updater.sync();
       });
     }
   }
 
-  updateUserData (newUserData) {
+  sendUserData (newUserData, callback = () => {}) {
     const token = store.get('LexicongaToken');
 
     if (token) {
@@ -86,6 +91,7 @@ export class AccountManager extends Component {
             console.error(data);
           } else {
             console.log(data);
+            this.updateUserData(data.token, data.userData, callback);
           }
         })
       });
@@ -122,7 +128,7 @@ export class AccountManager extends Component {
               publicName={ userData.publicName }
               allowEmails={ userData.allowEmails }
               userDictionaries={ this.state.userDictionaries }
-              updateUserData={ this.updateUserData.bind(this) }
+              sendUserData={ this.sendUserData.bind(this) }
               changeDictionary={ () => {} } />
           </Modal>
           <a className='button' onClick={this.logOut.bind(this)}>

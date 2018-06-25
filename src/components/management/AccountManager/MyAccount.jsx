@@ -2,27 +2,69 @@ import Inferno from 'inferno';
 import { Component } from 'inferno';
 import PropTypes from 'prop-types';
 
+import { request } from '../../../Helpers';
+
 export class MyAccount extends Component {
   constructor(props) {
     super(props);
 
     PropTypes.checkPropTypes({
       email: PropTypes.string.isRequired,
-      // username: PropTypes.string.isRequired,
       publicName: PropTypes.string.isRequired,
       allowEmails: PropTypes.bool.isRequired,
       userDictionaries: PropTypes.array.isRequired,
-      updateUserData: PropTypes.func,
+      sendUserData: PropTypes.func,
       changeDictionary: PropTypes.func,
     }, props, 'prop', 'MyAccount');
 
     this.state = {
       email: this.props.email,
-      username: this.props.username,
+      emailError: '',
       publicName: this.props.publicName,
       allowEmails: this.props.allowEmails,
       userDictionaries: this.props.userDictionaries,
+      hasChanged: false,
+      canSend: false,
     };
+    
+    this.originalState = Object.assign({}, this.state);
+  }
+
+  get hasChanged () {
+    for (const property in this.state) {
+      if (['email', 'publicName', 'allowEmails'].includes(property)) {
+        if (this.state[property] !== this.originalState[property]) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  checkFields () {
+    const emailError = /^.+@.+$/.test(this.state.email) ? '' : 'This doesn\'t look like an email address. Please make sure it\'s correct.';
+    this.setState({
+      emailError,
+      hasChanged: this.hasChanged,
+      canSend: emailError === '' && this.hasChanged,
+    });
+  }
+
+  saveChanges () {
+    if (this.state.canSend) {
+      this.props.sendUserData({
+        email: this.state.email,
+        publicName: this.state.publicName,
+        allowEmails: this.state.allowEmails,
+      }, () => {
+        this.setState({
+          hasChanged: false,
+          canSend: false,
+        }, () => {
+          this.originalState = Object.assign({}, this.state);
+        });
+      });
+    }
   }
   
   render() {
@@ -38,7 +80,8 @@ export class MyAccount extends Component {
               </label>
               <div className='control'>
                 <input className='input' type='text' value={this.state.email}
-                  onInput={(event) => { this.setState({ email: event.target.value }) }} />
+                  onInput={ event => this.setState({ email: event.target.value }) }
+                  onChange={ () => this.checkFields() } />
                 <div className='help'>
                   <strong>Note:</strong> If you change your email address, you will need to use your new email address to log in.
                 </div>
@@ -50,7 +93,8 @@ export class MyAccount extends Component {
               </label>
               <div className='control'>
                 <input className='input' type='text' value={this.state.publicName}
-                  onInput={(event) => {this.setState({publicName: event.target.value})}} />
+                  onInput={ event => this.setState({ publicName: event.target.value }) }
+                  onChange={ () => this.checkFields() } />
                 <div className='help'>
                   This is the name we greet you with. It's also the name displayed if you ever decide to share 
                   any of your dictionaries.
@@ -65,7 +109,9 @@ export class MyAccount extends Component {
               <div className='control'>
                 <input className='is-checkradio is-rtl' type='checkbox' id='allowEmails'
                   checked={this.state.allowEmails ? 'checked' : false}
-                  onChange={(event) => { this.setState({ allowEmails: !this.state.allowEmails }) }} />
+                  onChange={(event) => {
+                    this.setState({ allowEmails: !this.state.allowEmails }, () => this.checkFields());
+                  }} />
                 <label className='label is-unselectable' htmlFor='allowEmails'>
                   Allow Emails
                 </label>
@@ -77,6 +123,15 @@ export class MyAccount extends Component {
                 <div className='help'>
                   <strong>Note:</strong> Password reset emails will be sent regardless of your choice here.
                 </div>
+              </div>
+            </div>
+
+            <div className='field'>
+              <div className='control'>
+                <button className='button' Disabled={ !this.state.canSend ? 'disabled' : null }
+                  onClick={ () => this.saveChanges() }>
+                  Save Changes
+                </button>
               </div>
             </div>
           </div>
