@@ -23,6 +23,8 @@ export class AccountManager extends Component {
     
     this.state = {
       isLoggedIn: false,
+      logInLoading: false,
+      signUpLoading: false,
       userData: {
         email: userData && userData.hasOwnProperty('email') ? userData.email : DEFAULT_USER_DATA.email,
         publicName: userData && userData.hasOwnProperty('publicName') ? userData.publicName : DEFAULT_USER_DATA.publicName,
@@ -35,16 +37,18 @@ export class AccountManager extends Component {
   }
 
   logIn (email, password) {
-    return request('login', { email, password }, response => this.handleResponse(response, userData => {
-      const nameGreeting = userData.hasOwnProperty('publicName') && userData.publicName !== '' ? ', ' + userData.publicName : '';
-      swal({
-        title: `Welcome back${nameGreeting}!`,
-        text: 'You have been logged in successfully.',
-        type: 'success',
-        confirmButtonClass: 'button',
-        buttonsStyling: false,
-      });
-    }));
+    this.setState({ logInLoading: true }, () => {
+      request('login', { email, password }, response => this.handleResponse(response, userData => {
+        const nameGreeting = userData.hasOwnProperty('publicName') && userData.publicName !== '' ? ', ' + userData.publicName : '';
+        swal({
+          title: `Welcome back${nameGreeting}!`,
+          text: 'You have been logged in successfully.',
+          type: 'success',
+          confirmButtonClass: 'button',
+          buttonsStyling: false,
+        });
+      }));
+    })
   }
 
   logOut () {
@@ -66,20 +70,22 @@ export class AccountManager extends Component {
   }
 
   signUp (email, password, userData) {
-    request('create-account', {
-      email,
-      password,
-      userData,
-    }, response => this.handleResponse(response, () => {
-      const nameGreeting = userData.hasOwnProperty('publicName') && userData.publicName !== '' ? ', ' + userData.publicName : '';
-      swal({
-        title: `Welcome${nameGreeting}!`,
-        text: 'Your account was created successfully! We hope you enjoy what a Lexiconga account can provide for you!',
-        type: 'success',
-        confirmButtonClass: 'button',
-        buttonsStyling: false,
-      });
-    }));
+    this.setState({ signUpLoading: true }, () => {
+      request('create-account', {
+        email,
+        password,
+        userData,
+      }, response => this.handleResponse(response, () => {
+        const nameGreeting = userData.hasOwnProperty('publicName') && userData.publicName !== '' ? ', ' + userData.publicName : '';
+        swal({
+          title: `Welcome${nameGreeting}!`,
+          text: 'Your account was created successfully! We hope you enjoy what a Lexiconga account can provide for you!',
+          type: 'success',
+          confirmButtonClass: 'button',
+          buttonsStyling: false,
+        });
+      }));
+    });
   }
 
   updateUserData (token, userData, callback = () => {}) {
@@ -87,6 +93,8 @@ export class AccountManager extends Component {
     store.set('LexicongaUserData', userData);
     this.setState({
       isLoggedIn: true,
+      logInLoading: false,
+      signUpLoading: false,
       userData,
     }, () => {
       callback();
@@ -166,7 +174,11 @@ export class AccountManager extends Component {
     }
     return (
       <Modal buttonText='Log In/Sign Up' title='Log In/Sign Up'>
-        <LoginForm logIn={this.logIn.bind(this)} signUp={this.signUp.bind(this)} />
+        <LoginForm
+          logIn={ this.logIn.bind(this) }
+          signUp={ this.signUp.bind(this) }
+          logInLoading={ this.state.logInLoading }
+          signUpLoading={ this.state.signUpLoading } />
       </Modal>
     );
   }

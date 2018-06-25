@@ -10,7 +10,9 @@ export class LoginForm extends Component {
 
     PropTypes.checkPropTypes({
       logIn: PropTypes.func.isRequired,
+      logInLoading: PropTypes.bool,
       signUp: PropTypes.func.isRequired,
+      signUpLoading: PropTypes.bool,
     }, props, 'prop', 'LoginForm');
 
     this.state = {
@@ -233,7 +235,7 @@ export class LoginForm extends Component {
                   </div>
                 </div>
                 <div className='field'>
-                  <button className='button is-success'
+                  <button className={`button is-success ${this.props.logInLoading ? 'is-loading' : ''}`}
                     onClick={this.logIn.bind(this)}>
                     Log In
                   </button>
@@ -354,7 +356,7 @@ export class LoginForm extends Component {
 
                     <div className='field'>
                       <div className='control'>
-                        <button className='button is-success'
+                        <button className={`button is-success ${this.props.signUpLoading ? 'is-loading' : ''}`}
                           onClick={this.createAccount.bind(this)}>
                           Create Account
                         </button>
