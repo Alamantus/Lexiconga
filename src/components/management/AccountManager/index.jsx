@@ -3,6 +3,7 @@ import { Component } from 'inferno';
 import PropTypes from 'prop-types';
 import marked from 'marked';
 import store from 'store';
+import swal from 'sweetalert2';
 
 import { Modal } from '../../structure/Modal';
 import { LoginForm } from './LoginForm';
@@ -45,6 +46,14 @@ export class AccountManager extends Component {
       isLoggedIn: false,
       userData: Object.assign({}, DEFAULT_USER_DATA),
       userDictionaries: [],
+    }, () => {
+      swal({
+        title: 'Logged Out',
+        text: 'You have been logged out. Your work will not be synced to your account until you log in again.',
+        type: 'success',
+        confirmButtonClass: 'button',
+        buttonsStyling: false,
+      });
     });
   }
 
