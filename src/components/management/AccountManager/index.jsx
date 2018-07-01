@@ -17,6 +17,7 @@ export class AccountManager extends Component {
 
     PropTypes.checkPropTypes({
       updater: PropTypes.object.isRequired,
+      dictionary: PropTypes.object,
     }, props, 'prop', 'AccountManager');
 
     const userData = store.get('LexicongaUserData');
@@ -163,6 +164,7 @@ export class AccountManager extends Component {
               publicName={ userData.publicName }
               allowEmails={ userData.allowEmails }
               userDictionaries={ this.state.userDictionaries }
+              dictionary={ this.props.dictionary }
               sendUserData={ this.sendUserData.bind(this) }
               changeDictionary={ () => {} } />
           </Modal>

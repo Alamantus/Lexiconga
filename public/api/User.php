@@ -115,9 +115,10 @@ VALUES (?, ?, ?, ?, ?)';
       $id = $user_data->id;
       $new_dictionary = $this->dictionary->create($id);
       if (!isset($new_dictionary['error'])) {
+        $new_token = $this->generateUserToken($id, $new_dictionary);
         return array(
-            'token' => $this->generateUserToken($id, $new_dictionary),
-            'dictionary' => $this->getCurrentDictionary($token),
+            'token' => $new_token,
+            'dictionary' => $this->getCurrentDictionary($new_token),
           );
       } else {
         return $new_dictionary;

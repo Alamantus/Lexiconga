@@ -209,6 +209,7 @@ class App extends Component {
           partsOfSpeech={ this.state.partsOfSpeech }
           search={ (searchConfig) => this.search(searchConfig) }
           updater={ this.updater }
+          dictionary={ dictionary }
         />
 
         <MainDisplay

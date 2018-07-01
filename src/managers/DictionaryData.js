@@ -3,6 +3,7 @@ import store from 'store';
 import wordDb from './WordDatabase';
 import idManager from './IDManager';
 import { DEFAULT_DICTIONARY } from '../Constants';
+import { request } from "../Helpers";
 
 class DictionaryData {
   constructor () {
@@ -37,6 +38,11 @@ class DictionaryData {
 
   set storedData (updatedValues) {
     store.set('Lexiconga', updatedValues);
+  }
+
+  get id () {
+    return this.storedData.id
+      || null;
   }
 
   get name () {
@@ -345,6 +351,30 @@ class DictionaryData {
       Contains will need to be searched through Array.filter() because Dexie can only search indexes.
       As such, searches on `details` will only allow "contains".
     */
+  }
+
+  reset(dictionaryDetails = DEFAULT_DICTIONARY) {
+    this.storedData = dictionaryDetails;
+    wordDb.delete().then(() => {
+      window.location.reload();
+    }).catch(err => {
+      console.error('Could not delete words db: ', err);
+    });
+  }
+
+  createNew () {
+    request('create-new-dictionary', {
+      token: store.get('LexicongaToken'),
+    }, response => {
+      const {data, error} = response;
+      if (error) {
+        console.error(data);
+      } else {
+        console.log(data);
+        store.set('LexicongaToken', data.token);
+        this.reset(data.dictionary.details);
+      }
+    });
   }
 }
 

@@ -26,22 +26,33 @@ class Dictionary {
     );
   }
 
+  private function checkIfIdExists ($id) {
+    $query = "SELECT id FROM dictionaries WHERE id=?";
+    $results = $this->db->query($query, array($id))->fetchAll();
+    return count($results) > 0;
+  }
+
   public function create ($user) {
-    $insert_dictionary_query = "INSERT INTO dictionaries (user, created_on) VALUES (?, ?)";
-    $insert_dictionary = $this->db->execute($insert_dictionary_query, array($user, time()));
+    $new_id = mt_rand(1000, 999999999);
+    $id_exists = $this->checkIfIdExists($new_id);
+    while ($id_exists) {
+      $new_id = mt_rand(1000, 999999999);
+      $id_exists = $this->checkIfIdExists($new_id);
+    }
+
+    $insert_dictionary_query = "INSERT INTO dictionaries (id, user, created_on) VALUES (?, ?, ?)";
+    $insert_dictionary = $this->db->execute($insert_dictionary_query, array($new_id, $user, time()));
 
     if ($insert_dictionary === true) {
-      $new_dictionary_id = $this->db->lastInsertId();
-
       $insert_linguistics_query = "INSERT INTO dictionary_linguistics (dictionary, parts_of_speech, phonology)
-VALUES ($new_dictionary_id, ?, ?)";
+VALUES ($new_id, ?, ?)";
       $insert_linguistics = $this->db->execute($insert_linguistics_query, array(
         json_encode($this->defaults['partsOfSpeech']),
         json_encode($this->defaults['phonology']),
       ));
 
       if ($insert_linguistics === true) {
-        return $this->changeCurrent($user, $new_dictionary_id);
+        return $this->changeCurrent($user, $new_id);
       } else {
         return array(
           'error' => '"INSERT INTO dictionary_linguistics" failed: ' . $this->db->last_error_info[2],
@@ -69,7 +80,7 @@ VALUES ($new_dictionary_id, ?, ?)";
     if ($results) {
       return array_map(function($result) {
         return array(
-          'id' => $this->token->hash($result['id']),
+          'id' => $result['id'],
           'name' => $result['name'] . ' ' . $result['specification'],
         );
       }, $results);
@@ -86,7 +97,7 @@ VALUES ($new_dictionary_id, ?, ?)";
       $phonology = $result['phonology'] !== '' ? json_decode($result['phonology']) : $this->defaults['phonology'];
 
       return array(
-        'id' => $this->token->hash($result['id']),
+        'id' => $result['id'],
         'name' => $result['name'],
         'specification' => $result['specification'],
         'description' => $result['description'],

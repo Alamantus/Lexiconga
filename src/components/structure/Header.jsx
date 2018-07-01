@@ -17,6 +17,7 @@ export class Header extends Component {
       partsOfSpeech: PropTypes.array.isRequired,
       search: PropTypes.func.isRequired,
       updater: PropTypes.object.isRequired,
+      dictionary: PropTypes.object,
     }, props, 'prop', 'Header');
 
     this.state = {
@@ -49,7 +50,9 @@ export class Header extends Component {
         <div className={`navbar-menu${ this.state.displayNavMenu ? ' is-active' : '' }`}>
           <div className='navbar-end'>
             <span className='navbar-item has-text-right-touch'>
-              <AccountManager updater={ this.props.updater } />
+              <AccountManager
+                updater={ this.props.updater }
+                dictionary={ this.props.dictionary } />
             </span>
             <span className='navbar-item has-text-right-touch'>
               <Modal buttonText='Help' title='Lexiconga Help'>

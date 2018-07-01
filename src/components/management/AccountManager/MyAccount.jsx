@@ -11,6 +11,7 @@ export class MyAccount extends Component {
       publicName: PropTypes.string.isRequired,
       allowEmails: PropTypes.bool.isRequired,
       userDictionaries: PropTypes.array.isRequired,
+      dictionary: PropTypes.object,
       sendUserData: PropTypes.func,
       changeDictionary: PropTypes.func,
     }, props, 'prop', 'MyAccount');
@@ -137,14 +138,22 @@ export class MyAccount extends Component {
           <h2 className='title'>Account Actions</h2>
 
           <div className='field'>
+            <div className='control'>
+              <button class="button" onClick={ () => this.props.dictionary.createNew() }>
+                Create New Dictionary
+              </button>
+            </div>
+          </div>
+
+          <div className='field'>
             <label className='label is-unselectable'>
               <span>Change Dictionary</span>
             </label>
             <div className='control'>
               <div className='select'>
-                <select>
+                <select value={ this.props.dictionary.id }>
                   {this.props.userDictionaries.map(item => {
-                    return <option value={item.id}>{item.name}</option>;
+                    return <option value={item.id}>{item.name}{item.id === this.props.dictionary.id && ' (Current)'}</option>;
                   })}
                 </select>
               </div>
