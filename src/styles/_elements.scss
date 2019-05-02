@@ -1,9 +1,26 @@
-.button {
-  cursor: pointer;
+.tag {
   padding: 3px 9px;
   border: $border;
   border-radius: 3px;
   background-color: $light;
+  line-height: 30px;
+}
+
+span .tag {
+  @extend .tag;
+  
+  border-radius: 3px 0 0 3px;
+  
+  &+.tag {
+    border-left: none;
+    border-radius: 0 3px 3px 0;
+    background-color: $white;
+  }
+}
+
+.button {
+  @extend .tag;
+  cursor: pointer;
 }
 
 .modal {
