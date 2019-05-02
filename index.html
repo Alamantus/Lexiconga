@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lexiconga</title>
+  <script src="src/index.js"></script>
+</head>
+<body>
+  <header id="top">
+    <h1 id="title">Lexiconga</h1>
+    <input id="searchButton" placeholder="🔍&#xFE0E; Search">
+  </header>
+
+  <main>
+    <aside id="sideColumn">
+      <form id="wordForm">
+        <label>Word<br>
+          <input id="word">
+        </label>
+      </form>
+    </aside>
+    
+    <section id="mainColumn">
+      <section id="detailsSection">
+        <h2>Dictionary Name</h2>
+        <nav>
+          <ul>
+            <li>Description</li>
+            <li>Details</li>
+            <li>Stats</li>
+          </ul>
+        </nav>
+        <article id="detailsPanel">
+          <p>The dictionary details</p>
+        </article>
+      </section>
+
+      <section id="entries">
+        <article class="entry">
+          <header>
+            <h4 class="word">Word</h4>
+            <span class="pronunciation">Pronunciation</span>
+            <span class="part-of-speech">Part of Speech</span>
+          </header>
+          <dl>
+            <dt class="definition">Definition</dt>
+            <dd class="details">
+              <p><em>Markdown</em> <strong>details</strong></p>
+            </dd>
+          </dl>
+        </article>
+      </section>
+    </section>
+  </main>
+
+  <footer>
+    Lexiconga Footer Links
+  </footer>
+</body>
+</html>

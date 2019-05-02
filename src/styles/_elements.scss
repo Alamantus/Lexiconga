@@ -1,0 +1,15 @@
+#top {
+  #title {
+    display: inline-block;
+    margin: 3px 20px 3px 0;
+  }
+
+  #searchButton {
+    cursor: pointer;
+  }
+}
+
+#wordForm {
+  position: fixed;
+  top: $header-height;
+}

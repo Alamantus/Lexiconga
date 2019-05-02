@@ -1,0 +1,19 @@
+{
+  "name": "lexiconga-lite",
+  "version": "1.0.0",
+  "description": "A light-as-possible rewrite of Lexiconga",
+  "main": "index.html",
+  "repository": "https://cybre.tech/Alamantus/lexiconga-lite.git",
+  "author": "Robbie Antenesse <dev@alamantus.com>",
+  "license": "UNLICENCED",
+  "scripts": {
+    "start": "parcel index.html"
+  },
+  "devDependencies": {
+    "parcel-bundler": "^1.12.3",
+    "sass": "^1.19.0"
+  },
+  "dependencies": {
+    "normalize.css": "^8.0.1"
+  }
+}

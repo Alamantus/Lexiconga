@@ -1,0 +1,49 @@
+header {
+  display: block;
+  padding: 5px 20px;
+  border-bottom: 1px solid #dedede;
+  margin: 0 0 5px;
+
+  &#top {
+    max-height: $header-height;
+  }
+}
+
+main {
+  display: block;
+  width: 90%;
+  margin: 0 auto;
+
+  #sideColumn,
+  #mainColumn {
+    display: inline-block;
+    vertical-align: top;
+  }
+
+  #sideColumn {
+    width: 28%;
+    margin: 0 1%;
+  }
+
+  #mainColumn {
+    width: 68%;
+    margin: 0;
+  }
+
+  article {
+    width: 95%;
+    margin: 5px auto;
+    border: 1px solid #dedede;
+
+    dl {
+      padding: 0 20px;
+    }
+  }
+}
+
+footer {
+  display: block;
+  padding: 5px 20px;
+  border-top: 1px solid #dedede;
+  margin: 5px 0 0;
+}
