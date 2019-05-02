@@ -36,8 +36,13 @@ function showStats() {
   detailsPanel.style.display = 'block';
   const wordStats = getWordsStats();
   const numberOfWordsHTML = `<p><strong>Number of Words</strong><br>${wordStats.numberOfWords.map(stat => `<span><span class="tag">${stat.name}</span><span class="tag">${stat.value}</span></span>`).join(' ')}</p>`;
-
-  detailsPanel.innerHTML = numberOfWordsHTML;
+  const wordLengthHTML = `<p><strong>Word Length</strong><br><span><span class="tag">Shortest</span><span class="tag">${wordStats.wordLength.shortest}</span></span>
+  <span><span class="tag">Longest</span><span class="tag">${wordStats.wordLength.longest}</span></span>
+  <span><span class="tag">Average</span><span class="tag">${wordStats.wordLength.average}</span></span></p>`;
+  const letterDistributionHTML = `<p><strong>Letter Distribution</strong><br>${wordStats.letterDistribution.map(stat => `<span title="${stat.number} ${stat.letter}'s total"><span class="tag">${stat.letter}</span><span class="tag">${stat.percentage.toFixed(2)}</span></span>`).join(' ')}</p>`;
+  const totalLettersHTML = `<p><strong>${wordStats.totalLetters} Total Letters</strong></p>`;
+  
+  detailsPanel.innerHTML = numberOfWordsHTML + wordLengthHTML + letterDistributionHTML + totalLettersHTML;
 }
 
 function getWordsStats() {
@@ -109,7 +114,7 @@ function getWordsStats() {
   });
 
   wordStats.totalLetters = totalLetters;
-  wordStats.wordLength.average = totalLetters / words.length;
+  wordStats.wordLength.average = words.length > 0 ? totalLetters / words.length : 0;
 
   for (const letter in numberOfLetters) {
     if (numberOfLetters.hasOwnProperty(letter)) {
