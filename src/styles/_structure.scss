@@ -72,6 +72,8 @@
   #detailsPanel {
     background-color: $white;
     padding: 20px;
+    max-height: 400px;
+    overflow-y: auto;
   }
 }
 

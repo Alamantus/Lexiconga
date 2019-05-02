@@ -75,3 +75,27 @@ span .tag {
     }
   }
 }
+
+.split {
+  display: block;
+
+  div {
+    display: inline-block;
+    vertical-align: top;
+    margin: 0;
+    margin-right: 2%;
+
+    &:last-child {
+      margin-right: unset;
+      margin-left: 2%;
+    }
+  }
+
+  &.two div {
+    width: 46%;
+  }
+
+  &.three div {
+    width: 30%;
+  }
+}
