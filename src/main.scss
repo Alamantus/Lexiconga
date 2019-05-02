@@ -3,11 +3,12 @@
 @import '../node_modules/normalize.css/normalize.css';
 
 @import 'styles/containers';
+@import 'styles/structure';
 @import 'styles/elements';
 
 html, body {
   font-family: $font;
-  
+
   * {
     box-sizing: border-box;
   }

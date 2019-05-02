@@ -1,7 +1,7 @@
 header {
   display: block;
   padding: 5px 20px;
-  border-bottom: 1px solid #dedede;
+  border-bottom: 1px solid $mid;
   margin: 0 0 5px;
 
   &#top {
@@ -12,6 +12,7 @@ header {
 main {
   display: block;
   width: 90%;
+  min-height: 400px;
   margin: 0 auto;
 
   #sideColumn,
@@ -32,8 +33,8 @@ main {
 
   article {
     width: 95%;
-    margin: 5px auto;
-    border: 1px solid #dedede;
+    margin: 10px auto;
+    border: $border;
 
     dl {
       padding: 0 20px;
@@ -43,7 +44,7 @@ main {
 
 footer {
   display: block;
-  padding: 5px 20px;
-  border-top: 1px solid #dedede;
+  padding: 20px;
+  border-top: 1px solid $mid;
   margin: 5px 0 0;
 }

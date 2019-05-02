@@ -1,0 +1,96 @@
+#top {
+  #title {
+    display: inline-block;
+    margin: 3px 20px 3px 0;
+  }
+
+  #searchButton {
+    cursor: pointer;
+  }
+}
+
+#wordForm {
+  position: fixed;
+  top: $header-height;
+  width: 24%;
+  padding: 10px;
+  background-color: $light;
+  border: $border;
+  border-radius: 5px;
+
+  label {
+    display: block;
+    font-weight: bold;
+
+    &:not(:last-child) {
+      margin-bottom: 20px;
+    }
+
+    input, select, textarea {
+      font-weight: normal;
+      width: 100%;
+    }
+
+    .label-button {
+      font-size: 80%;
+      float: right;
+      cursor: pointer;
+    }
+  }
+}
+
+#detailsSection {
+  padding: 20px;
+  background-color: $white;
+  border: $border;
+  border-radius: 5px;
+
+  nav li {
+    display: inline-block;
+    list-style: none;
+    margin: 0;
+    padding: 10px 20px;
+    border: $border;
+    background-color: $light;
+    cursor: pointer;
+    
+    &:first-child {
+      border-radius: 5px 0 0 5px;
+    }
+    &:last-child {
+      border-radius: 0 5px 5px 0;
+    }
+    &:not(:first-child) {
+      border-left: none;
+    }
+
+    &.active {
+      background-color: #bababa;
+    }
+  }
+
+  #detailsPanel {
+    background-color: $white;
+    padding: 20px;
+  }
+}
+
+
+.entry {
+  background-color: $light;
+  
+  .word {
+    display: inline-block;
+    margin: 3px 0;
+  }
+
+  .pronunciation {
+    margin: 0 20px;
+  }
+
+  .part-of-speech {
+    font-weight: bold;
+    font-style: italic;
+    font-size: 70%;
+  }
+}

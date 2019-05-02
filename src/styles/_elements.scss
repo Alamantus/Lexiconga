@@ -1,15 +1,60 @@
-#top {
-  #title {
-    display: inline-block;
-    margin: 3px 20px 3px 0;
+.button {
+  cursor: pointer;
+  padding: 3px 9px;
+  border: $border;
+  border-radius: 3px;
+  background-color: $light;
+}
+
+.modal {
+  .modal-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: #000000;
+    opacity: 0.5;
   }
 
-  #searchButton {
-    cursor: pointer;
+  .modal-content {
+    position: fixed;
+    top: 10%;
+    left: 20%;
+    bottom: 10%;
+    right: 20%;
+    background-color: $white;
+    border: $border;
+    border-radius: 5px;
+
+    .close-button {
+      font-size: 200%;
+      float: right;
+      margin: 10px 20px;
+      cursor: pointer;
+    }
   }
 }
 
-#wordForm {
-  position: fixed;
-  top: $header-height;
+.tabs {
+  ul {
+    border-bottom: $border;
+  }
+  li {
+    display: inline-block;
+    list-style: none;
+    margin: 0 2px -1px;
+    padding: 10px 20px;
+    border-top: $border;
+    border-left: $border;
+    border-right: $border;
+    border-radius: 5px 5px 0 0;
+    background-color: $mid;
+    cursor: pointer;
+
+    &.active {
+      background-color: $white;
+      border-bottom: 1px solid $white;
+    }
+  }
 }

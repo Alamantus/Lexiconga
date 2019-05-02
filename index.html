@@ -15,9 +15,21 @@
 
   <main>
     <aside id="sideColumn">
-      <form id="wordForm">
+      <form id="wordForm" onsubmit="function(e){e.preventDefault();return false;}">
         <label>Word<br>
-          <input id="word">
+          <input id="wordName">
+        </label>
+        <label>Pronunciation<a class="label-button">IPA Chart</a><br>
+          <input id="wordPronunciation">
+        </label>
+        <label>Part of Speech<br>
+          <select id="wordPartOfSpeech"></select>
+        </label>
+        <label>Definition<br>
+          <input id="wordDefinition">
+        </label>
+        <label>Details<a class="label-button">Maximize</a><br>
+          <textarea id="wordDetails"></textarea>
         </label>
       </form>
     </aside>
@@ -27,9 +39,7 @@
         <h2>Dictionary Name</h2>
         <nav>
           <ul>
-            <li>Description</li>
-            <li>Details</li>
-            <li>Stats</li>
+            <li id="toggleDescription">Description</li><li id="toggleDetails">Details</li><li id="toggleStats" class="active">Stats</li><li id="showEdit" onclick="document.getElementById('editModal').style.display='block'">Edit</li>
           </ul>
         </nav>
         <article id="detailsPanel">
@@ -55,8 +65,28 @@
     </section>
   </main>
 
-  <footer>
+  <footer id="bottom">
     Lexiconga Footer Links
+    <a class="button">Support</a>
+    <a class="button">Blog</a>
+    <a class="button">Issues</a>
+    <a class="button">Updates</a>
+    |
+    <a class="button">Help</a>
+    <a class="button">Terms</a>
+    <a class="button">Privacy</a>
   </footer>
+
+  <section id="editModal" class="modal" style="display:none;">
+    <div class="modal-background" onclick="this.parentElement.style.display='none';"></div>
+    <div class="modal-content">
+      <a class="close-button" onclick="this.parentElement.parentElement.style.display='none';">&times;&#xFE0E;</a>
+      <nav class="tabs">
+        <ul>
+          <li class="active">Description</li><li>Details</li><li>Settings</li><li>Actions</li>
+        </ul>
+      </nav>
+    </div>
+  </section>
 </body>
 </html>
