@@ -1,7 +1,7 @@
 import { cloneObject } from "../helpers";
 
 export function getSearchTerm() {
-  return document.getElementById('searchButton').value;
+  return document.getElementById('searchBox').value;
 }
 
 export function getMatchingSearchWords() {

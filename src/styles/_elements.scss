@@ -4,6 +4,16 @@
   border-radius: 3px;
   background-color: $light;
   line-height: 30px;
+
+  &.small {
+    font-size: 80%;
+    line-height: 25px;
+  }
+
+  &.red {
+    background-color: $red;
+    color: $white;
+  }
 }
 
 span .tag {
@@ -24,8 +34,14 @@ span .tag {
 }
 
 .modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  
   .modal-background {
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     bottom: 0;
@@ -35,7 +51,7 @@ span .tag {
   }
 
   .modal-content {
-    position: fixed;
+    position: absolute;
     top: 10%;
     left: 20%;
     bottom: 10%;
@@ -45,9 +61,10 @@ span .tag {
     border-radius: 5px;
 
     .close-button {
+      position: absolute;
+      top: 0;
+      right: 10px;
       font-size: 200%;
-      float: right;
-      margin: 10px 20px;
       cursor: pointer;
     }
   }
@@ -95,7 +112,20 @@ span .tag {
     width: 46%;
   }
 
-  &.three div {
+  &.three div,
+  div.third {
     width: 30%;
+  }
+
+  div.two-third {
+    width: 66%;
+  }
+
+  div.quarter {
+    width: 22%;
+  }
+
+  div.three-quarter {
+    width: 72%;
   }
 }

@@ -4,14 +4,48 @@
     margin: 3px 20px 3px 0;
   }
 
-  #searchButton {
+  #openSearchModal {
     cursor: pointer;
+  }
+
+  #searchModal {
+    min-height: $header-height;
+    bottom: unset;
+    z-index: 10;
+
+    .modal-content {
+      position: relative;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      margin: 0 auto;
+      width: 90%;
+      padding: 20px;
+    }
+
+    #searchBox {
+      width: 60%;
+    }
+
+    .category {
+      text-align: right;
+      * {
+        margin: 0;
+      }
+    }
+
+    .options {
+      * {
+        margin-right: 5px;
+      }
+    }
   }
 }
 
 #wordForm {
   position: fixed;
-  top: $header-height;
+  top: auto;
   width: 24%;
   padding: 10px;
   background-color: $light;
