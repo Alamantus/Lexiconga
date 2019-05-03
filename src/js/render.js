@@ -1,6 +1,7 @@
 import md from 'snarkdown';
 import { removeTags } from '../helpers';
-import { getWordsStats, wordExists, getMatchingSearchWords, highlightSearchTerm } from './utilities';
+import { getWordsStats, wordExists } from './utilities';
+import { getMatchingSearchWords, highlightSearchTerm } from './search';
 import { showSection } from './displayToggles';
 
 export function renderAll() {
