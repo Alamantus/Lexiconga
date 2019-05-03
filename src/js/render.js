@@ -1,6 +1,6 @@
 import md from 'snarkdown';
 import { removeTags } from '../helpers';
-import { getWordsStats, wordExists } from './utilities';
+import { getWordsStats, wordExists, getMatchingSearchWords } from './utilities';
 import { showSection } from './displayToggles';
 
 export function renderAll() {
@@ -92,7 +92,7 @@ export function renderPartsOfSpeechSelect() {
 }
 
 export function renderWords() {
-  const { words } = window.currentDictionary;
+  const words = getMatchingSearchWords();
   let wordsHTML = '';
   words.forEach(word => {
     let detailsMarkdown = removeTags(word.longDefinition);

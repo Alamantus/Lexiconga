@@ -98,3 +98,14 @@ export function wordExists(word, returnId = false) {
   });
   return foundWord ? (returnId ? foundWord.wordId : true) : false;
 }
+
+export function getMatchingSearchWords() {
+  const searchTerm = document.getElementById('searchButton').value.trim();
+  const matchingWords = window.currentDictionary.words.filter(word => {
+    const isInName = new RegExp(searchTerm, 'g').test(word.name);
+    const isInDefinition = new RegExp(searchTerm, 'g').test(word.simpleDefinition);
+    const isInDetails = new RegExp(searchTerm, 'g').test(word.longDefinition);
+    return isInName || isInDefinition || isInDetails;
+  });
+  return matchingWords;
+}
