@@ -1,9 +1,13 @@
 import {showSection} from './displayToggles';
 import { renderWords } from './render';
+import { validateWord, addWord } from './wordManagement';
+import { removeTags } from '../helpers';
+import { getNextId } from './utilities';
 
 export default function setupListeners() {
   setupDetailsTabs();
   setupSearchBar();
+  setupWordForm();
 }
 
 function setupDetailsTabs() {
@@ -40,5 +44,35 @@ function setupSearchBar() {
   });
   openSearchModal.addEventListener('click', () => {
     document.getElementById('searchModal').style.display = 'block';
+  });
+}
+
+function setupWordForm() {
+  const wordForm = document.getElementById('wordForm'),
+    addWordButton = document.getElementById('addWordButton');
+  wordForm.addEventListener('submit', event => {
+    // Allow semantic form and prevent it from getting submitted
+    event.preventDefault();
+    return false;
+  });
+  addWordButton.addEventListener('click', () => {
+    const name = document.getElementById('wordName').value,
+      pronunciation = document.getElementById('wordPronunciation').value,
+      partOfSpeech = document.getElementById('wordPartOfSpeech').value,
+      definition = document.getElementById('wordDefinition').value,
+      details = document.getElementById('wordDetails').value;
+
+    const word = {
+      name: removeTags(name).trim(),
+      pronunciation: removeTags(pronunciation).trim(),
+      partOfSpeech: removeTags(partOfSpeech).trim(),
+      simpleDefinition: removeTags(definition).trim(),
+      longDefinition: removeTags(details).trim(),
+      wordId: getNextId(),
+    };
+
+    if (validateWord(word)) {
+      addWord(word);
+    }
   });
 }

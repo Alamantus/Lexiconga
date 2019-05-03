@@ -49,8 +49,8 @@
 
   <main>
     <aside id="sideColumn">
-      <form id="wordForm" onsubmit="function(e){e.preventDefault();return false;}">
-        <label>Word<br>
+      <form id="wordForm">
+        <label>Word<span class="red">*</span><br>
           <input id="wordName">
         </label>
         <label>Pronunciation<a class="label-button">IPA Chart</a><br>
@@ -59,12 +59,14 @@
         <label>Part of Speech<br>
           <select id="wordPartOfSpeech" class="part-of-speech-select"></select>
         </label>
-        <label>Definition<br>
+        <label>Definition<span class="red">*</span><br>
           <input id="wordDefinition" placeholder="Equivalent words">
         </label>
-        <label>Details<a class="label-button">Maximize</a><br>
+        <label>Details<span class="red">*</span><a class="label-button">Maximize</a><br>
           <textarea id="wordDetails" placeholder="Markdown formatting allowed"></textarea>
         </label>
+        <div id="wordErrorMessage"></div>
+        <a class="button" id="addWordButton">Add Word</a>
       </form>
     </aside>
     

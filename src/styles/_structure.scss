@@ -51,6 +51,8 @@
   background-color: $light;
   border: $border;
   border-radius: 5px;
+  max-height: 80%;
+  overflow-y: auto;
 
   label {
     display: block;

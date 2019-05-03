@@ -1,5 +1,12 @@
 import { cloneObject } from '../helpers';
 
+export function getNextId() {
+  const lastId = window.currentDictionary.words.reduce((highestId, word) => {
+    return (word.wordId && word.wordId) > highestId ? word.wordId : highestId;
+  }, 0);
+  return lastId + 1;
+}
+
 export function getWordsStats() {
   const {words, partsOfSpeech} = window.currentDictionary;
   const {caseSensitive} = window.currentDictionary.settings;
