@@ -5,6 +5,7 @@ import { showSection } from './displayToggles';
 
 export function renderAll() {
   renderDictionaryDetails();
+  renderPartsOfSpeechSelect();
   renderWords();
 }
 
@@ -79,6 +80,15 @@ export function renderStats() {
   const totalLettersHTML = `<p><strong>${wordStats.totalLetters} Total Letters</strong></p>`;
 
   detailsPanel.innerHTML = numberOfWordsHTML + wordLengthHTML + letterDistributionHTML + totalLettersHTML;
+}
+
+export function renderPartsOfSpeechSelect() {
+  let optionsHTML = '<option value=""></option>';
+  window.currentDictionary.partsOfSpeech.forEach(partOfSpeech => {
+    partOfSpeech = removeTags(partOfSpeech);
+    optionsHTML += `<option value="${partOfSpeech}">${partOfSpeech}</option>`;
+  });
+  Array.from(document.getElementsByClassName('part-of-speech-select')).forEach(select => select.innerHTML = optionsHTML);
 }
 
 export function renderWords() {
