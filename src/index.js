@@ -3,10 +3,11 @@ import './main.scss';
 import { DEFAULT_DICTIONARY } from './constants';
 import setupListeners from './js/setupListeners';
 import { renderAll } from './js/render';
+import { cloneObject } from './helpers';
 
 function initialize() {
   console.log('initializing');
-  window.currentDictionary = JSON.parse(JSON.stringify(DEFAULT_DICTIONARY));
+  window.currentDictionary = cloneObject(DEFAULT_DICTIONARY);
   setupListeners();
   renderAll();
 }

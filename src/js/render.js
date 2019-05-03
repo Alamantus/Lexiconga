@@ -1,6 +1,6 @@
 import md from 'snarkdown';
 import { removeTags } from '../helpers';
-import { getWordsStats, wordExists, getMatchingSearchWords } from './utilities';
+import { getWordsStats, wordExists, getMatchingSearchWords, highlightSearchTerm } from './utilities';
 import { showSection } from './displayToggles';
 
 export function renderAll() {
@@ -94,32 +94,37 @@ export function renderPartsOfSpeechSelect() {
 export function renderWords() {
   const words = getMatchingSearchWords();
   let wordsHTML = '';
-  words.forEach(word => {
-    let detailsMarkdown = removeTags(word.longDefinition);
+  words.forEach(originalWord => {
+    let detailsMarkdown = removeTags(originalWord.longDefinition);
     const references = detailsMarkdown.match(/\{\{.+?\}\}/g);
     if (references && Array.isArray(references)) {
       new Set(references).forEach(reference => {
-        console.log(reference);
         const wordToFind = reference.replace(/\{\{|\}\}/g, '');
         const existingWordId = wordExists(wordToFind, true);
         if (existingWordId !== false) {
           const wordMarkdownLink = `[${wordToFind}](#${existingWordId})`;
-          console.log(wordMarkdownLink);
           detailsMarkdown = detailsMarkdown.replace(new RegExp(reference, 'g'), wordMarkdownLink);
         }
       });
     }
-    console.log(detailsMarkdown);
+    const word = highlightSearchTerm({
+      name: removeTags(originalWord.name),
+      pronunciation: removeTags(originalWord.pronunciation),
+      partOfSpeech: removeTags(originalWord.partOfSpeech),
+      simpleDefinition: removeTags(originalWord.simpleDefinition),
+      longDefinition: detailsMarkdown,
+      wordId: originalWord.wordId,
+    });
     wordsHTML += `<article class="entry" id="${word.wordId}">
       <header>
-        <h4 class="word">${removeTags(word.name)}</h4>
-        <span class="pronunciation">${removeTags(word.pronunciation)}</span>
-        <span class="part-of-speech">${removeTags(word.partOfSpeech)}</span>
+        <h4 class="word">${word.name}</h4>
+        <span class="pronunciation">${word.pronunciation}</span>
+        <span class="part-of-speech">${word.partOfSpeech}</span>
       </header>
       <dl>
-        <dt class="definition">${removeTags(word.simpleDefinition)}</dt>
+        <dt class="definition">${word.simpleDefinition}</dt>
         <dd class="details">
-          ${md(detailsMarkdown)}
+          ${md(word.longDefinition)}
         </dd>
       </dl>
     </article>`;

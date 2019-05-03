@@ -1,3 +1,7 @@
+export function cloneObject(object) {
+  return JSON.parse(JSON.stringify(object));
+}
+
 export function removeTags(html) {
 var tagBody = '(?:[^"\'>]|"[^"]*"|\'[^\']*\')*';
 
