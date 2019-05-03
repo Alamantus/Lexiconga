@@ -1,6 +1,6 @@
 import md from 'snarkdown';
 import { removeTags } from '../helpers';
-import { getWordsStats } from './utilities';
+import { getWordsStats, wordExists } from './utilities';
 import { showSection } from './displayToggles';
 
 export function renderAll() {
@@ -95,6 +95,21 @@ export function renderWords() {
   const { words } = window.currentDictionary;
   let wordsHTML = '';
   words.forEach(word => {
+    let detailsMarkdown = removeTags(word.longDefinition);
+    const references = detailsMarkdown.match(/\{\{.+?\}\}/g);
+    if (references && Array.isArray(references)) {
+      new Set(references).forEach(reference => {
+        console.log(reference);
+        const wordToFind = reference.replace(/\{\{|\}\}/g, '');
+        const existingWordId = wordExists(wordToFind, true);
+        if (existingWordId !== false) {
+          const wordMarkdownLink = `[${wordToFind}](#${existingWordId})`;
+          console.log(wordMarkdownLink);
+          detailsMarkdown = detailsMarkdown.replace(new RegExp(reference, 'g'), wordMarkdownLink);
+        }
+      });
+    }
+    console.log(detailsMarkdown);
     wordsHTML += `<article class="entry" id="${word.wordId}">
       <header>
         <h4 class="word">${removeTags(word.name)}</h4>
@@ -104,7 +119,7 @@ export function renderWords() {
       <dl>
         <dt class="definition">${removeTags(word.simpleDefinition)}</dt>
         <dd class="details">
-          ${md(removeTags(word.longDefinition))}
+          ${md(detailsMarkdown)}
         </dd>
       </dl>
     </article>`;

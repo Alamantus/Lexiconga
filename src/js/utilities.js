@@ -89,3 +89,12 @@ export function getWordsStats() {
 
   return wordStats;
 }
+
+export function wordExists(word, returnId = false) {
+  const { currentDictionary } = window;
+  const { caseSensitive } = currentDictionary.settings;
+  const foundWord = currentDictionary.words.find(existingWord => {
+    return caseSensitive ? existingWord.name === word : existingWord.name.toLowerCase() === word.toLowerCase();
+  });
+  return foundWord ? (returnId ? foundWord.wordId : true) : false;
+}
