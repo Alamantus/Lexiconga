@@ -89,7 +89,11 @@ export function renderPartsOfSpeechSelect() {
     partOfSpeech = removeTags(partOfSpeech);
     optionsHTML += `<option value="${partOfSpeech}">${partOfSpeech}</option>`;
   });
-  Array.from(document.getElementsByClassName('part-of-speech-select')).forEach(select => select.innerHTML = optionsHTML);
+  Array.from(document.getElementsByClassName('part-of-speech-select')).forEach(select => {
+    const selectedValue = select.value;
+    select.innerHTML = optionsHTML;
+    select.value = selectedValue;
+  });
 }
 
 export function renderWords() {

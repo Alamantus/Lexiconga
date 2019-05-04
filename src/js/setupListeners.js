@@ -3,7 +3,7 @@ import { renderWords } from './render';
 import { validateWord, addWord } from './wordManagement';
 import { removeTags } from '../helpers';
 import { getNextId } from './utilities';
-import { openEditModal } from './dictionaryManagement';
+import { openEditModal, save, saveAndClose } from './dictionaryManagement';
 
 export default function setupListeners() {
   setupDetailsTabs();
@@ -49,7 +49,8 @@ function setupEditFormTabs() {
 }
 
 function setupEditFormButtons() {
-
+  document.getElementById('editSave').addEventListener('click', () => save());
+  document.getElementById('editSaveAndClose').addEventListener('click', () => saveAndClose());
 }
 
 function setupSearchBar() {
