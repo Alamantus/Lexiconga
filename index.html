@@ -122,7 +122,7 @@
           <li class="active">Description</li><li>Details</li><li>Settings</li><li>Actions</li>
         </ul>
       </nav>
-      <section id="editDescriptionTab" style="display:none;">
+      <section id="editDescriptionTab">
         <label>Name<br>
           <input id="editName">
         </label>
@@ -134,7 +134,7 @@
         </label>
       </section>
 
-      <section id="editDetailsTab">
+      <section id="editDetailsTab" style="display:none;">
         <label>Parts of Speech <small>(Comma Separated List)</small><br>
           <input id="editPartsOfSpeech">
         </label>
@@ -177,6 +177,9 @@
             </label>
           </div>
         </div>
+        <label>Exceptions<br>
+          <textarea id="editExceptions"></textarea>
+        </label>
         <h3>Orthography</h3>
         <label>Notes<a class="label-button">Maximize</a><br>
           <textarea id="editOrthography"></textarea>
@@ -185,6 +188,55 @@
         <label>Notes<a class="label-button">Maximize</a><br>
           <textarea id="editGrammar"></textarea>
         </label>
+      </section>
+
+      <section id="editSettingsTab" style="display:none;">
+        <label>Allow Duplicate Words
+          <input type="checkbox" id="editAllowDuplicates"><br>
+          <small>Checking this box will allow any number of the exact same spelling of a word to be added</small>
+        </label>
+        <label>Words are Case-Sensitive
+          <input type="checkbox" id="editCaseSensitive"><br>
+          <small>Checking this box will allow any words spelled the same but with different capitalization to be added.</small>
+        </label>
+        <label>Sort by Definition
+          <input type="checkbox" id="editSortByDefinition"><br>
+          <small>Checking this box will sort the words in alphabetical order based on the Definition instead of the Word.</small>
+        </label>
+        <label>Mark Complete
+          <input type="checkbox" id="editIsComplete"><br>
+          <small>Checking this box will mark this as "complete" and prevent any changes from being made.</small>
+        </label>
+        <label>Make Public
+          <input type="checkbox" id="editIsPublic"><br>
+          <small>Checking this box will make this public via a link you can share with others.</small>
+        </label>
+      </section>
+
+      <section id="editActionsTab" style="display:none;">
+        <h3>Import&nbsp;/ Export</h3>
+        <div class="split two">
+          <div>
+            <p>
+              <a class="button">Import JSON</a><br>
+              <small>Import a previously-exported <code>JSON</code> file.</small>
+            </p>
+            <p>
+              <a class="button">Import Words</a><br>
+              <small>Import a CSV file of words. (Download an <a>example file with the correct formatting</a>.)</small>
+            </p>
+          </div>
+          <div>
+            <p>
+              <a class="button">Export JSON</a><br>
+              <small>Export your work as a <code>JSON</code> file to re-import later.</small>
+            </p>
+            <p>
+              <a class="button">Export Words</a><br>
+              <small>Export a CSV file of your words.</small>
+            </p>
+          </div>
+        </div>
       </section>
 
       <footer>

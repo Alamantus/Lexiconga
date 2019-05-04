@@ -30,11 +30,26 @@ function setupDetailsTabs() {
       }
     });
   });
-  setupEditForm();
+  setupEditFormTabs();
+  setupEditFormButtons();
 }
 
-function setupEditForm() {
-  
+function setupEditFormTabs() {
+  const tabs = document.querySelectorAll('#editModal nav li');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => {
+        t.classList.remove('active');
+        document.getElementById('edit' + t.innerText + 'Tab').style.display = 'none';
+      });
+      tab.classList.add('active');
+      document.getElementById('edit' + tab.innerText + 'Tab').style.display = '';
+    });
+  });
+}
+
+function setupEditFormButtons() {
+
 }
 
 function setupSearchBar() {
