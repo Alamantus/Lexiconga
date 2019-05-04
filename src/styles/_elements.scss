@@ -8,6 +8,31 @@ p, span {
   }
 }
 
+label {
+  display: block;
+  font-weight: bold;
+
+  &:not(:last-child) {
+    margin-bottom: 20px;
+  }
+
+  small {
+    font-weight: normal;
+  }
+
+  input:not([type="checkbox"]):not([type="radio"]),
+  select, textarea {
+    font-weight: normal;
+    width: 100%;
+  }
+
+  .label-button {
+    font-size: 80%;
+    float: right;
+    cursor: pointer;
+  }
+}
+
 .tag {
   padding: 3px 9px;
   border: $border;
@@ -76,6 +101,25 @@ span .tag {
       right: 10px;
       font-size: 200%;
       cursor: pointer;
+    }
+
+    nav ul {
+      margin-bottom: 0;
+    }
+
+    section {
+      padding: 20px;
+      margin-bottom: 80px;
+      overflow-y: auto;
+      height: 78%;
+    }
+
+    section~footer {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      background-color: $white;
     }
   }
 }

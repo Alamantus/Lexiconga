@@ -76,7 +76,7 @@ export function getWordsStats() {
   });
 
   wordStats.totalLetters = totalLetters;
-  wordStats.wordLength.average = words.length > 0 ? totalLetters / words.length : 0;
+  wordStats.wordLength.average = words.length > 0 ? Math.round(totalLetters / words.length) : 0;
 
   for (const letter in numberOfLetters) {
     if (numberOfLetters.hasOwnProperty(letter)) {

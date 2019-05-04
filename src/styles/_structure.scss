@@ -22,6 +22,24 @@
       margin: 0 auto;
       width: 90%;
       padding: 20px;
+
+      label {
+        display: inline;
+      }
+
+      section {
+        padding: 0;
+        overflow-y: unset;
+        margin-bottom: 0;
+      }
+
+      section+footer {
+        position: relative;
+        left: unset;
+        bottom: unset;
+        right: unset;
+        background-color: $white;
+      }
     }
 
     #searchBox {
@@ -36,7 +54,7 @@
     }
 
     .options {
-      * {
+      label {
         margin-right: 5px;
       }
     }
@@ -53,26 +71,6 @@
   border-radius: 5px;
   max-height: 80%;
   overflow-y: auto;
-
-  label {
-    display: block;
-    font-weight: bold;
-
-    &:not(:last-child) {
-      margin-bottom: 20px;
-    }
-
-    input, select, textarea {
-      font-weight: normal;
-      width: 100%;
-    }
-
-    .label-button {
-      font-size: 80%;
-      float: right;
-      cursor: pointer;
-    }
-  }
 }
 
 #detailsSection {
@@ -130,5 +128,12 @@
     font-weight: bold;
     font-style: italic;
     font-size: 70%;
+  }
+}
+
+#editModal {
+  #editDescription {
+    width: 100%;
+    height: 350px;
   }
 }

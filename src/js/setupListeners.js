@@ -3,6 +3,7 @@ import { renderWords } from './render';
 import { validateWord, addWord } from './wordManagement';
 import { removeTags } from '../helpers';
 import { getNextId } from './utilities';
+import { openEditModal } from './dictionaryManagement';
 
 export default function setupListeners() {
   setupDetailsTabs();
@@ -15,16 +16,25 @@ function setupDetailsTabs() {
   tabs.forEach(tab => {
     tab.addEventListener('click', () => {
       const section = tab.innerText.toLowerCase();
-      const isActive = tab.classList.contains('active');
-      tabs.forEach(t => t.classList.remove('active'));
-      if (isActive) {
-        document.getElementById('detailsPanel').style.display = 'none';
+      if (section === 'edit') {
+        openEditModal();
       } else {
-        tab.classList.add('active');
-        showSection(section);
+        const isActive = tab.classList.contains('active');
+        tabs.forEach(t => t.classList.remove('active'));
+        if (isActive) {
+          document.getElementById('detailsPanel').style.display = 'none';
+        } else {
+          tab.classList.add('active');
+          showSection(section);
+        }
       }
     });
-  })
+  });
+  setupEditForm();
+}
+
+function setupEditForm() {
+  
 }
 
 function setupSearchBar() {

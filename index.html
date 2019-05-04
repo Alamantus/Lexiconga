@@ -75,7 +75,7 @@
         <h2 id="dictionaryName">Dictionary Name</h2>
         <nav>
           <ul>
-            <li>Description</li><li>Details</li><li>Stats</li><li onclick="document.getElementById('editModal').style.display='block'">Edit</li>
+            <li>Description</li><li>Details</li><li>Stats</li><li id="editDictionaryButton">Edit</li>
           </ul>
         </nav>
         <article id="detailsPanel" style="display:none;">
@@ -122,6 +122,76 @@
           <li class="active">Description</li><li>Details</li><li>Settings</li><li>Actions</li>
         </ul>
       </nav>
+      <section id="editDescriptionTab" style="display:none;">
+        <label>Name<br>
+          <input id="editName">
+        </label>
+        <label>Specification<br>
+          <input id="editSpecification">
+        </label>
+        <label>Description<a class="label-button">Maximize</a><br>
+          <textarea id="editDescription"></textarea>
+        </label>
+      </section>
+
+      <section id="editDetailsTab">
+        <label>Parts of Speech <small>(Comma Separated List)</small><br>
+          <input id="editPartsOfSpeech">
+        </label>
+        <label>Alphabetical Order <small>(Comma Separated List. Include every letter!)</small><br>
+          <input id="editAlphabeticalOrder" disabled value="English Alphabet">
+        </label>
+        <h3>Phonology</h3>
+        <div class="split three">
+          <div>
+            <label>Consonants<br>
+              <input id="editConsonants">
+            </label>
+          </div>
+          <div>
+            <label>Vowels<br>
+              <input id="editVowels">
+            </label>
+          </div>
+          <div>
+            <label>Polyphthongs&nbsp;/ Blends<br>
+              <input id="editBlends">
+            </label>
+          </div>
+        </div>
+        <h3>Phonotactics</h3>
+        <div class="split three">
+          <div>
+            <label>Onset<br>
+              <input id="editOnset">
+            </label>
+          </div>
+          <div>
+            <label>Nucleus<br>
+              <input id="editNucleus">
+            </label>
+          </div>
+          <div>
+            <label>Coda<br>
+              <input id="editCoda">
+            </label>
+          </div>
+        </div>
+        <h3>Orthography</h3>
+        <label>Notes<a class="label-button">Maximize</a><br>
+          <textarea id="editOrthography"></textarea>
+        </label>
+        <h3>Grammar</h3>
+        <label>Notes<a class="label-button">Maximize</a><br>
+          <textarea id="editGrammar"></textarea>
+        </label>
+      </section>
+
+      <footer>
+        <a class="button" id="editSave">Save</a>
+        <a class="button" id="editSaveAndClose">Save &amp; Close</a>
+        <a class="red button" onclick="this.parentElement.parentElement.parentElement.style.display='none';">Close Without Saving</a>
+      </footer>
     </div>
   </section>
 </body>
