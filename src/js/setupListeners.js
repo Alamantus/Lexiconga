@@ -18,6 +18,10 @@ function setupDetailsTabs() {
       const section = tab.innerText.toLowerCase();
       if (section === 'edit') {
         openEditModal();
+        // import('../test.js').then(function (test) {
+        //   // Render page
+        //   test.aaa();
+        // });
       } else {
         const isActive = tab.classList.contains('active');
         tabs.forEach(t => t.classList.remove('active'));
