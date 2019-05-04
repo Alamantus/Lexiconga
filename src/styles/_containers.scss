@@ -1,6 +1,6 @@
 header {
   display: block;
-  padding: 5px 20px;
+  padding: 5px $general-padding;
   border-bottom: 1px solid $mid;
   margin: 0 0 5px;
 
@@ -37,14 +37,14 @@ main {
     border: $border;
 
     dl {
-      padding: 0 20px;
+      padding: 0 $general-padding;
     }
   }
 }
 
 footer {
   display: block;
-  padding: 20px;
+  padding: $general-padding;
   border-top: 1px solid $mid;
   margin: 5px 0 0;
 }
