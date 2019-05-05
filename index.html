@@ -10,13 +10,13 @@
 <body>
   <header id="top">
     <h1 id="title">Lexiconga</h1>
-    <input id="openSearchModal" placeholder="🔍&#xFE0E; Search">
+    <input id="openSearchModal" placeholder="🔍&#xFE0E; Search"> <span id="searchResults"></span>
     <section id="searchModal" class="modal" style="display:none;">
       <div class="modal-background" onclick="this.parentElement.style.display='none';"></div>
       <div class="modal-content">
         <a class="close-button" onclick="this.parentElement.parentElement.style.display='none';">&times;&#xFE0E;</a>
         <section>
-          <label><strong>Search Term</strong>
+          <label>Search Term
             <input id="searchBox" placeholder="Search term">
           </label>
           <a id="searchButton" class="small button">Search</a>
@@ -31,16 +31,22 @@
               <h3>Include in Search</h3>
             </div>
             <div class="three-quarter options">
-              <label><strong>Word Name</strong>
+              <label>Word Name
                 <input type="checkbox" checked id="searchIncludeName">
               </label>
-              <label><strong>Definition</strong>
+              <label>Definition
                 <input type="checkbox" checked id="searchIncludeDefinition">
               </label>
-              <label><strong>Details</strong>
+              <label>Details
                 <input type="checkbox" checked id="searchIncludeDetails">
               </label>
             </div>
+          </div>
+          <div class="split">
+            <div class="quarter category">
+              <h3>Include Only</h3>
+            </div>
+            <div class="three-quarter options" id="searchPartsOfSpeech"></div>
           </div>
         </footer>
       </div>

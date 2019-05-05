@@ -1,4 +1,4 @@
-import { renderDictionaryDetails, renderPartsOfSpeechSelect } from "./render";
+import { renderDictionaryDetails, renderPartsOfSpeech } from "./render";
 import { removeTags } from "../helpers";
 
 export function updateDictionary () {
@@ -61,7 +61,7 @@ export function save() {
   window.currentDictionary.settings.isPublic = document.getElementById('editIsPublic').checked;
 
   renderDictionaryDetails();
-  renderPartsOfSpeechSelect();
+  renderPartsOfSpeech();
 }
 
 export function saveAndClose() {

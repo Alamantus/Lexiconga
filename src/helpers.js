@@ -1,3 +1,5 @@
+import removeDiacritics from "./js/StackOverflow/removeDiacritics";
+
 export function cloneObject(object) {
   return JSON.parse(JSON.stringify(object));
 }
@@ -25,4 +27,8 @@ export function removeTags(html) {
     return html.replace(/</g, '&lt;');
   }
   return html;
+}
+
+export function slugify(string) {
+  return removeDiacritics(string).replace(/[!a-zA-Z0-9-_]/g, '-');
 }

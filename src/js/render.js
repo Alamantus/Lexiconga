@@ -1,12 +1,13 @@
 import md from 'snarkdown';
-import { removeTags } from '../helpers';
+import { removeTags, slugify } from '../helpers';
 import { getWordsStats, wordExists } from './utilities';
-import { getMatchingSearchWords, highlightSearchTerm } from './search';
+import { getMatchingSearchWords, highlightSearchTerm, getSearchFilters, getSearchTerm } from './search';
 import { showSection } from './displayToggles';
+import { setupSearchFilters } from './setupListeners';
 
 export function renderAll() {
   renderDictionaryDetails();
-  renderPartsOfSpeechSelect();
+  renderPartsOfSpeech();
   renderWords();
 }
 
@@ -83,17 +84,23 @@ export function renderStats() {
   detailsPanel.innerHTML = numberOfWordsHTML + wordLengthHTML + letterDistributionHTML + totalLettersHTML;
 }
 
-export function renderPartsOfSpeechSelect() {
-  let optionsHTML = '<option value=""></option>';
+export function renderPartsOfSpeech() {
+  let optionsHTML = '<option value=""></option>',
+    searchHTML = '<label>Unclassified <input type="checkbox" checked id="searchPartOfSpeech__None"></label>';
   window.currentDictionary.partsOfSpeech.forEach(partOfSpeech => {
     partOfSpeech = removeTags(partOfSpeech);
     optionsHTML += `<option value="${partOfSpeech}">${partOfSpeech}</option>`;
+    searchHTML += `<label>${partOfSpeech} <input type="checkbox" checked id="searchPartOfSpeech_${slugify(partOfSpeech)}"></label>`;
   });
+  
   Array.from(document.getElementsByClassName('part-of-speech-select')).forEach(select => {
     const selectedValue = select.value;
     select.innerHTML = optionsHTML;
     select.value = selectedValue;
   });
+  document.getElementById('searchPartsOfSpeech').innerHTML = searchHTML;
+
+  setupSearchFilters();
 }
 
 export function renderWords() {
@@ -136,4 +143,11 @@ export function renderWords() {
   });
 
   document.getElementById('entries').innerHTML = wordsHTML;
+  
+  // Show Search Results
+  const searchTerm = getSearchTerm();
+  const filters = getSearchFilters();
+  let resultsText = searchTerm !== '' || !filters.allPartsOfSpeechChecked ? words.length.toString() + ' Results' : '';
+  resultsText += !filters.allPartsOfSpeechChecked ? ' (Filtered)' : '';
+  document.getElementById('searchResults').innerHTML = resultsText;
 }

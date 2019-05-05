@@ -77,6 +77,14 @@ function setupSearchBar() {
   });
 }
 
+export function setupSearchFilters() {
+  const searchFilters = document.querySelectorAll('#searchOptions input[type="checkbox"]');
+  Array.from(searchFilters).concat([searchBox]).forEach(filter => {
+    filter.removeEventListener('change', renderWords);
+    filter.addEventListener('change', renderWords);
+  });
+}
+
 function setupWordForm() {
   const wordForm = document.getElementById('wordForm'),
     addWordButton = document.getElementById('addWordButton');
