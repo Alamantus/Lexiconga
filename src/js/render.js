@@ -3,7 +3,7 @@ import { removeTags, slugify } from '../helpers';
 import { getWordsStats, wordExists } from './utilities';
 import { getMatchingSearchWords, highlightSearchTerm, getSearchFilters, getSearchTerm } from './search';
 import { showSection } from './displayToggles';
-import { setupSearchFilters } from './setupListeners';
+import { setupSearchFilters, setupWordOptionButtons } from './setupListeners';
 
 export function renderAll() {
   renderDictionaryDetails();
@@ -132,6 +132,11 @@ export function renderWords() {
         <h4 class="word">${word.name}</h4>
         <span class="pronunciation">${word.pronunciation}</span>
         <span class="part-of-speech">${word.partOfSpeech}</span>
+        <span class="small button word-option-button">Options</span>
+        <div class="word-option-list" style="display:none;">
+          <div class="word-option" id="edit_${word.wordId}">Edit</div>
+          <div class="word-option" id="delete_${word.wordId}">Delete</div>
+        </div>
       </header>
       <dl>
         <dt class="definition">${word.simpleDefinition}</dt>
@@ -143,6 +148,7 @@ export function renderWords() {
   });
 
   document.getElementById('entries').innerHTML = wordsHTML;
+  setupWordOptionButtons();
   
   // Show Search Results
   const searchTerm = getSearchTerm();
@@ -150,4 +156,8 @@ export function renderWords() {
   let resultsText = searchTerm !== '' || !filters.allPartsOfSpeechChecked ? words.length.toString() + ' Results' : '';
   resultsText += !filters.allPartsOfSpeechChecked ? ' (Filtered)' : '';
   document.getElementById('searchResults').innerHTML = resultsText;
+}
+
+export function renderEditForm() {
+
 }

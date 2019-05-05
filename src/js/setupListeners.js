@@ -1,5 +1,5 @@
 import {showSection} from './displayToggles';
-import { renderWords } from './render';
+import { renderWords, renderWordOptions, destroyWordOptions, renderEditForm } from './render';
 import { validateWord, addWord } from './wordManagement';
 import { removeTags } from '../helpers';
 import { getNextId } from './utilities';
@@ -111,6 +111,46 @@ function setupWordForm() {
 
     if (validateWord(word)) {
       addWord(word);
+    }
+  });
+}
+
+export function setupWordOptionButtons() {
+  const wordOptionButtons = document.getElementsByClassName('word-option-button');
+  const showWordOptions = function() {
+    this.parentElement.querySelector('.word-option-list').style.display = '';
+  }
+  const hideWordOptions = function(e) {
+    if (!e.target.classList.contains('word-option-button')) {
+      const allWordOptions = document.querySelectorAll('.word-option-list');
+      Array.from(allWordOptions).forEach(wordOptionList => {
+        wordOptionList.style.display = 'none';
+      });
+    }
+  }
+
+  Array.from(wordOptionButtons).forEach(button => {
+    button.removeEventListener('click', showWordOptions);
+    button.addEventListener('click', showWordOptions);
+  });
+
+  document.removeEventListener('click', hideWordOptions);
+  document.addEventListener('click', hideWordOptions);
+
+}
+
+export function setupWordOptionSelections() {
+  const wordOptions = document.getElementsByClassName('word-option');
+  Array.from(wordOptions).forEach(option => {
+    switch (option.innerText) {
+      case 'Edit': {
+        option.removeEventListener('click', renderEditForm);
+        option.addEventListener('click', renderEditForm);
+        break;
+      }
+      case 'Delete': {
+        break;
+      }
     }
   });
 }

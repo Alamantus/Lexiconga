@@ -133,6 +133,36 @@
     font-style: italic;
     font-size: 70%;
   }
+
+  header {
+    position: relative;
+    
+    .word-option-button {
+      position: absolute;
+      top: 3px;
+      right: 3px;
+      line-height: 16px !important;
+      padding: 1px 3px 3px;
+    }
+
+    .word-option-list {
+      position: absolute;
+      top: 3px;
+      right: 3px;
+      background-color: $white;
+      border: $border;
+      border-radius: 5px;
+      
+      .word-option {
+        padding: 10px 25px;;
+
+        &:hover {
+          background-color: $light;
+          cursor: pointer;
+        }
+      }
+    }
+  }
 }
 
 #editModal {
