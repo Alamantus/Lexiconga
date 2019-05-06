@@ -28,8 +28,9 @@ export function openEditModal() {
   document.getElementById('editOrthography').value = orthography.notes;
   document.getElementById('editGrammar').value = grammar.notes;
 
-  document.getElementById('editAllowDuplicates').checked = allowDuplicates;
+  document.getElementById('editPreventDuplicates').checked = !allowDuplicates;
   document.getElementById('editCaseSensitive').checked = caseSensitive;
+  if (allowDuplicates) document.getElementById('editCaseSensitive').disabled = true;
   document.getElementById('editSortByDefinition').checked = sortByDefinition;
   document.getElementById('editIsComplete').checked = isComplete;
   document.getElementById('editIsPublic').checked = isPublic;
@@ -54,7 +55,7 @@ export function save() {
   window.currentDictionary.details.orthography.notes = removeTags(document.getElementById('editOrthography').value.trim());
   window.currentDictionary.details.grammar.notes = removeTags(document.getElementById('editGrammar').value.trim());
 
-  window.currentDictionary.settings.allowDuplicates = document.getElementById('editAllowDuplicates').checked;
+  window.currentDictionary.settings.allowDuplicates = !document.getElementById('editPreventDuplicates').checked;
   window.currentDictionary.settings.caseSensitive = document.getElementById('editCaseSensitive').checked;
   window.currentDictionary.settings.sortByDefinition = document.getElementById('editSortByDefinition').checked;
   window.currentDictionary.settings.isComplete = document.getElementById('editIsComplete').checked;
