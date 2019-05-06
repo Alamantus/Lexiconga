@@ -3,7 +3,8 @@ import { removeTags, slugify } from '../helpers';
 import { getWordsStats, wordExists } from './utilities';
 import { getMatchingSearchWords, highlightSearchTerm, getSearchFilters, getSearchTerm } from './search';
 import { showSection } from './displayToggles';
-import { setupSearchFilters, setupWordOptionButtons } from './setupListeners';
+import { setupSearchFilters, setupWordOptionButtons, setupPagination } from './setupListeners';
+import { DEFAULT_PAGE_SIZE } from '../constants';
 
 export function renderAll() {
   renderDictionaryDetails();
@@ -106,7 +107,13 @@ export function renderPartsOfSpeech() {
 export function renderWords() {
   const words = getMatchingSearchWords();
   let wordsHTML = '';
-  words.forEach(originalWord => {
+
+  const pageSize = window.localStorage.getItem('pageSize') ? parseInt(window.localStorage.getItem('pageSize')) : DEFAULT_PAGE_SIZE;
+  const currentPage = window.hasOwnProperty('currentPage') ? window.currentPage : 0;
+  const start = currentPage * pageSize;
+  const end = typeof words[start + pageSize] !== 'undefined' ? start + pageSize : words.length - 1;
+
+  words.slice(start, end).forEach(originalWord => {
     let detailsMarkdown = removeTags(originalWord.longDefinition);
     const references = detailsMarkdown.match(/\{\{.+?\}\}/g);
     if (references && Array.isArray(references)) {
@@ -156,6 +163,31 @@ export function renderWords() {
   let resultsText = searchTerm !== '' || !filters.allPartsOfSpeechChecked ? words.length.toString() + ' Results' : '';
   resultsText += !filters.allPartsOfSpeechChecked ? ' (Filtered)' : '';
   document.getElementById('searchResults').innerHTML = resultsText;
+
+  renderPagination();
+}
+
+export function renderPagination() {
+  const numWords = window.currentDictionary.words.length;
+  const pageSize = window.localStorage.getItem('pageSize') ? parseInt(window.localStorage.getItem('pageSize')) : DEFAULT_PAGE_SIZE;
+  const pages = Math.floor(numWords / pageSize);
+  const currentPage = window.hasOwnProperty('currentPage') ? window.currentPage : 0;
+
+  if (pages > 0) {
+    let paginationHTML = (currentPage > 0 ? '<span class="button prev-button">&laquo; Previous</span>' : '')
+      + '<select class="page-selector">';
+    for (let i = 0; i < pages; i++) {
+      paginationHTML += `<option value="${i}"${currentPage === i ? ' selected' : ''}>Page ${i + 1}</option>`;
+    }
+    paginationHTML += '</select>'
+      + (currentPage < pages - 1 ? '<span class="button next-button">Next &raquo;</span>' : '');
+    
+    Array.from(document.getElementsByClassName('pagination')).forEach(pagination => {
+      pagination.innerHTML = paginationHTML;
+    });
+
+    setupPagination();
+  }
 }
 
 export function renderEditForm() {

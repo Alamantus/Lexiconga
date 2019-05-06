@@ -28,7 +28,6 @@ export function getSearchFilters() {
 export function getMatchingSearchWords() {
   const searchTerm = getSearchTerm();
   const filters = getSearchFilters();
-  console.log('filters', filters);
   const matchingWords = window.currentDictionary.words.slice().filter(word => {
     if (!filters.allPartsOfSpeechChecked) {
       const partOfSpeech = word.partOfSpeech === '' ? 'Unclassified' : word.partOfSpeech;
@@ -47,11 +46,12 @@ export function getMatchingSearchWords() {
 
 export function highlightSearchTerm(word) {
   const searchTerm = getSearchTerm();
-  const markedUpWord = cloneObject(word);
   if (searchTerm) {
+    const markedUpWord = cloneObject(word);
     markedUpWord.name = markedUpWord.name.replace(new RegExp(searchTerm, 'g'), `<mark>${searchTerm}</mark>`);
     markedUpWord.simpleDefinition = markedUpWord.simpleDefinition.replace(new RegExp(searchTerm, 'g'), `<mark>${searchTerm}</mark>`);
     markedUpWord.longDefinition = markedUpWord.longDefinition.replace(new RegExp(searchTerm, 'g'), `<mark>${searchTerm}</mark>`);
+    return markedUpWord;
   }
-  return markedUpWord;
+  return word;
 }

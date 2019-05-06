@@ -1,5 +1,6 @@
 import { renderWords } from "./render";
 import { wordExists } from "./utilities";
+import removeDiacritics from "./StackOverflow/removeDiacritics";
 
 export function validateWord(word, wordId = false) {
   const errorElementId = wordId === false ? 'wordErrorMessage' : 'wordErrorMessage_' + wordId,
@@ -25,15 +26,17 @@ export function validateWord(word, wordId = false) {
   return errorMessage === '';
 }
 
-export function addWord(word) {
+export function addWord(word, render = true) {
   const { sortByDefinition } = window.currentDictionary.settings;
   const sortBy = sortByDefinition ? 'simpleDefinition' : 'name';
 
   window.currentDictionary.words.push(word);
   window.currentDictionary.words.sort((wordA, wordB) => {
-    if (wordA[sortBy] === wordB[sortBy]) return 0;
-    return wordA[sortBy] > wordB[sortBy] ? 1 : -1;
+    if (removeDiacritics(wordA[sortBy]).toLowerCase() === removeDiacritics(wordB[sortBy]).toLowerCase()) return 0;
+    return removeDiacritics(wordA[sortBy]).toLowerCase() > removeDiacritics(wordB[sortBy]).toLowerCase() ? 1 : -1;
   });
 
-  renderWords();
+  if (render) {
+    renderWords();
+  }
 }

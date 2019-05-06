@@ -4,6 +4,7 @@ import { validateWord, addWord } from './wordManagement';
 import { removeTags } from '../helpers';
 import { getNextId } from './utilities';
 import { openEditModal, save, saveAndClose } from './dictionaryManagement';
+import { goToNextPage, goToPreviousPage, goToPage } from './pagination';
 
 export default function setupListeners() {
   setupDetailsTabs();
@@ -169,5 +170,25 @@ export function setupWordOptionSelections() {
         break;
       }
     }
+  });
+}
+
+export function setupPagination() {
+  const nextButtons = document.getElementsByClassName('next-button'),
+    prevButtons = document.getElementsByClassName('prev-button'),
+    pageSelectors = document.getElementsByClassName('page-selector');
+  
+  Array.from(nextButtons).forEach(nextButton => {
+    nextButton.removeEventListener('click', goToNextPage);
+    nextButton.addEventListener('click', goToNextPage);
+  });
+  Array.from(prevButtons).forEach(prevButton => {
+    prevButton.removeEventListener('click', goToPreviousPage);
+    prevButton.addEventListener('click', goToPreviousPage);
+  });
+  
+  Array.from(pageSelectors).forEach(pageSelector => {
+    pageSelector.removeEventListener('change', goToPage);
+    pageSelector.addEventListener('change', goToPage);
   });
 }

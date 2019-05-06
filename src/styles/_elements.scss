@@ -171,3 +171,26 @@ span .tag {
     width: 72%;
   }
 }
+
+.pagination {
+  position: relative;
+  text-align: center;
+  margin: $general-padding 0;
+
+  .page-selector {
+    padding: 5px 10px;
+  }
+
+  .prev-button,
+  .next-button {
+    position: absolute;
+  }
+
+  .prev-button {
+    left: 2.5%;
+  }
+  
+  .next-button {
+    right: 2.5%;
+  }
+}

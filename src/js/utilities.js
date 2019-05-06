@@ -1,4 +1,5 @@
 import { cloneObject } from '../helpers';
+import { addWord } from './wordManagement';
 
 export function getNextId() {
   const lastId = window.currentDictionary.words.reduce((highestId, word) => {
@@ -104,4 +105,29 @@ export function wordExists(word, returnId = false) {
     return caseSensitive ? existingWord.name === word : existingWord.name.toLowerCase() === word.toLowerCase();
   });
   return foundWord ? (returnId ? foundWord.wordId : true) : false;
+}
+
+export function generateRandomWords(numberOfWords) {
+  console.log('Generating', numberOfWords, 'words...');
+  const letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
+  letters.forEach(letter => letters.push(letter.toUpperCase()));
+  const words = [];
+  while (words.length < numberOfWords) {
+    let word = '';
+    while (word === '' || words.includes(word)) {
+      word += letters[Math.floor(Math.random() * letters.length)];
+    }
+    words.push(word);
+  }
+  words.forEach((word, index) => {
+    addWord({
+      name: word,
+      pronunciation: '/' + word + '/',
+      partOfSpeech: Math.random() > 0.5 ? 'Noun' : 'Verb',
+      simpleDefinition: word,
+      longDefinition: word + (index > 0 ? '\n\nRef: {{' + words[index - 1] + '}}' : ''),
+      wordId: getNextId(),
+    }, false);
+  });
+  console.log('done');
 }
