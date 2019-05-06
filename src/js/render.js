@@ -3,7 +3,7 @@ import { removeTags, slugify } from '../helpers';
 import { getWordsStats, wordExists } from './utilities';
 import { getMatchingSearchWords, highlightSearchTerm, getSearchFilters, getSearchTerm } from './search';
 import { showSection } from './displayToggles';
-import { setupSearchFilters, setupWordOptionButtons, setupPagination } from './setupListeners';
+import { setupSearchFilters, setupWordOptionButtons, setupPagination, setupWordOptionSelections, setupEditFormButtons } from './setupListeners';
 import { DEFAULT_PAGE_SIZE } from '../constants';
 
 export function renderAll() {
@@ -156,6 +156,7 @@ export function renderWords() {
 
   document.getElementById('entries').innerHTML = wordsHTML;
   setupWordOptionButtons();
+  setupWordOptionSelections();
   
   // Show Search Results
   const searchTerm = getSearchTerm();
@@ -193,7 +194,7 @@ export function renderPagination() {
 export function renderEditForm() {
   const wordId = parseInt(this.id.replace('edit_', ''));
   const word = window.currentDictionary.words.find(w => w.wordId === wordId);
-  if (wordToEdit) {
+  if (word) {
     const editForm = `<form id="editForm_${wordId}" class="edit-form">
       <label>Word<span class="red">*</span><br>
         <input id="wordName_${wordId}" value="${word.name}">
@@ -213,8 +214,11 @@ export function renderEditForm() {
         <textarea id="wordDetails_${wordId}" placeholder="Markdown formatting allowed">${word.longDefinition}</textarea>
       </label>
       <div id="wordErrorMessage_${wordId}"></div>
-      <a class="button" id="editWordButton_${wordId}">Save Changes</a>
-      <a class="button cancel-edit">Cancel Edit</a>
+      <a class="button edit-save-changes" id="editWordButton_${wordId}">Save Changes</a>
+      <a class="button edit-cancel">Cancel Edit</a>
     </form>`;
+
+    document.getElementById(wordId.toString()).innerHTML = editForm;
+    setupEditFormButtons();
   }
 }

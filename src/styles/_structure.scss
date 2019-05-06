@@ -77,6 +77,11 @@
   overflow-y: auto;
 }
 
+.edit-form {
+  padding: $general-padding;
+  max-width: 500px;
+}
+
 #detailsSection {
   padding: 20px;
   background-color: $white;

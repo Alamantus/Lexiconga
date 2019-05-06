@@ -173,6 +173,19 @@ export function setupWordOptionSelections() {
   });
 }
 
+export function setupEditFormButtons() {
+  const saveChangesButtons = document.getElementsByClassName('edit-save-changes');
+  const cancelChangesButtons = document.getElementsByClassName('edit-cancel');
+  Array.from(saveChangesButtons).forEach(button => {
+    button.removeEventListener('click', renderEditForm);
+    button.addEventListener('click', renderEditForm);
+  });
+  Array.from(cancelChangesButtons).forEach(button => {
+    button.removeEventListener('click', renderWords);
+    button.addEventListener('click', renderWords);
+  });
+}
+
 export function setupPagination() {
   const nextButtons = document.getElementsByClassName('next-button'),
     prevButtons = document.getElementsByClassName('prev-button'),
