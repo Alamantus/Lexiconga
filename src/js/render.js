@@ -159,5 +159,30 @@ export function renderWords() {
 }
 
 export function renderEditForm() {
-
+  const wordId = parseInt(this.id.replace('edit_', ''));
+  const word = window.currentDictionary.words.find(w => w.wordId === wordId);
+  if (wordToEdit) {
+    const editForm = `<form id="editForm_${wordId}" class="edit-form">
+      <label>Word<span class="red">*</span><br>
+        <input id="wordName_${wordId}" value="${word.name}">
+      </label>
+      <label>Pronunciation<a class="label-button">IPA Chart</a><br>
+        <input id="wordPronunciation_${wordId}" value="${word.pronunciation}">
+      </label>
+      <label>Part of Speech<br>
+        <select id="wordPartOfSpeech_${wordId}" class="part-of-speech-select">
+          <option value="${word.partOfSpeech}" selected>${word.partOfSpeech}</option>
+        </select>
+      </label>
+      <label>Definition<span class="red">*</span><br>
+        <input id="wordDefinition_${wordId}" value="${word.simpleDefinition}" placeholder="Equivalent words">
+      </label>
+      <label>Details<span class="red">*</span><a class="label-button">Maximize</a><br>
+        <textarea id="wordDetails_${wordId}" placeholder="Markdown formatting allowed">${word.longDefinition}</textarea>
+      </label>
+      <div id="wordErrorMessage_${wordId}"></div>
+      <a class="button" id="editWordButton_${wordId}">Save Changes</a>
+      <a class="button cancel-edit">Cancel Edit</a>
+    </form>`;
+  }
 }
