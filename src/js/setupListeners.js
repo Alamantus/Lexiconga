@@ -10,6 +10,7 @@ export default function setupListeners() {
   setupDetailsTabs();
   setupSearchBar();
   setupWordForm();
+  setupMobileWordFormButton();
 }
 
 function setupDetailsTabs() {
@@ -203,6 +204,21 @@ export function setupWordEditFormButtons() {
   });
 
   setupMaximizeButtons();
+}
+
+export function setupMobileWordFormButton() {
+  const mobileButton = document.getElementById('mobileWordFormShow'),
+    wordForm = document.getElementById('wordForm');
+  
+  mobileButton.addEventListener('click', () => {
+    if (mobileButton.innerText === '+') {
+      wordForm.style.display = 'block';
+      mobileButton.innerHTML = '&times;&#xFE0E;';
+    } else {
+      wordForm.style.display = '';
+      mobileButton.innerHTML = '+';
+    }
+  });
 }
 
 export function setupPagination() {

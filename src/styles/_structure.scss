@@ -1,7 +1,7 @@
 #top {
   #title {
     display: inline-block;
-    margin: 3px 20px 3px 0;
+    margin: 3px $general-padding 3px 0;
   }
 
   #openSearchModal {
@@ -25,7 +25,7 @@
       max-height: unset;
       margin: 0 auto;
       width: 90%;
-      padding: 20px;
+      padding: $general-padding $general-padding ($general-padding / 2);
 
       label {
         display: inline;
@@ -43,6 +43,16 @@
         bottom: unset;
         right: unset;
         background-color: $white;
+        padding: ($general-padding / 2) $general-padding ($general-padding * 0.25);
+        font-size: 90%;
+
+        .split {
+          margin-bottom: 10px;
+
+          &:last-child {
+            margin-bottom: 0;
+          }
+        }
       }
     }
 
@@ -51,6 +61,7 @@
     }
 
     .category {
+      margin-right: 8px;
       text-align: right;
       * {
         margin: 0;
@@ -59,22 +70,30 @@
 
     .options {
       label {
+        display: inline-block;
         margin-right: 5px;
+        margin-bottom: 5px;
       }
     }
   }
+}
+
+#mobileWordFormShow {
+  display: none;
 }
 
 #wordForm {
   position: fixed;
   top: auto;
   width: 24%;
+  max-width: 275px;
   padding: 10px;
   background-color: $light;
   border: $border;
   border-radius: 5px;
   max-height: 80%;
   overflow-y: auto;
+  box-shadow: 4px 4px 5px 0px rgba(50, 50, 50, 0.75);
 }
 
 .edit-form {
@@ -83,40 +102,52 @@
 }
 
 #detailsSection {
-  padding: 20px;
+  padding: $general-padding;
   background-color: $white;
   border: $border;
   border-radius: 5px;
 
-  nav li {
-    display: inline-block;
-    list-style: none;
-    margin: 0;
-    padding: 10px 20px;
-    border: $border;
-    background-color: $light;
-    cursor: pointer;
-    
-    &:first-child {
-      border-radius: 5px 0 0 5px;
-    }
-    &:last-child {
-      border-radius: 0 5px 5px 0;
-    }
-    &:not(:first-child) {
-      border-left: none;
-    }
+  #dictionaryName {
+    margin-top: 0;
+  }
 
-    &.active {
-      background-color: #bababa;
+  nav ul {
+    padding-left: 0;
+
+    li {
+      display: inline-block;
+      list-style: none;
+      margin: 0;
+      padding: 10px $general-padding;
+      border: $border;
+      background-color: $light;
+      cursor: pointer;
+      
+      &:first-child {
+        border-radius: 5px 0 0 5px;
+      }
+      &:last-child {
+        border-radius: 0 5px 5px 0;
+      }
+      &:not(:first-child) {
+        border-left: none;
+      }
+
+      &.active {
+        background-color: #bababa;
+      }
     }
   }
 
   #detailsPanel {
     background-color: $white;
-    padding: 20px;
+    padding: $general-padding;
     max-height: 400px;
     overflow-y: auto;
+
+    h3 {
+      margin-top: 0;
+    }
   }
 }
 
@@ -130,7 +161,7 @@
   }
 
   .pronunciation {
-    margin: 0 20px;
+    margin: 0 $general-padding;
   }
 
   .part-of-speech {

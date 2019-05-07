@@ -1,0 +1,85 @@
+@media (max-width: 750px) {
+  
+#top {
+  #openSearchModal {
+    width: 40%;
+  }
+
+  #searchModal {
+    .modal-content {
+      width: 100%;
+      padding: $general-padding ($general-padding / 2) ($general-padding / 4);
+
+      #searchBox {
+        margin-bottom: 5px;
+      }
+
+      section+footer {
+        padding: ($general-padding / 2) 0;
+      }
+    }
+  }
+}
+
+#mobileWordFormShow {
+  position: fixed;
+  top: $header-height;
+  left: 0;
+  width: 32px;
+  height: 32px;
+  display: block;
+  background-color: #00de00;
+  border: $border;
+  border-radius: 0 3px 3px 0;
+  color: $white;
+  font-size: 30px;
+  line-height: 24px;
+  font-weight: bold;
+  text-align: center;
+  cursor: pointer;
+  z-index: 1;
+  user-select: none;
+}
+
+#wordForm {
+  display: none;
+  width: 95%;
+  max-width: unset;
+  top: $header-height + 32px;
+  left: 0;
+  right: 3%;
+  z-index: 1;
+}
+
+#detailsSection {
+  nav ul li {
+    padding: 5px 10px;
+  }
+
+  #detailsPanel {
+    max-height: 300px;
+  }
+}
+
+
+.entry {
+  .pronunciation {
+    margin: 0 ($general-padding / 2);
+  }
+}
+
+#editModal {
+  $nav-font-height: 16px;
+  footer {
+    .button {
+      font-size: $nav-font-height - 2px;
+      line-height: $nav-font-height;
+    }
+  }
+  #editDescription {
+    width: 100%;
+    height: 260px;
+  }
+}
+
+}

@@ -1,0 +1,39 @@
+@media (max-width: 750px) {
+
+html, body {
+  font-size: 90%;
+  line-height: 90%;
+}
+
+header {
+  &#top {
+    margin-bottom: $general-padding;
+  }
+}
+
+main {
+  #sideColumn {
+    display: block;
+    width: 0;
+    height: block;
+    margin: 0;
+    overflow: visible;
+  }
+
+  #mainColumn {
+    width: 100%;
+    margin: 0;
+  }
+
+  article {
+    dl {
+      padding: 0 ($general-padding / 2);
+
+      dd {
+        margin: 0 ($general-padding * 0.75);
+      }
+    }
+  }
+}
+
+}

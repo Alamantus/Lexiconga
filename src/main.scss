@@ -5,6 +5,9 @@
 @import 'styles/containers';
 @import 'styles/structure';
 @import 'styles/elements';
+@import 'styles/mobile/containers';
+@import 'styles/mobile/structure';
+@import 'styles/mobile/elements';
 
 html, body {
   font-family: $font;

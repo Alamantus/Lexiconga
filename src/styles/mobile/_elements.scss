@@ -1,0 +1,90 @@
+@media (max-width: 750px) {
+
+.tag {
+  padding: 2px 6px;
+  font-size: 90%;
+  line-height: 120%;
+
+  &.small {
+    font-size: 70%;
+    line-height: 100%;
+  }
+}
+
+.button {
+  @extend .tag;
+  cursor: pointer;
+  user-select: none;
+}
+
+.tabs {
+  li {
+    padding: 5px;
+  }
+}
+
+.modal {
+  z-index: 10;
+
+  .modal-content .close-button {
+    top: 5px;
+    right: 5px;
+  }
+}
+
+.split {
+  display: block;
+
+  div {
+    display: block;
+    margin-right: unset;
+
+    &:last-child {
+      margin-left: unset;
+    }
+  }
+
+  &.two div,
+  &.three div,
+  div.third {
+    width: 100%;
+    margin: 10px auto;
+  }
+
+  div.quarter,
+  div.three-quarter {
+    display: inline-block;
+  }
+
+  div.quarter {
+    width: 30%;
+  }
+  div.three-quarter {
+    width: 66%;
+  }
+}
+
+.pagination {
+  position: relative;
+  text-align: center;
+  margin: $general-padding 0;
+
+  .page-selector {
+    padding: 5px 10px;
+  }
+
+  .prev-button,
+  .next-button {
+    position: absolute;
+  }
+
+  .prev-button {
+    left: 2.5%;
+  }
+  
+  .next-button {
+    right: 2.5%;
+  }
+}
+
+}

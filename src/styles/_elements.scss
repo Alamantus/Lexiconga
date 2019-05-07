@@ -11,6 +11,8 @@ p, span {
 label {
   display: block;
   font-weight: bold;
+  line-height: 120%;
+  cursor: pointer;
 
   &:not(:last-child) {
     margin-bottom: $general-padding;
@@ -39,6 +41,7 @@ label {
 }
 
 .tag {
+  display: inline-block;
   padding: 3px 9px;
   border: $border;
   border-radius: 3px;
@@ -71,6 +74,7 @@ span .tag {
 .button {
   @extend .tag;
   cursor: pointer;
+  user-select: none;
 }
 
 .modal {
@@ -92,10 +96,6 @@ span .tag {
 
   .modal-content {
     position: absolute;
-    // top: 10%;
-    // left: 20%;
-    // bottom: 10%;
-    // right: 20%;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -113,6 +113,7 @@ span .tag {
       right: 10px;
       font-size: 200%;
       cursor: pointer;
+      user-select: none;
     }
   }
 }
