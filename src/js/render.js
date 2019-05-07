@@ -5,6 +5,7 @@ import { getMatchingSearchWords, highlightSearchTerm, getSearchFilters, getSearc
 import { showSection } from './displayToggles';
 import { setupSearchFilters, setupWordOptionButtons, setupPagination, setupWordOptionSelections, setupWordEditFormButtons } from './setupListeners';
 import { getPaginationData } from './pagination';
+import { getOpenEditForms } from './wordManagement';
 
 export function renderAll() {
   renderDictionaryDetails();
@@ -108,6 +109,15 @@ export function renderWords() {
   const words = getMatchingSearchWords();
   let wordsHTML = '';
 
+  const openEditForms = getOpenEditForms();
+
+  if (openEditForms.length > 0) {
+    // Clone the dom nodes
+    openEditForms.forEach((wordFormId, index) => {
+      openEditForms[index] = document.getElementById(wordFormId.toString()).cloneNode(true);
+    });
+  }
+
   // const { pageStart, pageEnd } = getPaginationData(words);
 
   // words.slice(pageStart, pageEnd).forEach(originalWord => {
@@ -153,6 +163,16 @@ export function renderWords() {
   });
 
   document.getElementById('entries').innerHTML = wordsHTML;
+
+  if (openEditForms.length > 0) {
+    // Clone the dom nodes
+    openEditForms.forEach(editForm => {
+      const entryElement = document.getElementById(editForm.id);
+      entryElement.parentNode.replaceChild(editForm, entryElement);
+    });
+    setupWordEditFormButtons();
+  }
+  
   setupWordOptionButtons();
   setupWordOptionSelections();
   
@@ -186,8 +206,8 @@ export function renderPagination(filteredWords) {
   }
 }
 
-export function renderEditForm() {
-  const wordId = parseInt(this.id.replace('edit_', ''));
+export function renderEditForm(wordId = false) {
+  wordId = typeof wordId.target === 'undefined' ? wordId : parseInt(this.id.replace('edit_', ''));
   const word = window.currentDictionary.words.find(w => w.wordId === wordId);
   if (word) {
     const editForm = `<form id="editForm_${wordId}" class="edit-form">

@@ -60,8 +60,7 @@ export function updateWord(word, wordId) {
 }
 
 export function confirmEditWord() {
-  const button = this;
-  const wordId = parseInt(button.id.replace('editWordButton_', ''));
+  const wordId = parseInt(this.id.replace('editWordButton_', ''));
   const name = document.getElementById('wordName_' + wordId).value,
     pronunciation = document.getElementById('wordPronunciation_' + wordId).value,
     partOfSpeech = document.getElementById('wordPartOfSpeech_' + wordId).value,
@@ -78,8 +77,30 @@ export function confirmEditWord() {
   };
 
   if (validateWord(word, wordId)) {
-    if (confirm(`Are you sure you want save changes to ${word.name}?`)) {
+    if (confirm(`Are you sure you want to save changes to "${word.name}"?`)) {
+      document.getElementById('editForm_' + wordId).classList.add('done');
       updateWord(word, wordId);
     }
   }
+}
+
+export function cancelEditWord() {
+  const wordId = parseInt(this.parentElement.id.replace('editForm_', ''));
+  console.log('wordId', wordId);
+  if (confirm(`Are you sure you want to cancel?\n(Any changes will be lost!)`)) {
+    document.getElementById('editForm_' + wordId).classList.add('done');
+    renderWords();
+  }
+}
+
+export function getOpenEditForms() {
+  const openEditForms = document.getElementsByClassName('edit-form');
+  const formsToReopen = [];
+  Array.from(openEditForms).forEach(form => {
+    if (!form.classList.contains('done')) {
+      formsToReopen.push(parseInt(form.id.replace('editForm_', '')));
+    }
+  });
+
+  return formsToReopen;
 }
