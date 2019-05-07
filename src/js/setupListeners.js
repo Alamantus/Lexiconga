@@ -94,6 +94,7 @@ function setupSearchBar() {
   });
   openSearchModal.addEventListener('click', () => {
     document.getElementById('searchModal').style.display = 'block';
+    searchBox.focus();
   });
 
   searchExactWords.addEventListener('change', () => {
