@@ -173,7 +173,7 @@ export function setupWordOptionSelections() {
   });
 }
 
-export function setupEditFormButtons() {
+export function setupWordEditFormButtons() {
   const saveChangesButtons = document.getElementsByClassName('edit-save-changes');
   const cancelChangesButtons = document.getElementsByClassName('edit-cancel');
   Array.from(saveChangesButtons).forEach(button => {

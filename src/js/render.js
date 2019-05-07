@@ -3,7 +3,7 @@ import { removeTags, slugify } from '../helpers';
 import { getWordsStats, wordExists } from './utilities';
 import { getMatchingSearchWords, highlightSearchTerm, getSearchFilters, getSearchTerm } from './search';
 import { showSection } from './displayToggles';
-import { setupSearchFilters, setupWordOptionButtons, setupPagination, setupWordOptionSelections, setupEditFormButtons } from './setupListeners';
+import { setupSearchFilters, setupWordOptionButtons, setupPagination, setupWordOptionSelections, setupWordEditFormButtons } from './setupListeners';
 import { getPaginationData } from './pagination';
 
 export function renderAll() {
@@ -214,6 +214,6 @@ export function renderEditForm() {
     </form>`;
 
     document.getElementById(wordId.toString()).innerHTML = editForm;
-    setupEditFormButtons();
+    setupWordEditFormButtons();
   }
 }
