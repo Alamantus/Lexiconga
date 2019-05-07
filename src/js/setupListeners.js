@@ -1,6 +1,6 @@
 import {showSection} from './displayToggles';
 import { renderWords, renderWordOptions, destroyWordOptions, renderEditForm } from './render';
-import { validateWord, addWord } from './wordManagement';
+import { validateWord, addWord, confirmEditWord } from './wordManagement';
 import { removeTags } from '../helpers';
 import { getNextId } from './utilities';
 import { openEditModal, save, saveAndClose } from './dictionaryManagement';
@@ -190,8 +190,8 @@ export function setupWordEditFormButtons() {
   const saveChangesButtons = document.getElementsByClassName('edit-save-changes');
   const cancelChangesButtons = document.getElementsByClassName('edit-cancel');
   Array.from(saveChangesButtons).forEach(button => {
-    button.removeEventListener('click', renderEditForm);
-    button.addEventListener('click', renderEditForm);
+    button.removeEventListener('click', confirmEditWord);
+    button.addEventListener('click', confirmEditWord);
   });
   Array.from(cancelChangesButtons).forEach(button => {
     button.removeEventListener('click', renderWords);
