@@ -1,5 +1,5 @@
 import {showSection} from './displayToggles';
-import { renderWords, renderEditForm } from './render';
+import { renderWords, renderEditForm, renderMaximizedTextbox } from './render';
 import { validateWord, addWord, confirmEditWord, cancelEditWord } from './wordManagement';
 import { removeTags } from '../helpers';
 import { getNextId } from './utilities';
@@ -73,6 +73,8 @@ function setupEditFormInteractions() {
 function setupEditFormButtons() {
   document.getElementById('editSave').addEventListener('click', () => save());
   document.getElementById('editSaveAndClose').addEventListener('click', () => saveAndClose());
+
+  setupMaximizeButtons();
 }
 
 function setupSearchBar() {
@@ -144,6 +146,8 @@ function setupWordForm() {
       addWord(word);
     }
   });
+
+  setupMaximizeButtons();
 }
 
 export function setupWordOptionButtons() {
@@ -197,6 +201,8 @@ export function setupWordEditFormButtons() {
     button.removeEventListener('click', cancelEditWord);
     button.addEventListener('click', cancelEditWord);
   });
+
+  setupMaximizeButtons();
 }
 
 export function setupPagination() {
@@ -217,4 +223,30 @@ export function setupPagination() {
     pageSelector.removeEventListener('change', goToPage);
     pageSelector.addEventListener('change', goToPage);
   });
+}
+
+export function setupMaximizeButtons() {
+  const maximizeButtons = document.getElementsByClassName('maximize-button');
+  Array.from(maximizeButtons).forEach(button => {
+    button.removeEventListener('click', renderMaximizedTextbox);
+    button.addEventListener('click', renderMaximizedTextbox);
+  });
+}
+
+export function setupMaximizeModal(modal, textBox) {
+  const closeElements = modal.querySelectorAll('.modal-background, .close-button, .done-button'),
+    maximizedTextBox = modal.querySelector('textarea');
+  Array.from(closeElements).forEach(close => {
+    close.addEventListener('click', () => {
+      modal.parentElement.removeChild(modal);
+    });
+  });
+
+  maximizedTextBox.addEventListener('change', () => {
+    textBox.value = maximizedTextBox.value;
+  })
+
+  setTimeout(() => {
+    modal.querySelector('textarea').focus();
+  }, 1);
 }

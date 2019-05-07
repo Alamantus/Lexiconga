@@ -3,7 +3,7 @@ import { removeTags, slugify } from '../helpers';
 import { getWordsStats, wordExists } from './utilities';
 import { getMatchingSearchWords, highlightSearchTerm, getSearchFilters, getSearchTerm } from './search';
 import { showSection } from './displayToggles';
-import { setupSearchFilters, setupWordOptionButtons, setupPagination, setupWordOptionSelections, setupWordEditFormButtons } from './setupListeners';
+import { setupSearchFilters, setupWordOptionButtons, setupPagination, setupWordOptionSelections, setupWordEditFormButtons, setupMaximizeModal } from './setupListeners';
 import { getPaginationData } from './pagination';
 import { getOpenEditForms } from './wordManagement';
 
@@ -225,7 +225,7 @@ export function renderEditForm(wordId = false) {
       <label>Definition<span class="red">*</span><br>
         <input id="wordDefinition_${wordId}" value="${word.simpleDefinition}" placeholder="Equivalent words">
       </label>
-      <label>Details<span class="red">*</span><a class="label-button">Maximize</a><br>
+      <label>Details<span class="red">*</span><a class="label-button maximize-button">Maximize</a><br>
         <textarea id="wordDetails_${wordId}" placeholder="Markdown formatting allowed">${word.longDefinition}</textarea>
       </label>
       <div id="wordErrorMessage_${wordId}"></div>
@@ -236,4 +236,26 @@ export function renderEditForm(wordId = false) {
     document.getElementById(wordId.toString()).innerHTML = editForm;
     setupWordEditFormButtons();
   }
+}
+
+export function renderMaximizedTextbox(maximizeButton) {
+  maximizeButton = typeof maximizeButton.target === 'undefined' ? maximizeButton : maximizeButton.target;
+  const label = maximizeButton.parentElement.innerText.replace(/(\*|Maximize)/g, '').trim();
+  const textBox = maximizeButton.parentElement.querySelector('textarea');
+  const modalElement = document.createElement('section');
+  modalElement.classList.add('modal');
+  modalElement.innerHTML = `<section class="modal maximize-modal"><div class="modal-background"></div>
+    <div class="modal-content">
+      <a class="close-button">&times;&#xFE0E;</a>
+      <header><h3>${label}</h3></header>
+      <section>
+        <textarea>${textBox.value}</textarea>
+      </section>
+      <footer><a class="button done-button">Done</a></footer>
+    </div>
+  </section>`;
+
+  document.body.appendChild(modalElement);
+  
+  setupMaximizeModal(modalElement, textBox);
 }
