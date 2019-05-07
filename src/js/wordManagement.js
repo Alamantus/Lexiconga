@@ -48,6 +48,14 @@ export function addWord(word, render = true) {
   sortWords(render);
 }
 
+export function deleteWord(wordId) {
+  const wordIndex = window.currentDictionary.words.findIndex(word => word.wordId === wordId);
+  if (wordIndex > -1) {
+    window.currentDictionary.words.splice(wordIndex, 1);
+  }
+  sortWords(true);
+}
+
 export function updateWord(word, wordId) {
   const wordIndex = window.currentDictionary.words.findIndex(word => word.wordId === wordId);
 
@@ -86,10 +94,24 @@ export function confirmEditWord() {
 
 export function cancelEditWord() {
   const wordId = parseInt(this.parentElement.id.replace('editForm_', ''));
-  console.log('wordId', wordId);
   if (confirm(`Are you sure you want to cancel?\n(Any changes will be lost!)`)) {
     document.getElementById('editForm_' + wordId).classList.add('done');
     renderWords();
+  }
+}
+
+export function confirmDeleteWord(wordId) {
+  wordId = typeof wordId.target === 'undefined' ? wordId : parseInt(wordId.target.id.replace('delete_', ''));
+  const word = window.currentDictionary.words.find(w => w.wordId === wordId);
+
+  if (!word) {
+    console.error('Something went wrong! Couldn\'t find word with id of ' + wordId);
+  } else {
+    if (confirm(`Are you sure you want to delete "${word.name}"?`)) {
+      if (confirm(`Just to double-check:\nDo you really want to delete "${word.name}"?\n\nYou won't be able to undo it!`)) {
+        deleteWord(wordId);
+      }
+    }
   }
 }
 

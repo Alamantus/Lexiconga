@@ -1,6 +1,6 @@
 import {showSection} from './displayToggles';
 import { renderWords, renderEditForm, renderMaximizedTextbox } from './render';
-import { validateWord, addWord, confirmEditWord, cancelEditWord } from './wordManagement';
+import { validateWord, addWord, confirmEditWord, cancelEditWord, confirmDeleteWord } from './wordManagement';
 import { removeTags } from '../helpers';
 import { getNextId } from './utilities';
 import { openEditModal, save, saveAndClose } from './dictionaryManagement';
@@ -185,6 +185,8 @@ export function setupWordOptionSelections() {
         break;
       }
       case 'Delete': {
+        option.removeEventListener('click', confirmDeleteWord);
+        option.addEventListener('click', confirmDeleteWord);
         break;
       }
     }
