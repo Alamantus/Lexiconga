@@ -28,20 +28,24 @@ export function getSearchFilters() {
 export function getMatchingSearchWords() {
   const searchTerm = getSearchTerm();
   const filters = getSearchFilters();
-  const matchingWords = window.currentDictionary.words.slice().filter(word => {
-    if (!filters.allPartsOfSpeechChecked) {
-      const partOfSpeech = word.partOfSpeech === '' ? 'Unclassified' : word.partOfSpeech;
-      console.log('partOfSpeech', partOfSpeech);
-      return filters.partsOfSpeech.hasOwnProperty(partOfSpeech) && filters.partsOfSpeech[partOfSpeech];
-    }
-    return true;
-  }).filter(word => {
-    const isInName = filters.name && new RegExp(searchTerm, 'g').test(word.name);
-    const isInDefinition = filters.definition && new RegExp(searchTerm, 'g').test(word.simpleDefinition);
-    const isInDetails = filters.details && new RegExp(searchTerm, 'g').test(word.longDefinition);
-    return searchTerm === '' || isInName || isInDefinition || isInDetails;
-  });
-  return matchingWords;
+  if (searchTerm !== '' || !filters.allPartsOfSpeechChecked) {
+    const matchingWords = window.currentDictionary.words.slice().filter(word => {
+      if (!filters.allPartsOfSpeechChecked) {
+        const partOfSpeech = word.partOfSpeech === '' ? 'Unclassified' : word.partOfSpeech;
+        console.log('partOfSpeech', partOfSpeech);
+        return filters.partsOfSpeech.hasOwnProperty(partOfSpeech) && filters.partsOfSpeech[partOfSpeech];
+      }
+      return true;
+    }).filter(word => {
+      const isInName = filters.name && new RegExp(searchTerm, 'g').test(word.name);
+      const isInDefinition = filters.definition && new RegExp(searchTerm, 'g').test(word.simpleDefinition);
+      const isInDetails = filters.details && new RegExp(searchTerm, 'g').test(word.longDefinition);
+      return searchTerm === '' || isInName || isInDefinition || isInDetails;
+    });
+    return matchingWords;
+  }
+  
+  return window.currentDictionary.words
 }
 
 export function highlightSearchTerm(word) {
