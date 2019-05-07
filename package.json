@@ -11,6 +11,7 @@
     "bundle": "parcel build index.html"
   },
   "devDependencies": {
+    "autoprefixer": "^9.5.1",
     "parcel-bundler": "^1.12.3",
     "sass": "^1.19.0"
   },
