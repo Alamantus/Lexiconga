@@ -4,7 +4,7 @@ import { getWordsStats, wordExists } from './utilities';
 import { getMatchingSearchWords, highlightSearchTerm, getSearchFilters, getSearchTerm } from './search';
 import { showSection } from './displayToggles';
 import { setupSearchFilters, setupWordOptionButtons, setupPagination, setupWordOptionSelections, setupEditFormButtons } from './setupListeners';
-import { DEFAULT_PAGE_SIZE } from '../constants';
+import { getPaginationData } from './pagination';
 
 export function renderAll() {
   renderDictionaryDetails();
@@ -108,12 +108,10 @@ export function renderWords() {
   const words = getMatchingSearchWords();
   let wordsHTML = '';
 
-  const pageSize = window.localStorage.getItem('pageSize') ? parseInt(window.localStorage.getItem('pageSize')) : DEFAULT_PAGE_SIZE;
-  const currentPage = window.hasOwnProperty('currentPage') ? window.currentPage : 0;
-  const start = currentPage * pageSize;
-  const end = typeof words[start + pageSize] !== 'undefined' ? start + pageSize : words.length - 1;
+  // const { pageStart, pageEnd } = getPaginationData(words);
 
-  words.slice(start, end).forEach(originalWord => {
+  // words.slice(pageStart, pageEnd).forEach(originalWord => {
+  words.forEach(originalWord => {
     let detailsMarkdown = removeTags(originalWord.longDefinition);
     const references = detailsMarkdown.match(/\{\{.+?\}\}/g);
     if (references && Array.isArray(references)) {
@@ -165,23 +163,20 @@ export function renderWords() {
   resultsText += !filters.allPartsOfSpeechChecked ? ' (Filtered)' : '';
   document.getElementById('searchResults').innerHTML = resultsText;
 
-  renderPagination();
+  // renderPagination(words);
 }
 
-export function renderPagination() {
-  const numWords = window.currentDictionary.words.length;
-  const pageSize = window.localStorage.getItem('pageSize') ? parseInt(window.localStorage.getItem('pageSize')) : DEFAULT_PAGE_SIZE;
-  const pages = Math.floor(numWords / pageSize);
-  const currentPage = window.hasOwnProperty('currentPage') ? window.currentPage : 0;
+export function renderPagination(filteredWords) {
+  const paginationData = getPaginationData(filteredWords);
 
-  if (pages > 0) {
-    let paginationHTML = (currentPage > 0 ? '<span class="button prev-button">&laquo; Previous</span>' : '')
+  if (paginationData.pages > 0) {
+    let paginationHTML = (paginationData.currentPage > 0 ? '<span class="button prev-button">&laquo; Previous</span>' : '')
       + '<select class="page-selector">';
-    for (let i = 0; i < pages; i++) {
-      paginationHTML += `<option value="${i}"${currentPage === i ? ' selected' : ''}>Page ${i + 1}</option>`;
+    for (let i = 0; i < paginationData.pages; i++) {
+      paginationHTML += `<option value="${i}"${paginationData.currentPage === i ? ' selected' : ''}>Page ${i + 1}</option>`;
     }
     paginationHTML += '</select>'
-      + (currentPage < pages - 1 ? '<span class="button next-button">Next &raquo;</span>' : '');
+      + (paginationData.currentPage < paginationData.pages - 1 ? '<span class="button next-button">Next &raquo;</span>' : '');
     
     Array.from(document.getElementsByClassName('pagination')).forEach(pagination => {
       pagination.innerHTML = paginationHTML;
