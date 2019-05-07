@@ -6,6 +6,8 @@ export function getSearchTerm() {
 
 export function getSearchFilters() {
   const filters = {
+    caseSensitive: document.getElementById('searchCaseSensitive').checked,
+    exact: document.getElementById('searchExactWords').checked,
     name: document.getElementById('searchIncludeName').checked,
     definition: document.getElementById('searchIncludeDefinition').checked,
     details: document.getElementById('searchIncludeDetails').checked,
@@ -26,7 +28,7 @@ export function getSearchFilters() {
 }
 
 export function getMatchingSearchWords() {
-  const searchTerm = getSearchTerm();
+  let searchTerm = getSearchTerm();
   const filters = getSearchFilters();
   if (searchTerm !== '' || !filters.allPartsOfSpeechChecked) {
     const matchingWords = window.currentDictionary.words.slice().filter(word => {
@@ -37,9 +39,20 @@ export function getMatchingSearchWords() {
       }
       return true;
     }).filter(word => {
-      const isInName = filters.name && new RegExp(searchTerm, 'g').test(word.name);
-      const isInDefinition = filters.definition && new RegExp(searchTerm, 'g').test(word.simpleDefinition);
-      const isInDetails = filters.details && new RegExp(searchTerm, 'g').test(word.longDefinition);
+      searchTerm = filters.caseSensitive ? searchTerm : searchTerm.toLowerCase();
+      const name = filters.caseSensitive ? word.name : word.name.toLowerCase();
+      const simpleDefinition = filters.caseSensitive ? word.simpleDefinition : word.simpleDefinition.toLowerCase();
+      const longDefinition = filters.caseSensitive ? word.longDefinition : word.longDefinition.toLowerCase();
+
+      const isInName = filters.name
+        && (filters.exact
+          ? searchTerm == name
+          : new RegExp(searchTerm, 'g').test(name));
+      const isInDefinition = filters.definition
+        && (filters.exact
+          ? searchTerm == simpleDefinition
+          : new RegExp(searchTerm, 'g').test(simpleDefinition));
+      const isInDetails = filters.details && new RegExp(searchTerm, 'g').test(longDefinition);
       return searchTerm === '' || isInName || isInDefinition || isInDetails;
     });
     return matchingWords;
@@ -51,10 +64,12 @@ export function getMatchingSearchWords() {
 export function highlightSearchTerm(word) {
   const searchTerm = getSearchTerm();
   if (searchTerm) {
+    const filters = getSearchFilters();
+    const regexMethod = 'g' + (filters.caseSensitive ? '' : 'i');
     const markedUpWord = cloneObject(word);
-    markedUpWord.name = markedUpWord.name.replace(new RegExp(searchTerm, 'g'), `<mark>${searchTerm}</mark>`);
-    markedUpWord.simpleDefinition = markedUpWord.simpleDefinition.replace(new RegExp(searchTerm, 'g'), `<mark>${searchTerm}</mark>`);
-    markedUpWord.longDefinition = markedUpWord.longDefinition.replace(new RegExp(searchTerm, 'g'), `<mark>${searchTerm}</mark>`);
+    markedUpWord.name = markedUpWord.name.replace(new RegExp(`(${searchTerm})`, regexMethod), `<mark>$1</mark>`);
+    markedUpWord.simpleDefinition = markedUpWord.simpleDefinition.replace(new RegExp(`(${searchTerm})`, regexMethod), `<mark>$1</mark>`);
+    markedUpWord.longDefinition = markedUpWord.longDefinition.replace(new RegExp(`(${searchTerm})`, regexMethod), `<mark>$1</mark>`);
     return markedUpWord;
   }
   return word;

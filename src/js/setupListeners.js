@@ -78,7 +78,9 @@ function setupEditFormButtons() {
 function setupSearchBar() {
   const searchBox = document.getElementById('searchBox'),
     clearSearchButton = document.getElementById('clearSearchButton'),
-    openSearchModal = document.getElementById('openSearchModal');
+    openSearchModal = document.getElementById('openSearchModal'),
+    searchExactWords = document.getElementById('searchExactWords'),
+    searchIncludeDetails = document.getElementById('searchIncludeDetails');
   searchBox.addEventListener('change', () => {
     renderWords();
   });
@@ -92,6 +94,16 @@ function setupSearchBar() {
   });
   openSearchModal.addEventListener('click', () => {
     document.getElementById('searchModal').style.display = 'block';
+  });
+
+  searchExactWords.addEventListener('change', () => {
+    if (searchExactWords.checked) {
+      searchIncludeDetails.checked = false;
+      searchIncludeDetails.disabled = true;
+    } else {
+      searchIncludeDetails.disabled = false;
+      searchIncludeDetails.checked = true;
+    }
   });
 }
 
