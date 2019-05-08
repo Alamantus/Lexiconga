@@ -106,8 +106,19 @@ export function renderPartsOfSpeech() {
 }
 
 export function renderWords() {
-  const words = getMatchingSearchWords();
   let wordsHTML = '';
+  if (window.currentDictionary.words.length === 0) {
+    wordsHTML = `<article class="entry">
+      <header>
+        <h4 class="word">No Words Created</h4>
+      </header>
+      <dl>
+        <dt class="definition">Use the Word Form to create words or click the Help button below!</dt>
+      </dl>
+    </article>`;
+  }
+
+  const words = getMatchingSearchWords();
 
   const openEditForms = getOpenEditForms();
 
