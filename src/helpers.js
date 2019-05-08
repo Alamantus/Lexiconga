@@ -4,6 +4,28 @@ export function cloneObject(object) {
   return JSON.parse(JSON.stringify(object));
 }
 
+export function getIndicesOf(searchStr, findIn, caseSensitive) {
+  // https://stackoverflow.com/a/3410557
+  const searchStrLen = searchStr.length;
+  if (searchStrLen == 0) {
+    return [];
+  }
+  let startIndex = 0, index, indices = [];
+  if (!caseSensitive) {
+    findIn = findIn.toLowerCase();
+    searchStr = searchStr.toLowerCase();
+  }
+  while ((index = findIn.indexOf(searchStr, startIndex)) > -1) {
+    indices.push(index);
+    startIndex = index + searchStrLen;
+  }
+  return indices;
+}
+
+export function getTimestampInSeconds() {
+  return Math.round(Date.now() / 1000);
+}
+
 export function removeTags(html) {
   if (html) {
     var tagBody = '(?:[^"\'>]|"[^"]*"|\'[^\']*\')*';
@@ -31,22 +53,4 @@ export function removeTags(html) {
 
 export function slugify(string) {
   return removeDiacritics(string).replace(/[!a-zA-Z0-9-_]/g, '-');
-}
-
-export function getIndicesOf(searchStr, findIn, caseSensitive) {
-  // https://stackoverflow.com/a/3410557
-  const searchStrLen = searchStr.length;
-  if (searchStrLen == 0) {
-    return [];
-  }
-  let startIndex = 0, index, indices = [];
-  if (!caseSensitive) {
-    findIn = findIn.toLowerCase();
-    searchStr = searchStr.toLowerCase();
-  }
-  while ((index = findIn.indexOf(searchStr, startIndex)) > -1) {
-    indices.push(index);
-    startIndex = index + searchStrLen;
-  }
-  return indices;
 }

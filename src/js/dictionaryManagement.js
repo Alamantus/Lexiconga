@@ -1,5 +1,5 @@
 import { renderDictionaryDetails, renderPartsOfSpeech } from "./render";
-import { removeTags, cloneObject } from "../helpers";
+import { removeTags, cloneObject, getTimestampInSeconds } from "../helpers";
 import { LOCAL_STORAGE_KEY, DEFAULT_DICTIONARY } from "../constants";
 
 export function updateDictionary () {
@@ -73,6 +73,7 @@ export function saveAndCloseEditModal() {
 }
 
 export function saveDictionary() {
+  window.currentDictionary.lastUpdated = getTimestampInSeconds();
   window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(window.currentDictionary));
 }
 
