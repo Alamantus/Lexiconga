@@ -1,6 +1,6 @@
 import { renderDictionaryDetails, renderPartsOfSpeech } from "./render";
 import { removeTags, cloneObject, getTimestampInSeconds } from "../helpers";
-import { LOCAL_STORAGE_KEY, DEFAULT_DICTIONARY } from "../constants";
+import { LOCAL_STORAGE_KEY, DEFAULT_DICTIONARY, MIGRATE_VERSION } from "../constants";
 
 export function updateDictionary () {
 
@@ -81,6 +81,7 @@ export function loadDictionary() {
   const storedDictionary = window.localStorage.getItem(LOCAL_STORAGE_KEY);
   if (storedDictionary) {
     window.currentDictionary = JSON.parse(storedDictionary);
+    migrateDictionary();
   } else {
     clearDictionary();
   }
@@ -88,4 +89,31 @@ export function loadDictionary() {
 
 export function clearDictionary() {
   window.currentDictionary = cloneObject(DEFAULT_DICTIONARY);
+}
+
+export function migrateDictionary() {
+  let migrated = false;
+  if (!window.currentDictionary.hasOwnProperty('version')) {
+    const fixStupidOldNonsense = string => string.replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/&#92;/g, '\\').replace(/<br>/g, '\n');
+    window.currentDictionary.description = fixStupidOldNonsense(window.currentDictionary.description);
+    window.currentDictionary.words = window.currentDictionary.words.map(word => {
+      word.longDefinition = fixStupidOldNonsense(word.longDefinition);
+      return word;
+    });
+    window.currentDictionary = Object.assign({}, DEFAULT_DICTIONARY, window.currentDictionary);
+    window.currentDictionary.partsOfSpeech = window.currentDictionary.settings.partsOfSpeech.split(',').map(val => val.trim()).filter(val => val !== '');
+    delete window.currentDictionary.settings.partsOfSpeech;
+    window.currentDictionary.settings.sortByDefinition = window.currentDictionary.settings.sortByEquivalent;
+    delete window.currentDictionary.settings.sortByEquivalent;
+    
+    migrated = true;
+  } else if (window.currentDictionary.version !== MIGRATE_VERSION) {
+    switch (window.currentDictionary.version) {
+      default: console.error('Unknown version'); break;
+    }
+  }
+
+  if (migrated) {
+    saveDictionary();
+  }
 }
