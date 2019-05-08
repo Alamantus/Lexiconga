@@ -149,7 +149,8 @@
     max-height: 400px;
     overflow-y: auto;
 
-    h3 {
+    &:not(.content) h3,
+    *:not(.content) h3 {
       margin-top: 0;
     }
   }

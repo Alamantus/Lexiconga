@@ -32,7 +32,7 @@ export function renderName() {
 export function renderDescription() {
   const descriptionHTML = md(removeTags(window.currentDictionary.description));
 
-  detailsPanel.innerHTML = descriptionHTML;
+  document.getElementById('detailsPanel').innerHTML = '<div class="content">' + descriptionHTML + '</div>';
 }
 
 export function renderDetails() {
