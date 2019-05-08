@@ -1,4 +1,5 @@
-import { cloneObject } from "../helpers";
+import { cloneObject, getIndicesOf } from "../helpers";
+import removeDiacritics from "./StackOverflow/removeDiacritics";
 
 export function getSearchTerm() {
   return document.getElementById('searchBox').value;
@@ -7,6 +8,7 @@ export function getSearchTerm() {
 export function getSearchFilters() {
   const filters = {
     caseSensitive: document.getElementById('searchCaseSensitive').checked,
+    ignoreDiacritics: document.getElementById('searchIgnoreDiacritics').checked,
     exact: document.getElementById('searchExactWords').checked,
     name: document.getElementById('searchIncludeName').checked,
     definition: document.getElementById('searchIncludeDefinition').checked,
@@ -39,17 +41,19 @@ export function getMatchingSearchWords() {
       }
       return true;
     }).filter(word => {
+      searchTerm = filters.ignoreDiacritics ? removeDiacritics(searchTerm) : searchTerm;
       searchTerm = filters.caseSensitive ? searchTerm : searchTerm.toLowerCase();
-      const name = filters.caseSensitive ? word.name : word.name.toLowerCase();
-      const simpleDefinition = filters.caseSensitive ? word.simpleDefinition : word.simpleDefinition.toLowerCase();
-      const longDefinition = filters.caseSensitive ? word.longDefinition : word.longDefinition.toLowerCase();
+      let name = filters.ignoreDiacritics ? removeDiacritics(word.name) : word.name;
+      name = filters.caseSensitive ? name : name.toLowerCase();
+      let simpleDefinition = filters.ignoreDiacritics ? removeDiacritics(word.simpleDefinition) : word.simpleDefinition;
+      simpleDefinition = filters.caseSensitive ? simpleDefinition : simpleDefinition.toLowerCase();
+      let longDefinition = filters.ignoreDiacritics ? removeDiacritics(word.longDefinition) : word.longDefinition;
+      longDefinition = filters.caseSensitive ? longDefinition : longDefinition.toLowerCase();
 
-      const isInName = filters.name
-        && (filters.exact
+      const isInName = filters.name && (filters.exact
           ? searchTerm == name
           : new RegExp(searchTerm, 'g').test(name));
-      const isInDefinition = filters.definition
-        && (filters.exact
+      const isInDefinition = filters.definition && (filters.exact
           ? searchTerm == simpleDefinition
           : new RegExp(searchTerm, 'g').test(simpleDefinition));
       const isInDetails = filters.details && new RegExp(searchTerm, 'g').test(longDefinition);
@@ -62,14 +66,52 @@ export function getMatchingSearchWords() {
 }
 
 export function highlightSearchTerm(word) {
-  const searchTerm = getSearchTerm();
+  let searchTerm = getSearchTerm();
   if (searchTerm) {
     const filters = getSearchFilters();
-    const regexMethod = 'g' + (filters.caseSensitive ? '' : 'i');
     const markedUpWord = cloneObject(word);
-    markedUpWord.name = markedUpWord.name.replace(new RegExp(`(${searchTerm})`, regexMethod), `<mark>$1</mark>`);
-    markedUpWord.simpleDefinition = markedUpWord.simpleDefinition.replace(new RegExp(`(${searchTerm})`, regexMethod), `<mark>$1</mark>`);
-    markedUpWord.longDefinition = markedUpWord.longDefinition.replace(new RegExp(`(${searchTerm})`, regexMethod), `<mark>$1</mark>`);
+    if (filters.ignoreDiacritics) {
+      const searchTermLength = searchTerm.length;
+      searchTerm = removeDiacritics(searchTerm);
+      if (filters.name) {
+        const nameMatches = getIndicesOf(searchTerm, removeDiacritics(markedUpWord.name), filters.caseSensitive);
+        nameMatches.forEach((wordIndex, i) => {
+            wordIndex += '<mark></mark>'.length * i;
+          markedUpWord.name = markedUpWord.name.substring(0, wordIndex)
+            + '<mark>' + markedUpWord.name.substr(wordIndex, searchTermLength) + '</mark>'
+            + markedUpWord.name.substr(wordIndex + searchTermLength);
+        });
+      }
+      if (filters.definition) {
+        const simpleDefinitionMatches = getIndicesOf(searchTerm, removeDiacritics(markedUpWord.simpleDefinition), filters.caseSensitive);
+        simpleDefinitionMatches.forEach((wordIndex, i) => {
+          wordIndex += '<mark></mark>'.length * i;
+          markedUpWord.simpleDefinition = markedUpWord.simpleDefinition.substring(0, wordIndex)
+            + '<mark>' + markedUpWord.simpleDefinition.substr(wordIndex, searchTermLength) + '</mark>'
+            + markedUpWord.simpleDefinition.substr(wordIndex + searchTermLength);
+        });
+      }
+      if (filters.details) {
+        const longDefinitionMatches = getIndicesOf(searchTerm, removeDiacritics(markedUpWord.longDefinition), filters.caseSensitive);
+        longDefinitionMatches.forEach((wordIndex, i) => {
+          wordIndex += '<mark></mark>'.length * i;
+          markedUpWord.longDefinition = markedUpWord.longDefinition.substring(0, wordIndex)
+            + '<mark>' + markedUpWord.longDefinition.substr(wordIndex, searchTermLength) + '</mark>'
+            + markedUpWord.longDefinition.substr(wordIndex + searchTermLength);
+        });
+      }
+    } else {
+      const regexMethod = 'g' + (filters.caseSensitive ? '' : 'i');
+      if (filters.name) {
+        markedUpWord.name = markedUpWord.name.replace(new RegExp(`(${searchTerm})`, regexMethod), `<mark>$1</mark>`);
+      }
+      if (filters.definition) {
+        markedUpWord.simpleDefinition = markedUpWord.simpleDefinition.replace(new RegExp(`(${searchTerm})`, regexMethod), `<mark>$1</mark>`);
+      }
+      if (filters.details) {
+        markedUpWord.longDefinition = markedUpWord.longDefinition.replace(new RegExp(`(${searchTerm})`, regexMethod), `<mark>$1</mark>`);
+      }
+    }
     return markedUpWord;
   }
   return word;
