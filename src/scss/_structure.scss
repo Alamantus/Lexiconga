@@ -249,3 +249,23 @@
     padding: $general-padding;
   }
 }
+
+.info-modal {
+  padding: ($general-padding * 1.5) 0 $general-padding $general-padding;
+  height: 100%;
+
+  .content {
+    height: 100%;
+    overflow-y: auto;
+    padding-right: $general-padding;
+  }
+}
+
+#bottom {
+  text-align: center;
+
+  a {
+    color: #000000;
+    text-decoration: none;
+  }
+}

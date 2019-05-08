@@ -3,7 +3,7 @@ import { removeTags, slugify } from '../helpers';
 import { getWordsStats, wordExists } from './utilities';
 import { getMatchingSearchWords, highlightSearchTerm, getSearchFilters, getSearchTerm } from './search';
 import { showSection } from './displayToggles';
-import { setupSearchFilters, setupWordOptionButtons, setupPagination, setupWordOptionSelections, setupWordEditFormButtons, setupMaximizeModal } from './setupListeners';
+import { setupSearchFilters, setupWordOptionButtons, setupPagination, setupWordOptionSelections, setupWordEditFormButtons, setupMaximizeModal, setupInfoModal } from './setupListeners';
 import { getPaginationData } from './pagination';
 import { getOpenEditForms } from './wordManagement';
 
@@ -258,4 +258,23 @@ export function renderMaximizedTextbox(maximizeButton) {
   document.body.appendChild(modalElement);
   
   setupMaximizeModal(modalElement, textBox);
+}
+
+export function renderInfoModal(content) {
+  const modalElement = document.createElement('section');
+  modalElement.classList.add('modal');
+  modalElement.innerHTML = `<section class="modal maximize-modal"><div class="modal-background"></div>
+    <div class="modal-content">
+      <a class="close-button">&times;&#xFE0E;</a>
+      <section class="info-modal">
+        <div class="content">
+          ${content}
+        </div>
+      </section>
+    </div>
+  </section>`;
+
+  document.body.appendChild(modalElement);
+
+  setupInfoModal(modalElement);
 }

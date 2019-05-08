@@ -1,5 +1,5 @@
 import {showSection} from './displayToggles';
-import { renderWords, renderEditForm, renderMaximizedTextbox } from './render';
+import { renderWords, renderEditForm, renderMaximizedTextbox, renderInfoModal } from './render';
 import { validateWord, addWord, confirmEditWord, cancelEditWord, confirmDeleteWord } from './wordManagement';
 import { removeTags } from '../helpers';
 import { getNextId } from './utilities';
@@ -11,6 +11,7 @@ export default function setupListeners() {
   setupSearchBar();
   setupWordForm();
   setupMobileWordFormButton();
+  setupInfoButtons();
 }
 
 function setupDetailsTabs() {
@@ -267,4 +268,31 @@ export function setupMaximizeModal(modal, textBox) {
   setTimeout(() => {
     modal.querySelector('textarea').focus();
   }, 1);
+}
+
+export function setupInfoButtons() {
+  document.getElementById('helpInfoButton').addEventListener('click', () => {
+    import('../markdown/help.md').then(html => {
+      renderInfoModal(html);
+    });
+  });
+  document.getElementById('termsInfoButton').addEventListener('click', () => {
+    import('../markdown/terms.md').then(html => {
+      renderInfoModal(html);
+    });
+  });
+  document.getElementById('privacyInfoButton').addEventListener('click', () => {
+    import('../markdown/privacy.md').then(html => {
+      renderInfoModal(html);
+    });
+  });
+}
+
+export function setupInfoModal(modal) {
+  const closeElements = modal.querySelectorAll('.modal-background, .close-button');
+  Array.from(closeElements).forEach(close => {
+    close.addEventListener('click', () => {
+      modal.parentElement.removeChild(modal);
+    });
+  });
 }
