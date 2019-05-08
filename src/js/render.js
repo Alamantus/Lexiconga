@@ -1,4 +1,4 @@
-import md from 'snarkdown';
+import md from 'marked';
 import { removeTags, slugify } from '../helpers';
 import { getWordsStats, wordExists } from './utilities';
 import { getMatchingSearchWords, highlightSearchTerm, getSearchFilters, getSearchTerm } from './search';

@@ -15,13 +15,12 @@
   },
   "devDependencies": {
     "autoprefixer": "^9.5.1",
-    "marked": "^0.6.2",
     "parcel-bundler": "^1.12.3",
     "rimraf": "^2.6.3",
     "sass": "^1.19.0"
   },
   "dependencies": {
-    "normalize.css": "^8.0.1",
-    "snarkdown": "^1.2.2"
+    "marked": "^0.6.2",
+    "normalize.css": "^8.0.1"
   }
 }
