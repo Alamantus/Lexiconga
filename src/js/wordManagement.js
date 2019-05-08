@@ -2,6 +2,7 @@ import { renderWords } from "./render";
 import { wordExists } from "./utilities";
 import removeDiacritics from "./StackOverflow/removeDiacritics";
 import { removeTags } from "../helpers";
+import { saveDictionary } from "./dictionaryManagement";
 
 export function validateWord(word, wordId = false) {
   const errorElementId = wordId === false ? 'wordErrorMessage' : 'wordErrorMessage_' + wordId,
@@ -37,6 +38,8 @@ export function sortWords(render) {
     if (removeDiacritics(wordA[sortBy]).toLowerCase() === removeDiacritics(wordB[sortBy]).toLowerCase()) return 0;
     return removeDiacritics(wordA[sortBy]).toLowerCase() > removeDiacritics(wordB[sortBy]).toLowerCase() ? 1 : -1;
   });
+  
+  saveDictionary();
 
   if (render) {
     renderWords();
@@ -50,10 +53,12 @@ export function addWord(word, render = true) {
 
 export function deleteWord(wordId) {
   const wordIndex = window.currentDictionary.words.findIndex(word => word.wordId === wordId);
-  if (wordIndex > -1) {
+  if (wordIndex < 0) {
+    console.error('Could not find word to delete');
+  } else {
     window.currentDictionary.words.splice(wordIndex, 1);
+    sortWords(true);
   }
-  sortWords(true);
 }
 
 export function updateWord(word, wordId) {

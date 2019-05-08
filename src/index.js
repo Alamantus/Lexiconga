@@ -1,14 +1,13 @@
 import './main.scss';
 
-import { DEFAULT_DICTIONARY } from './constants';
 import setupListeners from './js/setupListeners';
 import { renderAll } from './js/render';
-import { cloneObject } from './helpers';
 import { generateRandomWords } from './js/utilities';
+import { loadDictionary } from './js/dictionaryManagement';
 
 function initialize() {
   console.log('initializing');
-  window.currentDictionary = cloneObject(DEFAULT_DICTIONARY);
+  loadDictionary();
   // generateRandomWords(100);
   setupListeners();
   renderAll();

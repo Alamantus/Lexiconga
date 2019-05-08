@@ -3,7 +3,7 @@ import { renderWords, renderEditForm, renderMaximizedTextbox, renderInfoModal } 
 import { validateWord, addWord, confirmEditWord, cancelEditWord, confirmDeleteWord } from './wordManagement';
 import { removeTags } from '../helpers';
 import { getNextId } from './utilities';
-import { openEditModal, save, saveAndClose } from './dictionaryManagement';
+import { openEditModal, saveEditModal, saveAndCloseEditModal } from './dictionaryManagement';
 import { goToNextPage, goToPreviousPage, goToPage } from './pagination';
 
 export default function setupListeners() {
@@ -74,8 +74,8 @@ function setupEditFormInteractions() {
 }
 
 function setupEditFormButtons() {
-  document.getElementById('editSave').addEventListener('click', () => save());
-  document.getElementById('editSaveAndClose').addEventListener('click', () => saveAndClose());
+  document.getElementById('editSave').addEventListener('click', () => saveEditModal());
+  document.getElementById('editSaveAndClose').addEventListener('click', () => saveAndCloseEditModal());
 
   setupMaximizeButtons();
 }

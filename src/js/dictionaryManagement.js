@@ -1,5 +1,6 @@
 import { renderDictionaryDetails, renderPartsOfSpeech } from "./render";
-import { removeTags } from "../helpers";
+import { removeTags, cloneObject } from "../helpers";
+import { LOCAL_STORAGE_KEY, DEFAULT_DICTIONARY } from "../constants";
 
 export function updateDictionary () {
 
@@ -38,18 +39,18 @@ export function openEditModal() {
   document.getElementById('editModal').style.display = '';
 }
 
-export function save() {
+export function saveEditModal() {
   window.currentDictionary.name = removeTags(document.getElementById('editName').value.trim());
   window.currentDictionary.specification = removeTags(document.getElementById('editSpecification').value.trim());
   window.currentDictionary.description = removeTags(document.getElementById('editDescription').value.trim());
-  window.currentDictionary.partsOfSpeech = document.getElementById('editPartsOfSpeech').value.split(',').map(val => val.trim());
+  window.currentDictionary.partsOfSpeech = document.getElementById('editPartsOfSpeech').value.split(',').map(val => val.trim()).filter(val => val !== '');
 
-  window.currentDictionary.details.phonology.consonants = document.getElementById('editConsonants').value.split(',').map(val => val.trim());
-  window.currentDictionary.details.phonology.vowels = document.getElementById('editVowels').value.split(',').map(val => val.trim());
-  window.currentDictionary.details.phonology.blends = document.getElementById('editBlends').value.split(',').map(val => val.trim());
-  window.currentDictionary.details.phonology.phonotactics.onset = document.getElementById('editOnset').value.split(',').map(val => val.trim());
-  window.currentDictionary.details.phonology.phonotactics.nucleus = document.getElementById('editNucleus').value.split(',').map(val => val.trim());
-  window.currentDictionary.details.phonology.phonotactics.coda = document.getElementById('editCoda').value.split(',').map(val => val.trim());
+  window.currentDictionary.details.phonology.consonants = document.getElementById('editConsonants').value.split(',').map(val => val.trim()).filter(val => val !== '');
+  window.currentDictionary.details.phonology.vowels = document.getElementById('editVowels').value.split(',').map(val => val.trim()).filter(val => val !== '');
+  window.currentDictionary.details.phonology.blends = document.getElementById('editBlends').value.split(',').map(val => val.trim()).filter(val => val !== '');
+  window.currentDictionary.details.phonology.phonotactics.onset = document.getElementById('editOnset').value.split(',').map(val => val.trim()).filter(val => val !== '');
+  window.currentDictionary.details.phonology.phonotactics.nucleus = document.getElementById('editNucleus').value.split(',').map(val => val.trim()).filter(val => val !== '');
+  window.currentDictionary.details.phonology.phonotactics.coda = document.getElementById('editCoda').value.split(',').map(val => val.trim()).filter(val => val !== '');
   window.currentDictionary.details.phonology.phonotactics.exceptions = removeTags(document.getElementById('editExceptions').value.trim());
 
   window.currentDictionary.details.orthography.notes = removeTags(document.getElementById('editOrthography').value.trim());
@@ -61,15 +62,29 @@ export function save() {
   window.currentDictionary.settings.isComplete = document.getElementById('editIsComplete').checked;
   window.currentDictionary.settings.isPublic = document.getElementById('editIsPublic').checked;
 
+  saveDictionary();
   renderDictionaryDetails();
   renderPartsOfSpeech();
 }
 
-export function saveAndClose() {
-  save();
+export function saveAndCloseEditModal() {
+  saveEditModal();
   document.getElementById('editModal').style.display = 'none';
 }
 
-export function updateGeneralDetails() {
+export function saveDictionary() {
+  window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(window.currentDictionary));
+}
 
+export function loadDictionary() {
+  const storedDictionary = window.localStorage.getItem(LOCAL_STORAGE_KEY);
+  if (storedDictionary) {
+    window.currentDictionary = JSON.parse(storedDictionary);
+  } else {
+    clearDictionary();
+  }
+}
+
+export function clearDictionary() {
+  window.currentDictionary = cloneObject(DEFAULT_DICTIONARY);
 }
