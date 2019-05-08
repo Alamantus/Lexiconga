@@ -10,6 +10,7 @@
 <body>
   <header id="top">
     <h1 id="title">Lexiconga</h1>
+
     <input id="openSearchModal" placeholder="🔍&#xFE0E; Search"> <span id="searchResults"></span>
     <section id="searchModal" class="modal" style="display:none;">
       <div class="modal-background" onclick="this.parentElement.style.display='none';"></div>
@@ -64,6 +65,8 @@
         </footer>
       </div>
     </section>
+
+    <a id="settingsButton" class="button">Settings</a>
   </header>
 
   <main>
@@ -109,8 +112,6 @@
         <article class="entry">
           <header>
             <h4 class="word">Loading Words</h4>
-            <span class="pronunciation"></span>
-            <span class="part-of-speech"></span>
           </header>
           <dl>
             <dt class="definition">Please Wait...</dt>
@@ -132,6 +133,39 @@
     <a class="button" id="termsInfoButton">Terms</a>
     <a class="button" id="privacyInfoButton">Privacy</a>
   </footer>
+
+  <section id="settingsModal" class="modal" style="display:none;">
+    <div class="modal-background" onclick="this.parentElement.style.display='none';"></div>
+    <div class="modal-content">
+      <a class="close-button" onclick="this.parentElement.parentElement.style.display='none';">&times;&#xFE0E;</a>
+      <section>
+        <form>
+          <label>Use IPA Auto-Fill
+            <input type="checkbox" checked><br />
+            <small>Check this to use character combinations to input International Phonetic Alphabet characters into
+              Pronunciation fields.</small>
+          </label>
+  
+          <label>Theme
+            <select disabled>
+              <option selected value="default">Default</option>
+              <option selected value="dark">Dark</option>
+              <option selected value="light">Light</option>
+              <option selected value="blue">Blue</option>
+              <option selected value="green">Green</option>
+              <option selected value="royal">Royal</option>
+            </select>
+          </label>
+        </form>
+      </section>
+      <footer>
+        <a class="button" id="settingsSave">Save</a>
+        <a class="button" id="settingsSaveAndClose">Save &amp; Close</a>
+        <a class="red button" onclick="this.parentElement.parentElement.parentElement.style.display='none';">Close Without
+          Saving</a>
+      </footer>
+    </div>
+  </section>
 
   <section id="editModal" class="modal" style="display:none;">
     <div class="modal-background" onclick="this.parentElement.style.display='none';"></div>

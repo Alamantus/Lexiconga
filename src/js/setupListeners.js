@@ -9,6 +9,7 @@ import { goToNextPage, goToPreviousPage, goToPage } from './pagination';
 export default function setupListeners() {
   setupDetailsTabs();
   setupSearchBar();
+  setupSettingsModal();
   setupWordForm();
   setupMobileWordFormButton();
   setupInfoButtons();
@@ -191,6 +192,12 @@ export function setupWordOptionSelections() {
         break;
       }
     }
+  });
+}
+
+export function setupSettingsModal() {
+  document.getElementById('settingsButton').addEventListener('click', () => {
+    document.getElementById('settingsModal').style.display = '';
   });
 }
 
