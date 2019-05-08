@@ -266,6 +266,36 @@
   }
 }
 
+#messagingSection {
+  position: fixed;
+  bottom: $general-padding;
+  right: $general-padding;
+  max-width: 250px;
+
+  .message {
+    position: relative;
+    display: block;
+    padding: $general-padding ($general-padding * 2) $general-padding $general-padding;
+    background-color: $light;
+    border: $border;
+    border-radius: 5px;
+    margin-bottom: 5px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    .close-button {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      font-size: 25px;
+      line-height: 10px;
+      cursor: pointer;
+    }
+  }
+}
+
 #bottom {
   text-align: center;
 

@@ -1,4 +1,3 @@
-import { cloneObject } from '../helpers';
 import { addWord } from './wordManagement';
 
 export function getNextId() {
@@ -130,4 +129,21 @@ export function generateRandomWords(numberOfWords) {
     }, false);
   });
   console.log('done');
+}
+
+export function addMessage(messageText, time = 5000) {
+  const messagingSection = document.getElementById('messagingSection');
+  const element = document.createElement('div');
+  element.classList.add('message');
+  element.innerHTML = '<a class="close-button">&times;&#xFE0E;</a>' + messageText;
+  messagingSection.appendChild(element);
+
+  const closeButton = element.querySelector('.close-button');
+  const closeMessage = () => {
+    closeButton.removeEventListener('click', closeMessage);
+    messagingSection.removeChild(element);
+  };
+  closeButton.addEventListener('click', closeMessage);
+
+  setTimeout(closeMessage, time);
 }

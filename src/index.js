@@ -2,15 +2,16 @@ import './main.scss';
 
 import setupListeners from './js/setupListeners';
 import { renderAll } from './js/render';
-import { generateRandomWords } from './js/utilities';
+import { generateRandomWords, addMessage } from './js/utilities';
 import { loadDictionary } from './js/dictionaryManagement';
 
 function initialize() {
-  console.log('initializing');
+  addMessage('Loading!');
   loadDictionary();
   // generateRandomWords(100);
   setupListeners();
   renderAll();
+  addMessage('Done Loading!');
   // console.log('Rendered!');
 }
 
