@@ -3,7 +3,16 @@ import { removeTags, slugify } from '../helpers';
 import { getWordsStats, wordExists } from './utilities';
 import { getMatchingSearchWords, highlightSearchTerm, getSearchFilters, getSearchTerm } from './search';
 import { showSection } from './displayToggles';
-import { setupSearchFilters, setupWordOptionButtons, setupPagination, setupWordOptionSelections, setupWordEditFormButtons, setupMaximizeModal, setupInfoModal } from './setupListeners';
+import {
+  setupSearchFilters,
+  setupWordOptionButtons,
+  setupPagination,
+  setupWordOptionSelections,
+  setupWordEditFormButtons,
+  setupMaximizeModal,
+  setupInfoModal,
+  setupIPATable
+} from './setupListeners';
 import { getPaginationData } from './pagination';
 import { getOpenEditForms } from './wordManagement';
 
@@ -225,8 +234,9 @@ export function renderEditForm(wordId = false) {
       <label>Word<span class="red">*</span><br>
         <input id="wordName_${wordId}" value="${word.name}">
       </label>
-      <label>Pronunciation<a class="label-button">IPA Chart</a><br>
-        <input id="wordPronunciation_${wordId}" value="${word.pronunciation}">
+      <label>Pronunciation<a class="label-button ipa-table-button">IPA Chart</a><br>
+        <input id="wordPronunciation_${wordId}" value="${word.pronunciation}"><br>
+        <a class="label-help-button ipa-field-help-button">Field Help</a>
       </label>
       <label>Part of Speech<br>
         <select id="wordPartOfSpeech_${wordId}" class="part-of-speech-select">
@@ -249,22 +259,44 @@ export function renderEditForm(wordId = false) {
   }
 }
 
+export function renderIPATable(ipaTableButton) {
+  ipaTableButton = typeof ipaTableButton.target === 'undefined' ? ipaTableButton : ipaTableButton.target;
+  // const label = ipaTableButton.parentElement.innerText.replace(/(\*|Maximize)/g, '').trim();
+  const textBox = ipaTableButton.parentElement.querySelector('input');
+  import('./KeyboardFire/phondue/ipa-table.html').then(html => {
+    const modalElement = document.createElement('section');
+    modalElement.classList.add('modal', 'ipa-table-modal');
+    modalElement.innerHTML = `<div class="modal-background"></div>
+    <div class="modal-content">
+      <a class="close-button">&times;&#xFE0E;</a>
+      <header><label>Pronunciation <input value="${textBox.value}"></label></header>
+      <section>
+        ${html}
+      </section>
+      <footer><a class="button done-button">Done</a></footer>
+    </div>`;
+  
+    document.body.appendChild(modalElement);
+    
+    setupIPATable(modalElement, textBox);
+  });
+}
+
 export function renderMaximizedTextbox(maximizeButton) {
   maximizeButton = typeof maximizeButton.target === 'undefined' ? maximizeButton : maximizeButton.target;
   const label = maximizeButton.parentElement.innerText.replace(/(\*|Maximize)/g, '').trim();
   const textBox = maximizeButton.parentElement.querySelector('textarea');
   const modalElement = document.createElement('section');
-  modalElement.classList.add('modal');
-  modalElement.innerHTML = `<section class="modal maximize-modal"><div class="modal-background"></div>
-    <div class="modal-content">
-      <a class="close-button">&times;&#xFE0E;</a>
-      <header><h3>${label}</h3></header>
-      <section>
-        <textarea>${textBox.value}</textarea>
-      </section>
-      <footer><a class="button done-button">Done</a></footer>
-    </div>
-  </section>`;
+  modalElement.classList.add('modal', 'maximize-modal');
+  modalElement.innerHTML = `<div class="modal-background"></div>
+  <div class="modal-content">
+    <a class="close-button">&times;&#xFE0E;</a>
+    <header><h3>${label}</h3></header>
+    <section>
+      <textarea>${textBox.value}</textarea>
+    </section>
+    <footer><a class="button done-button">Done</a></footer>
+  </div>`;
 
   document.body.appendChild(modalElement);
   

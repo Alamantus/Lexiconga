@@ -1,10 +1,11 @@
 import {showSection} from './displayToggles';
-import { renderWords, renderEditForm, renderMaximizedTextbox, renderInfoModal } from './render';
+import { renderWords, renderEditForm, renderMaximizedTextbox, renderInfoModal, renderIPATable } from './render';
 import { validateWord, addWord, confirmEditWord, cancelEditWord, confirmDeleteWord } from './wordManagement';
 import { removeTags } from '../helpers';
 import { getNextId } from './utilities';
 import { openEditModal, saveEditModal, saveAndCloseEditModal } from './dictionaryManagement';
 import { goToNextPage, goToPreviousPage, goToPage } from './pagination';
+import { insertAtCursor } from './StackOverflow/inputCursorManagement';
 
 export default function setupListeners() {
   setupDetailsTabs();
@@ -163,6 +164,7 @@ function setupWordForm() {
     }
   });
 
+  setupIPAButtons();
   setupMaximizeButtons();
 }
 
@@ -226,6 +228,7 @@ export function setupWordEditFormButtons() {
     button.addEventListener('click', cancelEditWord);
   });
 
+  setupIPAButtons();
   setupMaximizeButtons();
 }
 
@@ -262,6 +265,53 @@ export function setupPagination() {
     pageSelector.removeEventListener('change', goToPage);
     pageSelector.addEventListener('change', goToPage);
   });
+}
+
+export function setupIPAButtons() {
+  const ipaTableButtons = document.getElementsByClassName('ipa-table-button'),
+    ipaFieldHelpButtons = document.getElementsByClassName('ipa-field-help-button');
+
+  Array.from(ipaTableButtons).forEach(button => {
+    button.removeEventListener('click', renderIPATable);
+    button.addEventListener('click', renderIPATable);
+  });
+
+  const renderIPAHelp = () => {
+    import('./KeyboardFire/phondue/usage.html').then(html => {
+      renderInfoModal(html);
+    });
+  }
+  Array.from(ipaFieldHelpButtons).forEach(button => {
+    button.removeEventListener('click', renderIPAHelp);
+    button.addEventListener('click', renderIPAHelp);
+  });
+}
+
+export function setupIPATable(modal, textBox) {
+  const closeElements = modal.querySelectorAll('.modal-background, .close-button, .done-button'),
+    headerTextBox = modal.querySelector('header input'),
+    ipaButtons = modal.querySelectorAll('.td-btn button');
+  Array.from(closeElements).forEach(close => {
+    close.addEventListener('click', () => {
+      modal.parentElement.removeChild(modal);
+    });
+  });
+
+  headerTextBox.addEventListener('change', () => {
+    textBox.value = headerTextBox.value;
+  });
+  
+  Array.from(ipaButtons).forEach(button => {
+    button.addEventListener('click', () => {
+      console.log(button);
+      insertAtCursor(headerTextBox, button.innerText);
+      textBox.value = headerTextBox.value;
+    });
+  });
+
+  setTimeout(() => {
+    headerTextBox.focus();
+  }, 1);
 }
 
 export function setupMaximizeButtons() {
