@@ -2,6 +2,7 @@ import { SETTINGS_KEY, DEFAULT_SETTINGS } from "../constants";
 import { cloneObject } from "../helpers";
 import { usePhondueDigraphs } from "./KeyboardFire/phondue/ipaField";
 import { renderWords } from "./render";
+import { addMessage } from "./utilities";
 
 export function loadSettings() {
   const storedSettings = window.localStorage.getItem(SETTINGS_KEY);
@@ -11,6 +12,7 @@ export function loadSettings() {
 
 export function saveSettings() {
   window.localStorage.setItem(SETTINGS_KEY, JSON.stringify(window.settings));
+  addMessage('Settings Saved!');
 }
 
 export function openSettingsModal() {

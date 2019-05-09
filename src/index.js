@@ -7,7 +7,7 @@ import { loadDictionary } from './js/dictionaryManagement';
 import { loadSettings } from './js/settings';
 
 function initialize() {
-  addMessage('Loading!');
+  addMessage('Loading...');
   loadDictionary();
   loadSettings();
   // generateRandomWords(100);

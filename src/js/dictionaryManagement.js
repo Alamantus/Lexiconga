@@ -1,6 +1,7 @@
 import { renderDictionaryDetails, renderPartsOfSpeech } from "./render";
 import { removeTags, cloneObject, getTimestampInSeconds } from "../helpers";
 import { LOCAL_STORAGE_KEY, DEFAULT_DICTIONARY, MIGRATE_VERSION } from "../constants";
+import { addMessage } from "./utilities";
 
 export function updateDictionary () {
 
@@ -62,6 +63,7 @@ export function saveEditModal() {
   window.currentDictionary.settings.isComplete = document.getElementById('editIsComplete').checked;
   window.currentDictionary.settings.isPublic = document.getElementById('editIsPublic').checked;
 
+  addMessage('Saved ' + window.currentDictionary.specification + ' Successfully');
   saveDictionary();
   renderDictionaryDetails();
   renderPartsOfSpeech();

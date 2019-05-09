@@ -1,5 +1,5 @@
 import { renderWords } from "./render";
-import { wordExists } from "./utilities";
+import { wordExists, addMessage } from "./utilities";
 import removeDiacritics from "./StackOverflow/removeDiacritics";
 import { removeTags } from "../helpers";
 import { saveDictionary } from "./dictionaryManagement";
@@ -48,6 +48,7 @@ export function sortWords(render) {
 
 export function addWord(word, render = true) {
   window.currentDictionary.words.push(word);
+  addMessage('Word Created Successfully');
   sortWords(render);
 }
 
@@ -57,6 +58,7 @@ export function deleteWord(wordId) {
     console.error('Could not find word to delete');
   } else {
     window.currentDictionary.words.splice(wordIndex, 1);
+    addMessage('Word Deleted Successfully');
     sortWords(true);
   }
 }
@@ -68,6 +70,7 @@ export function updateWord(word, wordId) {
     console.error('Could not find word to update');
   } else {
     window.currentDictionary.words[wordIndex] = word;
+    addMessage('Word Updated Successfully');
     sortWords(true);
   }
 }
