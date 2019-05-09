@@ -36,7 +36,6 @@ export function getMatchingSearchWords() {
     const matchingWords = window.currentDictionary.words.slice().filter(word => {
       if (!filters.allPartsOfSpeechChecked) {
         const partOfSpeech = word.partOfSpeech === '' ? 'Unclassified' : word.partOfSpeech;
-        console.log('partOfSpeech', partOfSpeech);
         return filters.partsOfSpeech.hasOwnProperty(partOfSpeech) && filters.partsOfSpeech[partOfSpeech];
       }
       return true;

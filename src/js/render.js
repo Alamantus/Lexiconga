@@ -117,6 +117,9 @@ export function renderPartsOfSpeech() {
 
 export function renderWords() {
   let wordsHTML = '';
+  let openEditForms = getOpenEditForms();
+  let words = false;
+
   if (window.currentDictionary.words.length === 0) {
     wordsHTML = `<article class="entry">
       <header>
@@ -126,62 +129,71 @@ export function renderWords() {
         <dt class="definition">Use the Word Form to create words or click the Help button below!</dt>
       </dl>
     </article>`;
-  }
+  } else {
+    words = getMatchingSearchWords();
 
-  const words = getMatchingSearchWords();
+    if (words.length === 0) {
+      wordsHTML = `<article class="entry">
+        <header>
+          <h4 class="word">No Search Results</h4>
+        </header>
+        <dl>
+          <dt class="definition">Edit your search or filter to show words.</dt>
+        </dl>
+      </article>`;
+    }
 
-  const openEditForms = getOpenEditForms();
-
-  if (openEditForms.length > 0) {
-    // Clone the dom nodes
-    openEditForms.forEach((wordFormId, index) => {
-      openEditForms[index] = document.getElementById(wordFormId.toString()).cloneNode(true);
-    });
-  }
-
-  // const { pageStart, pageEnd } = getPaginationData(words);
-
-  // words.slice(pageStart, pageEnd).forEach(originalWord => {
-  words.forEach(originalWord => {
-    let detailsMarkdown = removeTags(originalWord.longDefinition);
-    const references = detailsMarkdown.match(/\{\{.+?\}\}/g);
-    if (references && Array.isArray(references)) {
-      new Set(references).forEach(reference => {
-        const wordToFind = reference.replace(/\{\{|\}\}/g, '');
-        const existingWordId = wordExists(wordToFind, true);
-        if (existingWordId !== false) {
-          const wordMarkdownLink = `[${wordToFind}](#${existingWordId})`;
-          detailsMarkdown = detailsMarkdown.replace(new RegExp(reference, 'g'), wordMarkdownLink);
-        }
+    if (openEditForms.length > 0) {
+      // Clone the dom nodes
+      openEditForms.forEach((wordFormId, index) => {
+        openEditForms[index] = document.getElementById(wordFormId.toString()).cloneNode(true);
       });
     }
-    const word = highlightSearchTerm({
-      name: removeTags(originalWord.name),
-      pronunciation: removeTags(originalWord.pronunciation),
-      partOfSpeech: removeTags(originalWord.partOfSpeech),
-      simpleDefinition: removeTags(originalWord.simpleDefinition),
-      longDefinition: detailsMarkdown,
-      wordId: originalWord.wordId,
+
+    // const { pageStart, pageEnd } = getPaginationData(words);
+
+    // words.slice(pageStart, pageEnd).forEach(originalWord => {
+    words.forEach(originalWord => {
+      let detailsMarkdown = removeTags(originalWord.longDefinition);
+      const references = detailsMarkdown.match(/\{\{.+?\}\}/g);
+      if (references && Array.isArray(references)) {
+        new Set(references).forEach(reference => {
+          const wordToFind = reference.replace(/\{\{|\}\}/g, '');
+          const existingWordId = wordExists(wordToFind, true);
+          if (existingWordId !== false) {
+            const wordMarkdownLink = `[${wordToFind}](#${existingWordId})`;
+            detailsMarkdown = detailsMarkdown.replace(new RegExp(reference, 'g'), wordMarkdownLink);
+          }
+        });
+      }
+      const word = highlightSearchTerm({
+        name: removeTags(originalWord.name),
+        pronunciation: removeTags(originalWord.pronunciation),
+        partOfSpeech: removeTags(originalWord.partOfSpeech),
+        simpleDefinition: removeTags(originalWord.simpleDefinition),
+        longDefinition: detailsMarkdown,
+        wordId: originalWord.wordId,
+      });
+      wordsHTML += `<article class="entry" id="${word.wordId}">
+        <header>
+          <h4 class="word">${word.name}</h4>
+          <span class="pronunciation">${word.pronunciation}</span>
+          <span class="part-of-speech">${word.partOfSpeech}</span>
+          <span class="small button word-option-button">Options</span>
+          <div class="word-option-list" style="display:none;">
+            <div class="word-option" id="edit_${word.wordId}">Edit</div>
+            <div class="word-option" id="delete_${word.wordId}">Delete</div>
+          </div>
+        </header>
+        <dl>
+          <dt class="definition">${word.simpleDefinition}</dt>
+          <dd class="details">
+            ${md(word.longDefinition)}
+          </dd>
+        </dl>
+      </article>`;
     });
-    wordsHTML += `<article class="entry" id="${word.wordId}">
-      <header>
-        <h4 class="word">${word.name}</h4>
-        <span class="pronunciation">${word.pronunciation}</span>
-        <span class="part-of-speech">${word.partOfSpeech}</span>
-        <span class="small button word-option-button">Options</span>
-        <div class="word-option-list" style="display:none;">
-          <div class="word-option" id="edit_${word.wordId}">Edit</div>
-          <div class="word-option" id="delete_${word.wordId}">Delete</div>
-        </div>
-      </header>
-      <dl>
-        <dt class="definition">${word.simpleDefinition}</dt>
-        <dd class="details">
-          ${md(word.longDefinition)}
-        </dd>
-      </dl>
-    </article>`;
-  });
+  }
 
   document.getElementById('entries').innerHTML = wordsHTML;
 
@@ -200,7 +212,7 @@ export function renderWords() {
   // Show Search Results
   const searchTerm = getSearchTerm();
   const filters = getSearchFilters();
-  let resultsText = searchTerm !== '' || !filters.allPartsOfSpeechChecked ? words.length.toString() + ' Results' : '';
+  let resultsText = searchTerm !== '' || !filters.allPartsOfSpeechChecked ? (words ? words.length : 0).toString() + ' Results' : '';
   resultsText += !filters.allPartsOfSpeechChecked ? ' (Filtered)' : '';
   document.getElementById('searchResults').innerHTML = resultsText;
 
