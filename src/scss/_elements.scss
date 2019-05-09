@@ -22,6 +22,11 @@ label {
     font-weight: normal;
   }
 
+  input:not([type="checkbox"]):not([type="radio"]) {
+    padding-bottom: 2px;
+    line-height: 130%;
+  }
+
   input:not([type="checkbox"]):not([type="radio"]),
   select, textarea {
     font-weight: normal;

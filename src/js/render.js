@@ -11,7 +11,8 @@ import {
   setupWordEditFormButtons,
   setupMaximizeModal,
   setupInfoModal,
-  setupIPATable
+  setupIPATable,
+  setupIPAFields
 } from './setupListeners';
 import { getPaginationData } from './pagination';
 import { getOpenEditForms } from './wordManagement';
@@ -269,7 +270,7 @@ export function renderIPATable(ipaTableButton) {
     modalElement.innerHTML = `<div class="modal-background"></div>
     <div class="modal-content">
       <a class="close-button">&times;&#xFE0E;</a>
-      <header><label>Pronunciation <input value="${textBox.value}"></label></header>
+      <header><label>Pronunciation <input value="${textBox.value}" class="ipa-field"></label></header>
       <section>
         ${html}
       </section>
@@ -278,6 +279,7 @@ export function renderIPATable(ipaTableButton) {
   
     document.body.appendChild(modalElement);
     
+    setupIPAFields();
     setupIPATable(modalElement, textBox);
   });
 }
@@ -305,17 +307,16 @@ export function renderMaximizedTextbox(maximizeButton) {
 
 export function renderInfoModal(content) {
   const modalElement = document.createElement('section');
-  modalElement.classList.add('modal');
-  modalElement.innerHTML = `<section class="modal maximize-modal"><div class="modal-background"></div>
-    <div class="modal-content">
-      <a class="close-button">&times;&#xFE0E;</a>
-      <section class="info-modal">
-        <div class="content">
-          ${content}
-        </div>
-      </section>
-    </div>
-  </section>`;
+  modalElement.classList.add('modal', 'info-modal');
+  modalElement.innerHTML = `<div class="modal-background"></div>
+  <div class="modal-content">
+    <a class="close-button">&times;&#xFE0E;</a>
+    <section class="info-modal">
+      <div class="content">
+        ${content}
+      </div>
+    </section>
+  </div>`;
 
   document.body.appendChild(modalElement);
 

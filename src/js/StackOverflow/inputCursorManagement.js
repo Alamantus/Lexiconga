@@ -1,4 +1,4 @@
-export function insertAtCursor(myField, myValue) {
+export function insertAtCursor(myField, myValue, adjustStart = 0) {
   // http://stackoverflow.com/questions/11076975/insert-text-into-textarea-at-cursor-position-javascript
   // IE support
   if (document.selection) {
@@ -9,6 +9,7 @@ export function insertAtCursor(myField, myValue) {
   // MOZILLA and others
   else if (myField.selectionStart || myField.selectionStart == '0') {
     const selection = getInputSelection(myField);
+    selection.start += adjustStart;
     myField.value = myField.value.substring(0, selection.start)
       + myValue
       + myField.value.substring(selection.end, myField.value.length);

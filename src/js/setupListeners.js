@@ -6,6 +6,7 @@ import { getNextId } from './utilities';
 import { openEditModal, saveEditModal, saveAndCloseEditModal } from './dictionaryManagement';
 import { goToNextPage, goToPreviousPage, goToPage } from './pagination';
 import { insertAtCursor } from './StackOverflow/inputCursorManagement';
+import { usePhondueDigraphs } from './KeyboardFire/phondue/ipaField';
 
 export default function setupListeners() {
   setupDetailsTabs();
@@ -164,7 +165,7 @@ function setupWordForm() {
     }
   });
 
-  setupIPAButtons();
+  setupIPAFields();
   setupMaximizeButtons();
 }
 
@@ -228,7 +229,7 @@ export function setupWordEditFormButtons() {
     button.addEventListener('click', cancelEditWord);
   });
 
-  setupIPAButtons();
+  setupIPAFields();
   setupMaximizeButtons();
 }
 
@@ -265,6 +266,16 @@ export function setupPagination() {
     pageSelector.removeEventListener('change', goToPage);
     pageSelector.addEventListener('change', goToPage);
   });
+}
+
+export function setupIPAFields() {
+  const ipaFields = document.getElementsByClassName('ipa-field');
+  Array.from(ipaFields).forEach(field => {
+    field.removeEventListener('keypress', usePhondueDigraphs);
+    field.addEventListener('keypress', usePhondueDigraphs);
+  });
+
+  setupIPAButtons();
 }
 
 export function setupIPAButtons() {
