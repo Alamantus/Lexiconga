@@ -5,7 +5,7 @@ import { removeTags } from '../helpers';
 import { getNextId } from './utilities';
 import { openEditModal, saveEditModal, saveAndCloseEditModal } from './dictionaryManagement';
 import { goToNextPage, goToPreviousPage, goToPage } from './pagination';
-import { insertAtCursor } from './StackOverflow/inputCursorManagement';
+import { insertAtCursor, getInputSelection, setSelectionRange } from './StackOverflow/inputCursorManagement';
 import { usePhondueDigraphs } from './KeyboardFire/phondue/ipaField';
 import { openSettingsModal, saveSettingsModal, saveAndCloseSettingsModal } from './settings';
 
@@ -341,6 +341,9 @@ export function setupMaximizeModal(modal, textBox) {
     maximizedTextBox = modal.querySelector('textarea');
   Array.from(closeElements).forEach(close => {
     close.addEventListener('click', () => {
+      const selection = getInputSelection(maximizedTextBox);
+      textBox.focus();
+      setSelectionRange(textBox, selection.start, selection.end);
       modal.parentElement.removeChild(modal);
     });
   });
@@ -350,7 +353,9 @@ export function setupMaximizeModal(modal, textBox) {
   })
 
   setTimeout(() => {
-    modal.querySelector('textarea').focus();
+    const selection = getInputSelection(textBox);
+    maximizedTextBox.focus();
+    setSelectionRange(maximizedTextBox, selection.start, selection.end);
   }, 1);
 }
 
