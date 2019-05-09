@@ -7,6 +7,7 @@ import { openEditModal, saveEditModal, saveAndCloseEditModal } from './dictionar
 import { goToNextPage, goToPreviousPage, goToPage } from './pagination';
 import { insertAtCursor } from './StackOverflow/inputCursorManagement';
 import { usePhondueDigraphs } from './KeyboardFire/phondue/ipaField';
+import { openSettingsModal, saveSettingsModal, saveAndCloseSettingsModal } from './settings';
 
 export default function setupListeners() {
   setupDetailsTabs();
@@ -212,9 +213,9 @@ export function setupWordOptionSelections() {
 }
 
 export function setupSettingsModal() {
-  document.getElementById('settingsButton').addEventListener('click', () => {
-    document.getElementById('settingsModal').style.display = '';
-  });
+  document.getElementById('settingsButton').addEventListener('click', openSettingsModal);
+  document.getElementById('settingsSave').addEventListener('click', saveSettingsModal);
+  document.getElementById('settingsSaveAndClose').addEventListener('click', saveAndCloseSettingsModal);
 }
 
 export function setupWordEditFormButtons() {
@@ -269,11 +270,13 @@ export function setupPagination() {
 }
 
 export function setupIPAFields() {
-  const ipaFields = document.getElementsByClassName('ipa-field');
-  Array.from(ipaFields).forEach(field => {
-    field.removeEventListener('keypress', usePhondueDigraphs);
-    field.addEventListener('keypress', usePhondueDigraphs);
-  });
+  if (window.settings.useIPAPronunciationField) {
+    const ipaFields = document.getElementsByClassName('ipa-field');
+    Array.from(ipaFields).forEach(field => {
+      field.removeEventListener('keypress', usePhondueDigraphs);
+      field.addEventListener('keypress', usePhondueDigraphs);
+    });
+  }
 
   setupIPAButtons();
 }

@@ -54,6 +54,11 @@ export const DEFAULT_DICTIONARY = {
   version: MIGRATE_VERSION,
 };
 
+export const DEFAULT_SETTINGS = {
+  useIPAPronunciationField: true,
+};
+
 export const DEFAULT_PAGE_SIZE = 50;
 
 export const LOCAL_STORAGE_KEY = 'dictionary';
+export const SETTINGS_KEY = 'settings';

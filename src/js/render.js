@@ -231,14 +231,18 @@ export function renderEditForm(wordId = false) {
   wordId = typeof wordId.target === 'undefined' ? wordId : parseInt(this.id.replace('edit_', ''));
   const word = window.currentDictionary.words.find(w => w.wordId === wordId);
   if (word) {
+    const ipaPronunciationField = `<label>Pronunciation<a class="label-button ipa-table-button">IPA Chart</a><br>
+      <input id="wordPronunciation_${wordId}" class="ipa-field" value="${word.pronunciation}"><br>
+      <a class="label-help-button ipa-field-help-button">Field Help</a>
+    </label>`;
+    const plainPronunciationField = `<label>Pronunciation<br>
+      <input id="wordPronunciation_${wordId}" value="${word.pronunciation}">
+    </label>`;
     const editForm = `<form id="editForm_${wordId}" class="edit-form">
       <label>Word<span class="red">*</span><br>
         <input id="wordName_${wordId}" value="${word.name}">
       </label>
-      <label>Pronunciation<a class="label-button ipa-table-button">IPA Chart</a><br>
-        <input id="wordPronunciation_${wordId}" value="${word.pronunciation}"><br>
-        <a class="label-help-button ipa-field-help-button">Field Help</a>
-      </label>
+      ${window.settings.useIPAPronunciationField ? ipaPronunciationField : plainPronunciationField}
       <label>Part of Speech<br>
         <select id="wordPartOfSpeech_${wordId}" class="part-of-speech-select">
           <option value="${word.partOfSpeech}" selected>${word.partOfSpeech}</option>
