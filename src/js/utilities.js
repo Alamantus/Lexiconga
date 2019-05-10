@@ -123,8 +123,8 @@ export function generateRandomWords(numberOfWords) {
       name: word,
       pronunciation: '/' + word + '/',
       partOfSpeech: Math.random() > 0.5 ? 'Noun' : 'Verb',
-      simpleDefinition: word,
-      longDefinition: word + (index > 0 ? '\n\nRef: {{' + words[index - 1] + '}}' : ''),
+      definition: word,
+      details: word + (index > 0 ? '\n\nRef: {{' + words[index - 1] + '}}' : ''),
       wordId: getNextId(),
     }, false);
   });

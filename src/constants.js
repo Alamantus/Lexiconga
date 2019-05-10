@@ -37,8 +37,8 @@ export const DEFAULT_DICTIONARY = {
       name: '',
       pronunciation: '',
       partOfSpeech: '',
-      simpleDefinition: '',
-      longDefinition: '',
+      definition: '',
+      details: '',
       wordId: 0
     }, */
   ],

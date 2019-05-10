@@ -12,7 +12,7 @@ export function validateWord(word, wordId = false) {
   if (word.name === '') {
     errorMessage += '<p class="bold red">Word field must not be blank.</p>';
   }
-  if (word.simpleDefinition === '' && word.longDefinition === '') {
+  if (word.definition === '' && word.details === '') {
     errorMessage += '<p class="bold red">You must enter Definition or Details.</p>';
   }
 
@@ -32,7 +32,7 @@ export function validateWord(word, wordId = false) {
 
 export function sortWords(render) {
   const { sortByDefinition } = window.currentDictionary.settings;
-  const sortBy = sortByDefinition ? 'simpleDefinition' : 'name';
+  const sortBy = sortByDefinition ? 'definition' : 'name';
 
   window.currentDictionary.words.sort((wordA, wordB) => {
     if (removeDiacritics(wordA[sortBy]).toLowerCase() === removeDiacritics(wordB[sortBy]).toLowerCase()) return 0;
@@ -87,8 +87,8 @@ export function confirmEditWord() {
     name: removeTags(name).trim(),
     pronunciation: removeTags(pronunciation).trim(),
     partOfSpeech: removeTags(partOfSpeech).trim(),
-    simpleDefinition: removeTags(definition).trim(),
-    longDefinition: removeTags(details).trim(),
+    definition: removeTags(definition).trim(),
+    details: removeTags(details).trim(),
     wordId,
   };
 

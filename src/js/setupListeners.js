@@ -156,8 +156,8 @@ function setupWordForm() {
       name: removeTags(name).trim(),
       pronunciation: removeTags(pronunciation).trim(),
       partOfSpeech: removeTags(partOfSpeech).trim(),
-      simpleDefinition: removeTags(definition).trim(),
-      longDefinition: removeTags(details).trim(),
+      definition: removeTags(definition).trim(),
+      details: removeTags(details).trim(),
       wordId: getNextId(),
     };
 

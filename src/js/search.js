@@ -44,18 +44,18 @@ export function getMatchingSearchWords() {
       searchTerm = filters.caseSensitive ? searchTerm : searchTerm.toLowerCase();
       let name = filters.ignoreDiacritics ? removeDiacritics(word.name) : word.name;
       name = filters.caseSensitive ? name : name.toLowerCase();
-      let simpleDefinition = filters.ignoreDiacritics ? removeDiacritics(word.simpleDefinition) : word.simpleDefinition;
-      simpleDefinition = filters.caseSensitive ? simpleDefinition : simpleDefinition.toLowerCase();
-      let longDefinition = filters.ignoreDiacritics ? removeDiacritics(word.longDefinition) : word.longDefinition;
-      longDefinition = filters.caseSensitive ? longDefinition : longDefinition.toLowerCase();
+      let definition = filters.ignoreDiacritics ? removeDiacritics(word.definition) : word.definition;
+      definition = filters.caseSensitive ? definition : definition.toLowerCase();
+      let details = filters.ignoreDiacritics ? removeDiacritics(word.details) : word.details;
+      details = filters.caseSensitive ? details : details.toLowerCase();
 
       const isInName = filters.name && (filters.exact
           ? searchTerm == name
           : new RegExp(searchTerm, 'g').test(name));
       const isInDefinition = filters.definition && (filters.exact
-          ? searchTerm == simpleDefinition
-          : new RegExp(searchTerm, 'g').test(simpleDefinition));
-      const isInDetails = filters.details && new RegExp(searchTerm, 'g').test(longDefinition);
+          ? searchTerm == definition
+          : new RegExp(searchTerm, 'g').test(definition));
+      const isInDetails = filters.details && new RegExp(searchTerm, 'g').test(details);
       return searchTerm === '' || isInName || isInDefinition || isInDetails;
     });
     return matchingWords;
@@ -82,21 +82,21 @@ export function highlightSearchTerm(word) {
         });
       }
       if (filters.definition) {
-        const simpleDefinitionMatches = getIndicesOf(searchTerm, removeDiacritics(markedUpWord.simpleDefinition), filters.caseSensitive);
-        simpleDefinitionMatches.forEach((wordIndex, i) => {
+        const definitionMatches = getIndicesOf(searchTerm, removeDiacritics(markedUpWord.definition), filters.caseSensitive);
+        definitionMatches.forEach((wordIndex, i) => {
           wordIndex += '<mark></mark>'.length * i;
-          markedUpWord.simpleDefinition = markedUpWord.simpleDefinition.substring(0, wordIndex)
-            + '<mark>' + markedUpWord.simpleDefinition.substr(wordIndex, searchTermLength) + '</mark>'
-            + markedUpWord.simpleDefinition.substr(wordIndex + searchTermLength);
+          markedUpWord.definition = markedUpWord.definition.substring(0, wordIndex)
+            + '<mark>' + markedUpWord.definition.substr(wordIndex, searchTermLength) + '</mark>'
+            + markedUpWord.definition.substr(wordIndex + searchTermLength);
         });
       }
       if (filters.details) {
-        const longDefinitionMatches = getIndicesOf(searchTerm, removeDiacritics(markedUpWord.longDefinition), filters.caseSensitive);
-        longDefinitionMatches.forEach((wordIndex, i) => {
+        const detailsMatches = getIndicesOf(searchTerm, removeDiacritics(markedUpWord.details), filters.caseSensitive);
+        detailsMatches.forEach((wordIndex, i) => {
           wordIndex += '<mark></mark>'.length * i;
-          markedUpWord.longDefinition = markedUpWord.longDefinition.substring(0, wordIndex)
-            + '<mark>' + markedUpWord.longDefinition.substr(wordIndex, searchTermLength) + '</mark>'
-            + markedUpWord.longDefinition.substr(wordIndex + searchTermLength);
+          markedUpWord.details = markedUpWord.details.substring(0, wordIndex)
+            + '<mark>' + markedUpWord.details.substr(wordIndex, searchTermLength) + '</mark>'
+            + markedUpWord.details.substr(wordIndex + searchTermLength);
         });
       }
     } else {
@@ -105,10 +105,10 @@ export function highlightSearchTerm(word) {
         markedUpWord.name = markedUpWord.name.replace(new RegExp(`(${searchTerm})`, regexMethod), `<mark>$1</mark>`);
       }
       if (filters.definition) {
-        markedUpWord.simpleDefinition = markedUpWord.simpleDefinition.replace(new RegExp(`(${searchTerm})`, regexMethod), `<mark>$1</mark>`);
+        markedUpWord.definition = markedUpWord.definition.replace(new RegExp(`(${searchTerm})`, regexMethod), `<mark>$1</mark>`);
       }
       if (filters.details) {
-        markedUpWord.longDefinition = markedUpWord.longDefinition.replace(new RegExp(`(${searchTerm})`, regexMethod), `<mark>$1</mark>`);
+        markedUpWord.details = markedUpWord.details.replace(new RegExp(`(${searchTerm})`, regexMethod), `<mark>$1</mark>`);
       }
     }
     return markedUpWord;

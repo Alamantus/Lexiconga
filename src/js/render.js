@@ -154,7 +154,7 @@ export function renderWords() {
 
     // words.slice(pageStart, pageEnd).forEach(originalWord => {
     words.forEach(originalWord => {
-      let detailsMarkdown = removeTags(originalWord.longDefinition);
+      let detailsMarkdown = removeTags(originalWord.details);
       const references = detailsMarkdown.match(/\{\{.+?\}\}/g);
       if (references && Array.isArray(references)) {
         new Set(references).forEach(reference => {
@@ -170,8 +170,8 @@ export function renderWords() {
         name: removeTags(originalWord.name),
         pronunciation: removeTags(originalWord.pronunciation),
         partOfSpeech: removeTags(originalWord.partOfSpeech),
-        simpleDefinition: removeTags(originalWord.simpleDefinition),
-        longDefinition: detailsMarkdown,
+        definition: removeTags(originalWord.definition),
+        details: detailsMarkdown,
         wordId: originalWord.wordId,
       });
       wordsHTML += `<article class="entry" id="${word.wordId}">
@@ -186,9 +186,9 @@ export function renderWords() {
           </div>
         </header>
         <dl>
-          <dt class="definition">${word.simpleDefinition}</dt>
+          <dt class="definition">${word.definition}</dt>
           <dd class="details">
-            ${md(word.longDefinition)}
+            ${md(word.details)}
           </dd>
         </dl>
       </article>`;
@@ -261,10 +261,10 @@ export function renderEditForm(wordId = false) {
         </select>
       </label>
       <label>Definition<span class="red">*</span><br>
-        <input id="wordDefinition_${wordId}" value="${word.simpleDefinition}" placeholder="Equivalent words">
+        <input id="wordDefinition_${wordId}" value="${word.definition}" placeholder="Equivalent words">
       </label>
       <label>Details<span class="red">*</span><a class="label-button maximize-button">Maximize</a><br>
-        <textarea id="wordDetails_${wordId}" placeholder="Markdown formatting allowed">${word.longDefinition}</textarea>
+        <textarea id="wordDetails_${wordId}" placeholder="Markdown formatting allowed">${word.details}</textarea>
       </label>
       <div id="wordErrorMessage_${wordId}"></div>
       <a class="button edit-save-changes" id="editWordButton_${wordId}">Save Changes</a>

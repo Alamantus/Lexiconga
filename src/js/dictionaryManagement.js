@@ -99,7 +99,10 @@ export function migrateDictionary() {
     const fixStupidOldNonsense = string => string.replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/&#92;/g, '\\').replace(/<br>/g, '\n');
     window.currentDictionary.description = fixStupidOldNonsense(window.currentDictionary.description);
     window.currentDictionary.words = window.currentDictionary.words.map(word => {
-      word.longDefinition = fixStupidOldNonsense(word.longDefinition);
+      word.definition = word.simpleDefinition;
+      delete word.simpleDefinition;
+      word.details = fixStupidOldNonsense(word.longDefinition);
+      delete word.longDefinition;
       return word;
     });
     window.currentDictionary = Object.assign({}, DEFAULT_DICTIONARY, window.currentDictionary);
