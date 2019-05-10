@@ -36,9 +36,9 @@ export function hotKeyActions(event) {
         }
       } break;
     }
-    case 'd': if (event.ctrlKey) {event.preventDefault(); toggleDetailsDisplay()} break;
-    case 'e': if (event.ctrlKey) {event.preventDefault(); openEditModal()} break;
-    case 'h': if (event.ctrlKey) {event.preventDefault(); showHelpModal();} break;
+    case 'd': if (event.ctrlKey) {event.preventDefault(); toggleDetailsDisplay();} break;
+    case 'e': if (event.ctrlKey) {event.preventDefault(); hideAllModals(); openEditModal();} break;
+    case 'h': if (event.ctrlKey) {event.preventDefault(); hideAllModals(); showHelpModal();} break;
     case 'm': if (event.ctrlKey) {event.preventDefault(); maximizeTextarea();} break;
     case 's': {
       if (event.ctrlKey) {
@@ -52,7 +52,7 @@ export function hotKeyActions(event) {
       }
       break;
     }
-    case 'S': if (event.ctrlKey) { event.preventDefault(); hideAllModals(); openSettingsModal(); } break;
+    case 'S': if (event.ctrlKey) {event.preventDefault(); hideAllModals(); openSettingsModal();} break;
     case 'x': if (event.ctrlKey) {event.preventDefault(); clearSearchText();} break;
   }
 }

@@ -3,6 +3,7 @@ import { cloneObject } from "../helpers";
 import { usePhondueDigraphs } from "./KeyboardFire/phondue/ipaField";
 import { renderWords } from "./render";
 import { addMessage } from "./utilities";
+import { enableHotKeys, disableHotKeys } from "./hotkeys";
 
 export function loadSettings() {
   const storedSettings = window.localStorage.getItem(SETTINGS_KEY);
@@ -16,23 +17,33 @@ export function saveSettings() {
 }
 
 export function openSettingsModal() {
-  const { useIPAPronunciationField } = window.settings;
+  const { useIPAPronunciationField, useHotkeys } = window.settings;
 
   document.getElementById('settingsUseIPA').checked = useIPAPronunciationField;
+  document.getElementById('settingsUseHotkeys').checked = useHotkeys;
 
   document.getElementById('settingsModal').style.display = '';
 }
 
 export function saveSettingsModal() {
   window.settings.useIPAPronunciationField = document.getElementById('settingsUseIPA').checked;
+  window.settings.useHotkeys = document.getElementById('settingsUseHotkeys').checked;
 
   saveSettings();
+  toggleHotkeysEnabled();
   toggleIPAPronunciationFields();
 }
 
 export function saveAndCloseSettingsModal() {
   saveSettingsModal();
   document.getElementById('settingsModal').style.display = 'none';
+}
+
+export function toggleHotkeysEnabled() {
+  disableHotKeys();
+  if (window.settings.useHotkeys) {
+    enableHotKeys();
+  }
 }
 
 export function toggleIPAPronunciationFields() {
