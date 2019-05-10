@@ -1,13 +1,13 @@
-import {showSection} from './displayToggles';
+import {showSection, hideDetailsPanel} from './displayToggles';
 import { renderWords, renderEditForm, renderMaximizedTextbox, renderInfoModal, renderIPATable } from './render';
-import { validateWord, addWord, confirmEditWord, cancelEditWord, confirmDeleteWord } from './wordManagement';
-import { removeTags } from '../helpers';
-import { getNextId } from './utilities';
+import { confirmEditWord, cancelEditWord, confirmDeleteWord, submitWordForm } from './wordManagement';
 import { openEditModal, saveEditModal, saveAndCloseEditModal } from './dictionaryManagement';
 import { goToNextPage, goToPreviousPage, goToPage } from './pagination';
 import { insertAtCursor, getInputSelection, setSelectionRange } from './StackOverflow/inputCursorManagement';
 import { usePhondueDigraphs } from './KeyboardFire/phondue/ipaField';
 import { openSettingsModal, saveSettingsModal, saveAndCloseSettingsModal } from './settings';
+import { enableHotKeys } from './hotkeys';
+import { showSearchModal, clearSearchText } from './search';
 
 export default function setupListeners() {
   setupDetailsTabs();
@@ -16,6 +16,9 @@ export default function setupListeners() {
   setupWordForm();
   setupMobileWordFormButton();
   setupInfoButtons();
+  if (window.settings.useHotkeys) {
+    enableHotKeys();
+  }
 }
 
 function setupDetailsTabs() {
@@ -33,7 +36,7 @@ function setupDetailsTabs() {
         const isActive = tab.classList.contains('active');
         tabs.forEach(t => t.classList.remove('active'));
         if (isActive) {
-          document.getElementById('detailsPanel').style.display = 'none';
+          hideDetailsPanel();
         } else {
           tab.classList.add('active');
           showSection(section);
@@ -96,15 +99,8 @@ function setupSearchBar() {
   searchBox.addEventListener('input', event => {
     openSearchModal.value = event.target.value;
   });
-  clearSearchButton.addEventListener('click', event => {
-    searchBox.value = '';
-    openSearchModal.value = '';
-    renderWords();
-  });
-  openSearchModal.addEventListener('click', () => {
-    document.getElementById('searchModal').style.display = 'block';
-    searchBox.focus();
-  });
+  clearSearchButton.addEventListener('click', clearSearchText);
+  openSearchModal.addEventListener('click', showSearchModal);
 
   const toggleDetailsCheck = function() {
     if (searchExactWords.checked) {
@@ -145,26 +141,7 @@ function setupWordForm() {
     event.preventDefault();
     return false;
   });
-  addWordButton.addEventListener('click', () => {
-    const name = document.getElementById('wordName').value,
-      pronunciation = document.getElementById('wordPronunciation').value,
-      partOfSpeech = document.getElementById('wordPartOfSpeech').value,
-      definition = document.getElementById('wordDefinition').value,
-      details = document.getElementById('wordDetails').value;
-
-    const word = {
-      name: removeTags(name).trim(),
-      pronunciation: removeTags(pronunciation).trim(),
-      partOfSpeech: removeTags(partOfSpeech).trim(),
-      definition: removeTags(definition).trim(),
-      details: removeTags(details).trim(),
-      wordId: getNextId(),
-    };
-
-    if (validateWord(word)) {
-      addWord(word);
-    }
-  });
+  addWordButton.addEventListener('click', submitWordForm);
 
   setupIPAFields();
   setupMaximizeButtons();

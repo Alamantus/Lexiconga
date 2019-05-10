@@ -8,6 +8,14 @@ export function showSection(sectionName) {
   }
 }
 
+export function hideDetailsPanel() {
+  document.getElementById('detailsPanel').style.display = 'none';
+}
+
+export function getIsDetailsPanelDisplayed() {
+  return document.getElementById('detailsPanel').style.display !== 'none';
+}
+
 function showDescription() {
   const detailsPanel = document.getElementById('detailsPanel');
   detailsPanel.style.display = 'block';

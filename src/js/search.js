@@ -1,5 +1,17 @@
 import { cloneObject, getIndicesOf } from "../helpers";
 import removeDiacritics from "./StackOverflow/removeDiacritics";
+import { renderWords } from "./render";
+
+export function showSearchModal() {
+  document.getElementById('searchModal').style.display = 'block';
+  document.getElementById('searchBox').focus();
+}
+
+export function clearSearchText() {
+  document.getElementById('searchBox').value = '';
+  document.getElementById('openSearchModal').value = '';
+  renderWords();
+}
 
 export function getSearchTerm() {
   return document.getElementById('searchBox').value;

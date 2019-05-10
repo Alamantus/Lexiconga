@@ -1,5 +1,5 @@
 import { renderWords } from "./render";
-import { wordExists, addMessage } from "./utilities";
+import { wordExists, addMessage, getNextId } from "./utilities";
 import removeDiacritics from "./StackOverflow/removeDiacritics";
 import { removeTags } from "../helpers";
 import { saveDictionary } from "./dictionaryManagement";
@@ -46,6 +46,27 @@ export function sortWords(render) {
   }
 }
 
+export function submitWordForm() {
+  const name = document.getElementById('wordName').value,
+    pronunciation = document.getElementById('wordPronunciation').value,
+    partOfSpeech = document.getElementById('wordPartOfSpeech').value,
+    definition = document.getElementById('wordDefinition').value,
+    details = document.getElementById('wordDetails').value;
+
+  const word = {
+    name: removeTags(name).trim(),
+    pronunciation: removeTags(pronunciation).trim(),
+    partOfSpeech: removeTags(partOfSpeech).trim(),
+    definition: removeTags(definition).trim(),
+    details: removeTags(details).trim(),
+    wordId: getNextId(),
+  };
+
+  if (validateWord(word)) {
+    addWord(word);
+  }
+}
+
 export function addWord(word, render = true) {
   window.currentDictionary.words.push(word);
   addMessage('Word Created Successfully');
@@ -75,8 +96,9 @@ export function updateWord(word, wordId) {
   }
 }
 
-export function confirmEditWord() {
-  const wordId = parseInt(this.id.replace('editWordButton_', ''));
+export function confirmEditWord(id) {
+  const wordId = typeof id.target !== 'undefined' ? parseInt(this.id.replace('editWordButton_', '')) : id;
+  console.log(wordId);
   const name = document.getElementById('wordName_' + wordId).value,
     pronunciation = document.getElementById('wordPronunciation_' + wordId).value,
     partOfSpeech = document.getElementById('wordPartOfSpeech_' + wordId).value,
