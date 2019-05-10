@@ -278,7 +278,7 @@ export function renderEditForm(wordId = false) {
 
 export function renderIPATable(ipaTableButton) {
   ipaTableButton = typeof ipaTableButton.target === 'undefined' ? ipaTableButton : ipaTableButton.target;
-  // const label = ipaTableButton.parentElement.innerText.replace(/(\*|Maximize)/g, '').trim();
+  const label = ipaTableButton.parentElement.innerText.replace(/(Field Help|IPA Chart)/g, '').trim();
   const textBox = ipaTableButton.parentElement.querySelector('input');
   import('./KeyboardFire/phondue/ipa-table.html').then(html => {
     const modalElement = document.createElement('section');
@@ -286,7 +286,7 @@ export function renderIPATable(ipaTableButton) {
     modalElement.innerHTML = `<div class="modal-background"></div>
     <div class="modal-content">
       <a class="close-button">&times;&#xFE0E;</a>
-      <header><label>Pronunciation <input value="${textBox.value}" class="ipa-field"></label></header>
+      <header><label>${label} <input value="${textBox.value}" class="ipa-field"></label></header>
       <section>
         ${html}
       </section>
