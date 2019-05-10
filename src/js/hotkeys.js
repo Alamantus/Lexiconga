@@ -2,8 +2,9 @@ import { confirmEditWord, submitWordForm } from "./wordManagement";
 import { showSection, getIsDetailsPanelDisplayed, hideDetailsPanel } from "./displayToggles";
 import { renderInfoModal, renderMaximizedTextbox } from "./render";
 import { showSearchModal, clearSearchText } from "./search";
-import { saveAndCloseSettingsModal, openSettingsModal } from "./settings";
+import { saveAndCloseSettingsModal, openSettingsModal, saveSettings } from "./settings";
 import { saveAndCloseEditModal, openEditModal } from "./dictionaryManagement";
+import { addMessage } from "./utilities";
 
 export function enableHotKeys() {
   document.addEventListener('keydown', hotKeyActions);
@@ -14,10 +15,11 @@ export function disableHotKeys() {
 }
 
 export function hotKeyActions(event) {
-  console.log(event);
-
   if (typeof event.key === 'undefined' || typeof event.ctrlKey === 'undefined' || typeof event.altKey === 'undefined') {
+    addMessage('Hotkeys disabled');
     console.warn('Browser does not have required event properties for hotkeys.');
+    window.settings.useHotkeys = false;
+    saveSettings();
     disableHotKeys();
     return false;
   }
