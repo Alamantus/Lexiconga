@@ -143,23 +143,26 @@
     <div class="modal-content">
       <a class="close-button" onclick="this.parentElement.parentElement.style.display='none';">&times;&#xFE0E;</a>
       <section>
-        <form>
-          <label>Use IPA Auto-Fill
-            <input id="settingsUseIPA" type="checkbox" checked><br />
-            <small>Check this to use character combinations to input International Phonetic Alphabet characters into
-              Pronunciation fields.</small>
-          </label>
-  
-          <label>Theme
-            <select disabled>
-              <option selected value="default">Default</option>
-              <option value="dark">Dark</option>
-              <option value="light">Light</option>
-              <option value="blue">Blue</option>
-              <option value="green">Green</option>
-              <option value="royal">Royal</option>
-            </select>
-          </label>
+        <form class="split two">
+          <div>
+            <label>Use IPA Auto-Fill
+              <input id="settingsUseIPA" type="checkbox" checked><br />
+              <small>Check this to use character combinations to input International Phonetic Alphabet characters into
+                Pronunciation fields.</small>
+            </label>
+    
+            <label>Theme
+              <select disabled>
+                <option selected value="default">Default</option>
+                <option value="dark">Dark</option>
+                <option value="light">Light</option>
+                <option value="blue">Blue</option>
+                <option value="green">Green</option>
+                <option value="royal">Royal</option>
+              </select>
+            </label>
+            </div>
+            <div id="accountSettings"></div>
         </form>
       </section>
       <footer>

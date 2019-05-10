@@ -82,6 +82,12 @@
   }
 }
 
+#settingsModal {
+  .modal-content section {
+    padding: ($general-padding * 2) $general-padding $general-padding;
+  }
+}
+
 #mobileWordFormShow {
   display: none;
 }
