@@ -74,13 +74,15 @@ export function clearWordForm() {
   document.getElementById('wordPartOfSpeech').value = '';
   document.getElementById('wordDefinition').value = '';
   document.getElementById('wordDetails').value = '';
-  
+
   document.getElementById('wordName').focus();
 }
 
-export function addWord(word, render = true) {
+export function addWord(word, render = true, message = true) {
   window.currentDictionary.words.push(word);
-  addMessage('Word Created Successfully');
+  if (message) {
+    addMessage(`<a href="#${word.wordId}">${word.name}</a> Created Successfully`, 10000);
+  }
   sortWords(render);
 }
 
