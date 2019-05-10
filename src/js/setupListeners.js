@@ -1,7 +1,7 @@
 import {showSection, hideDetailsPanel} from './displayToggles';
 import { renderWords, renderEditForm, renderMaximizedTextbox, renderInfoModal, renderIPATable } from './render';
 import { confirmEditWord, cancelEditWord, confirmDeleteWord, submitWordForm } from './wordManagement';
-import { openEditModal, saveEditModal, saveAndCloseEditModal } from './dictionaryManagement';
+import { openEditModal, saveEditModal, saveAndCloseEditModal, exportDictionary, exportWords, importDictionary, importWords } from './dictionaryManagement';
 import { goToNextPage, goToPreviousPage, goToPage } from './pagination';
 import { insertAtCursor, getInputSelection, setSelectionRange } from './StackOverflow/inputCursorManagement';
 import { usePhondueDigraphs } from './KeyboardFire/phondue/ipaField';
@@ -82,6 +82,10 @@ function setupEditFormInteractions() {
 function setupEditFormButtons() {
   document.getElementById('editSave').addEventListener('click', () => saveEditModal());
   document.getElementById('editSaveAndClose').addEventListener('click', () => saveAndCloseEditModal());
+  document.getElementById('importDictionaryFile').addEventListener('change', importDictionary);
+  document.getElementById('importWordsCSV').addEventListener('change', importWords);
+  document.getElementById('exportDictionaryButton').addEventListener('click', exportDictionary);
+  document.getElementById('exportWordsButton').addEventListener('click', exportWords);
 
   setupMaximizeButtons();
 }
@@ -196,8 +200,8 @@ export function setupSettingsModal() {
 }
 
 export function setupWordEditFormButtons() {
-  const saveChangesButtons = document.getElementsByClassName('edit-save-changes');
-  const cancelChangesButtons = document.getElementsByClassName('edit-cancel');
+  const saveChangesButtons = document.getElementsByClassName('edit-save-changes'),
+    cancelChangesButtons = document.getElementsByClassName('edit-cancel');
   Array.from(saveChangesButtons).forEach(button => {
     button.removeEventListener('click', confirmEditWord);
     button.addEventListener('click', confirmEditWord);

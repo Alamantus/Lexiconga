@@ -1,7 +1,8 @@
-import { renderDictionaryDetails, renderPartsOfSpeech } from "./render";
-import { removeTags, cloneObject, getTimestampInSeconds } from "../helpers";
+import { renderDictionaryDetails, renderPartsOfSpeech, renderAll } from "./render";
+import { removeTags, cloneObject, getTimestampInSeconds, download, slugify } from "../helpers";
 import { LOCAL_STORAGE_KEY, DEFAULT_DICTIONARY, MIGRATE_VERSION } from "../constants";
-import { addMessage } from "./utilities";
+import { addMessage, getNextId } from "./utilities";
+import { addWord } from "./wordManagement";
 
 export function updateDictionary () {
 
@@ -91,6 +92,118 @@ export function loadDictionary() {
 
 export function clearDictionary() {
   window.currentDictionary = cloneObject(DEFAULT_DICTIONARY);
+}
+
+export function importDictionary() {
+  const importDictionaryField = document.getElementById('importDictionaryFile');
+  
+  if (importDictionaryField.files.length === 1) {
+    if (confirm('Importing a dicitonary file will overwrite and replace your current dictionary!\nDo you want to continue?')) {
+      addMessage('Importing Dictionary...');
+      const fileReader = new FileReader();
+      fileReader.onload = function (fileLoadedEvent) {
+        const textFromFileLoaded = fileLoadedEvent.target.result;
+        const importedDictionary = JSON.parse(textFromFileLoaded);
+        if (importedDictionary && importedDictionary.hasOwnProperty('words')) {
+          window.currentDictionary = importedDictionary;
+          saveDictionary();
+          renderAll();
+          importDictionaryField.value = '';
+          document.getElementById('editModal').style.display = 'none';
+          addMessage('Dictionary Imported Successfully');
+        } else {
+          addMessage('Dictionary could not be imported', 10000);
+        }
+      };
+
+      fileReader.readAsText(importDictionaryField.files[0], "UTF-8");
+    }
+  }
+}
+
+export function importWords() {
+  const importWordsField = document.getElementById('importWordsCSV');
+  
+  if (importWordsField.files.length === 1) {
+    if (confirm('Importing a CSV file with words will add all of the words in the file to your dictionary regardless of duplication!\nDo you want to continue?')) {
+      addMessage('Importing words...');
+      import('papaparse').then(papa => {
+        let wordsImported = 0;
+        papa.parse(importWordsField.files[0], {
+          header: true,
+          encoding: "utf-8",
+          step: results => {
+            if (results.errors.length > 0) {
+              results.errors.forEach(err => {
+                addMessage('Error Importing Word: ' + err);
+                console.error('Error Importing Word: ', err)
+              });
+            } else {
+              const row = results.data[0];
+              addWord({
+                name: removeTags(row.word).trim(),
+                pronunciation: removeTags(row.pronunciation).trim(),
+                partOfSpeech: removeTags(row['part of speech']).trim(),
+                definition: removeTags(row.definition).trim(),
+                details: removeTags(row.explanation).trim(),
+                wordId: getNextId(),
+              }, false, false);
+              wordsImported++;
+            }
+          },
+          complete: () => {
+            saveDictionary();
+            renderAll();
+            importWordsField.value = '';
+            document.getElementById('editModal').style.display = 'none';
+            addMessage(`Done Importing ${wordsImported} Words`);
+          },
+          error: err => {
+            addMessage('Error Importing Words: ' + err);
+            console.error('Error Importing Words: ', err);
+          },
+          skipEmptyLines: true,
+        });
+      });
+    }
+  }
+}
+
+export function exportDictionary() {
+  addMessage('Exporting JSON...');
+
+  setTimeout(() => {
+    const file = JSON.stringify(window.currentDictionary),
+      { name, specification } = window.currentDictionary;
+
+    const fileName = slugify(name + '_' + specification) + '.json';
+
+    download(file, fileName, 'application/json;charset=utf-8');
+  }, 1);
+}
+
+export function exportWords() {
+  addMessage('Exporting Words...');
+
+  setTimeout(() => {
+    import('papaparse').then(papa => {
+      const { name, specification } = window.currentDictionary;
+      
+      const fileName = slugify(name + '_' + specification) + '_words.csv';
+      
+      const words = window.currentDictionary.words.map(word => {
+        return {
+          word: word.name,
+          pronunciation: word.pronunciation,
+          'part of speech': word.partOfSpeech,
+          definition: word.definition,
+          explanation: word.details,
+        }
+      });
+      const csv = papa.unparse(words, { quotes: true });
+      download(csv, fileName, 'text/csv;charset=utf-8');
+    });
+  }, 1);
 }
 
 export function migrateDictionary() {

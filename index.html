@@ -289,21 +289,24 @@
         <div class="split two">
           <div>
             <p>
-              <a class="button">Import JSON</a><br>
-              <small>Import a previously-exported <code>JSON</code> file.</small>
+              <label class="button">Import JSON <input type="file" id="importDictionaryFile" accept="application/json, .dict"><br>
+                <small>Import a previously-exported <code>JSON</code> file.</small>
+              </label>
             </p>
             <p>
-              <a class="button">Import Words</a><br>
-              <small>Import a CSV file of words. (Download an <a>example file with the correct formatting</a>.)</small>
+              <label class="button">Import Words <input type="file" id="importWordsCSV" accept="text/csv, .csv"><br>
+                <small>Import a CSV file of words.</small>
+              </label>
+              <a class="small button" download="Lexiconga_import-template.csv" href="data:text/csv;charset=utf-8,%22word%22,%22pronunciation%22,%22part of speech%22,%22definition%22,%22explanation%22%0A">Download an example file with the correct formatting</a>
             </p>
           </div>
           <div>
             <p>
-              <a class="button">Export JSON</a><br>
+              <a class="button" id="exportDictionaryButton">Export JSON</a><br>
               <small>Export your work as a <code>JSON</code> file to re-import later.</small>
             </p>
             <p>
-              <a class="button">Export Words</a><br>
+              <a class="button" id="exportWordsButton">Export Words</a><br>
               <small>Export a CSV file of your words.</small>
             </p>
           </div>
