@@ -64,7 +64,18 @@ export function submitWordForm() {
 
   if (validateWord(word)) {
     addWord(word);
+    clearWordForm();
   }
+}
+
+export function clearWordForm() {
+  document.getElementById('wordName').value = '';
+  document.getElementById('wordPronunciation').value = '';
+  document.getElementById('wordPartOfSpeech').value = '';
+  document.getElementById('wordDefinition').value = '';
+  document.getElementById('wordDetails').value = '';
+  
+  document.getElementById('wordName').focus();
 }
 
 export function addWord(word, render = true) {
