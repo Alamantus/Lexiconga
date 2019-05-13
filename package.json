@@ -7,7 +7,8 @@
   "author": "Robbie Antenesse <dev@alamantus.com>",
   "license": "UNLICENCED",
   "scripts": {
-    "start": "parcel index.html",
+    "start": "parcel watch index.html",
+    "serve-frontend-only": "parcel index.html",
     "bundle": "parcel build index.html",
     "clear": "npm run clear-dist && npm run clear-cache",
     "clear-dist": "rimraf dist/*",
