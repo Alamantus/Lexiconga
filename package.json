@@ -7,15 +7,19 @@
   "author": "Robbie Antenesse <dev@alamantus.com>",
   "license": "UNLICENCED",
   "scripts": {
-    "start": "parcel watch index.html",
+    "start": "concurrently \"npm run watch-js\" \"npm run watch-php\"",
+    "watch-js": "parcel watch index.html",
+    "watch-php": "cpx src/php/**/* dist -v -w",
+    "bundle": "parcel build index.html && cpx src/php/**/* dist",
     "serve-frontend-only": "parcel index.html",
-    "bundle": "parcel build index.html",
     "clear": "npm run clear-dist && npm run clear-cache",
     "clear-dist": "rimraf dist/*",
     "clear-cache": "rimraf .cache/*"
   },
   "devDependencies": {
     "autoprefixer": "^9.5.1",
+    "concurrently": "^4.1.0",
+    "cpx": "^1.5.0",
     "parcel-bundler": "^1.12.3",
     "rimraf": "^2.6.3",
     "sass": "^1.19.0"

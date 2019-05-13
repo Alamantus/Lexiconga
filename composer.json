@@ -1,0 +1,9 @@
+{
+  "config": {
+    "vendor-dir": "src/php/vendor"
+  },
+  "require": {
+    "firebase/php-jwt": "^5.0",
+    "hashids/hashids": "^4.0"
+  }
+}
