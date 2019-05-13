@@ -1,0 +1,16 @@
+#loginModal {
+  .modal-content {
+    padding: $general-padding;
+    width: 1000px;
+    
+    section {
+      overflow-y: auto;
+      height: 100%;
+
+      p {
+        font-size: 10pt;
+        line-height: 12pt;
+      }
+    }
+  }
+}

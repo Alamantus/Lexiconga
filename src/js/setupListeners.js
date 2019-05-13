@@ -11,14 +11,24 @@ import { showSearchModal, clearSearchText } from './search';
 
 export default function setupListeners() {
   setupDetailsTabs();
-  setupSearchBar();
-  setupSettingsModal();
+  setupHeaderButtons();
   setupWordForm();
   setupMobileWordFormButton();
   setupInfoButtons();
   if (window.settings.useHotkeys) {
     enableHotKeys();
   }
+}
+
+export function setupHeaderButtons() {
+  setupSearchBar();
+  setupSettingsModal();
+
+  document.getElementById('loginCreateAccountButton').addEventListener('click', () => {
+    import('./account/index.js').then(account => {
+      account.showLoginForm();
+    });
+  });
 }
 
 function setupDetailsTabs() {
