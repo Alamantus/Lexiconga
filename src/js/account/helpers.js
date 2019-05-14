@@ -1,5 +1,5 @@
-export function request (data = {}, success = () => {}, error = () => {}, fail = () => {}) {
-  fetch('./account/', {
+export function request (data = {}, success = () => {}, error = () => {}/* , fail = () => {} */) {
+  return fetch('./api/', {
     method: 'POST', // or 'PUT'
     body: JSON.stringify(data), // data can be `string` or {object}!
     headers: {
@@ -10,12 +10,8 @@ export function request (data = {}, success = () => {}, error = () => {}, fail =
     .then(response => {
       console.log('Success:', JSON.stringify(response));
       if (response.error) {
-        error(response);
+        return error(response.data);
       }
-      success(response);
-    })
-    .catch(err => {
-      console.error('Request Error:', err);
-      fail(err);
+      return success(response.data);
     });
 }
