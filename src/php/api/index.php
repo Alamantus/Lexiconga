@@ -6,7 +6,7 @@ $inputJSON = file_get_contents('php://input');
 $request= json_decode($inputJSON, true);
 
 $action = isset($request['action']) ? $request['action'] : '';
-$token = isset($request['token']) ? $request['token'] : false;
+$token = isset($_COOKIE['token']) ? $_COOKIE['token'] : false;
 
 switch ($action) {
   case 'login': {
