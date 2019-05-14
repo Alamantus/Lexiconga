@@ -64,6 +64,10 @@ VALUES (?, ?, ?, ?, ?)';
         return array(
           'user' => $this->getUserData($new_user_id),
           'dictionary' => $this->token->hash($new_dictionary),
+          'debug' => [
+            'newUserId' => $new_user_id,
+            'newDictionary' => $new_dictionary,
+          ],
         );
       }
     }

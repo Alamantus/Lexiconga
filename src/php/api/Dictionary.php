@@ -12,17 +12,6 @@ class Dictionary {
 
     $this->defaults = array(
       'partsOfSpeech' => array("Noun","Adjective","Verb"),
-      'phonology'=> array(
-        'consonants' => array(),
-        'vowels' => array(),
-        'blends' => array(),
-        'phonotactics' => array(
-          'onset' => array(),
-          'nucleus' => array(),
-          'coda' => array(),
-          'exceptions' => '',
-        ),
-      ),
     );
   }
 
@@ -44,11 +33,10 @@ class Dictionary {
     $insert_dictionary = $this->db->execute($insert_dictionary_query, array($new_id, $user, time()));
 
     if ($insert_dictionary === true) {
-      $insert_linguistics_query = "INSERT INTO dictionary_linguistics (dictionary, parts_of_speech, phonology)
-VALUES ($new_id, ?, ?)";
+      $insert_linguistics_query = "INSERT INTO dictionary_linguistics (dictionary, parts_of_speech)
+VALUES ($new_id, ?)";
       $insert_linguistics = $this->db->execute($insert_linguistics_query, array(
         json_encode($this->defaults['partsOfSpeech']),
-        json_encode($this->defaults['phonology']),
       ));
 
       if ($insert_linguistics === true) {
