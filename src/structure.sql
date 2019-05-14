@@ -1,12 +1,6 @@
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-
-
 CREATE TABLE IF NOT EXISTS `deleted_words` (
   `dictionary` int(11) NOT NULL,
   `word_id` int(11) NOT NULL,
@@ -18,12 +12,12 @@ CREATE TABLE IF NOT EXISTS `dictionaries` (
   `user` int(11) NOT NULL,
   `name` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'New',
   `specification` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'Dictionary',
-  `description` text COLLATE utf8_unicode_ci NOT NULL COMMENT 'Markdown',
-  `allow_duplicates` tinyint(1) NOT NULL DEFAULT '0',
-  `case_sensitive` tinyint(1) NOT NULL DEFAULT '0',
-  `sort_by_definition` tinyint(1) NOT NULL DEFAULT '0',
-  `is_complete` tinyint(1) NOT NULL DEFAULT '0',
-  `is_public` tinyint(1) NOT NULL DEFAULT '0',
+  `description` text COLLATE utf8_unicode_ci NOT NULL DEFAULT 'A new dicitonary.' COMMENT 'Markdown',
+  `allow_duplicates` tinyint(1) NOT NULL DEFAULT 0,
+  `case_sensitive` tinyint(1) NOT NULL DEFAULT 0,
+  `sort_by_definition` tinyint(1) NOT NULL DEFAULT 0,
+  `is_complete` tinyint(1) NOT NULL DEFAULT 0,
+  `is_public` tinyint(1) NOT NULL DEFAULT 0,
   `last_updated` int(11) DEFAULT NULL,
   `created_on` int(11) NOT NULL,
   PRIMARY KEY (`id`)
@@ -39,24 +33,24 @@ DELIMITER ;
 
 CREATE TABLE IF NOT EXISTS `dictionary_linguistics` (
   `dictionary` int(11) NOT NULL,
-  `parts_of_speech` text NOT NULL COMMENT 'JSON array',
-  `consonants` text NOT NULL COMMENT 'JSON array',
-  `vowels` text NOT NULL COMMENT 'JSON array',
-  `blends` text NOT NULL COMMENT 'JSON array',
-  `onset` text NOT NULL COMMENT 'JSON array',
-  `nucleus` text NOT NULL COMMENT 'JSON array',
-  `coda` text NOT NULL COMMENT 'JSON array',
-  `exceptions` text NOT NULL COMMENT 'Markdown',
-  `orthography_notes` text NOT NULL COMMENT 'Markdown',
-  `grammar_notes` text NOT NULL COMMENT 'Markdown',
+  `parts_of_speech` text NOT NULL DEFAULT '' COMMENT 'JSON array',
+  `consonants` text NOT NULL DEFAULT '' COMMENT 'JSON array',
+  `vowels` text NOT NULL DEFAULT '' COMMENT 'JSON array',
+  `blends` text NOT NULL DEFAULT '' COMMENT 'JSON array',
+  `onset` text NOT NULL DEFAULT '' COMMENT 'JSON array',
+  `nucleus` text NOT NULL DEFAULT '' COMMENT 'JSON array',
+  `coda` text NOT NULL DEFAULT '' COMMENT 'JSON array',
+  `exceptions` text NOT NULL DEFAULT '' COMMENT 'Markdown',
+  `orthography_notes` text NOT NULL DEFAULT '' COMMENT 'Markdown',
+  `grammar_notes` text NOT NULL DEFAULT '' COMMENT 'Markdown',
   UNIQUE KEY `dictionary` (`dictionary`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `memberships` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user` int(11) NOT NULL,
-  `start_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `expire_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `start_date` timestamp NOT NULL DEFAULT current_timestamp(),
+  `expire_date` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -67,14 +61,14 @@ CREATE TABLE IF NOT EXISTS `users` (
   `password` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
   `public_name` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'Someone',
   `current_dictionary` int(11) DEFAULT NULL,
-  `allow_email` tinyint(1) NOT NULL DEFAULT '1',
+  `allow_email` tinyint(1) NOT NULL DEFAULT 1,
   `last_login` int(11) DEFAULT NULL,
   `password_reset_code` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
   `password_reset_date` int(11) DEFAULT NULL,
   `created_on` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=MyISAM AUTO_INCREMENT=184 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=200 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 DELIMITER $$
 CREATE TRIGGER IF NOT EXISTS `Delete_User_Dictionaries` AFTER DELETE ON `users` FOR EACH ROW DELETE FROM dictionaries WHERE dictionaries.user = old.id
 $$
@@ -86,13 +80,9 @@ CREATE TABLE IF NOT EXISTS `words` (
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `pronunciation` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `part_of_speech` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `definition` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `details` text COLLATE utf8_unicode_ci NOT NULL COMMENT 'Markdown',
+  `definition` text COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `details` text COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT 'Markdown',
   `last_updated` int(11) DEFAULT NULL,
   `created_on` int(11) NOT NULL,
   UNIQUE KEY `unique_index` (`dictionary`,`word_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
