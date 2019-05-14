@@ -40,6 +40,7 @@ export function renderLoginForm() {
           <label>Allow Emails
             <input type="checkbox" id="createNewAllowEmails">
           </label>
+          <section id="createAccountErrorMessages"></section>
           <a id="createAccountSubmit" class="button">Create Account</a>
         </div>
       </div>

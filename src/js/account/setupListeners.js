@@ -1,4 +1,4 @@
-import { logIn } from "./login";
+import { logIn, createAccount } from "./login";
 
 export function setupLoginModal(modal) {
   const closeElements = modal.querySelectorAll('.modal-background, .close-button');
@@ -9,4 +9,5 @@ export function setupLoginModal(modal) {
   });
 
   document.getElementById('loginSubmit').addEventListener('click', logIn);
+  document.getElementById('createAccountSubmit').addEventListener('click', createAccount);
 }
