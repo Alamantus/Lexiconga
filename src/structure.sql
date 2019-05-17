@@ -10,9 +10,9 @@ CREATE TABLE IF NOT EXISTS `deleted_words` (
 CREATE TABLE IF NOT EXISTS `dictionaries` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user` int(11) NOT NULL,
-  `name` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'New',
-  `specification` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'Dictionary',
-  `description` text COLLATE utf8_unicode_ci NOT NULL DEFAULT 'A new dicitonary.' COMMENT 'Markdown',
+  `name` varchar(80) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'New',
+  `specification` varchar(80) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'Dictionary',
+  `description` text COLLATE utf8_unicode_ci NOT NULL COMMENT 'Markdown. Default: "A new dictionary."',
   `allow_duplicates` tinyint(1) NOT NULL DEFAULT 0,
   `case_sensitive` tinyint(1) NOT NULL DEFAULT 0,
   `sort_by_definition` tinyint(1) NOT NULL DEFAULT 0,
@@ -33,16 +33,16 @@ DELIMITER ;
 
 CREATE TABLE IF NOT EXISTS `dictionary_linguistics` (
   `dictionary` int(11) NOT NULL,
-  `parts_of_speech` text NOT NULL DEFAULT '' COMMENT 'JSON array',
-  `consonants` text NOT NULL DEFAULT '' COMMENT 'JSON array',
-  `vowels` text NOT NULL DEFAULT '' COMMENT 'JSON array',
-  `blends` text NOT NULL DEFAULT '' COMMENT 'JSON array',
-  `onset` text NOT NULL DEFAULT '' COMMENT 'JSON array',
-  `nucleus` text NOT NULL DEFAULT '' COMMENT 'JSON array',
-  `coda` text NOT NULL DEFAULT '' COMMENT 'JSON array',
-  `exceptions` text NOT NULL DEFAULT '' COMMENT 'Markdown',
-  `orthography_notes` text NOT NULL DEFAULT '' COMMENT 'Markdown',
-  `grammar_notes` text NOT NULL DEFAULT '' COMMENT 'Markdown',
+  `parts_of_speech` text COLLATE utf8_unicode_ci NOT NULL COMMENT 'Comma-separated',
+  `consonants` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT 'Space-separated',
+  `vowels` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT 'Space-separated',
+  `blends` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT 'Space-separated',
+  `onset` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT 'Comma-separated',
+  `nucleus` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT 'Comma-separated',
+  `coda` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT 'Comma-separated',
+  `exceptions` text COLLATE utf8_unicode_ci NOT NULL COMMENT 'Markdown',
+  `orthography_notes` text COLLATE utf8_unicode_ci NOT NULL COMMENT 'Markdown',
+  `grammar_notes` text COLLATE utf8_unicode_ci NOT NULL COMMENT 'Markdown',
   UNIQUE KEY `dictionary` (`dictionary`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -80,8 +80,8 @@ CREATE TABLE IF NOT EXISTS `words` (
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `pronunciation` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `part_of_speech` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `definition` text COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `details` text COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT 'Markdown',
+  `definition` text COLLATE utf8_unicode_ci NOT NULL,
+  `details` text COLLATE utf8_unicode_ci NOT NULL COMMENT 'Markdown',
   `last_updated` int(11) DEFAULT NULL,
   `created_on` int(11) NOT NULL,
   UNIQUE KEY `unique_index` (`dictionary`,`word_id`)

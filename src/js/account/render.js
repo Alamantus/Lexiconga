@@ -11,10 +11,10 @@ export function renderLoginForm() {
         <div>
           <h2>Log In</h2>
           <label>Email<br>
-            <input type="email" required id="loginEmail">
+            <input type="email" required id="loginEmail" maxlength="100">
           </label>
           <label>Password<br>
-            <input type="password" required id="loginPassword">
+            <input type="password" required id="loginPassword" maxlength="100">
           </label>
           <section id="loginErrorMessages"></section>
           <a id="loginSubmit" class="button">Log In</a><br>
@@ -26,16 +26,16 @@ export function renderLoginForm() {
           <p>Plus if you allow us to send you emails, we'll make sure that you're the first to hear about any new features that get added or if any of our policies change for any reason. We'll never spam you or sell your information.</p>
           <p>By creating an account, you are indicating that you agree to the Terms of Service and that you understand Lexiconga's Privacy Policy.</p>
           <label>Email<br>
-            <input type="email" id="createNewEmail">
+            <input type="email" id="createNewEmail" maxlength="100">
           </label>
           <label>Password<br>
-            <input type="password" id="createNewPassword">
+            <input type="password" id="createNewPassword" maxlength="100">
           </label>
           <label>Confirm Password<br>
-            <input type="password" id="createNewConfirm">
+            <input type="password" id="createNewConfirm" maxlength="100">
           </label>
           <label>Public Name<br>
-            <input type="text" id="createNewPublicName">
+            <input type="text" id="createNewPublicName" maxlength="50">
           </label>
           <label>Allow Emails
             <input type="checkbox" id="createNewAllowEmails">

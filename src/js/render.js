@@ -244,15 +244,15 @@ export function renderEditForm(wordId = false) {
   const word = window.currentDictionary.words.find(w => w.wordId === wordId);
   if (word) {
     const ipaPronunciationField = `<label>Pronunciation<a class="label-button ipa-table-button">IPA Chart</a><br>
-      <input id="wordPronunciation_${wordId}" class="ipa-field" value="${word.pronunciation}"><br>
+      <input id="wordPronunciation_${wordId}" class="ipa-field" maxlength="200" value="${word.pronunciation}"><br>
       <a class="label-help-button ipa-field-help-button">Field Help</a>
     </label>`;
     const plainPronunciationField = `<label>Pronunciation<br>
-      <input id="wordPronunciation_${wordId}" value="${word.pronunciation}">
+      <input id="wordPronunciation_${wordId}" maxlength="200" value="${word.pronunciation}">
     </label>`;
     const editForm = `<form id="editForm_${wordId}" class="edit-form">
       <label>Word<span class="red">*</span><br>
-        <input id="wordName_${wordId}" value="${word.name}">
+        <input id="wordName_${wordId}" maxlength="200" value="${word.name}">
       </label>
       ${window.settings.useIPAPronunciationField ? ipaPronunciationField : plainPronunciationField}
       <label>Part of Speech<br>
@@ -261,7 +261,7 @@ export function renderEditForm(wordId = false) {
         </select>
       </label>
       <label>Definition<span class="red">*</span><br>
-        <input id="wordDefinition_${wordId}" value="${word.definition}" placeholder="Equivalent words">
+        <input id="wordDefinition_${wordId}" maxlength="2500" value="${word.definition}" placeholder="Equivalent words">
       </label>
       <label>Details<span class="red">*</span><a class="label-button maximize-button">Maximize</a><br>
         <textarea id="wordDetails_${wordId}" placeholder="Markdown formatting allowed">${word.details}</textarea>
