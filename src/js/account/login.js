@@ -1,5 +1,7 @@
 import { request } from "./helpers";
 import { addMessage } from "../utilities";
+import { setupLogoutButton } from "./setupListeners";
+import { renderAccountSettings } from "./render";
 
 export function logIn() {
   const email = document.getElementById('loginEmail').value.trim(),
@@ -16,12 +18,24 @@ export function logIn() {
 
   loginErrorMessages.innerHTML = errorHTML;
 
-  if (errorHTML !== '') {
+  if (errorHTML === '') {
     request({
       action: 'login',
       email,
       password,
-    });
+    }, successData => {
+      console.log(successData);
+    }, errorData => {
+      errorHTML += errorData;
+    }).then(() => {
+      createAccountErrorMessages.innerHTML = errorHTML;
+      if (errorHTML === '') {
+        const loginModal = document.getElementById('loginModal');
+        loginModal.parentElement.removeChild(loginModal);
+        triggerLoginChanges();
+        addMessage(`Welcome! You are logged in.`);
+      }
+    }).catch(err => console.error(err));
   }
 }
 
@@ -79,6 +93,7 @@ export function createAccount() {
           if (errorHTML === '') {
             const loginModal = document.getElementById('loginModal');
             loginModal.parentElement.removeChild(loginModal);
+            triggerLoginChanges();
             addMessage('Account Created Successfully!');
             addMessage(`Welcome${publicName !== '' ? ', ' + publicName : ''}! You are logged in.`);
           }
@@ -86,4 +101,17 @@ export function createAccount() {
       }
     }).catch(err => console.error(err));
   }
+}
+
+export function triggerLoginChanges() {
+  const loginButton = document.getElementById('loginCreateAccountButton')
+  const logoutButton = document.createElement('a');
+  logoutButton.classList.add('button');
+  logoutButton.id = 'logoutButton';
+  logoutButton.innerHTML = 'Log Out';
+  loginButton.parentElement.appendChild(logoutButton);
+  loginButton.parentElement.removeChild(loginButton);
+  setupLogoutButton(logoutButton);
+
+  renderAccountSettings();
 }

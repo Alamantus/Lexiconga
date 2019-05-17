@@ -51,3 +51,26 @@ export function renderLoginForm() {
 
   setupLoginModal(loginModal);
 }
+
+export function renderAccountSettings() {
+  const accountSettingsColumn = document.getElementById('accountSettings');
+  const accountSettingsHTML = `<h3>Account Settings</h3>
+  <label>Email Address<br><input id="accountSettingsEmail" required maxlength="100"></label>
+  <label>Public Name<br><input id="accountSettingsPublicName" placeholder="Someone" maxlength="50"></label>
+  <label>Allow Emails <input type="checkbox" id="accountSettingsAllowEmails"></label>
+  <label>Change Dictionary<br><select id="accountSettingsChangeDictionary"></select></label>
+  <h4>Request Your Data</h4>
+  <p>
+    Per your <a href="https://www.eugdpr.org/" target="_blank">GDPR</a> rights in Articles 13–15 and 20, we allow you to request any and all data we have stored about you. The only data we have about you personally is your email address and your Public Name, if you decided to set one. All other data (your Dictionary data) is visible and accessible via the Export button under your Dictionary's Settings. Send an email to help@lexicon.ga to request your information.
+  </p>
+
+  <h4>Delete Your Account</h4>
+  <p>
+    Per your <a href="https://www.eugdpr.org/" target="_blank">GDPR</a> rights in Articles 17, if you wish for your account to be deleted, please contact us at help@lexicon.ga, and we will delete your account and all associated dictionaries and words as quickly as possible. Note that you can delete dictionaries yourself via your Dictionary's Settings.
+  </p>
+  <p>
+    Anything that is deleted from our system is permanently and irretrievably removed from our system and cannot be restored, though search engines or internet archives may retain a cached version of your content (there is nothing we can do about this, and you will need to seek out removal of that information by directly contacting the services that are caching your data).
+  </p>
+  `;
+  accountSettingsColumn.innerHTML = accountSettingsHTML;
+}
