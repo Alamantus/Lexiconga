@@ -2,3 +2,5 @@ node_modules/
 .cache/
 dist/
 vendor/
+
+src/php/api/config.php
