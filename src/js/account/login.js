@@ -1,4 +1,4 @@
-import { request } from "./helpers";
+import { request, saveToken } from "./helpers";
 import { addMessage } from "../utilities";
 import { setupLogoutButton } from "./setupListeners";
 import { renderAccountSettings } from "./render";
@@ -25,6 +25,7 @@ export function logIn() {
       password,
     }, successData => {
       console.log(successData);
+      saveToken(successData.token);
     }, errorData => {
       errorHTML += errorData;
     }).then(() => {
@@ -84,9 +85,10 @@ export function createAccount() {
             allowEmail,
           },
         }, responseData => {
-            return responseData;
+          saveToken(responseData.token);
+          return responseData;
         }, errorData => {
-            errorHTML += `<p class="bold red">${errorData}</p>`;        
+          errorHTML += `<p class="bold red">${errorData}</p>`;        
         }).then(responseData => {
           console.log(responseData);
           createAccountErrorMessages.innerHTML = errorHTML;

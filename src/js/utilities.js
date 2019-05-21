@@ -1,4 +1,5 @@
 import { addWord } from './wordManagement';
+import { getCookie } from './StackOverflow/cookie';
 
 export function getNextId() {
   const lastId = window.currentDictionary.words.reduce((highestId, word) => {
@@ -146,4 +147,8 @@ export function addMessage(messageText, time = 5000) {
   closeButton.addEventListener('click', closeMessage);
 
   setTimeout(closeMessage, time);
+}
+
+export function hasToken() {
+  return getCookie('token') !== '';
 }
