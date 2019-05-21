@@ -84,17 +84,26 @@ VALUES ($new_id, ?, ?, ?, ?)";
     $result = $this->db->query($query)->fetch();
     if ($result) {
       // Default json values in case they are somehow not created by front end first
-      $partsOfSpeech = $result['parts_of_speech'] !== '' ? json_decode($result['parts_of_speech']) : $this->defaults['partsOfSpeech'];
-      $phonology = $result['phonology'] !== '' ? json_decode($result['phonology']) : $this->defaults['phonology'];
+      $partsOfSpeech = $result['parts_of_speech'] !== '' ? $result['parts_of_speech'] : $this->defaults['partsOfSpeech'];
 
       return array(
-        'id' => $result['id'],
+        'externalId' => $this->token->hash($result['id']),
         'name' => $result['name'],
         'specification' => $result['specification'],
         'description' => $result['description'],
         'partsOfSpeech' => $partsOfSpeech,
         'details' => array(
-          'phonology' => $phonology,
+          'phonology' => array(
+            'consonants' => $result['consonants'] !== '' ? explode(' ', $result['consonants']) : array(),
+            'vowels' => $result['vowels'] !== '' ? explode(' ', $result['vowels']) : array(),
+            'blends' => $result['blends'] !== '' ? explode(' ', $result['blends']) : array(),
+            'phonotactics' => array(
+              'onset' => $result['onset'] !== '' ? explode(',', $result['onset']) : array(),
+              'nucleus' => $result['nucleus'] !== '' ? explode(',', $result['nucleus']) : array(),
+              'coda' => $result['coda'] !== '' ? explode(',', $result['coda']) : array(),
+              'exceptions' => $result['parts_of_speech'],
+            ),
+          ),
           'orthography' => array(
             'notes' => $result['orthography_notes'],
           ),
@@ -220,7 +229,7 @@ WHERE dictionary=$dictionary";
     if (count($words) < 1) {
       return true;
     }
-    
+
     $query = 'INSERT INTO words (dictionary, word_id, name, pronunciation, part_of_speech, definition, details, last_updated, created_on) VALUES ';
     $params = array();
     $word_ids = array();
