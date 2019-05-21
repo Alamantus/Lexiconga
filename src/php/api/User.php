@@ -179,7 +179,12 @@ VALUES (?, ?, ?, ?, ?)';
       $dictionary = $user_data->dictionary;
       $details_updated = $this->dictionary->setDetails($user, $dictionary, $dictionary_data['details']);
       $words_updated = $this->dictionary->setWords($dictionary, $dictionary_data['words']);
-      return $details_updated && $words_updated;
+      if ($details_updated === true && $words_updated === true) {
+        return $this->token->hash($dictionary);
+      }
+      return array(
+        'error' => ($details_updated !== true ? $details_updated . ' ' : '') . ($words_updated !== true ? $words_updated : ''),
+      );
     }
     return false;
   }

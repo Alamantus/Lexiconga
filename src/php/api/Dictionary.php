@@ -135,11 +135,11 @@ WHERE user=$user AND id=$dictionary";
       ':name' => $dictionary_object['name'],
       ':specification' => $dictionary_object['specification'],
       ':description' => $dictionary_object['description'],
-      ':allow_duplicates' => $dictionary_object['settings']['allowDuplicates'],
-      ':case_sensitive' => $dictionary_object['settings']['caseSensitive'],
-      ':sort_by_definition' => $dictionary_object['settings']['sortByDefinition'],
-      ':is_complete' => $dictionary_object['settings']['isComplete'],
-      ':is_public' => $dictionary_object['settings']['isPublic'],
+      ':allow_duplicates' => $dictionary_object['settings']['allowDuplicates'] ? 1 : 0,
+      ':case_sensitive' => $dictionary_object['settings']['caseSensitive'] ? 1 : 0,
+      ':sort_by_definition' => $dictionary_object['settings']['sortByDefinition'] ? 1 : 0,
+      ':is_complete' => $dictionary_object['settings']['isComplete'] ? 1 : 0,
+      ':is_public' => $dictionary_object['settings']['isPublic'] ? 1 : 0,
       ':last_updated' => $dictionary_object['lastUpdated'],
       ':created_on' => $dictionary_object['createdOn'],
     ));
@@ -148,15 +148,27 @@ WHERE user=$user AND id=$dictionary";
       $linguistics = $dictionary_object['details'];
       $query2 = "UPDATE dictionary_linguistics
 SET parts_of_speech=:parts_of_speech,
-  phonology=:phonology,
+  consonants=:consonants,
+  vowels=:vowels,
+  blends=:blends,
+  onset=:onset,
+  nucleus=:nucleus,
+  coda=:coda,
+  exceptions=:exceptions,
   orthography_notes=:orthography_notes,
   grammar_notes=:grammar_notes
 WHERE dictionary=$dictionary";
 
       // $result2 = $this->db->query($query2, array(
       $result2 = $this->db->execute($query2, array(
-        ':parts_of_speech' => json_encode($dictionary_object['partsOfSpeech']),
-        ':phonology' => json_encode($linguistics['phonology']),
+        ':parts_of_speech' => implode(',', $dictionary_object['partsOfSpeech']),
+        ':consonants' => implode(' ', $linguistics['phonology']['consonants']),
+        ':vowels' => implode(' ', $linguistics['phonology']['vowels']),
+        ':blends' => implode(' ', $linguistics['phonology']['blends']),
+        ':onset' => implode(',', $linguistics['phonology']['phonotactics']['onset']),
+        ':nucleus' => implode(',', $linguistics['phonology']['phonotactics']['nucleus']),
+        ':coda' => implode(',', $linguistics['phonology']['phonotactics']['coda']),
+        ':exceptions' => $linguistics['phonology']['phonotactics']['exceptions'],
         ':orthography_notes' => $linguistics['orthography']['notes'],
         ':grammar_notes' => $linguistics['grammar']['notes'],
       ));
@@ -165,10 +177,9 @@ WHERE dictionary=$dictionary";
       if ($result2 === true) {
         return true;
       }
-      // return $result2->errorInfo();
     }
-    // return $result1->errorInfo();
-    return false;
+    return $this->db->last_error_info;
+    // return false;
   }
 
   public function getWords ($user, $dictionary) {
@@ -206,6 +217,10 @@ WHERE dictionary=$dictionary";
   }
 
   public function setWords ($user, $dictionary, $words = array()) {
+    if (count($words) < 1) {
+      return true;
+    }
+    
     $query = 'INSERT INTO words (dictionary, word_id, name, pronunciation, part_of_speech, definition, details, last_updated, created_on) VALUES ';
     $params = array();
     $word_ids = array();
@@ -247,7 +262,12 @@ last_updated=VALUES(last_updated)';
     //   }
     // }
 
-    return $results;
+    if ($results) {
+      return $results;
+    }
+    return array(
+      'error' => $this->db->last_error_info,
+    );
   }
 
   public function deleteWords ($dictionary, $word_ids) {

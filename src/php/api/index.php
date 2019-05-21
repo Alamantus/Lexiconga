@@ -196,11 +196,17 @@ switch ($action) {
     if ($token !== false && isset($request['dictionary'])) {
       $user = new User();
       $dictionary_data = $user->saveWholeCurrentDictionary($token, $request['dictionary']);
-      if ($dictionary_data !== false) {
+      if ($dictionary_data !== false && !isset($dictionary_data['error'])) {
         return Response::json(array(
-          'data' => 'Updated successfully',
+          'data' => $dictionary_data,
           'error' => false,
         ), 200);
+      }
+      if (isset($dictionary_data['error'])) {
+        return Response::json(array(
+          'data' => $dictionary_data['message'],
+          'error' => true,
+        ), 500);
       }
       return Response::json(array(
         'data' => 'Could not set dictionary: invalid token',
