@@ -101,7 +101,7 @@ VALUES (?, ?, ?, ?, ?)';
   }
 
   public function getUserData ($user_id) {
-    $query = 'SELECT email, public_name, allow_emails FROM users WHERE id=?';
+    $query = 'SELECT email, public_name, allow_email FROM users WHERE id=?';
     $stmt = $this->db->query($query, array($user_id));
     $user = $stmt->fetch();
     if ($stmt && $user) {

@@ -11,7 +11,7 @@ class Dictionary {
     $this->token = new Token();
 
     $this->defaults = array(
-      'partsOfSpeech' => array("Noun","Adjective","Verb"),
+      'partsOfSpeech' => 'Noun,Adjective,Verb',
     );
   }
 
@@ -29,14 +29,17 @@ class Dictionary {
       $id_exists = $this->checkIfIdExists($new_id);
     }
 
-    $insert_dictionary_query = "INSERT INTO dictionaries (id, user, created_on) VALUES (?, ?, ?)";
-    $insert_dictionary = $this->db->execute($insert_dictionary_query, array($new_id, $user, time()));
+    $insert_dictionary_query = "INSERT INTO dictionaries (id, user, description, created_on) VALUES (?, ?, ?, ?)";
+    $insert_dictionary = $this->db->execute($insert_dictionary_query, array($new_id, $user, 'A new dictionary.', time()));
 
     if ($insert_dictionary === true) {
-      $insert_linguistics_query = "INSERT INTO dictionary_linguistics (dictionary, parts_of_speech)
-VALUES ($new_id, ?)";
+      $insert_linguistics_query = "INSERT INTO dictionary_linguistics (dictionary, parts_of_speech, exceptions, orthography_notes, grammar_notes)
+VALUES ($new_id, ?, ?, ?, ?)";
       $insert_linguistics = $this->db->execute($insert_linguistics_query, array(
-        json_encode($this->defaults['partsOfSpeech']),
+        $this->defaults['partsOfSpeech'],
+        '',
+        '',
+        '',
       ));
 
       if ($insert_linguistics === true) {
