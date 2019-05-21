@@ -3,7 +3,16 @@ require_once('./Response.php');
 require_once('./User.php');
 
 $inputJSON = file_get_contents('php://input');
+$inputJSON = strip_tags($inputJSON);
 $request= json_decode($inputJSON, true);
+
+if (!$request) {
+  // If malformed/unparseable JSON, fail.
+  return Response::json(array(
+    'data' => 'Malformed request data',
+    'error' => true,
+  ), 400);
+}
 
 $action = isset($request['action']) ? $request['action'] : '';
 $token = isset($_COOKIE['token']) ? $_COOKIE['token'] : false;
