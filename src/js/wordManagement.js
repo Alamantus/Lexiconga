@@ -1,7 +1,7 @@
 import { renderWords } from "./render";
 import { wordExists, addMessage, getNextId } from "./utilities";
 import removeDiacritics from "./StackOverflow/removeDiacritics";
-import { removeTags } from "../helpers";
+import { removeTags, getTimestampInSeconds } from "../helpers";
 import { saveDictionary } from "./dictionaryManagement";
 
 export function validateWord(word, wordId = false) {
@@ -79,6 +79,9 @@ export function clearWordForm() {
 }
 
 export function addWord(word, render = true, message = true) {
+  const timestamp = getTimestampInSeconds();
+  word.lastUpdated = timestamp;
+  word.createdOn = timestamp;
   window.currentDictionary.words.push(word);
   if (message) {
     addMessage(`<a href="#${word.wordId}">${word.name}</a> Created Successfully`, 10000);
@@ -103,6 +106,7 @@ export function updateWord(word, wordId) {
   if (wordIndex < 0) {
     console.error('Could not find word to update');
   } else {
+    word.lastUpdated = getTimestampInSeconds();
     window.currentDictionary.words[wordIndex] = word;
     addMessage('Word Updated Successfully');
     sortWords(true);
