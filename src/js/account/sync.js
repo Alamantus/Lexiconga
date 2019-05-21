@@ -1,10 +1,10 @@
 import { addMessage } from "../utilities";
 import { saveDictionary } from "../dictionaryManagement";
-import { request } from "./helpers";
+import { request, saveToken } from "./helpers";
 
 export function syncDictionary() {
   if (!window.currentDictionary.hasOwnProperty('externalId')) {
-    uploadWholeDictionaryAsNew();
+    uploadWholeDictionary(true);
   } else {
     console.log('Do a sync comparison!');
     // request({
@@ -22,24 +22,39 @@ export function syncDictionary() {
   }
 }
 
-export function uploadWholeDictionaryAsNew() {
+export function uploadWholeDictionary(asNew = false) {
+  let promise;
+  if (asNew) {
+    promise = request({
+      action: 'create-new-dictionary',
+    }, successData => {
+      saveToken(successData.token);
+    }, errorData => {
+      console.error(errorData);
+    });
+  } else {
+    promise = Promise.resolve();
+  }
   const dictionary = {
     details: Object.assign({}, window.currentDictionary),
     words: window.currentDictionary.words,
   };
   delete dictionary.details.words;  // Ugly way to easily get the data I need.
-  request({
-    action: 'set-whole-current-dictionary',
-    dictionary,
-  }, remoteId => {
-    window.currentDictionary.externalId = remoteId;
-    saveDictionary();
-    addMessage('Dictionary Uploaded Successfully');
-  }, errorData => {
-    console.error(errorData);
-    addMessage(errorData);
+  promise.then(() => {
+    request({
+      action: 'set-whole-current-dictionary',
+      dictionary,
+    }, remoteId => {
+      window.currentDictionary.externalId = remoteId;
+      saveDictionary();
+      addMessage('Dictionary Uploaded Successfully');
+    }, errorData => {
+      console.error(errorData);
+      addMessage(errorData);
+    })
+    .catch(err => console.error('set-whole-current-dictionary: ', err));
   })
-  .catch(err => console.error(err));
+  .catch(err => console.error('create-new-dictionary: ', err));
 }
 
 export function syncDetails(remoteDetails) {

@@ -2,7 +2,7 @@ import { request, saveToken } from "./helpers";
 import { addMessage } from "../utilities";
 import { setupLogoutButton } from "./setupListeners";
 import { renderAccountSettings } from "./render";
-import { uploadWholeDictionaryAsNew } from "./sync";
+import { uploadWholeDictionary } from "./sync";
 
 export function logIn() {
   const email = document.getElementById('loginEmail').value.trim(),
@@ -88,7 +88,7 @@ export function createAccount() {
         }, responseData => {
           saveToken(responseData.token);
           if (responseData.hasOwnProperty('dictionary')) {
-            uploadWholeDictionaryAsNew(); // Saves external id
+            uploadWholeDictionary(); // Saves external id
           }
           return responseData;
         }, errorData => {
