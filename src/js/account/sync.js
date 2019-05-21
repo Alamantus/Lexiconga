@@ -2,6 +2,33 @@ import { addMessage } from "../utilities";
 import { saveDictionary } from "../dictionaryManagement";
 import { request, saveToken } from "./helpers";
 
+/* Outline for syncing
+login
+-> check local dictionary id
+  (DONE!) ? no id
+    -> upload dictionary
+    -> make new dictionary current
+  ? mismatched id
+    -> sync local dictionary (see 'same id' below)
+      -> if no matching remote id, ignore (assume deleted)
+    -> clear local dictionary
+    -> insert downloaded dictionary
+  ? same id
+    -> compare detail last updated timestamp
+      ? downloaded details are newer
+        -> replace local details
+      ? local details are newer
+        -> flag to upload details
+    -> filter deleted words from current words
+      -- check id and compare deletedOn with createdOn
+    -> compare each word and by lastUpdated/createdOn
+      ? downloaded word is newer
+        -> update local word
+      ? local word is newer
+        -> put word in an array to upload
+    -> upload anything that needs update
+ */
+
 export function syncDictionary() {
   if (!window.currentDictionary.hasOwnProperty('externalId')) {
     uploadWholeDictionary(true);
