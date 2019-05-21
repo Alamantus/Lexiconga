@@ -24,10 +24,10 @@ class User {
         }
       } else if (password_verify($password, $user['password'])) {
         $this->db->execute('UPDATE users SET last_login=' . time() . ' WHERE id=' . $user['id']);
-        setcookie('token', $this->generateUserToken($user['id'], $user['current_dictionary']));
+        $token = $this->generateUserToken($user['id'], $user['current_dictionary']);
         return array(
+          'token' => $token,
           'user' => $this->getUserData($user['id']),
-          'dictionary' => $this->token->hash($user['current_dictionary']),
         );
       }
     }
@@ -60,14 +60,10 @@ VALUES (?, ?, ?, ?, ?)';
       if (isset($new_dictionary['error'])) {
         return $new_dictionary;
       } else {
-        setcookie('token', $this->generateUserToken($new_user_id, $new_dictionary));
+        $token = $this->generateUserToken($new_user_id, $new_dictionary);
         return array(
+          'token' => $token,
           'user' => $this->getUserData($new_user_id),
-          'dictionary' => $this->token->hash($new_dictionary),
-          'debug' => [
-            'newUserId' => $new_user_id,
-            'newDictionary' => $new_dictionary,
-          ],
         );
       }
     }

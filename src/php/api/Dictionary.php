@@ -71,7 +71,7 @@ VALUES ($new_id, ?, ?, ?, ?)";
     if ($results) {
       return array_map(function($result) {
         return array(
-          'id' => $result['id'],
+          'id' => $this->token->hash($result['id']),
           'name' => $result['name'] . ' ' . $result['specification'],
         );
       }, $results);
