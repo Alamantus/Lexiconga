@@ -1,6 +1,6 @@
 import { request, saveToken } from "./helpers";
 import { addMessage } from "../utilities";
-import { setupLogoutButton } from "./setupListeners";
+import { setupLogoutButton, setupEditFormButtonOverrides } from "./setupListeners";
 import { renderAccountSettings } from "./render";
 import { uploadWholeDictionary } from "./sync";
 
@@ -119,6 +119,7 @@ export function triggerLoginChanges() {
   loginButton.parentElement.appendChild(logoutButton);
   loginButton.parentElement.removeChild(loginButton);
   setupLogoutButton(logoutButton);
+  setupEditFormButtonOverrides();
 
   renderAccountSettings();
 }

@@ -33,19 +33,25 @@ export function syncDictionary() {
   if (!window.currentDictionary.hasOwnProperty('externalId')) {
     uploadWholeDictionary(true);
   } else {
-    console.log('Do a sync comparison!');
-    // request({
-    //   action: 'get-current-dictionary',
-    // }, remote => {
-    //   console.log(remote);
-    //   syncDetails(remote.details).then(success => {
-    //     if (success) {
-
-    //     }
-    //   });
-    // }, error => {
-    //   console.error(error);
-    // }).catch(err => console.error(err));
+    addMessage('Syncing...');
+    request({
+      action: 'get-current-dictionary',
+    }, remote => {
+      console.log(remote);
+      const detailsSynced = syncDetails(remote.details);
+      
+      if (detailsSynced === false) {
+        addMessage('Could not sync');
+      } else {
+        detailsSynced.then(success => {
+          if (success) {
+            console.log('Do a word comparison!');
+          }
+        });
+      }
+    }, error => {
+      console.error(error);
+    }).catch(err => console.error(err));
   }
 }
 
@@ -84,10 +90,27 @@ export function uploadWholeDictionary(asNew = false) {
   .catch(err => console.error('create-new-dictionary: ', err));
 }
 
-export function syncDetails(remoteDetails) {
-  if (remoteDetails.hasOwnProperty('lastUpdated') && remoteDetails.lastUpdated > window.currentDictionary.lastUpdated) {
-    
+export function syncDetails(remoteDetails = false) {
+  if (remoteDetails === false || remoteDetails.lastUpdated < window.currentDictionary.lastUpdated) {
+    const details = Object.assign({}, window.currentDictionary);
+    delete details.words;
+    return request({
+      action: 'set-dictionary-details',
+      details,
+    }, successful => {
+      addMessage('Saved Details to Server');
+      return successful;
+    }, error => {
+      console.error(error);
+      addMessage('Could not sync dictionary');
+      return false;
+    });
+  } else if (remoteDetails.lastUpdated > window.currentDictionary.lastUpdated) {
+    window.currentDictionary = Object.assign(window.currentDictionary, remoteDetails);
+    saveDictionary();
   }
+  addMessage('Dictionary details synchronized');
+  return Promise.resolve();
 }
 
 export function syncWords(remoteWords, deletedWords) {

@@ -1,4 +1,6 @@
 import { logIn, createAccount } from "./login";
+import { saveEditModal, saveAndCloseEditModal } from "../dictionaryManagement";
+import { saveEditModalAndSync, saveAndCloseEditModalAndSync } from "./dictionaryManagement";
 
 export function setupLoginModal(modal) {
   const closeElements = modal.querySelectorAll('.modal-background, .close-button');
@@ -19,4 +21,19 @@ export function setupLogoutButton(logoutButton) {
     document.cookie = 'token=;expires=' + expire.toGMTString() + ';domain=' + document.domain + ';path=' + path; // + in front of `new Date` converts to a number
     window.location.reload();
   });
+}
+
+export function setupEditFormButtonOverrides() {
+  document.getElementById('editSave').removeEventListener('click', saveEditModal);
+  document.getElementById('editSave').addEventListener('click', saveEditModalAndSync);
+  document.getElementById('editSaveAndClose').removeEventListener('click', saveAndCloseEditModal);
+  document.getElementById('editSaveAndClose').addEventListener('click', saveAndCloseEditModalAndSync);
+  
+  // document.getElementById('importDictionaryFile').addEventListener('change', importDictionary);
+  // document.getElementById('importWordsCSV').addEventListener('change', importWords);
+  // document.getElementById('exportDictionaryButton').addEventListener('click', exportDictionary);
+  // document.getElementById('exportWordsButton').addEventListener('click', exportWords);
+  // document.getElementById('deleteDictionaryButton').addEventListener('click', confirmDeleteDictionary);
+
+  // setupMaximizeButtons();
 }
