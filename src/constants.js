@@ -49,7 +49,7 @@ export const DEFAULT_DICTIONARY = {
     isComplete: false,
     isPublic: false,
   },
-  lastUpdated: null,
+  lastUpdated: getTimestampInSeconds(),
   createdOn: getTimestampInSeconds(),
   version: MIGRATE_VERSION,
 };

@@ -194,7 +194,13 @@ VALUES (?, ?, ?, ?, ?)';
     if ($user_data !== false) {
       $user = $user_data->id;
       $dictionary = $user_data->dictionary;
-      return $this->dictionary->setDetails($user, $dictionary, $dictionary_details);
+      $details_updated = $this->dictionary->setDetails($user, $dictionary, $dictionary_details);
+      if ($details_updated === true) {
+        return true;
+      }
+      return array(
+        'error' => $details_updated,
+      );
     }
     return false;
   }

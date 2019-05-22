@@ -222,12 +222,18 @@ switch ($action) {
     if ($token !== false && isset($request['details'])) {
       $user = new User();
       $update_details_success = $user->updateCurrentDictionaryDetails($token, $request['details']);
-      if ($update_details_success !== false) {
+      if ($update_details_success === true) {
         return Response::json(array(
           // 'data' => 'Updated successfully',
           'data' => $update_details_success,
           'error' => false,
         ), 200);
+      }
+      if (isset($update_details_success['error'])) {
+        return Response::json(array(
+          'data' => $update_details_success['error'],
+          'error' => true,
+        ), 500);
       }
       return Response::json(array(
         'data' => 'Could not set dictionary: invalid token',

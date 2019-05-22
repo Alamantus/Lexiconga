@@ -91,7 +91,7 @@ VALUES ($new_id, ?, ?, ?, ?)";
         'name' => $result['name'],
         'specification' => $result['specification'],
         'description' => $result['description'],
-        'partsOfSpeech' => $partsOfSpeech,
+        'partsOfSpeech' => explode(',', $partsOfSpeech),
         'details' => array(
           'phonology' => array(
             'consonants' => $result['consonants'] !== '' ? explode(' ', $result['consonants']) : array(),
@@ -118,7 +118,7 @@ VALUES ($new_id, ?, ?, ?, ?)";
           'isComplete' => $result['is_complete'] === '1' ? true : false,
           'isPublic' => $result['is_public'] === '1' ? true : false,
         ),
-        'lastUpdated' => is_null($result['last_updated']) ? null : $result['last_updated'],
+        'lastUpdated' => is_null($result['last_updated']) ? $results['created_on'] : $result['last_updated'],
         'createdOn' => $result['created_on'],
       );
     }
