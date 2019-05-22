@@ -107,6 +107,7 @@ export function updateWord(word, wordId) {
     console.error('Could not find word to update');
   } else {
     word.lastUpdated = getTimestampInSeconds();
+    word.createdOn = window.currentDictionary.words[wordIndex].createdOn;
     window.currentDictionary.words[wordIndex] = word;
     addMessage('Word Updated Successfully');
     sortWords(true);
