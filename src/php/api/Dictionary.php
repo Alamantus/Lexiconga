@@ -197,7 +197,6 @@ WHERE dictionary=$dictionary";
     if ($results) {
       return array_map(function ($row) {
         return array(
-          'id' => intval($row['word_id']),
           'name' => $row['name'],
           'pronunciation' => $row['pronunciation'],
           'partOfSpeech' => $row['part_of_speech'],
@@ -205,6 +204,7 @@ WHERE dictionary=$dictionary";
           'details' => $row['details'],
           'lastUpdated' => is_null($row['last_updated']) ? null : intval($row['last_updated']),
           'createdOn' => intval($row['created_on']),
+          'wordId' => intval($row['word_id']),
         );
       }, $results);
     }
@@ -239,10 +239,10 @@ WHERE dictionary=$dictionary";
       if ($most_recent_word_update < $last_updated) {
         $most_recent_word_update = $last_updated;
       }
-      $word_ids[] = $word['id'];
+      $word_ids[] = $word['wordId'];
       $query .= "(?, ?, ?, ?, ?, ?, ?, ?, ?), ";
       $params[] = $dictionary;
-      $params[] = $word['id'];
+      $params[] = $word['wordId'];
       $params[] = $word['name'];
       $params[] = $word['pronunciation'];
       $params[] = $word['partOfSpeech'];
@@ -257,7 +257,8 @@ pronunciation=VALUES(pronunciation),
 part_of_speech=VALUES(part_of_speech),
 definition=VALUES(definition),
 details=VALUES(details),
-last_updated=VALUES(last_updated)';
+last_updated=VALUES(last_updated),
+created_on=VALUES(created_on)';
     
     $results = $this->db->execute($query, $params);
 

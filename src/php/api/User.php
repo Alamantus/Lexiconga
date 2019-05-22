@@ -212,9 +212,12 @@ VALUES (?, ?, ?, ?, ?)';
       $dictionary = $user_data->dictionary;
       $user = $user_data->id;
       $updated_words = $this->dictionary->setWords($user, $dictionary, $words);
-      if ($updated_words) {
+      if ($updated_words === true) {
         return true;
       }
+      return array(
+        'error' => $updated_words,
+      );
     }
     return false;
   }

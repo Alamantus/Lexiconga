@@ -249,11 +249,17 @@ switch ($action) {
     if ($token !== false && isset($request['words'])) {
       $user = new User();
       $update_words_success = $user->updateOrAddWordsToCurrentDictionary($token, $request['words']);
-      if ($update_words_success !== false) {
+      if ($update_words_success === true) {
         return Response::json(array(
-          'data' => 'Updated successfully',
+          'data' => $update_words_success,
           'error' => false,
         ), 200);
+      }
+      if (isset($update_words_success['error'])) {
+        return Response::json(array(
+          'data' => $update_words_success['error'],
+          'error' => true,
+        ), 500);
       }
       return Response::json(array(
         'data' => 'Could not set words: invalid token',
