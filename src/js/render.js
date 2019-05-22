@@ -96,7 +96,7 @@ export function renderStats() {
   detailsPanel.innerHTML = numberOfWordsHTML + wordLengthHTML + letterDistributionHTML + totalLettersHTML;
 }
 
-export function renderPartsOfSpeech() {
+export function renderPartsOfSpeech(onlyOptions = false) {
   let optionsHTML = '<option value=""></option>',
     searchHTML = '<label>Unclassified <input type="checkbox" checked id="searchPartOfSpeech__None"></label>';
   window.currentDictionary.partsOfSpeech.forEach(partOfSpeech => {
@@ -110,7 +110,9 @@ export function renderPartsOfSpeech() {
     select.innerHTML = optionsHTML;
     select.value = selectedValue;
   });
-  document.getElementById('searchPartsOfSpeech').innerHTML = searchHTML;
+  if (!onlyOptions) {
+    document.getElementById('searchPartsOfSpeech').innerHTML = searchHTML;
+  }
 
   setupSearchFilters();
 }
@@ -273,6 +275,7 @@ export function renderEditForm(wordId = false) {
 
     document.getElementById(wordId.toString()).innerHTML = editForm;
     setupWordEditFormButtons();
+    renderPartsOfSpeech(true);
   }
 }
 
