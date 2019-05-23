@@ -73,6 +73,16 @@ VALUES (?, ?, ?, ?, ?)';
     );
   }
 
+  public function validateToken ($token) {
+    $token_data = $this->token->decode($token);
+    if ($token_data !== false) {
+      if (isset($token_data->id)) {
+        return $this->getUserData($token_data->id);
+      }
+    }
+    return false;
+  }
+
   public function setUserData ($token, $user_data) {
     $token_data = $this->token->decode($token);
     if ($token_data !== false) {

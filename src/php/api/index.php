@@ -18,6 +18,26 @@ $action = isset($request['action']) ? $request['action'] : '';
 $token = isset($_COOKIE['token']) ? $_COOKIE['token'] : false;
 
 switch ($action) {
+  case 'validate-token': {
+    if ($token !== false) {
+      $user = new User();
+      $user_data = $user->validateToken($token);
+      if ($user_data !== false) {
+        return Response::json(array(
+          'data' => $user_data,
+          'error' => false,
+        ), 200);
+      }
+      return Response::json(array(
+        'data' => 'Could not validate token: incorrect data',
+        'error' => true,
+      ), 401);
+    }
+    return Response::json(array(
+      'data' => 'Could not validate token: required information missing',
+      'error' => true,
+    ), 400);
+  }
   case 'login': {
     if (isset($request['email']) && isset($request['password'])) {
       $user = new User();

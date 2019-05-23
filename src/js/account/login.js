@@ -3,7 +3,8 @@ import { saveToken } from "./utilities";
 import { addMessage } from "../utilities";
 import { setupLogoutButton } from "./setupListeners";
 import { renderAccountSettings } from "./render";
-import { uploadWholeDictionary } from "./sync";
+import { uploadWholeDictionary, syncDictionary } from "./sync";
+import { setCookie } from "../StackOverflow/cookie";
 
 export function logIn() {
   const email = document.getElementById('loginEmail').value.trim(),
@@ -26,8 +27,8 @@ export function logIn() {
       email,
       password,
     }, successData => {
-      console.log(successData);
       saveToken(successData.token);
+      window.account = successData.user;
     }, errorData => {
       errorHTML += errorData;
     }).then(() => {
@@ -36,7 +37,7 @@ export function logIn() {
         const loginModal = document.getElementById('loginModal');
         loginModal.parentElement.removeChild(loginModal);
         triggerLoginChanges();
-        addMessage(`Welcome! You are logged in.`);
+        addMessage(`Welcome${window.account.publicName !== '' ? ', ' + window.account.publicName : ''}! You are logged in.`);
       }
     }).catch(err => console.error(err));
   }
@@ -88,6 +89,7 @@ export function createAccount() {
           },
         }, responseData => {
           saveToken(responseData.token);
+          window.account = responseData.user;
           if (responseData.hasOwnProperty('dictionary')) {
             uploadWholeDictionary(); // Saves external id
           }
@@ -111,8 +113,22 @@ export function createAccount() {
   }
 }
 
+export function validateToken() {
+  request({
+    action: 'validate-token',
+  }, userData => {
+    window.account = userData;
+    triggerLoginChanges();
+    addMessage(`Welcome${window.account.publicName !== '' ? ', ' + window.account.publicName : ''}! You are logged in.`, 10000);
+    syncDictionary();
+  }, error => {
+    addMessage(error + '. Logging Out.', undefined, 'error');
+    setCookie('token', '', -1);
+  });
+}
+
 export function triggerLoginChanges() {
-  const loginButton = document.getElementById('loginCreateAccountButton')
+  const loginButton = document.getElementById('loginCreateAccountButton');
   const logoutButton = document.createElement('a');
   logoutButton.classList.add('button');
   logoutButton.id = 'logoutButton';

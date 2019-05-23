@@ -1,9 +1,8 @@
 import '../../scss/Account/main.scss';
 
 import { renderLoginForm } from "./render";
-import { triggerLoginChanges } from './login';
+import { validateToken } from './login';
 import {
-  syncDictionary,
   uploadWords,
   uploadDetails,
   uploadWholeDictionary,
@@ -17,8 +16,7 @@ export function showLoginForm() {
 }
 
 export function loginWithToken() {
-  triggerLoginChanges();
-  syncDictionary();
+  validateToken();
 }
 
 export function syncImportedDictionary() {
