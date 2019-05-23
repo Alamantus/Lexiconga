@@ -235,7 +235,7 @@ WHERE dictionary=$dictionary";
     $word_ids = array();
     $most_recent_word_update = 0;
     foreach($words as $word) {
-      $last_updated = is_null($word['lastUpdated']) ? $word['createdOn'] : $word['lastUpdated'];
+      $last_updated = isset($word['lastUpdated']) ? $word['createdOn'] : $word['lastUpdated'];
       if ($most_recent_word_update < $last_updated) {
         $most_recent_word_update = $last_updated;
       }

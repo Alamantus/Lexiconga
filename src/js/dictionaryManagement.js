@@ -133,6 +133,24 @@ export function importDictionary() {
         const textFromFileLoaded = fileLoadedEvent.target.result;
         const importedDictionary = JSON.parse(textFromFileLoaded);
         if (importedDictionary && importedDictionary.hasOwnProperty('words')) {
+          const timestamp = getTimestampInSeconds();
+          if (!importedDictionary.hasOwnProperty('createdOn')) {
+            importedDictionary.createdOn = timestamp;
+          }
+          if (importedDictionary.words.some(word => !word.hasOwnProperty('createdOn'))) {
+            importedDictionary.words.forEach(word => {
+              if (!word.hasOwnProperty('createdOn')) {
+                word.createdOn = timestamp;
+              }
+              if (!word.hasOwnProperty('lastUpdated')) {
+                word.lastUpdated = timestamp;
+              }
+            });
+          }
+          if (importedDictionary.hasOwnProperty('externalID')) {
+            delete importedDictionary.externalID;
+          }
+
           window.currentDictionary = importedDictionary;
           saveDictionary();
           renderAll();
@@ -252,11 +270,14 @@ export function migrateDictionary() {
   if (!window.currentDictionary.hasOwnProperty('version')) {
     const fixStupidOldNonsense = string => string.replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/&#92;/g, '\\').replace(/<br>/g, '\n');
     window.currentDictionary.description = fixStupidOldNonsense(window.currentDictionary.description);
+    const timestamp = getTimestampInSeconds();
     window.currentDictionary.words = window.currentDictionary.words.map(word => {
       word.definition = word.simpleDefinition;
       delete word.simpleDefinition;
       word.details = fixStupidOldNonsense(word.longDefinition);
       delete word.longDefinition;
+      word.lastUpdated = timestamp;
+      word.createdOn = timestamp;
       return word;
     });
     window.currentDictionary = Object.assign({}, DEFAULT_DICTIONARY, window.currentDictionary);
