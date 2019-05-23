@@ -101,7 +101,7 @@ VALUES ($new_id, ?, ?, ?, ?)";
               'onset' => $result['onset'] !== '' ? explode(',', $result['onset']) : array(),
               'nucleus' => $result['nucleus'] !== '' ? explode(',', $result['nucleus']) : array(),
               'coda' => $result['coda'] !== '' ? explode(',', $result['coda']) : array(),
-              'exceptions' => $result['parts_of_speech'],
+              'exceptions' => $result['exceptions'],
             ),
           ),
           'orthography' => array(
