@@ -149,9 +149,10 @@ VALUES (?, ?, ?, ?, ?)';
       if ($dictionary_id !== false) {
         $changed_dictionary = $this->dictionary->changeCurrent($id, $dictionary_id);
         if ($changed_dictionary !== false) {
+          $new_token = $this->generateUserToken($id, $changed_dictionary);
           return array(
-            'token' => $this->generateUserToken($id, $changed_dictionary),
-            'dictionary' => $this->getCurrentDictionary($token),
+            'token' => $new_token,
+            'dictionary' => $this->getCurrentDictionary($new_token),
           );
         }
       }

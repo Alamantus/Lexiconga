@@ -5,6 +5,7 @@ import { saveToken } from "./utilities";
 import { renderAll } from "../render";
 import { sortWords } from "../wordManagement";
 import { getLocalDeletedWords, clearLocalDeletedWords, saveDeletedWordsLocally } from "./utilities";
+import { renderChangeDictionaryOptions } from "./render";
 
 /* Outline for syncing
 login
@@ -41,33 +42,36 @@ export function syncDictionary() {
     request({
       action: 'get-current-dictionary',
     }, remote => {
-      // console.log(remote);
-      if (remote.details.externalID !== window.currentDictionary.externalID) {
-        clearDictionary();
-      }
-      const detailsSynced = syncDetails(remote.details);
-      
-      if (detailsSynced === false) {
-        addMessage('Could not sync', 10000, 'error');
-      } else {
-        detailsSynced.then(success => {
-          renderAll();
-          if (success) {
-            syncWords(remote.words, remote.deletedWords).then(success => {
-              if (success) {
-                renderAll();
-              } else {
-                console.error('word sync failed');
-              }
-            });
-          } else {
-            console.error('details sync failed');
-          }
-        });
-      }
+      performSync(remote);
     }, error => {
       console.error(error);
     }).catch(err => console.error(err));
+  }
+}
+
+export function performSync(remoteDictionary) {
+  if (remoteDictionary.details.externalID !== window.currentDictionary.externalID) {
+    clearDictionary();
+  }
+  const detailsSynced = syncDetails(remoteDictionary.details);
+
+  if (detailsSynced === false) {
+    addMessage('Could not sync', 10000, 'error');
+  } else {
+    detailsSynced.then(success => {
+      renderAll();
+      if (success) {
+        syncWords(remoteDictionary.words, remoteDictionary.deletedWords).then(success => {
+          if (success) {
+            renderAll();
+          } else {
+            console.error('word sync failed');
+          }
+        });
+      } else {
+        console.error('details sync failed');
+      }
+    });
   }
 }
 
@@ -97,6 +101,7 @@ export function uploadWholeDictionary(asNew = false) {
       window.currentDictionary.externalID = remoteId;
       saveDictionary(false);
       addMessage('Dictionary Uploaded Successfully');
+      renderChangeDictionaryOptions();
     }, errorData => {
       console.error(errorData);
       addMessage(errorData, 10000, 'error');

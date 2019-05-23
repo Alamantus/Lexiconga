@@ -183,12 +183,12 @@ switch ($action) {
         ), 200);
       }
       return Response::json(array(
-        'data' => 'Could not create dictionary: incorrect data',
+        'data' => 'Could not change dictionary: incorrect data',
         'error' => true,
       ), 401);
     }
     return Response::json(array(
-      'data' => 'Could not create dictionary: no token provided',
+      'data' => 'Could not change dictionary: no token provided',
       'error' => true,
     ), 400);
   }

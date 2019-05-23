@@ -10,6 +10,7 @@ import {
 } from './sync';
 import { saveDeletedWordLocally } from './utilities';
 import { addMessage } from '../utilities';
+import { updateCurrentChangeDictionaryOption } from './dictionaryManagement';
 
 export function showLoginForm() {
   renderLoginForm();
@@ -56,4 +57,8 @@ export function deleteWord(wordId) {
       deleteWord(wordId);
     }, 10000);
   });
+}
+
+export function updateChangeDictionaryOption() {
+  updateCurrentChangeDictionaryOption();
 }

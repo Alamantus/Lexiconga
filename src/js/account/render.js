@@ -1,4 +1,5 @@
-import { setupLoginModal } from "./setupListeners";
+import { setupLoginModal, setupChangeDictionary } from "./setupListeners";
+import { request } from "./helpers";
 
 export function renderLoginForm() {
   const loginModal = document.createElement('section');
@@ -55,9 +56,9 @@ export function renderLoginForm() {
 export function renderAccountSettings() {
   const accountSettingsColumn = document.getElementById('accountSettings');
   const accountSettingsHTML = `<h3>Account Settings</h3>
-  <label>Email Address<br><input id="accountSettingsEmail" required maxlength="100"></label>
-  <label>Public Name<br><input id="accountSettingsPublicName" placeholder="Someone" maxlength="50"></label>
-  <label>Allow Emails <input type="checkbox" id="accountSettingsAllowEmails"></label>
+  <label>Email Address<br><input id="accountSettingsEmail" required maxlength="100" value="${window.account.email}"></label>
+  <label>Public Name<br><input id="accountSettingsPublicName" placeholder="Someone" maxlength="50" value="${window.account.publicName}"></label>
+  <label>Allow Emails <input type="checkbox" id="accountSettingsAllowEmails"${window.account.allowEmails ? ' checked' : ''}></label>
   <label>Change Dictionary<br><select id="accountSettingsChangeDictionary"></select></label>
   <h4>Request Your Data</h4>
   <p>
@@ -73,4 +74,18 @@ export function renderAccountSettings() {
   </p>
   `;
   accountSettingsColumn.innerHTML = accountSettingsHTML;
+
+  renderChangeDictionaryOptions();
+}
+
+export function renderChangeDictionaryOptions() {
+  request({
+    action: 'get-all-dictionary-names',
+  }, dictionaries => {
+    const changeDictionarySelect = document.getElementById('accountSettingsChangeDictionary');
+    const optionsHTML = dictionaries.map(dictionary => `<option value="${dictionary.id}">${dictionary.name}</option>`).join('');
+    changeDictionarySelect.innerHTML = optionsHTML;
+    changeDictionarySelect.value = window.currentDictionary.externalID;
+    setupChangeDictionary();
+  }, error => console.error(error));
 }

@@ -72,6 +72,7 @@ export function saveEditModal() {
   if (hasToken()) {
     import('./account/index.js').then(account => {
       account.uploadDetailsDirect();
+      account.updateChangeDictionaryOption();
     })
   }
 }
