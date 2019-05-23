@@ -33,7 +33,7 @@ login
  */
 
 export function syncDictionary() {
-  if (!window.currentDictionary.hasOwnProperty('externalId')) {
+  if (!window.currentDictionary.hasOwnProperty('externalID')) {
     uploadWholeDictionary(true);
   } else {
     addMessage('Syncing...');
@@ -41,7 +41,7 @@ export function syncDictionary() {
       action: 'get-current-dictionary',
     }, remote => {
       // console.log(remote);
-      if (remote.details.externalId !== window.currentDictionary.externalId) {
+      if (remote.details.externalID !== window.currentDictionary.externalID) {
         clearDictionary();
       }
       const detailsSynced = syncDetails(remote.details);
@@ -93,7 +93,7 @@ export function uploadWholeDictionary(asNew = false) {
       action: 'set-whole-current-dictionary',
       dictionary,
     }, remoteId => {
-      window.currentDictionary.externalId = remoteId;
+      window.currentDictionary.externalID = remoteId;
       saveDictionary();
       addMessage('Dictionary Uploaded Successfully');
     }, errorData => {
@@ -109,7 +109,7 @@ export function syncDetails(remoteDetails = false) {
   let direction;  // This is if/else if tree the only way I can think to correctly prioritize this when to upload vs download.
   if (remoteDetails === false) {
     direction = 'up';
-  } else if (!window.currentDictionary.hasOwnProperty('externalId')) { // If mismatched id, dictionary will be cleared, allowing it to be overwritten
+  } else if (!window.currentDictionary.hasOwnProperty('externalID')) { // If mismatched id, dictionary will be cleared, allowing it to be overwritten
     direction = 'down';
   } else if (remoteDetails.lastUpdated < window.currentDictionary.lastUpdated) {
     direction = 'up';

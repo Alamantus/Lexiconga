@@ -87,7 +87,7 @@ VALUES ($new_id, ?, ?, ?, ?)";
       $partsOfSpeech = $result['parts_of_speech'] !== '' ? $result['parts_of_speech'] : $this->defaults['partsOfSpeech'];
 
       return array(
-        'externalId' => $this->token->hash($result['id']),
+        'externalID' => $this->token->hash($result['id']),
         'name' => $result['name'],
         'specification' => $result['specification'],
         'description' => $result['description'],
