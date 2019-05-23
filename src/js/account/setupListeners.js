@@ -1,6 +1,7 @@
 import { logIn, createAccount } from "./login";
 import { saveEditModal, saveAndCloseEditModal } from "../dictionaryManagement";
 import { saveEditModalAndSync, saveAndCloseEditModalAndSync } from "./dictionaryManagement";
+import { setCookie } from "../StackOverflow/cookie";
 
 export function setupLoginModal(modal) {
   const closeElements = modal.querySelectorAll('.modal-background, .close-button');
@@ -16,9 +17,7 @@ export function setupLoginModal(modal) {
 
 export function setupLogoutButton(logoutButton) {
   logoutButton.addEventListener('click', () => {
-    const expire = new Date("November 1, 2015"),
-      path = window.location.pathname;
-    document.cookie = 'token=;expires=' + expire.toGMTString() + ';domain=' + document.domain + ';path=' + path; // + in front of `new Date` converts to a number
+    setCookie('token', '', -1);
     window.location.reload();
   });
 }
@@ -28,7 +27,7 @@ export function setupEditFormButtonOverrides() {
   document.getElementById('editSave').addEventListener('click', saveEditModalAndSync);
   document.getElementById('editSaveAndClose').removeEventListener('click', saveAndCloseEditModal);
   document.getElementById('editSaveAndClose').addEventListener('click', saveAndCloseEditModalAndSync);
-  
+
   // document.getElementById('importDictionaryFile').addEventListener('change', importDictionary);
   // document.getElementById('importWordsCSV').addEventListener('change', importWords);
   // document.getElementById('exportDictionaryButton').addEventListener('click', exportDictionary);
