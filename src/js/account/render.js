@@ -58,7 +58,13 @@ export function renderAccountSettings() {
   const accountSettingsHTML = `<h3>Account Settings</h3>
   <label>Email Address<br><input id="accountSettingsEmail" required maxlength="100" value="${window.account.email}"></label>
   <label>Public Name<br><input id="accountSettingsPublicName" placeholder="Someone" maxlength="50" value="${window.account.publicName}"></label>
-  <label>Allow Emails <input type="checkbox" id="accountSettingsAllowEmails"${window.account.allowEmails ? ' checked' : ''}></label>
+  <label>Allow Emails <input type="checkbox" id="accountSettingsAllowEmails"${window.account.allowEmails ? ' checked' : ''}></label>`;
+  accountSettingsColumn.innerHTML = accountSettingsHTML;
+}
+
+export function renderAccountActions() {
+  const accountActionsColumn = document.getElementById('accountActions');
+  const accountActionsHTML = `<h3>Account Actions</h3>
   <label>Change Dictionary<br><select id="accountSettingsChangeDictionary"></select></label>
   <h4>Request Your Data</h4>
   <p>
@@ -73,7 +79,7 @@ export function renderAccountSettings() {
     Anything that is deleted from our system is permanently and irretrievably removed from our system and cannot be restored, though search engines or internet archives may retain a cached version of your content (there is nothing we can do about this, and you will need to seek out removal of that information by directly contacting the services that are caching your data).
   </p>
   `;
-  accountSettingsColumn.innerHTML = accountSettingsHTML;
+  accountActionsColumn.innerHTML = accountActionsHTML;
 
   renderChangeDictionaryOptions();
 }
