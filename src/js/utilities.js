@@ -132,10 +132,13 @@ export function generateRandomWords(numberOfWords) {
   console.log('done');
 }
 
-export function addMessage(messageText, time = 5000) {
+export function addMessage(messageText, time = 5000, extraClass = false) {
   const messagingSection = document.getElementById('messagingSection');
   const element = document.createElement('div');
   element.classList.add('message');
+  if (extraClass !== false) {
+    element.classList.add(extraClass);
+  }
   element.innerHTML = '<a class="close-button">&times;&#xFE0E;</a>' + messageText;
   messagingSection.appendChild(element);
 

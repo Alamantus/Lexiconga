@@ -164,7 +164,7 @@ export function importDictionary() {
             });
           }
         } else {
-          addMessage('Dictionary could not be imported', 10000);
+          addMessage('Dictionary could not be imported', 10000, 'error');
         }
       };
 
@@ -187,7 +187,7 @@ export function importWords() {
           step: results => {
             if (results.errors.length > 0) {
               results.errors.forEach(err => {
-                addMessage('Error Importing Word: ' + err);
+                addMessage('Error Importing Word: ' + err, undefined, 'error');
                 console.error('Error Importing Word: ', err)
               });
             } else {
@@ -218,7 +218,7 @@ export function importWords() {
             }
           },
           error: err => {
-            addMessage('Error Importing Words: ' + err);
+            addMessage('Error Importing Words: ' + err, undefined, 'error');
             console.error('Error Importing Words: ', err);
           },
           skipEmptyLines: true,

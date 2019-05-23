@@ -16,7 +16,7 @@ export function disableHotKeys() {
 
 export function hotKeyActions(event) {
   if (typeof event.key === 'undefined' || typeof event.ctrlKey === 'undefined' || typeof event.altKey === 'undefined') {
-    addMessage('Hotkeys disabled');
+    addMessage('Hotkeys disabled', undefined, 'error');
     console.warn('Browser does not have required event properties for hotkeys.');
     window.settings.useHotkeys = false;
     saveSettings();

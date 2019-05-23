@@ -26,11 +26,23 @@ export function syncImportedDictionary() {
 }
 
 export function uploadDetailsDirect() {
-  uploadDetails();
+  uploadDetails().catch(err => {
+    console.error(err);
+    addMessage('Could not connect to account. Trying again in 10 seconds.', undefined, 'error');
+    setTimeout(() => {
+      uploadDetails();
+    }, 10000);
+  });
 }
 
 export function uploadWord(word) {
-  uploadWords([word]);
+  uploadWords([word]).catch(err => {
+    console.error(err);
+    addMessage('Could not connect to account. Trying again in 10 seconds.', undefined, 'error');
+    setTimeout(() => {
+      uploadWord(word);
+    }, 10000);
+  });
 }
 
 export function syncImportedWords(words) {
@@ -41,7 +53,7 @@ export function deleteWord(wordId) {
   deleteWords([wordId]).catch(err => {
     console.error(err);
     saveDeletedWordLocally(wordId);
-    addMessage('Could not connect. Trying again in 10 seconds.');
+    addMessage('Could not connect to account. Trying again in 10 seconds.', undefined, 'error');
     setTimeout(() => {
       deleteWord(wordId);
     }, 10000);

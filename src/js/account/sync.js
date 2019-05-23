@@ -48,7 +48,7 @@ export function syncDictionary() {
       const detailsSynced = syncDetails(remote.details);
       
       if (detailsSynced === false) {
-        addMessage('Could not sync');
+        addMessage('Could not sync', 10000, 'error');
       } else {
         detailsSynced.then(success => {
           renderAll();
@@ -99,7 +99,7 @@ export function uploadWholeDictionary(asNew = false) {
       addMessage('Dictionary Uploaded Successfully');
     }, errorData => {
       console.error(errorData);
-      addMessage(errorData);
+      addMessage(errorData, 10000, 'error');
     })
     .catch(err => console.error('set-whole-current-dictionary: ', err));
   })
@@ -138,7 +138,7 @@ export function uploadDetails() {
     return successful;
   }, error => {
     console.error(error);
-    addMessage('Could not sync dictionary');
+    addMessage('Could not sync dictionary', 10000, 'undefined');
     return false;
   });
 }
@@ -220,7 +220,7 @@ export function uploadWords(words) {
     return successful;
   }, error => {
     console.error(error);
-    addMessage('Could not upload words');
+    addMessage('Could not upload words', 10000, 'error');
     return false;
   });
 }
@@ -234,7 +234,7 @@ export function deleteWords(wordIds) {
     return successful;
   }, error => {
     console.error(error);
-    addMessage('Could not delete words');
+    addMessage('Could not delete words', 10000, 'error');
     saveDeletedWordsLocally(wordIds);
     return false;
   });

@@ -328,7 +328,7 @@ $nav-font-height: 16px;
   position: fixed;
   bottom: $general-padding;
   right: $general-padding;
-  max-width: 250px;
+  max-width: 300px;
 
   .message {
     position: relative;
@@ -341,6 +341,10 @@ $nav-font-height: 16px;
 
     &:last-child {
       margin-bottom: 0;
+    }
+
+    &.error {
+      background-color: lighten($red, 0.75);
     }
 
     .close-button {
