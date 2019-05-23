@@ -2,6 +2,7 @@ import { addMessage } from "../utilities";
 import { saveDictionary, clearDictionary } from "../dictionaryManagement";
 import { request, saveToken } from "./helpers";
 import { renderAll } from "../render";
+import { sortWords } from "../wordManagement";
 
 /* Outline for syncing
 login
@@ -117,23 +118,27 @@ export function syncDetails(remoteDetails = false) {
   if (direction === 'up') {
     const details = Object.assign({}, window.currentDictionary);
     delete details.words;
-    return request({
-      action: 'set-dictionary-details',
-      details,
-    }, successful => {
-      addMessage('Saved Details to Server');
-      return successful;
-    }, error => {
-      console.error(error);
-      addMessage('Could not sync dictionary');
-      return false;
-    });
+    return uploadDetails(details);
   } else if (direction === 'down') {
     window.currentDictionary = Object.assign(window.currentDictionary, remoteDetails);
     saveDictionary();
   }
   addMessage('Dictionary details synchronized');
   return Promise.resolve(true);
+}
+
+export function uploadDetails(details) {
+  return request({
+    action: 'set-dictionary-details',
+    details,
+  }, successful => {
+    addMessage('Saved Details to Server');
+    return successful;
+  }, error => {
+    console.error(error);
+    addMessage('Could not sync dictionary');
+    return false;
+  });
 }
 
 export function syncWords(remoteWords, deletedWords) {
@@ -166,22 +171,27 @@ export function syncWords(remoteWords, deletedWords) {
   });
 
   window.currentDictionary.words = words;
+  sortWords();
   saveDictionary();
 
   if (localWordsToUpload.length > 0) {
-    return request({
-      action: 'set-dictionary-words',
-      words,
-    }, successful => {
-      addMessage('Saved Words to Server');
-      return successful;
-    }, error => {
-      console.error(error);
-      addMessage('Could not sync words');
-      return false;
-    });
+    return uploadWords(words);
   }
 
   addMessage('Words synchronized');
   return Promise.resolve(true);
+}
+
+export function uploadWords(words) {
+  return request({
+    action: 'set-dictionary-words',
+    words,
+  }, successful => {
+    addMessage('Saved Words to Server');
+    return successful;
+  }, error => {
+    console.error(error);
+    addMessage('Could not upload words');
+    return false;
+  });
 }
