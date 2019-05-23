@@ -1,5 +1,3 @@
-import { setCookie } from "../StackOverflow/cookie";
-
 export function request (data = {}, success = () => {}, error = () => {}/* , fail = () => {} */) {
   return fetch('./api/', {
     method: 'POST', // or 'PUT'
@@ -16,8 +14,4 @@ export function request (data = {}, success = () => {}, error = () => {}/* , fai
       }
       return success(response.data);
     });
-}
-
-export function saveToken(token) {
-  setCookie('token', token, 30);
 }

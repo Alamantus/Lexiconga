@@ -1,6 +1,7 @@
 import { addMessage } from "../utilities";
 import { saveDictionary, clearDictionary } from "../dictionaryManagement";
-import { request, saveToken } from "./helpers";
+import { request } from "./helpers";
+import { saveToken } from "./utilities";
 import { renderAll } from "../render";
 import { sortWords } from "../wordManagement";
 

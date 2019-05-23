@@ -1,4 +1,5 @@
-import { request, saveToken } from "./helpers";
+import { request } from "./helpers";
+import { saveToken } from "./utilities";
 import { addMessage } from "../utilities";
 import { setupLogoutButton } from "./setupListeners";
 import { renderAccountSettings } from "./render";
