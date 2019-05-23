@@ -292,14 +292,20 @@ switch ($action) {
     ), 400);
   }
   case 'delete-words': {
-    if ($token !== false && isset($request['words'])) {
+    if ($token !== false && isset($request['wordIds'])) {
       $user = new User();
-      $delete_word_success = $user->deleteWordsFromCurrentDictionary($token, $request['words']);
-      if ($delete_word_success !== false) {
+      $delete_words_success = $user->deleteWordsFromCurrentDictionary($token, $request['wordIds']);
+      if ($delete_words_success === true) {
         return Response::json(array(
-          'data' => 'Deleted successfully',
+          'data' => $delete_words_success,
           'error' => false,
         ), 200);
+      }
+      if (isset($delete_words_success['error'])) {
+        return Response::json(array(
+          'data' => $delete_words_success['error'],
+          'error' => true,
+        ), 500);
       }
       return Response::json(array(
         'data' => 'Could not delete words: invalid token',

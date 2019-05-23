@@ -301,8 +301,10 @@ created_on=VALUES(created_on)';
     $insert_results = $this->db->execute($insert_query, $insert_params);
     if ($insert_results) {
       $delete_results = $this->db->execute($delete_query, $delete_params);
-      return $delete_results;
+      if ($delete_results) {
+        return $delete_results;
+      }
     }
-    return $insert_results;
+    return $this->db->last_error_info;
   }
 }

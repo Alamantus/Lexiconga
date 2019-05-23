@@ -228,10 +228,13 @@ VALUES (?, ?, ?, ?, ?)';
     if ($user_data !== false) {
       $dictionary = $user_data->dictionary;
       $user = $user_data->id;
-      $deleted_word = $this->dictionary->deleteWords($dictionary, $word_ids);
-      if ($deleted_word) {
-        return true;
+      $deleted_words = $this->dictionary->deleteWords($dictionary, $word_ids);
+      if ($deleted_words === true) {
+        return $deleted_words;
       }
+      return array(
+        'error' => $deleted_words,
+      );
     }
     return false;
   }
