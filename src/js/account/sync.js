@@ -116,9 +116,7 @@ export function syncDetails(remoteDetails = false) {
     direction = 'down';
   }
   if (direction === 'up') {
-    const details = Object.assign({}, window.currentDictionary);
-    delete details.words;
-    return uploadDetails(details);
+    return uploadDetails();
   } else if (direction === 'down') {
     window.currentDictionary = Object.assign(window.currentDictionary, remoteDetails);
     saveDictionary();
@@ -127,7 +125,9 @@ export function syncDetails(remoteDetails = false) {
   return Promise.resolve(true);
 }
 
-export function uploadDetails(details) {
+export function uploadDetails() {
+  const details = Object.assign({}, window.currentDictionary);
+  delete details.words;
   return request({
     action: 'set-dictionary-details',
     details,
