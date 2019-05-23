@@ -1,6 +1,6 @@
 import { logIn, createAccount } from "./login";
 import { setCookie } from "../StackOverflow/cookie";
-import { changeDictionary } from "./dictionaryManagement";
+import { changeDictionary, createNewDictionary } from "./dictionaryManagement";
 
 export function setupLoginModal(modal) {
   const closeElements = modal.querySelectorAll('.modal-background, .close-button');
@@ -23,4 +23,8 @@ export function setupLogoutButton(logoutButton) {
 
 export function setupChangeDictionary() {
   document.getElementById('accountSettingsChangeDictionary').addEventListener('change', changeDictionary);
+}
+
+export function setupCreateNewDictionary() {
+  document.getElementById('accountSettingsCreateNewDictionary').addEventListener('click', createNewDictionary);
 }

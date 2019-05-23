@@ -1,4 +1,4 @@
-import { setupLoginModal, setupChangeDictionary } from "./setupListeners";
+import { setupLoginModal, setupChangeDictionary, setupCreateNewDictionary } from "./setupListeners";
 import { request } from "./helpers";
 
 export function renderLoginForm() {
@@ -66,6 +66,7 @@ export function renderAccountActions() {
   const accountActionsColumn = document.getElementById('accountActions');
   const accountActionsHTML = `<h3>Account Actions</h3>
   <label>Change Dictionary<br><select id="accountSettingsChangeDictionary"></select></label>
+  <p><a class="button" id="accountSettingsCreateNewDictionary">Create New Dictionary</a></p>
   <h4>Request Your Data</h4>
   <p>
     Per your <a href="https://www.eugdpr.org/" target="_blank">GDPR</a> rights in Articles 13–15 and 20, we allow you to request any and all data we have stored about you. The only data we have about you personally is your email address and your Public Name, if you decided to set one. All other data (your Dictionary data) is visible and accessible via the Export button under your Dictionary's Settings. Send an email to help@lexicon.ga to request your information.
@@ -82,6 +83,7 @@ export function renderAccountActions() {
   accountActionsColumn.innerHTML = accountActionsHTML;
 
   renderChangeDictionaryOptions();
+  setupCreateNewDictionary();
 }
 
 export function renderChangeDictionaryOptions() {

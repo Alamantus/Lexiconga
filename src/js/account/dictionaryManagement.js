@@ -1,7 +1,18 @@
-import { performSync } from "./sync";
+import { clearDictionary, saveDictionary } from "../dictionaryManagement";
+import { uploadWholeDictionary, performSync } from "./sync";
 import { request } from "./helpers";
 import { saveToken } from "./utilities";
 import { addMessage } from "../utilities";
+import { renderAll } from "../render";
+
+export function createNewDictionary() {
+  clearDictionary();
+  saveDictionary();
+  renderAll();
+  uploadWholeDictionary(true);
+  document.getElementById('settingsModal').style.display = 'none';
+  addMessage('New Dictionary Created!');
+}
 
 export function changeDictionary(dictionary) {
   dictionary = typeof dictionary.target !== 'undefined' ? dictionary.target.value : dictionary;
