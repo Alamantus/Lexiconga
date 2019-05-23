@@ -1,5 +1,5 @@
 import { renderWords } from "./render";
-import { wordExists, addMessage, getNextId } from "./utilities";
+import { wordExists, addMessage, getNextId, hasToken } from "./utilities";
 import removeDiacritics from "./StackOverflow/removeDiacritics";
 import { removeTags, getTimestampInSeconds } from "../helpers";
 import { saveDictionary } from "./dictionaryManagement";
@@ -78,7 +78,7 @@ export function clearWordForm() {
   document.getElementById('wordName').focus();
 }
 
-export function addWord(word, render = true, message = true) {
+export function addWord(word, render = true, message = true, upload = true) {
   const timestamp = getTimestampInSeconds();
   word.lastUpdated = timestamp;
   word.createdOn = timestamp;
@@ -87,6 +87,14 @@ export function addWord(word, render = true, message = true) {
     addMessage(`<a href="#${word.wordId}">${word.name}</a> Created Successfully`, 10000);
   }
   sortWords(render);
+
+  if (upload && hasToken()) {
+    import('./account/index.js').then(account => {
+      account.uploadWord(word);
+    });
+  }
+
+  return word;
 }
 
 export function deleteWord(wordId) {
@@ -111,6 +119,12 @@ export function updateWord(word, wordId) {
     window.currentDictionary.words[wordIndex] = word;
     addMessage('Word Updated Successfully');
     sortWords(true);
+
+    if (hasToken()) {
+      import('./account/index.js').then(account => {
+        account.uploadWord(word);
+      });
+    }
   }
 }
 

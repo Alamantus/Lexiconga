@@ -1,7 +1,7 @@
 import { renderDictionaryDetails, renderPartsOfSpeech, renderAll } from "./render";
 import { removeTags, cloneObject, getTimestampInSeconds, download, slugify } from "../helpers";
 import { LOCAL_STORAGE_KEY, DEFAULT_DICTIONARY, MIGRATE_VERSION } from "../constants";
-import { addMessage, getNextId } from "./utilities";
+import { addMessage, getNextId, hasToken } from "./utilities";
 import { addWord } from "./wordManagement";
 
 export function updateDictionary () {
@@ -68,6 +68,12 @@ export function saveEditModal() {
   saveDictionary();
   renderDictionaryDetails();
   renderPartsOfSpeech();
+
+  if (hasToken()) {
+    import('./account/index.js').then(account => {
+      account.uploadDetailsDirect();
+    })
+  }
 }
 
 export function saveAndCloseEditModal() {
@@ -131,6 +137,12 @@ export function importDictionary() {
           importDictionaryField.value = '';
           document.getElementById('editModal').style.display = 'none';
           addMessage('Dictionary Imported Successfully');
+
+          if (hasToken()) {
+            import('./account/index.js').then(account => {
+              account.syncImportedDictionary();
+            });
+          }
         } else {
           addMessage('Dictionary could not be imported', 10000);
         }
@@ -148,7 +160,7 @@ export function importWords() {
     if (confirm('Importing a CSV file with words will add all of the words in the file to your dictionary regardless of duplication!\nDo you want to continue?')) {
       addMessage('Importing words...');
       import('papaparse').then(papa => {
-        let wordsImported = 0;
+        const importedWords = [];
         papa.parse(importWordsField.files[0], {
           header: true,
           encoding: "utf-8",
@@ -160,15 +172,16 @@ export function importWords() {
               });
             } else {
               const row = results.data[0];
-              addWord({
+              const importedWord = addWord({
                 name: removeTags(row.word).trim(),
                 pronunciation: removeTags(row.pronunciation).trim(),
                 partOfSpeech: removeTags(row['part of speech']).trim(),
                 definition: removeTags(row.definition).trim(),
                 details: removeTags(row.explanation).trim(),
                 wordId: getNextId(),
-              }, false, false);
-              wordsImported++;
+              }, false, false, false);
+
+              importedWords.push(importedWord);
             }
           },
           complete: () => {
@@ -176,7 +189,13 @@ export function importWords() {
             renderAll();
             importWordsField.value = '';
             document.getElementById('editModal').style.display = 'none';
-            addMessage(`Done Importing ${wordsImported} Words`);
+            addMessage(`Done Importing ${importedWords.length} Words`);
+
+            if (hasToken()) {
+              import('./account/index.js').then(account => {
+                account.syncImportedWords(importedWords);
+              });
+            }
           },
           error: err => {
             addMessage('Error Importing Words: ' + err);
