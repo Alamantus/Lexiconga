@@ -81,8 +81,10 @@ export function saveAndCloseEditModal() {
   document.getElementById('editModal').style.display = 'none';
 }
 
-export function saveDictionary() {
-  window.currentDictionary.lastUpdated = getTimestampInSeconds();
+export function saveDictionary(triggerLastUpdated = true) {
+  if (triggerLastUpdated) {
+    window.currentDictionary.lastUpdated = getTimestampInSeconds();
+  }
   window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(window.currentDictionary));
 }
 
@@ -185,7 +187,7 @@ export function importWords() {
             }
           },
           complete: () => {
-            saveDictionary();
+            saveDictionary(false);
             renderAll();
             importWordsField.value = '';
             document.getElementById('editModal').style.display = 'none';

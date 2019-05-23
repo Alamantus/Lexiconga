@@ -94,7 +94,7 @@ export function uploadWholeDictionary(asNew = false) {
       dictionary,
     }, remoteId => {
       window.currentDictionary.externalID = remoteId;
-      saveDictionary();
+      saveDictionary(false);
       addMessage('Dictionary Uploaded Successfully');
     }, errorData => {
       console.error(errorData);
@@ -120,7 +120,7 @@ export function syncDetails(remoteDetails = false) {
     return uploadDetails();
   } else if (direction === 'down') {
     window.currentDictionary = Object.assign(window.currentDictionary, remoteDetails);
-    saveDictionary();
+    saveDictionary(false);
   }
   addMessage('Dictionary details synchronized');
   return Promise.resolve(true);
@@ -173,7 +173,7 @@ export function syncWords(remoteWords, deletedWords) {
 
   window.currentDictionary.words = words;
   sortWords();
-  saveDictionary();
+  saveDictionary(false);
 
   if (localWordsToUpload.length > 0) {
     return uploadWords(words);

@@ -39,7 +39,7 @@ export function sortWords(render) {
     return removeDiacritics(wordA[sortBy]).toLowerCase() > removeDiacritics(wordB[sortBy]).toLowerCase() ? 1 : -1;
   });
   
-  saveDictionary();
+  saveDictionary(false);
 
   if (render) {
     renderWords();
