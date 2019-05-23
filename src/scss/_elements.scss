@@ -164,7 +164,7 @@ span .tag {
 .split {
   display: block;
 
-  div {
+  & > div {
     display: inline-block;
     vertical-align: top;
     margin: 0;
@@ -176,24 +176,24 @@ span .tag {
     }
   }
 
-  &.two div {
+  &.two > div {
     width: 46%;
   }
 
-  &.three div,
-  div.third {
+  &.three > div,
+  & > div.third {
     width: 30%;
   }
 
-  div.two-third {
+  & > div.two-third {
     width: 66%;
   }
 
-  div.quarter {
+  & > div.quarter {
     width: 22%;
   }
 
-  div.three-quarter {
+  & > div.three-quarter {
     width: 72%;
   }
 }
