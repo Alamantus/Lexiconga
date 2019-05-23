@@ -105,6 +105,12 @@ export function deleteWord(wordId) {
     window.currentDictionary.words.splice(wordIndex, 1);
     addMessage('Word Deleted Successfully');
     sortWords(true);
+
+    if (hasToken()) {
+      import('./account/index.js').then(account => {
+        account.deleteWord(wordId);
+      });
+    }
   }
 }
 

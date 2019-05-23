@@ -1,0 +1,1 @@
+export const DELETED_WORDS_LOCALSTORAGE_KEY = 'deletedWords';

@@ -4,6 +4,7 @@ import { request } from "./helpers";
 import { saveToken } from "./utilities";
 import { renderAll } from "../render";
 import { sortWords } from "../wordManagement";
+import { getLocalDeletedWords, clearLocalDeletedWords, saveDeletedWordsLocally } from "./utilities";
 
 /* Outline for syncing
 login
@@ -152,9 +153,36 @@ export function syncWords(remoteWords, deletedWords) {
   });
   const localWordsToUpload = words.filter(word => {
     // Find words that don't exist in remote words after clearing deleted words
-    const remote = remoteWords.find(remoteWord => remoteWord.id === word.wordId);
+    const remote = remoteWords.find(remoteWord => remoteWord.wordId === word.wordId);
     return typeof remote === 'undefined';
   });
+
+  const localDeletedWords = getLocalDeletedWords();
+  if (localDeletedWords.length > 0) {
+    const deletedWordIds = [];
+    remoteWords = remoteWords.filter(remoteWord => {
+      const deleted = deletedWords.find(deletedWord => deletedWord.id === remoteWord.wordId);
+      if (deleted) {
+        if (deleted.deletedOn > remoteWord.createdOn) {
+          deletedWordIds.push(deleted.id);
+          return false;
+        }
+      }
+      return true;
+    });
+
+    let deletePromise;
+    if (deletedWordIds.length > 0) {
+      deletePromise = deleteWords(deletedWordIds);
+    } else {
+      deletePromise = Promise.resolve(true);
+    }
+    deletePromise.then(success => {
+      if (success) {
+        clearLocalDeletedWords();
+      }
+    });
+  }
   
   remoteWords.forEach(remoteWord => {
     const localWord = words.find(word => word.wordId === remoteWord.wordId);
@@ -193,6 +221,21 @@ export function uploadWords(words) {
   }, error => {
     console.error(error);
     addMessage('Could not upload words');
+    return false;
+  });
+}
+
+export function deleteWords(wordIds) {
+  return request({
+    action: 'delete-words',
+    wordIds,
+  }, successful => {
+    addMessage('Deleted from Server');
+    return successful;
+  }, error => {
+    console.error(error);
+    addMessage('Could not delete words');
+    saveDeletedWordsLocally(wordIds);
     return false;
   });
 }
