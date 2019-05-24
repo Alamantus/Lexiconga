@@ -53,6 +53,16 @@ export function renderLoginForm() {
   setupLoginModal(loginModal);
 }
 
+export function renderMakePublic() {
+  const editSettingsTab = document.getElementById('editSettingsTab');
+  const editSettingsTabHTML = `<label>Make Public
+    <input type="checkbox" id="editIsPublic"><br>
+    <small>Checking this box will make this public via a link you can share with others.</small>
+  </label>
+  `;
+  editSettingsTab.innerHTML += editSettingsTabHTML;
+}
+
 export function renderAccountSettings() {
   const accountSettingsColumn = document.getElementById('accountSettings');
   const accountSettingsHTML = `<h3>Account Settings</h3>

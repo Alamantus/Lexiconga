@@ -2,7 +2,7 @@ import { request } from "./helpers";
 import { saveToken } from "./utilities";
 import { addMessage } from "../utilities";
 import { setupLogoutButton } from "./setupListeners";
-import { renderAccountSettings, renderAccountActions } from "./render";
+import { renderAccountSettings, renderAccountActions, renderMakePublic } from "./render";
 import { uploadWholeDictionary, syncDictionary } from "./sync";
 import { setCookie } from "../StackOverflow/cookie";
 
@@ -143,6 +143,7 @@ export function triggerLoginChanges() {
   loginButton.parentElement.removeChild(loginButton);
   setupLogoutButton(logoutButton);
 
+  renderMakePublic();
   renderAccountSettings();
   renderAccountActions();
 }

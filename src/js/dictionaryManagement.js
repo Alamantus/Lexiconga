@@ -35,7 +35,9 @@ export function openEditModal() {
   document.getElementById('editCaseSensitive').checked = caseSensitive;
   if (allowDuplicates) document.getElementById('editCaseSensitive').disabled = true;
   document.getElementById('editSortByDefinition').checked = sortByDefinition;
-  document.getElementById('editIsPublic').checked = isPublic;
+  if (hasToken()) {
+    document.getElementById('editIsPublic').checked = isPublic;
+  }
 
   document.getElementById('editModal').style.display = '';
 }
@@ -61,7 +63,11 @@ export function saveEditModal() {
   window.currentDictionary.settings.caseSensitive = document.getElementById('editCaseSensitive').checked;
   const needsReSort = window.currentDictionary.settings.sortByDefinition !== document.getElementById('editSortByDefinition').checked;
   window.currentDictionary.settings.sortByDefinition = document.getElementById('editSortByDefinition').checked;
-  window.currentDictionary.settings.isPublic = document.getElementById('editIsPublic').checked;
+  if (hasToken()) {
+    window.currentDictionary.settings.isPublic = document.getElementById('editIsPublic').checked;
+  } else {
+    window.currentDictionary.settings.isPublic = false;
+  }
 
   addMessage('Saved ' + window.currentDictionary.specification + ' Successfully');
   saveDictionary();
