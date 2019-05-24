@@ -7,7 +7,7 @@ import { insertAtCursor, getInputSelection, setSelectionRange } from './StackOve
 import { usePhondueDigraphs } from './KeyboardFire/phondue/ipaField';
 import { openSettingsModal, saveSettingsModal, saveAndCloseSettingsModal } from './settings';
 import { enableHotKeys } from './hotkeys';
-import { showSearchModal, clearSearchText } from './search';
+import { showSearchModal, clearSearchText, checkAllPartsOfSpeechFilters, uncheckAllPartsOfSpeechFilters } from './search';
 
 export default function setupListeners() {
   setupDetailsTabs();
@@ -141,11 +141,16 @@ function setupSearchBar() {
 }
 
 export function setupSearchFilters() {
-  const searchFilters = document.querySelectorAll('#searchOptions input[type="checkbox"]');
+  const searchFilters = document.querySelectorAll('#searchOptions input[type="checkbox"]'),
+    searchBox = document.getElementById('searchBox');
   Array.from(searchFilters).concat([searchBox]).forEach(filter => {
     filter.removeEventListener('change', renderWords);
     filter.addEventListener('change', renderWords);
   });
+  document.getElementById('checkAllFilters').removeEventListener('click', checkAllPartsOfSpeechFilters);
+  document.getElementById('checkAllFilters').addEventListener('click', checkAllPartsOfSpeechFilters);
+  document.getElementById('uncheckAllFilters').removeEventListener('click', uncheckAllPartsOfSpeechFilters);
+  document.getElementById('uncheckAllFilters').addEventListener('click', uncheckAllPartsOfSpeechFilters);
 }
 
 function setupWordForm() {

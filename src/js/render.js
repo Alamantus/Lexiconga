@@ -104,6 +104,7 @@ export function renderPartsOfSpeech(onlyOptions = false) {
     optionsHTML += `<option value="${partOfSpeech}">${partOfSpeech}</option>`;
     searchHTML += `<label>${partOfSpeech} <input type="checkbox" checked id="searchPartOfSpeech_${slugify(partOfSpeech)}"></label>`;
   });
+  searchHTML += `<a class="small button" id="checkAllFilters">Check All</a> <a class="small button" id="uncheckAllFilters">Uncheck All</a>`;
   
   Array.from(document.getElementsByClassName('part-of-speech-select')).forEach(select => {
     const selectedValue = select.value;

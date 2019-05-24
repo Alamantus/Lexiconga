@@ -127,3 +127,19 @@ export function highlightSearchTerm(word) {
   }
   return word;
 }
+
+export function checkAllPartsOfSpeechFilters() {
+  const searchFilters = document.querySelectorAll('#searchPartsOfSpeech input[type="checkbox"]');
+  Array.from(searchFilters).forEach(filter => {
+    filter.checked = true;
+  });
+  renderWords();
+}
+
+export function uncheckAllPartsOfSpeechFilters() {
+  const searchFilters = document.querySelectorAll('#searchPartsOfSpeech input[type="checkbox"]');
+  Array.from(searchFilters).forEach(filter => {
+    filter.checked = false;
+  });
+  renderWords();
+}
