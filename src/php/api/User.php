@@ -87,13 +87,18 @@ VALUES (?, ?, ?, ?, ?)';
     $token_data = $this->token->decode($token);
     if ($token_data !== false) {
       $user_id = $token_data->id;
-      $query = 'UPDATE users SET email=?, public_name=?, allow_email=? WHERE id=?';
+      $query = 'UPDATE users SET email=?, public_name=?, allow_email=?';
       $properties = array(
         $user_data['email'],
         $user_data['publicName'],
         $user_data['allowEmails'],
-        $user_id,
       );
+      if (isset($user_data['newPassword']) && $user_data['newPassword'] !== '') {
+        $query .= ', password=?';
+        $properties[] = password_hash($user_data['newPassword'], PASSWORD_DEFAULT);
+      }
+      $query .= ' WHERE id=?';
+      $properties[] = $user_id;
       $update_success = $this->db->execute($query, $properties);
       if ($update_success) {
         return true;

@@ -58,7 +58,9 @@ export function renderAccountSettings() {
   const accountSettingsHTML = `<h3>Account Settings</h3>
   <label>Email Address<br><input id="accountSettingsEmail" required maxlength="100" value="${window.account.email}"></label>
   <label>Public Name<br><input id="accountSettingsPublicName" placeholder="Someone" maxlength="50" value="${window.account.publicName}"></label>
-  <label>Allow Emails <input type="checkbox" id="accountSettingsAllowEmails"${window.account.allowEmails ? ' checked' : ''}></label>`;
+  <label>Allow Emails <input type="checkbox" id="accountSettingsAllowEmails"${window.account.allowEmails ? ' checked' : ''}></label>
+  <label>New Password <small>Only fill if changing!</small><br><input type="password" id="accountSettingsNewPassword" placeholder="Leave Blank to Prevent Change"></label>
+  `;
   accountSettingsColumn.innerHTML = accountSettingsHTML;
 }
 

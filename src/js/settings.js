@@ -42,7 +42,9 @@ export function saveSettingsModal() {
       window.account.publicName = removeTags(publicName.value).trim();
       window.account.allowEmails = document.getElementById('accountSettingsAllowEmails').checked;
 
-      account.editAccount(window.account);
+      const newPassword = document.getElementById('accountSettingsNewPassword').value;
+
+      account.editAccount(Object.assign({ newPassword }, window.account));
     });
   }
 

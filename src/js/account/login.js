@@ -146,6 +146,7 @@ export function updateAccountData(userData) {
     action: 'set-user-data',
     userData,
   }, successData => {
+    document.getElementById('accountSettingsNewPassword').value = '';
     addMessage('Successfully Updated Account Data');
   }, error => {
     addMessage(error, undefined, 'error');
