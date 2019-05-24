@@ -84,7 +84,7 @@ export function addWord(word, render = true, message = true, upload = true) {
   word.createdOn = timestamp;
   window.currentDictionary.words.push(word);
   if (message) {
-    addMessage(`<a href="#${word.wordId}">${word.name}</a> Created Successfully`, 10000);
+    addMessage(`<a href="#${word.wordId}">${word.name}</a> Created Successfully`, 30000);
   }
   sortWords(render);
 

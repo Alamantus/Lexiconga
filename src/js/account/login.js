@@ -37,7 +37,7 @@ export function logIn() {
         const loginModal = document.getElementById('loginModal');
         loginModal.parentElement.removeChild(loginModal);
         triggerLoginChanges();
-        addMessage(`Welcome${window.account.publicName !== '' ? ', ' + window.account.publicName : ''}! You are logged in.`);
+        addMessage(`Welcome${window.account.publicName !== '' ? ', ' + window.account.publicName : ''}! You are logged in.`, 0);
         syncDictionary();
       }
     }).catch(err => console.error(err));
@@ -106,7 +106,7 @@ export function createAccount() {
             loginModal.parentElement.removeChild(loginModal);
             triggerLoginChanges();
             addMessage('Account Created Successfully!');
-            addMessage(`Welcome${publicName !== '' ? ', ' + publicName : ''}! You are logged in.`);
+            addMessage(`Welcome${publicName !== '' ? ', ' + publicName : ''}! You are logged in.`, 0);
             if (window.currentDictionary.hasOwnProperty('externalID')) {
               // Ensure dictionary uploads to overwrite the auto-created default dictionary
               delete window.currentDictionary.externalID;
@@ -125,7 +125,7 @@ export function validateToken() {
   }, userData => {
     window.account = userData;
     triggerLoginChanges();
-    addMessage(`Welcome${window.account.publicName !== '' ? ', ' + window.account.publicName : ''}! You are logged in.`, 10000);
+    addMessage(`Welcome${window.account.publicName !== '' ? ', ' + window.account.publicName : ''}! You are logged in.`, 0);
     syncDictionary();
   }, error => {
     addMessage(error + '. Logging Out.', undefined, 'error');

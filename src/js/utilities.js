@@ -149,7 +149,9 @@ export function addMessage(messageText, time = 5000, extraClass = false) {
   };
   closeButton.addEventListener('click', closeMessage);
 
-  setTimeout(closeMessage, time);
+  if (time > 0) {
+    setTimeout(closeMessage, time);
+  }
 }
 
 export function hideAllModals() {
