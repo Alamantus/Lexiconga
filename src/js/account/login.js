@@ -38,6 +38,7 @@ export function logIn() {
         loginModal.parentElement.removeChild(loginModal);
         triggerLoginChanges();
         addMessage(`Welcome${window.account.publicName !== '' ? ', ' + window.account.publicName : ''}! You are logged in.`);
+        syncDictionary();
       }
     }).catch(err => console.error(err));
   }
@@ -106,6 +107,11 @@ export function createAccount() {
             triggerLoginChanges();
             addMessage('Account Created Successfully!');
             addMessage(`Welcome${publicName !== '' ? ', ' + publicName : ''}! You are logged in.`);
+            if (window.currentDictionary.hasOwnProperty('externalID')) {
+              // Ensure dictionary uploads to overwrite the auto-created default dictionary
+              delete window.currentDictionary.externalID;
+            }
+            syncDictionary(false);
           }
         });
       }

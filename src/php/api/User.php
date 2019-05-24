@@ -194,7 +194,7 @@ VALUES (?, ?, ?, ?, ?)';
       $user = $user_data->id;
       $dictionary = $user_data->dictionary;
       $details_updated = $this->dictionary->setDetails($user, $dictionary, $dictionary_data['details']);
-      $words_updated = $this->dictionary->setWords($dictionary, $dictionary_data['words']);
+      $words_updated = $this->dictionary->setWords($user, $dictionary, $dictionary_data['words']);
       if ($details_updated === true && $words_updated === true) {
         return $this->token->hash($dictionary);
       }

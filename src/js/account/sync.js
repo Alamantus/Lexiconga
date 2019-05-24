@@ -34,9 +34,9 @@ login
     -> upload anything that needs update
  */
 
-export function syncDictionary() {
+export function syncDictionary(uploadAsNewIfNoExternalID = true) {
   if (!window.currentDictionary.hasOwnProperty('externalID')) {
-    uploadWholeDictionary(true);
+    uploadWholeDictionary(uploadAsNewIfNoExternalID);
   } else {
     addMessage('Syncing...');
     request({
