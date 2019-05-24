@@ -65,6 +65,15 @@ VALUES ($new_id, ?, ?, ?, ?)";
     return false;
   }
 
+  public function deleteDictionary ($user, $dictionary) {
+    $update_query = 'DELETE FROM dictionaries WHERE id=? AND user=?';
+    $update = $this->db->query($update_query, array($dictionary, $user));
+    if ($update->rowCount() > 0) {
+      return true;
+    }
+    return false;
+  }
+
   public function getAllNames ($user) {
     $query = "SELECT id, name, specification FROM dictionaries WHERE user=$user";
     $results = $this->db->query($query)->fetchAll();

@@ -104,10 +104,17 @@ export function clearDictionary() {
 }
 
 export function deleteDictionary() {
+  const deletedId = window.currentDictionary.externalID;
   clearDictionary();
   saveDictionary();
   addMessage('Dictionary Deleted!');
   renderAll();
+
+  if (hasToken()) {
+    import('./account/index.js').then(account => {
+      account.deleteCurrentDictionary(deletedId);
+    });
+  }
 }
 
 export function confirmDeleteDictionary() {

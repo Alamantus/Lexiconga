@@ -244,6 +244,26 @@ switch ($action) {
       'error' => true,
     ), 400);
   }
+  case 'delete-current-dictionary': {
+    if ($token !== false) {
+      $user = new User();
+      $dictionary_deleted = $user->deleteCurrentDictionary($token);
+      if ($dictionary_deleted !== false) {
+        return Response::json(array(
+          'data' => $dictionary_deleted,
+          'error' => false,
+        ), 200);
+      }
+      return Response::json(array(
+        'data' => 'Could not delete dictionary: invalid token',
+        'error' => true,
+      ), 401);
+    }
+    return Response::json(array(
+      'data' => 'Could not delete dictionary: no token provided',
+      'error' => true,
+    ), 400);
+  }
   case 'set-dictionary-details': {
     if ($token !== false && isset($request['details'])) {
       $user = new User();

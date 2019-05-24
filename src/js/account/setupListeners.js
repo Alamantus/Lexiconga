@@ -28,3 +28,11 @@ export function setupChangeDictionary() {
 export function setupCreateNewDictionary() {
   document.getElementById('accountSettingsCreateNewDictionary').addEventListener('click', createNewDictionary);
 }
+
+export function setupDeletedDictionaryChangeModal() {
+  const selectDictionaryToLoad = document.getElementById('selectDictionaryToLoad')
+  if (selectDictionaryToLoad) {
+    selectDictionaryToLoad.addEventListener('change', changeDictionary);
+  }
+  document.getElementById('createNewDictionaryAfterDelete').addEventListener('click', createNewDictionary);
+}

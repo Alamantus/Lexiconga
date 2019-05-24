@@ -1,4 +1,4 @@
-import { setupLoginModal, setupChangeDictionary, setupCreateNewDictionary } from "./setupListeners";
+import { setupLoginModal, setupChangeDictionary, setupCreateNewDictionary, setupDeletedDictionaryChangeModal } from "./setupListeners";
 import { request } from "./helpers";
 
 export function renderLoginForm() {
@@ -98,4 +98,33 @@ export function renderChangeDictionaryOptions() {
     changeDictionarySelect.value = window.currentDictionary.externalID;
     setupChangeDictionary();
   }, error => console.error(error));
+}
+
+export function renderDeletedDictionaryChangeModal(deletedId) {
+  const changeDictionarySelect = document.getElementById('accountSettingsChangeDictionary');
+  const lazyFilterOptions = changeDictionarySelect.querySelectorAll(`option:not([value="${deletedId}"])`);
+  const lazyFilter = document.createElement('select');
+  lazyFilter.innerHTML = '<option></option>';
+  lazyFilterOptions.forEach(option => {
+    lazyFilter.appendChild(option);
+  });
+  const otherDictionariesHTML = lazyFilter.innerHTML;
+  const modal = document.createElement('section');
+  modal.classList.add('modal');
+  modal.innerHTML = `<div class="modal-background"></div>
+  <div class="modal-content">
+    <section class="info-modal">
+      <h2>Dictionary Deleted</h2>
+      ${lazyFilterOptions.length < 1 ? ''
+      : `<label>Select dictionary to load<br>
+        <select id="selectDictionaryToLoad">${otherDictionariesHTML}</select>
+      </label>
+      <p>OR</p>`}
+      <p><a class="button" id="createNewDictionaryAfterDelete">Create a New Dictionary</a></p>
+    </section>
+  </div>`;
+
+  document.body.appendChild(modal);
+
+  setupDeletedDictionaryChangeModal();
 }

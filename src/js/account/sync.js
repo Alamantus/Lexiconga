@@ -64,6 +64,7 @@ export function performSync(remoteDictionary) {
         syncWords(remoteDictionary.words, remoteDictionary.deletedWords).then(success => {
           if (success) {
             renderAll();
+            document.getElementById('accountSettingsChangeDictionary').value = window.currentDictionary.externalID;
           } else {
             console.error('word sync failed');
           }

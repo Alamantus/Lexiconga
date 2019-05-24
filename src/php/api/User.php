@@ -205,6 +205,19 @@ VALUES (?, ?, ?, ?, ?)';
     return false;
   }
 
+  public function deleteCurrentDictionary ($token) {
+    $user_data = $this->token->decode($token);
+    if ($user_data !== false) {
+      $user = $user_data->id;
+      $dictionary = $user_data->dictionary;
+      $deleted = $this->dictionary->deleteDictionary($user, $dictionary);
+      if ($deleted) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   public function updateCurrentDictionaryDetails ($token, $dictionary_details) {
     $user_data = $this->token->decode($token);
     if ($user_data !== false) {
