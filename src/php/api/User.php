@@ -96,11 +96,11 @@ VALUES (?, ?, ?, ?, ?)';
       );
       $update_success = $this->db->execute($query, $properties);
       if ($update_success) {
-        return array(
-          'token' => $token,
-          'userData' => $user_data,
-        );
+        return true;
       }
+      return array(
+        'error' => $this->db->last_error_info,
+      );
     }
 
     return false;

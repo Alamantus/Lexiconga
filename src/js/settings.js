@@ -1,8 +1,8 @@
 import { SETTINGS_KEY, DEFAULT_SETTINGS } from "../constants";
-import { cloneObject } from "../helpers";
+import { cloneObject, removeTags } from "../helpers";
 import { usePhondueDigraphs } from "./KeyboardFire/phondue/ipaField";
 import { renderWords } from "./render";
-import { addMessage } from "./utilities";
+import { addMessage, hasToken } from "./utilities";
 import { enableHotKeys, disableHotKeys } from "./hotkeys";
 
 export function loadSettings() {
@@ -28,6 +28,23 @@ export function openSettingsModal() {
 export function saveSettingsModal() {
   window.settings.useIPAPronunciationField = document.getElementById('settingsUseIPA').checked;
   window.settings.useHotkeys = document.getElementById('settingsUseHotkeys').checked;
+
+  if (hasToken()) {
+    import('./account/index.js').then(account => {
+      const emailField = document.getElementById('accountSettingsEmail');
+      let email = removeTags(emailField.value).trim();
+      const publicName = document.getElementById('accountSettingsPublicName');
+      if (!/.+@.+\..+/.test(email)) {
+        email = window.account.email;
+        emailField.value = email;
+      }
+      window.account.email = email;
+      window.account.publicName = removeTags(publicName.value).trim();
+      window.account.allowEmails = document.getElementById('accountSettingsAllowEmails').checked;
+
+      account.editAccount(window.account);
+    });
+  }
 
   saveSettings();
   toggleHotkeysEnabled();

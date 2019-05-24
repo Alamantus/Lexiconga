@@ -140,3 +140,14 @@ export function triggerLoginChanges() {
   renderAccountSettings();
   renderAccountActions();
 }
+
+export function updateAccountData(userData) {
+  request({
+    action: 'set-user-data',
+    userData,
+  }, successData => {
+    addMessage('Successfully Updated Account Data');
+  }, error => {
+    addMessage(error, undefined, 'error');
+  });
+}

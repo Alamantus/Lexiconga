@@ -136,11 +136,17 @@ switch ($action) {
     if ($token !== false && isset($request['userData'])) {
       $user = new User();
       $updated_user = $user->setUserData($token, $request['userData']);
-      if ($updated_user !== false) {
+      if ($updated_user === true) {
         return Response::json(array(
           'data' => $updated_user,
           'error' => false,
         ), 200);
+      }
+      if (isset($updated_user['error'])) {
+        return Response::json(array(
+          'data' => $updated_user['error'],
+          'error' => false,
+        ), 500);
       }
       return Response::json(array(
         'data' => 'Could not set user data: missing data',

@@ -1,7 +1,7 @@
 import '../../scss/Account/main.scss';
 
 import { renderLoginForm } from "./render";
-import { validateToken } from './login';
+import { validateToken, updateAccountData } from './login';
 import {
   uploadWords,
   uploadDetails,
@@ -18,6 +18,10 @@ export function showLoginForm() {
 
 export function loginWithToken() {
   validateToken();
+}
+
+export function editAccount(accountData) {
+  updateAccountData(accountData);
 }
 
 export function syncImportedDictionary() {
