@@ -10,6 +10,30 @@ export function setupLoginModal(modal) {
     });
   });
 
+  [
+    document.getElementById('loginEmail'),
+    document.getElementById('loginPassword'),
+  ].forEach(field => {
+    field.addEventListener('keydown', event => {
+      if (['Enter', 'Return'].includes(event.key)) {
+        logIn();
+      }
+    });
+  });
+
+  [
+    document.getElementById('createNewEmail'),
+    document.getElementById('createNewPassword'),
+    document.getElementById('createNewConfirm'),
+    document.getElementById('createNewPublicName'),
+  ].forEach(field => {
+    field.addEventListener('keydown', event => {
+      if (['Enter', 'Return'].includes(event.key)) {
+        createAccount();
+      }
+    });
+  });
+
   document.getElementById('loginSubmit').addEventListener('click', logIn);
   document.getElementById('createAccountSubmit').addEventListener('click', createAccount);
 }

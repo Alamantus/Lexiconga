@@ -18,7 +18,7 @@ export function renderLoginForm() {
             <input type="password" required id="loginPassword" maxlength="100">
           </label>
           <section id="loginErrorMessages"></section>
-          <a id="loginSubmit" class="button">Log In</a><br>
+          <button id="loginSubmit" class="button">Log In</button><br>
           <a id="forgotPasswordButton" class="small button">Forgot Password?</a>
         </div>
         <div>
@@ -42,7 +42,7 @@ export function renderLoginForm() {
             <input type="checkbox" id="createNewAllowEmails">
           </label>
           <section id="createAccountErrorMessages"></section>
-          <a id="createAccountSubmit" class="button">Create Account</a>
+          <button id="createAccountSubmit" class="button">Create Account</button>
         </div>
       </div>
     </section>
