@@ -8,7 +8,7 @@ import { setCookie } from "../StackOverflow/cookie";
 
 export function logIn() {
   const email = document.getElementById('loginEmail').value.trim(),
-    password = document.getElementById('loginPassword').value.trim();
+    password = document.getElementById('loginPassword').value;
   const loginErrorMessages = document.getElementById('loginErrorMessages');
   let errorHTML = '';
   
@@ -45,7 +45,7 @@ export function logIn() {
 
 export function createAccount() {
   const email = document.getElementById('createNewEmail').value.trim(),
-    password = document.getElementById('createNewPassword').value.trim(),
+    password = document.getElementById('createNewPassword').value,
     confirm = document.getElementById('createNewConfirm').value.trim(),
     publicName = document.getElementById('createNewPublicName').value.trim(),
     allowEmail = document.getElementById('createNewAllowEmails').checked;
