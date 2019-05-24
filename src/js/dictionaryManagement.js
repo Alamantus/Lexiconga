@@ -13,7 +13,7 @@ export function openEditModal() {
   const { name, specification, description, partsOfSpeech } = window.currentDictionary;
   const { consonants, vowels, blends, phonotactics } = window.currentDictionary.details.phonology;
   const { orthography, grammar } = window.currentDictionary.details;
-  const { allowDuplicates, caseSensitive, sortByDefinition, isComplete, isPublic } = window.currentDictionary.settings;
+  const { allowDuplicates, caseSensitive, sortByDefinition, isPublic } = window.currentDictionary.settings;
   
   document.getElementById('editName').value = name;
   document.getElementById('editSpecification').value = specification;
@@ -35,7 +35,6 @@ export function openEditModal() {
   document.getElementById('editCaseSensitive').checked = caseSensitive;
   if (allowDuplicates) document.getElementById('editCaseSensitive').disabled = true;
   document.getElementById('editSortByDefinition').checked = sortByDefinition;
-  document.getElementById('editIsComplete').checked = isComplete;
   document.getElementById('editIsPublic').checked = isPublic;
 
   document.getElementById('editModal').style.display = '';
@@ -62,7 +61,6 @@ export function saveEditModal() {
   window.currentDictionary.settings.caseSensitive = document.getElementById('editCaseSensitive').checked;
   const needsReSort = window.currentDictionary.settings.sortByDefinition !== document.getElementById('editSortByDefinition').checked;
   window.currentDictionary.settings.sortByDefinition = document.getElementById('editSortByDefinition').checked;
-  window.currentDictionary.settings.isComplete = document.getElementById('editIsComplete').checked;
   window.currentDictionary.settings.isPublic = document.getElementById('editIsPublic').checked;
 
   addMessage('Saved ' + window.currentDictionary.specification + ' Successfully');
