@@ -1,10 +1,10 @@
 import { confirmEditWord, submitWordForm } from "./wordManagement";
-import { showSection, getIsDetailsPanelDisplayed, hideDetailsPanel } from "./displayToggles";
+import { showSection, hideDetailsPanel } from "./displayToggles";
 import { renderInfoModal, renderMaximizedTextbox } from "./render";
 import { showSearchModal, clearSearchText } from "./search";
 import { saveAndCloseSettingsModal, openSettingsModal, saveSettings } from "./settings";
 import { saveAndCloseEditModal, openEditModal } from "./dictionaryManagement";
-import { addMessage } from "./utilities";
+import { addMessage, hideAllModals } from "./utilities";
 
 export function enableHotKeys() {
   document.addEventListener('keydown', hotKeyActions);
@@ -57,14 +57,6 @@ export function hotKeyActions(event) {
     case 'S': if (event.ctrlKey) {event.preventDefault(); hideAllModals(); openSettingsModal();} break;
     case 'x': if (event.ctrlKey) {event.preventDefault(); clearSearchText();} break;
   }
-}
-
-function hideAllModals() {
-  const permanentModals = ['#searchModal', '#settingsModal', '#editModal'];
-  const hideModals = document.querySelectorAll(permanentModals.join(',')),
-    removeModals = document.querySelectorAll('.modal:not(' + permanentModals.join('):not(') + ')');
-  Array.from(hideModals).forEach(modal => modal.style.display = 'none');
-  Array.from(removeModals).forEach(modal => modal.parentElement.removeChild(modal));
 }
 
 function toggleDetailsDisplay() {

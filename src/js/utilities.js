@@ -152,6 +152,14 @@ export function addMessage(messageText, time = 5000, extraClass = false) {
   setTimeout(closeMessage, time);
 }
 
+export function hideAllModals() {
+  const permanentModals = ['#searchModal', '#settingsModal', '#editModal'];
+  const hideModals = document.querySelectorAll(permanentModals.join(',')),
+    removeModals = document.querySelectorAll('.modal:not(' + permanentModals.join('):not(') + ')');
+  Array.from(hideModals).forEach(modal => modal.style.display = 'none');
+  Array.from(removeModals).forEach(modal => modal.parentElement.removeChild(modal));
+}
+
 export function hasToken() {
   return getCookie('token') !== '';
 }
