@@ -2,7 +2,7 @@ import { renderDictionaryDetails, renderPartsOfSpeech, renderAll } from "./rende
 import { removeTags, cloneObject, getTimestampInSeconds, download, slugify } from "../helpers";
 import { LOCAL_STORAGE_KEY, DEFAULT_DICTIONARY, MIGRATE_VERSION } from "../constants";
 import { addMessage, getNextId, hasToken } from "./utilities";
-import { addWord } from "./wordManagement";
+import { addWord, sortWords } from "./wordManagement";
 
 export function updateDictionary () {
 
@@ -60,6 +60,7 @@ export function saveEditModal() {
 
   window.currentDictionary.settings.allowDuplicates = !document.getElementById('editPreventDuplicates').checked;
   window.currentDictionary.settings.caseSensitive = document.getElementById('editCaseSensitive').checked;
+  const needsReSort = window.currentDictionary.settings.sortByDefinition !== document.getElementById('editSortByDefinition').checked;
   window.currentDictionary.settings.sortByDefinition = document.getElementById('editSortByDefinition').checked;
   window.currentDictionary.settings.isComplete = document.getElementById('editIsComplete').checked;
   window.currentDictionary.settings.isPublic = document.getElementById('editIsPublic').checked;
@@ -68,6 +69,10 @@ export function saveEditModal() {
   saveDictionary();
   renderDictionaryDetails();
   renderPartsOfSpeech();
+
+  if (needsReSort) {
+    sortWords(true);
+  }
 
   if (hasToken()) {
     import('./account/index.js').then(account => {
