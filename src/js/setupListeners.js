@@ -299,6 +299,9 @@ export function setupIPATable(modal, textBox) {
     ipaButtons = modal.querySelectorAll('.td-btn button');
   Array.from(closeElements).forEach(close => {
     close.addEventListener('click', () => {
+      textBox.focus();
+      const endOfTextbox = textBox.value.length;
+      setSelectionRange(textBox, endOfTextbox, endOfTextbox);
       modal.parentElement.removeChild(modal);
     });
   });
@@ -309,7 +312,6 @@ export function setupIPATable(modal, textBox) {
   
   Array.from(ipaButtons).forEach(button => {
     button.addEventListener('click', () => {
-      console.log(button);
       insertAtCursor(headerTextBox, button.innerText);
       textBox.value = headerTextBox.value;
     });
@@ -317,6 +319,8 @@ export function setupIPATable(modal, textBox) {
 
   setTimeout(() => {
     headerTextBox.focus();
+    const endOfTextbox = headerTextBox.value.length;
+    setSelectionRange(headerTextBox, endOfTextbox, endOfTextbox);
   }, 1);
 }
 
