@@ -88,6 +88,78 @@ VALUES ($new_id, ?, ?, ?, ?)";
     return array();
   }
 
+  public function getPublicDictionaryDetails ($dictionary_hash) {
+    $dictionary = $this->token->unhash($dictionary_hash);
+    if ($dictionary !== false) {
+      $query = "SELECT * FROM dictionaries JOIN dictionary_linguistics ON dictionary = id WHERE id=? AND is_public=1";
+      $result = $this->db->query($query, array($dictionary))->fetch();
+      if ($result) {
+        // Default json values in case they are somehow not created by front end first
+        $partsOfSpeech = $result['parts_of_speech'] !== '' ? $result['parts_of_speech'] : $this->defaults['partsOfSpeech'];
+
+        return array(
+          'externalID' => $this->token->hash($result['id']),
+          'name' => $result['name'],
+          'specification' => $result['specification'],
+          'description' => $result['description'],
+          'partsOfSpeech' => explode(',', $partsOfSpeech),
+          'details' => array(
+            'phonology' => array(
+              'consonants' => $result['consonants'] !== '' ? explode(' ', $result['consonants']) : array(),
+              'vowels' => $result['vowels'] !== '' ? explode(' ', $result['vowels']) : array(),
+              'blends' => $result['blends'] !== '' ? explode(' ', $result['blends']) : array(),
+              'phonotactics' => array(
+                'onset' => $result['onset'] !== '' ? explode(',', $result['onset']) : array(),
+                'nucleus' => $result['nucleus'] !== '' ? explode(',', $result['nucleus']) : array(),
+                'coda' => $result['coda'] !== '' ? explode(',', $result['coda']) : array(),
+                'exceptions' => $result['exceptions'],
+              ),
+            ),
+            'orthography' => array(
+              'notes' => $result['orthography_notes'],
+            ),
+            'grammar' => array(
+              'notes' => $result['grammar_notes'],
+            ),
+          ),
+          'settings' => array(
+            'allowDuplicates' => $result['allow_duplicates'] === '1' ? true : false,
+            'caseSensitive' => $result['case_sensitive'] === '1' ? true : false,
+            'sortByDefinition' => $result['sort_by_definition'] === '1' ? true : false,
+            'isComplete' => false,
+            'isPublic' => $result['is_public'] === '1' ? true : false,
+          ),
+          'lastUpdated' => is_null($result['last_updated']) ? $result['created_on'] : $result['last_updated'],
+          'createdOn' => $result['created_on'],
+        );
+      }
+    }
+    return false;
+  }
+
+  public function getPublicDictionaryWords ($dictionary_hash) {
+    $dictionary = $this->token->unhash($dictionary_hash);
+    if ($dictionary !== false) {
+      $query = "SELECT words.* FROM words JOIN dictionaries ON id = dictionary WHERE dictionary=? AND is_public=1";
+      $results = $this->db->query($query, array($dictionary))->fetchAll();
+      if ($results) {
+        return array_map(function ($row) {
+          return array(
+            'name' => $row['name'],
+            'pronunciation' => $row['pronunciation'],
+            'partOfSpeech' => $row['part_of_speech'],
+            'definition' => $row['definition'],
+            'details' => $row['details'],
+            'lastUpdated' => is_null($row['last_updated']) ? intval($row['created_on']) : intval($row['last_updated']),
+            'createdOn' => intval($row['created_on']),
+            'wordId' => intval($row['word_id']),
+          );
+        }, $results);
+      }
+    }
+    return array();
+  }
+
   public function getDetails ($user, $dictionary) {
     $query = "SELECT * FROM dictionaries JOIN dictionary_linguistics ON dictionary = id WHERE user=$user AND id=$dictionary";
     $result = $this->db->query($query)->fetch();
@@ -211,7 +283,7 @@ WHERE dictionary=$dictionary";
           'partOfSpeech' => $row['part_of_speech'],
           'definition' => $row['definition'],
           'details' => $row['details'],
-          'lastUpdated' => is_null($row['last_updated']) ? null : intval($row['last_updated']),
+          'lastUpdated' => is_null($row['last_updated']) ? intval($row['created_on']) : intval($row['last_updated']),
           'createdOn' => intval($row['created_on']),
           'wordId' => intval($row['word_id']),
         );

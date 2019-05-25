@@ -218,6 +218,27 @@ switch ($action) {
       'error' => true,
     ), 400);
   }
+  case 'get-public-dictionary': {
+    if (isset($request['dictionary'])) {
+      $dictionary = new Dictionary();
+      $dictionary_data = $dictionary->getPublicDictionaryDetails($request['dictionary']);
+      if ($dictionary_data !== false) {
+        $dictionary_data['words'] = $dictionary->getPublicDictionaryWords($request['dictionary']);
+        return Response::json(array(
+          'data' => $dictionary_data,
+          'error' => false,
+        ), 200);
+      }
+      return Response::json(array(
+        'data' => 'Could not get dictionary: invalid id',
+        'error' => true,
+      ), 401);
+    }
+    return Response::json(array(
+      'data' => 'Could not get dictionary: no id provided',
+      'error' => true,
+    ), 400);
+  }
   case 'set-whole-current-dictionary': {
     if ($token !== false && isset($request['dictionary'])) {
       $user = new User();

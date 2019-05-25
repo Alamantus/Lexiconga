@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lexiconga</title>
+  <script src="src/js/view/index.js"></script>
+</head>
+<body>
+  <header id="top">
+    <h1 id="title">Lexiconga</h1>
+
+    <input id="openSearchModal" placeholder="🔍&#xFE0E; Search"> <span id="searchResults"></span>
+    <section id="searchModal" class="modal" style="display:none;">
+      <div class="modal-background" onclick="this.parentElement.style.display='none';"></div>
+      <div class="modal-content">
+        <a class="close-button" onclick="this.parentElement.parentElement.style.display='none';">&times;&#xFE0E;</a>
+        <section>
+          <label>Search Term
+            <input id="searchBox" placeholder="Search term">
+          </label>
+          <a id="searchButton" class="small button">Search</a>
+          <a id="clearSearchButton" class="small red button">Clear</a>
+          <a class="small button" onclick="var options=document.getElementById('searchOptions').style;options.display=options.display=='block'?'none':'block';">
+            Toggle Options
+          </a>
+        </section>
+        <footer id="searchOptions" style="display:none;">
+          <div class="split">
+            <div class="quarter category">
+              <h3>Search For</h3>
+            </div>
+            <div class="three-quarter options">
+              <label>Case-Sensitive
+                <input type="checkbox" id="searchCaseSensitive">
+              </label>
+              <label>Ignore Diacritics/Accents
+                <input type="checkbox" id="searchIgnoreDiacritics">
+              </label>
+              <label>Exact Words
+                <input type="checkbox" id="searchExactWords">
+              </label>
+            </div>
+          </div>
+          <div class="split">
+            <div class="quarter category">
+              <h3>Include in Search</h3>
+            </div>
+            <div class="three-quarter options">
+              <label>Word Name
+                <input type="checkbox" checked id="searchIncludeName">
+              </label>
+              <label>Definition
+                <input type="checkbox" checked id="searchIncludeDefinition">
+              </label>
+              <label>Details
+                <input type="checkbox" checked id="searchIncludeDetails">
+              </label>
+            </div>
+          </div>
+          <div class="split">
+            <div class="quarter category">
+              <h3>Include Only</h3>
+            </div>
+            <div class="three-quarter options" id="searchPartsOfSpeech"></div>
+          </div>
+        </footer>
+      </div>
+    </section>
+
+    <!-- div id="headerMenu">
+      <a id="settingsButton" class="button">Settings</a>
+      <a id="loginCreateAccountButton" class="button">Log In&nbsp;/ Create Account</a>
+    </div -->
+    <div style="clear:both;"></div>
+  </header>
+
+  <main>
+    <!--aside id="sideColumn">
+      <div id="mobileWordFormShow">+</div>
+      <form id="wordForm">
+        <label>Word<span class="red">*</span><br>
+          <input id="wordName" maxlength="200">
+        </label>
+        <label>Pronunciation<a class="label-button ipa-table-button">IPA Chart</a><br>
+          <input id="wordPronunciation" class="ipa-field" maxlength="200"><br>
+          <a class="label-help-button ipa-field-help-button">Field Help</a>
+        </label>
+        <label>Part of Speech<br>
+          <select id="wordPartOfSpeech" class="part-of-speech-select"></select>
+        </label>
+        <label>Definition<span class="red">*</span><br>
+          <input id="wordDefinition" maxlength="2500" placeholder="Equivalent words">
+        </label>
+        <label>Details<span class="red">*</span><a class="label-button maximize-button">Maximize</a><br>
+          <textarea id="wordDetails" placeholder="Markdown formatting allowed"></textarea>
+        </label>
+        <div id="wordErrorMessage"></div>
+        <a class="button" id="addWordButton">Add Word</a>
+      </form>
+    </aside -->
+    
+    <section id="mainColumn">
+      <section id="detailsSection">
+        <h2 id="dictionaryName">Dictionary Name</h2>
+        <nav>
+          <ul>
+            <li>Description</li><li>Details</li><li>Stats</li><!-- li id="editDictionaryButton">Edit</li -->
+          </ul>
+        </nav>
+        <article id="detailsPanel" style="display:none;">
+          <p>The dictionary details</p>
+        </article>
+      </section>
+
+      <section class="pagination"></section>
+
+      <section id="entries">
+        <article class="entry">
+          <header>
+            <h4 class="word">Loading Words</h4>
+          </header>
+          <dl>
+            <dt class="definition">Please Wait...</dt>
+          </dl>
+        </article>
+      </section>
+      
+      <section class="pagination"></section>
+    </section>
+  </main>
+
+  <footer id="bottom">
+    <a href="https://buymeacoff.ee/robbieantenesse" target="_blank" class="small button">Support Lexiconga</a>
+    <a href="https://blog.lexicon.ga" target="_blank" class="small button">Blog</a>
+    <a href="https://github.com/Alamantus/Lexiconga/issues" target="_blank" class="small button">Issues</a>
+    <a href="https://github.com/Alamantus/Lexiconga/releases" target="_blank" class="small button">Updates</a>
+    |
+    <a class="button" id="helpInfoButton">Help</a>
+    <a class="button" id="termsInfoButton">Terms</a>
+    <a class="button" id="privacyInfoButton">Privacy</a>
+  </footer>
+
+  <!-- section id="settingsModal" class="modal" style="display:none;">
+    <div class="modal-background" onclick="this.parentElement.style.display='none';"></div>
+    <div class="modal-content">
+      <a class="close-button" onclick="this.parentElement.parentElement.style.display='none';">&times;&#xFE0E;</a>
+      <section>
+        <form class="split two">
+          <div>
+            <h3>General Settings</h3>
+            <label>Use IPA Auto-Fill
+              <input id="settingsUseIPA" type="checkbox" checked><br />
+              <small>Check this to use character combinations to input International Phonetic Alphabet characters into
+                Pronunciation fields.</small>
+            </label>
+
+            <label>Use Hotkeys
+              <input id="settingsUseHotkeys" type="checkbox" checked><br />
+              <small>Check this to enable keyboard combinations to perform different helpful actions.</small>
+            </label>
+    
+            <label>Theme
+              <select disabled>
+                <option selected value="default">Default</option>
+                <option value="dark">Dark</option>
+                <option value="light">Light</option>
+                <option value="blue">Blue</option>
+                <option value="green">Green</option>
+                <option value="royal">Royal</option>
+              </select>
+            </label>
+            <div id="accountSettings"></div>
+          </div>
+          <div id="accountActions"></div>
+        </form>
+      </section>
+      <footer>
+        <a class="button" id="settingsSave">Save</a>
+        <a class="button" id="settingsSaveAndClose">Save &amp; Close</a>
+        <a class="red button" onclick="this.parentElement.parentElement.parentElement.style.display='none';">Close Without Saving</a>
+      </footer>
+    </div>
+  </section -->
+
+  <!-- section id="editModal" class="modal" style="display:none;">
+    <div class="modal-background" onclick="this.parentElement.style.display='none';"></div>
+    <div class="modal-content">
+      <a class="close-button" onclick="this.parentElement.parentElement.style.display='none';">&times;&#xFE0E;</a>
+      <nav class="tabs">
+        <ul>
+          <li class="active">Description</li><li>Details</li><li>Settings</li><li>Actions</li>
+        </ul>
+      </nav>
+      <section id="editDescriptionTab">
+        <label>Name<br>
+          <input id="editName" maxlength="50">
+        </label>
+        <label>Specification<br>
+          <input id="editSpecification" maxlength="50">
+        </label>
+        <label>Description<a class="label-button maximize-button">Maximize</a><br>
+          <textarea id="editDescription"></textarea>
+        </label>
+      </section>
+
+      <section id="editDetailsTab" style="display:none;">
+        <label>Parts of Speech <small>(Comma Separated List)</small><br>
+          <input id="editPartsOfSpeech" maxlength="2500" placeholder="Noun,Adjective,Verb">
+        </label>
+        <label>Alphabetical Order <small>(Comma Separated List. Include every letter!)</small><br>
+          <input id="editAlphabeticalOrder" disabled value="English Alphabet">
+        </label>
+        <h3>Phonology</h3>
+        <div class="split three">
+          <div>
+            <label>Consonants<br>
+              <small>(Space separated list)</small><br>
+              <input id="editConsonants" class="ipa-field" maxlength="100" placeholder="p b m n t ..."><br>
+              <a class="label-help-button ipa-field-help-button">Field Help</a>
+              <a class="label-button ipa-table-button">IPA Chart</a>
+            </label>
+          </div>
+          <div>
+            <label>Vowels<br>
+              <small>(Space separated list)</small><br>
+              <input id="editVowels" class="ipa-field" maxlength="100" placeholder="æ u e ɪ ..."><br>
+              <a class="label-help-button ipa-field-help-button">Field Help</a>
+              <a class="label-button ipa-table-button">IPA Chart</a>
+            </label>
+          </div>
+          <div>
+            <label>Polyphthongs&nbsp;/ Blends<br>
+              <small>(Space separated list)</small><br>
+              <input id="editBlends" class="ipa-field" maxlength="100" placeholder="ai ou ue ..."><br>
+              <a class="label-help-button ipa-field-help-button">Field Help</a>
+              <a class="label-button ipa-table-button">IPA Chart</a>
+            </label>
+          </div>
+        </div>
+        <h3>Phonotactics</h3>
+        <div class="split three">
+          <div>
+            <label>Onset<br>
+              <small>(Comma separated list)</small><br>
+              <input id="editOnset" maxlength="100" placeholder="Consonants,Vowels">
+            </label>
+          </div>
+          <div>
+            <label>Nucleus<br>
+              <small>(Comma separated list)</small><br>
+              <input id="editNucleus" maxlength="100" placeholder="Vowels,Blends">
+            </label>
+          </div>
+          <div>
+            <label>Coda<br>
+              <small>(Comma separated list)</small><br>
+              <input id="editCoda" maxlength="100" placeholder="Any">
+            </label>
+          </div>
+        </div>
+        <label>Exceptions <small>(Markdown-enabled)</small><br>
+          <textarea id="editExceptions"></textarea>
+        </label>
+        <h3>Orthography</h3>
+        <label>Notes <small>(Markdown-enabled)</small><a class="label-button maximize-button">Maximize</a><br>
+          <textarea id="editOrthography"></textarea>
+        </label>
+        <h3>Grammar</h3>
+        <label>Notes <small>(Markdown-enabled)</small><a class="label-button maximize-button">Maximize</a><br>
+          <textarea id="editGrammar"></textarea>
+        </label>
+      </section>
+
+      <section id="editSettingsTab" style="display:none;">
+        <label>Prevent Duplicate Words
+          <input type="checkbox" id="editPreventDuplicates"><br>
+          <small>Checking this box will prevent the creation of words with the exact same spelling.</small>
+        </label>
+        <label>Words are Case-Sensitive
+          <input type="checkbox" id="editCaseSensitive"><br>
+          <small>Checking this box will allow the creation of words with the exact same spelling if their capitalization is different.</small>
+        </label>
+        <label>Sort by Definition
+          <input type="checkbox" id="editSortByDefinition"><br>
+          <small>Checking this box will sort the words in alphabetical order based on the Definition instead of the Word.</small>
+        </label>
+      </section>
+
+      <section id="editActionsTab" style="display:none;">
+        <h3>Import&nbsp;/ Export</h3>
+        <div class="split two">
+          <div>
+            <p>
+              <label class="button">Import JSON <input type="file" id="importDictionaryFile" accept="application/json, .dict"><br>
+                <small>Import a previously-exported <code>JSON</code> file.</small>
+              </label>
+            </p>
+            <p>
+              <label class="button">Import Words <input type="file" id="importWordsCSV" accept="text/csv, .csv"><br>
+                <small>Import a CSV file of words.</small>
+              </label>
+              <a class="small button" download="Lexiconga_import-template.csv" href="data:text/csv;charset=utf-8,%22word%22,%22pronunciation%22,%22part of speech%22,%22definition%22,%22explanation%22%0A">Download an example file with the correct formatting</a>
+            </p>
+          </div>
+          <div>
+            <p>
+              <a class="button" id="exportDictionaryButton">Export JSON</a><br>
+              <small>Export your work as a <code>JSON</code> file to re-import later.</small>
+            </p>
+            <p>
+              <a class="button" id="exportWordsButton">Export Words</a><br>
+              <small>Export a CSV file of your words.</small>
+            </p>
+          </div>
+        </div>
+        <p>
+          <a class="red button" id="deleteDictionaryButton">Delete Dictionary</a><br>
+          <small>This will permanently delete your current dictionary, and it will not be possible to return it if you have not backed it up!</small>
+        </p>
+      </section>
+
+      <footer>
+        <a class="button" id="editSave">Save</a>
+        <a class="button" id="editSaveAndClose">Save &amp; Close</a>
+        <a class="red button" onclick="this.parentElement.parentElement.parentElement.style.display='none';">Close Without Saving</a>
+      </footer>
+    </div>
+  </section -->
+
+  <div id="messagingSection"></div>
+</body>
+</html>
