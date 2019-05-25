@@ -139,7 +139,7 @@ export function addMessage(messageText, time = 5000, extraClass = false) {
   if (extraClass !== false) {
     element.classList.add(extraClass);
   }
-  element.innerHTML = '<a class="close-button">&times;&#xFE0E;</a>' + messageText;
+  element.innerHTML = `<a class="close-button" style="animation-duration: ${time / 1000}s;">&times;&#xFE0E;</a>` + messageText;
   messagingSection.appendChild(element);
 
   const closeButton = element.querySelector('.close-button');

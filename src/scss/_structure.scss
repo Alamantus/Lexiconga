@@ -364,6 +364,28 @@ $nav-font-height: 16px;
       font-size: 25px;
       line-height: 10px;
       cursor: pointer;
+
+      &:before {
+        content: '';
+        position: absolute;
+        top: -2px;
+        right: -2px;
+        width: 20px;
+        height: 20px;
+        background-color: #455455;
+        opacity: 0.5;
+        transform-origin: center left;
+        transform: scaleX(0);
+        animation-name: fill;
+        animation-duration: inherit;
+        animation-timing-function: linear;
+        animation-iteration-count: infinite;
+      }
+      @keyframes fill {
+        100% {
+          transform: scaleX(1);
+        }
+      }
     }
   }
 }
