@@ -35,7 +35,7 @@ export function changeDictionary(dictionary) {
 export function updateCurrentChangeDictionaryOption() {
   const label = window.currentDictionary.name + ' ' + window.currentDictionary.specification;
   document.getElementById('accountSettingsChangeDictionary')
-    .querySelector(`option[value=${window.currentDictionary.externalID}]`).innerText = label;
+    .querySelector(`option[value="${window.currentDictionary.externalID}"]`).innerText = label;
 }
 
 export function deleteDictionary(deletedId) {
