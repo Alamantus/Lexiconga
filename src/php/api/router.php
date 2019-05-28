@@ -14,7 +14,8 @@ switch ($view) {
         $html = str_replace('{{dict}}', $dict, $html);
         $html = str_replace('{{dict_name}}', $dictionary_data['name'] . ' ' . $dictionary_data['specification'], $html);
         $html = str_replace('{{public_name}}', $dictionary_data['createdBy'], $html);
-        $html = str_replace('{{dict_json}}', json_encode($dictionary_data), $html);
+        $dictionary_json = json_encode($dictionary_data);
+        $html = str_replace('{{dict_json}}', addslashes($dictionary_json), $html);
       }
       echo $html;
     }

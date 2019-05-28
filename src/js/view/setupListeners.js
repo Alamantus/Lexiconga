@@ -1,4 +1,4 @@
-import {showSection, hideDetailsPanel} from '../displayToggles';
+import {showSection, hideDetailsPanel} from './displayToggles';
 import { showSearchModal, clearSearchText, checkAllPartsOfSpeechFilters, uncheckAllPartsOfSpeechFilters } from '../search';
 import { renderWords, renderInfoModal } from './render';
 
@@ -23,9 +23,6 @@ function setupDetailsTabs() {
       }
     });
   });
-  setupEditFormTabs();
-  setupEditFormInteractions();
-  setupEditFormButtons();
 }
 
 function setupSearchBar() {
@@ -82,17 +79,17 @@ export function setupSearchFilters() {
 
 export function setupInfoButtons() {
   document.getElementById('helpInfoButton').addEventListener('click', () => {
-    import('../markdown/help.md').then(html => {
+    import('../../markdown/help.md').then(html => {
       renderInfoModal(html);
     });
   });
   document.getElementById('termsInfoButton').addEventListener('click', () => {
-    import('../markdown/terms.md').then(html => {
+    import('../../markdown/terms.md').then(html => {
       renderInfoModal(html);
     });
   });
   document.getElementById('privacyInfoButton').addEventListener('click', () => {
-    import('../markdown/privacy.md').then(html => {
+    import('../../markdown/privacy.md').then(html => {
       renderInfoModal(html);
     });
   });
