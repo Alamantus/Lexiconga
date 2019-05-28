@@ -1,6 +1,7 @@
 import { logIn, createAccount } from "./login";
 import { setCookie } from "../StackOverflow/cookie";
 import { changeDictionary, createNewDictionary } from "./dictionaryManagement";
+import { addMessage } from "../utilities";
 
 export function setupLoginModal(modal) {
   const closeElements = modal.querySelectorAll('.modal-background, .close-button');
@@ -59,4 +60,15 @@ export function setupDeletedDictionaryChangeModal() {
     selectDictionaryToLoad.addEventListener('change', changeDictionary);
   }
   document.getElementById('createNewDictionaryAfterDelete').addEventListener('click', createNewDictionary);
+}
+
+export function setupMakePublic() {
+  document.getElementById('editIsPublic').addEventListener('change', function(event) {
+    document.getElementById('publicLinkDisplay').style.display = event.target.checked ? '' : 'none';
+  });
+  document.getElementById('publicLinkCopy').addEventListener('click', function() {
+    document.getElementById('publicLink').select();
+    document.execCommand('copy');
+    addMessage('Copied public link to clipboard', 3000);
+  });
 }
