@@ -1,4 +1,4 @@
-import { setupLoginModal, setupChangeDictionary, setupCreateNewDictionary, setupDeletedDictionaryChangeModal } from "./setupListeners";
+import { setupLoginModal, setupChangeDictionary, setupCreateNewDictionary, setupDeletedDictionaryChangeModal, setupMakePublic } from "./setupListeners";
 import { request } from "./helpers";
 
 export function renderLoginForm() {
@@ -55,12 +55,20 @@ export function renderLoginForm() {
 
 export function renderMakePublic() {
   const editSettingsTab = document.getElementById('editSettingsTab');
+  const { isPublic } = window.currentDictionary.settings;
   const editSettingsTabHTML = `<label>Make Public
-    <input type="checkbox" id="editIsPublic"><br>
+    <input type="checkbox" id="editIsPublic"${isPublic ? ' checked' : ''}><br>
     <small>Checking this box will make this public via a link you can share with others.</small>
   </label>
+  <p id="publicLinkDisplay" style="${!isPublic ? 'display:none;': ''}margin-left:20px;">
+    <strong>Public Link:</strong><br>
+    <input readonly id="publicLink" value="${window.location.href + window.currentDictionary.externalID.toString()}">
+    <a class="small button" id="publicLinkCopy">Copy</a>
+  </p>
   `;
   editSettingsTab.innerHTML += editSettingsTabHTML;
+
+  setupMakePublic();
 }
 
 export function renderAccountSettings() {
