@@ -91,7 +91,7 @@ VALUES ($new_id, ?, ?, ?, ?)";
   public function getPublicDictionaryDetails ($dictionary_hash) {
     $dictionary = $this->token->unhash($dictionary_hash);
     if ($dictionary !== false) {
-      $query = "SELECT * FROM dictionaries JOIN dictionary_linguistics ON dictionary = id WHERE id=? AND is_public=1";
+      $query = "SELECT d.*, dl.*, u.public_name FROM dictionaries d JOIN dictionary_linguistics dl ON dl.dictionary = d.id JOIN users u ON u.id = d.user WHERE d.id=? AND d.is_public=1";
       $result = $this->db->query($query, array($dictionary))->fetch();
       if ($result) {
         // Default json values in case they are somehow not created by front end first
@@ -102,6 +102,7 @@ VALUES ($new_id, ?, ?, ?, ?)";
           'name' => $result['name'],
           'specification' => $result['specification'],
           'description' => $result['description'],
+          'createdBy' => $result['public_name'],
           'partsOfSpeech' => explode(',', $partsOfSpeech),
           'details' => array(
             'phonology' => array(

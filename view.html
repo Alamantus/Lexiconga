@@ -4,7 +4,13 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Lexiconga</title>
+  <title>{{dict_name}} | Lexiconga</title>
+  <meta property="og:url" content="http://lexicon.ga/{{dict}}" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="{{dict_name}}" />
+  <meta property="og:description" content="A Lexiconga dictionary by {{public_name}}" />
+  <!--meta property="og:image" content="http://lexicon.ga/images/logo.svg" /-->
+  <script>window.currentDictionary = JSON.parse('{{dict_json}}');</script>
   <script src="src/js/view/index.js"></script>
 </head>
 <body>
