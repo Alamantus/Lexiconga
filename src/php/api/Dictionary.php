@@ -103,6 +103,7 @@ VALUES ($new_id, ?, ?, ?, ?)";
           'description' => $result['description'],
           'createdBy' => $result['public_name'],
           'partsOfSpeech' => explode(',', $partsOfSpeech),
+          'alphabeticalOrder' => array(),
           'details' => array(
             'phonology' => array(
               'consonants' => $result['consonants'] !== '' ? explode(' ', $result['consonants']) : array(),
@@ -172,6 +173,7 @@ VALUES ($new_id, ?, ?, ?, ?)";
         'specification' => $result['specification'],
         'description' => $result['description'],
         'partsOfSpeech' => explode(',', $partsOfSpeech),
+        'alphabeticalOrder' => array(),
         'details' => array(
           'phonology' => array(
             'consonants' => $result['consonants'] !== '' ? explode(' ', $result['consonants']) : array(),
