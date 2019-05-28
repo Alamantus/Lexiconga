@@ -80,7 +80,7 @@ VALUES ($new_id, ?, ?, ?, ?)";
     if ($results) {
       return array_map(function($result) {
         return array(
-          'id' => $this->token->hash($result['id']),
+          'id' => $result['id'],
           'name' => $result['name'] . ' ' . $result['specification'],
         );
       }, $results);
@@ -88,9 +88,8 @@ VALUES ($new_id, ?, ?, ?, ?)";
     return array();
   }
 
-  public function getPublicDictionaryDetails ($dictionary_hash) {
-    $dictionary = $this->token->unhash($dictionary_hash);
-    if ($dictionary !== false) {
+  public function getPublicDictionaryDetails ($dictionary) {
+    if (is_numeric($dictionary)) {
       $query = "SELECT d.*, dl.*, u.public_name FROM dictionaries d JOIN dictionary_linguistics dl ON dl.dictionary = d.id JOIN users u ON u.id = d.user WHERE d.id=? AND d.is_public=1";
       $result = $this->db->query($query, array($dictionary))->fetch();
       if ($result) {
@@ -98,7 +97,7 @@ VALUES ($new_id, ?, ?, ?, ?)";
         $partsOfSpeech = $result['parts_of_speech'] !== '' ? $result['parts_of_speech'] : $this->defaults['partsOfSpeech'];
 
         return array(
-          'externalID' => $this->token->hash($result['id']),
+          'externalID' => $result['id'],
           'name' => $result['name'],
           'specification' => $result['specification'],
           'description' => $result['description'],
@@ -138,9 +137,8 @@ VALUES ($new_id, ?, ?, ?, ?)";
     return false;
   }
 
-  public function getPublicDictionaryWords ($dictionary_hash) {
-    $dictionary = $this->token->unhash($dictionary_hash);
-    if ($dictionary !== false) {
+  public function getPublicDictionaryWords ($dictionary) {
+    if (is_numeric($dictionary)) {
       $query = "SELECT words.* FROM words JOIN dictionaries ON id = dictionary WHERE dictionary=? AND is_public=1";
       $results = $this->db->query($query, array($dictionary))->fetchAll();
       if ($results) {
@@ -169,7 +167,7 @@ VALUES ($new_id, ?, ?, ?, ?)";
       $partsOfSpeech = $result['parts_of_speech'] !== '' ? $result['parts_of_speech'] : $this->defaults['partsOfSpeech'];
 
       return array(
-        'externalID' => $this->token->hash($result['id']),
+        'externalID' => $result['id'],
         'name' => $result['name'],
         'specification' => $result['specification'],
         'description' => $result['description'],

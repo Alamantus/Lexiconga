@@ -146,12 +146,11 @@ VALUES (?, ?, ?, ?, ?)';
     );
   }
 
-  public function changeCurrentDictionary ($token, $dictionary_hash) {
+  public function changeCurrentDictionary ($token, $dictionary_id) {
     $user_data = $this->token->decode($token);
     if ($user_data !== false) {
       $id = $user_data->id;
-      $dictionary_id = $this->token->unhash($dictionary_hash);
-      if ($dictionary_id !== false) {
+      if (is_numeric($dictionary_id)) {
         $changed_dictionary = $this->dictionary->changeCurrent($id, $dictionary_id);
         if ($changed_dictionary !== false) {
           $new_token = $this->generateUserToken($id, $changed_dictionary);
@@ -196,7 +195,7 @@ VALUES (?, ?, ?, ?, ?)';
       $details_updated = $this->dictionary->setDetails($user, $dictionary, $dictionary_data['details']);
       $words_updated = $this->dictionary->setWords($user, $dictionary, $dictionary_data['words']);
       if ($details_updated === true && $words_updated === true) {
-        return $this->token->hash($dictionary);
+        return $dictionary;
       }
       return array(
         'error' => ($details_updated !== true ? $details_updated . ' ' : '') . ($words_updated !== true ? $words_updated : ''),
