@@ -4,7 +4,7 @@ The quick and easy dictionary builder for constructed languages.
 
 ## About
 
-This is the master branch for the full rewrite of Lexiconga using modern development practices.
+This is the abandoned branch for the full rewrite of Lexiconga using InfernoJS and some other things that ended up making it heavier than I wanted. I am keeping it as an abandoned stub branch for inspiration.
 
 The source code for the current version of Lexiconga (http://lexicon.ga) is saved in the `version1` branch.
 
