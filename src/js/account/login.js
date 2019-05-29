@@ -30,9 +30,9 @@ export function logIn() {
       saveToken(successData.token);
       window.account = successData.user;
     }, errorData => {
-      errorHTML += errorData;
+      errorHTML += '<p class="bold red">' + errorData + '</p>';
     }).then(() => {
-      createAccountErrorMessages.innerHTML = errorHTML;
+      loginErrorMessages.innerHTML = errorHTML;
       if (errorHTML === '') {
         const loginModal = document.getElementById('loginModal');
         loginModal.parentElement.removeChild(loginModal);
