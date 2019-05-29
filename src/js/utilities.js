@@ -107,6 +107,35 @@ export function wordExists(word, returnId = false) {
   return foundWord ? (returnId ? foundWord.wordId : true) : false;
 }
 
+export function getHomonymnIndexes(word) {
+  const { currentDictionary } = window;
+  const { caseSensitive } = currentDictionary.settings;
+  const foundIndexes = [];
+  currentDictionary.words.forEach((existingWord, index) => {
+    if (existingWord.wordId !== word.wordId
+      && (caseSensitive ? existingWord.name === word.name : existingWord.name.toLowerCase() === word.name.toLowerCase())) {
+        foundIndexes.push(index);
+      }
+  });
+  return foundIndexes;
+}
+
+export function getHomonymnNumber(word) {
+  const homonyms = getHomonymnIndexes(word);
+  if (homonyms.length > 0) {
+    const index = window.currentDictionary.words.findIndex(w => w.wordId === word.wordId);
+    let number = 1;
+
+    for (let i = 0; i < homonyms.length; i++) {
+      if (index < homonyms[i]) break;
+      number++;
+    }
+
+    return number;
+  }
+  return 0;
+}
+
 export function generateRandomWords(numberOfWords) {
   console.log('Generating', numberOfWords, 'words...');
   const letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];

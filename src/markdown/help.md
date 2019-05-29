@@ -54,7 +54,8 @@ After you enter a markdown-formatted description/rules in the Dictionary Setting
 
 ### Referencing Other Words
 If you want to reference another existing word in your dictionary, wrapping the word with its exact name in double-curly-braces \{\{like so\}\} in the Details field will automatically create a link to the word in the dictionary.  
-Note: If you do not prevent duplicates, it will find the first entry in the list.
+
+If you have more than one word with the same spelling, the duplicate words will appear in your word listing with small numbers beside them. By writing the number after a colon \{\{like so:2\}\}, you can directly reference the specific homonymn. If you have duplicate words and exclude the reference number, it will link to the homonymn marked with 1.
 
 ### Maximizing Large Text Boxes
 If you need more space to see what you are entering into a word's Details field or any other long text field with a "Maximize" button, clicking "Maximize" will give you a larger view of the text box to enter text in. When you're done writing, click either the "Done" or &times; button or any of the darker space outside of the larger view, and your text will be in the original text area. It will even preserve your cursor position or highlighted text so you don't lose your place moving from the larger view back to the small (and vice-versa)!
