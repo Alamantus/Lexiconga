@@ -39,6 +39,26 @@ switch ($action) {
     ), 400);
   }
   case 'login': {
+    session_start();
+    if (isset($_SESSION['unlock'])) {
+      if (time() < $_SESSION['unlock']) {
+        $seconds_left = ($_SESSION['unlock'] - time());
+        $minutes_left = floor($seconds_left / 60);
+        $seconds_left = $seconds_left % 60;
+        return Response::json(array(
+          'data' => 'Too many failed login attempts. You must wait another '
+            . ($minutes_left > 0 ? $minutes_left . ' minutes ' : '')
+            . ($minutes_left > 0 && $seconds_left > 0 ? 'and ' : '')
+            . ($seconds_left > 0 ? $seconds_left . ' seconds ' : '')
+            . 'until you can log in again.',
+          'error' => true,
+        ), 403);
+      } else {
+        unset($_SESSION['failures']);
+        unset($_SESSION['unlock']);
+      }
+    }
+
     if (isset($request['email']) && isset($request['password'])) {
       $user = new User();
       $user_data = $user->logIn($request['email'], $request['password']);
@@ -48,8 +68,22 @@ switch ($action) {
           'error' => false,
         ), 200);
       }
+
+      if (!isset($_SESSION['failures'])) {
+        $_SESSION['failures'] = 0;
+      }
+      $_SESSION['failures']++;
+
+      if ($_SESSION['failures'] >= LOGIN_FAILURES_ALLOWED) {
+        $_SESSION['unlock'] = time() + (LOGIN_FAILURES_LOCKOUT_MINUTES * 60);
+        return Response::json(array(
+          'data' => 'Too many failed login attempts. You must wait ' . LOGIN_FAILURES_LOCKOUT_MINUTES . ' minutes until you can log in again.',
+          'error' => true,
+        ), 403);
+      }
+
       return Response::json(array(
-        'data' => 'Could not log in: incorrect data',
+        'data' => 'Incorrect email or password.<br>After ' . (LOGIN_FAILURES_ALLOWED - $_SESSION['failures']) . ' more failures, you will be locked out for ' . LOGIN_FAILURES_LOCKOUT_MINUTES . ' minutes.',
         'error' => true,
       ), 401);
     }
