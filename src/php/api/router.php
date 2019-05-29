@@ -1,10 +1,10 @@
 <?php
 $view = isset($_GET['view']) ? $_GET['view'] : false;
-$dict = isset($_GET['dict']) ? $_GET['dict'] : false;
 
 switch ($view) {
   case 'publicview': {
     $html = file_get_contents('../view.html');
+    $dict = isset($_GET['dict']) ? $_GET['dict'] : false;
     if ($dict !== false) {
       require_once('./Dictionary.php');
       $dictionary = new Dictionary();
@@ -16,6 +16,11 @@ switch ($view) {
         $html = str_replace('{{public_name}}', $dictionary_data['createdBy'], $html);
         $dictionary_json = json_encode($dictionary_data);
         $html = str_replace('{{dict_json}}', addslashes($dictionary_json), $html);
+      } else {
+        $html = str_replace('{{dict}}', 'error', $html);
+        $html = str_replace('{{dict_name}}', 'Error: Dictionary Not Found', $html);
+        $html = str_replace('{{public_name}}', 'Error', $html);
+        $html = str_replace('{{dict_json}}', '{"name": "Error:", "specification": "Dictionary Not Found", "words": []}', $html);
       }
       echo $html;
     }
