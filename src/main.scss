@@ -16,3 +16,9 @@ html, body {
     box-sizing: border-box;
   }
 }
+
+input:not([type="checkbox"]),
+select,
+textarea {
+  font-size: 16px;
+}
