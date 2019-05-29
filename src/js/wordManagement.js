@@ -1,5 +1,5 @@
 import { renderWords } from "./render";
-import { wordExists, addMessage, getNextId, hasToken } from "./utilities";
+import { wordExists, addMessage, getNextId, hasToken, getHomonymnIndexes } from "./utilities";
 import removeDiacritics from "./StackOverflow/removeDiacritics";
 import { removeTags, getTimestampInSeconds } from "../helpers";
 import { saveDictionary } from "./dictionaryManagement";
@@ -44,6 +44,42 @@ export function sortWords(render) {
   if (render) {
     renderWords();
   }
+}
+
+export function parseReferences(detailsMarkdown, references) {
+  new Set(references).forEach(reference => {
+    let wordToFind = reference.replace(/\{\{|\}\}/g, '');
+    let homonymn = 0;
+    if (wordToFind.includes(':')) {
+      const separator = wordToFind.indexOf(':');
+      homonymn = wordToFind.substr(separator + 1);
+      wordToFind = wordToFind.substring(0, separator);
+      if (homonymn && homonymn.trim() && !isNaN(parseInt(homonymn.trim()))) {
+        homonymn = parseInt(homonymn.trim());
+      } else {
+        homonymn = 0;
+      }
+    }
+    let existingWordId = false;
+    const homonymnIndexes = getHomonymnIndexes({ name: wordToFind, wordId: -1 });
+    console.log(homonymn, homonymnIndexes);
+    if (homonymn > 0) {
+      if (typeof homonymnIndexes[homonymn - 1] !== 'undefined') {
+        existingWordId = window.currentDictionary.words[homonymnIndexes[homonymn - 1]].wordId;
+      }
+    } else {
+      existingWordId = wordExists(wordToFind, true);
+    }
+    if (existingWordId !== false) {
+      if (homonymn < 1 && homonymnIndexes.length > 0) {
+        homonymn = 1;
+      }
+      const homonymnSubHTML = homonymn > 0 ? '<sub>' + homonymn.toString() + '</sub>' : '';
+      const wordMarkdownLink = `[${wordToFind}${homonymnSubHTML}](#${existingWordId})`;
+      detailsMarkdown = detailsMarkdown.replace(new RegExp(reference, 'g'), wordMarkdownLink);
+    }
+  });
+  return detailsMarkdown;
 }
 
 export function submitWordForm() {
