@@ -2,3 +2,6 @@
 
 define('DB_USER', 'lexiconga_db_username');
 define('DB_PASSWORD', 'user_password');
+
+define('LOGIN_FAILURES_ALLOWED', 10);
+define('LOGIN_FAILURES_LOCKOUT_MINUTES', 60);
