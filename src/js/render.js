@@ -1,6 +1,6 @@
 import md from 'marked';
 import { removeTags, slugify } from '../helpers';
-import { getWordsStats, getHomonymnNumber } from './utilities';
+import { getWordsStats, getHomonymnNumber, hasToken } from './utilities';
 import { getMatchingSearchWords, highlightSearchTerm, getSearchFilters, getSearchTerm } from './search';
 import { showSection } from './displayToggles';
 import {
@@ -122,6 +122,7 @@ export function renderWords() {
   let wordsHTML = '';
   let openEditForms = getOpenEditForms();
   let words = false;
+  const isPublic = hasToken() && window.currentDictionary.settings.isPublic;
 
   if (window.currentDictionary.words.length === 0) {
     wordsHTML = `<article class="entry">
@@ -171,6 +172,8 @@ export function renderWords() {
         wordId: originalWord.wordId,
       });
       const homonymnNumber = getHomonymnNumber(originalWord);
+      const shareLink = window.currentDictionary.hasOwnProperty('externalID')
+        ? window.location.pathname + window.currentDictionary.externalID + '/' + word.wordId : '';
       wordsHTML += `<article class="entry" id="${word.wordId}">
         <header>
           <h4 class="word">${word.name}${homonymnNumber > 0 ? ' <sub>' + homonymnNumber.toString() + '</sub>' : ''}</h4>
@@ -179,6 +182,7 @@ export function renderWords() {
           <span class="small button word-option-button">Options</span>
           <div class="word-option-list" style="display:none;">
             <div class="word-option" id="edit_${word.wordId}">Edit</div>
+            ${isPublic ? `<a class="word-option" href="${shareLink}" target="_blank">Share</a>` : ''}
             <div class="word-option" id="delete_${word.wordId}">Delete</div>
           </div>
         </header>
