@@ -1,6 +1,6 @@
 import md from 'marked';
 import { removeTags, slugify } from '../helpers';
-import { getWordsStats, wordExists } from './utilities';
+import { getWordsStats, getHomonymnNumber } from './utilities';
 import { getMatchingSearchWords, highlightSearchTerm, getSearchFilters, getSearchTerm } from './search';
 import { showSection } from './displayToggles';
 import {
@@ -15,7 +15,7 @@ import {
   setupIPAFields
 } from './setupListeners';
 import { getPaginationData } from './pagination';
-import { getOpenEditForms } from './wordManagement';
+import { getOpenEditForms, parseReferences } from './wordManagement';
 
 export function renderAll() {
   renderDictionaryDetails();
@@ -160,14 +160,7 @@ export function renderWords() {
       let detailsMarkdown = removeTags(originalWord.details);
       const references = detailsMarkdown.match(/\{\{.+?\}\}/g);
       if (references && Array.isArray(references)) {
-        new Set(references).forEach(reference => {
-          const wordToFind = reference.replace(/\{\{|\}\}/g, '');
-          const existingWordId = wordExists(wordToFind, true);
-          if (existingWordId !== false) {
-            const wordMarkdownLink = `[${wordToFind}](#${existingWordId})`;
-            detailsMarkdown = detailsMarkdown.replace(new RegExp(reference, 'g'), wordMarkdownLink);
-          }
-        });
+        detailsMarkdown = parseReferences(detailsMarkdown, references);
       }
       const word = highlightSearchTerm({
         name: removeTags(originalWord.name),
@@ -177,9 +170,10 @@ export function renderWords() {
         details: detailsMarkdown,
         wordId: originalWord.wordId,
       });
+      const homonymnNumber = getHomonymnNumber(originalWord);
       wordsHTML += `<article class="entry" id="${word.wordId}">
         <header>
-          <h4 class="word">${word.name}</h4>
+          <h4 class="word">${word.name}${homonymnNumber > 0 ? ' <sub>' + homonymnNumber.toString() + '</sub>' : ''}</h4>
           <span class="pronunciation">${word.pronunciation}</span>
           <span class="part-of-speech">${word.partOfSpeech}</span>
           <span class="small button word-option-button">Options</span>
