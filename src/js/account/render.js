@@ -63,7 +63,7 @@ export function renderMakePublic() {
   </label>
   <p id="publicLinkDisplay" style="${!isPublic ? 'display:none;': ''}margin-left:20px;">
     <strong>Public Link:</strong><br>
-    <input readonly id="publicLink" value="${window.location.href + (externalID ? externalID.toString() : '')}">
+    <input readonly id="publicLink" value="${document.domain + window.location.pathname + (externalID ? externalID.toString() : '')}">
     <a class="small button" id="publicLinkCopy">Copy</a>
   </p>
   `;
