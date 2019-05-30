@@ -4,6 +4,7 @@ import { getWordsStats, wordExists } from '../utilities';
 import { getMatchingSearchWords, highlightSearchTerm, getSearchFilters, getSearchTerm } from '../search';
 import { showSection } from '../displayToggles';
 import { setupSearchFilters, setupInfoModal } from './setupListeners';
+import { parseReferences } from '../wordManagement';
 
 export function renderAll() {
   renderDictionaryDetails();
@@ -134,18 +135,8 @@ export function renderWords() {
     }
 
     words.forEach(originalWord => {
-      let detailsMarkdown = removeTags(originalWord.details);
-      const references = detailsMarkdown.match(/\{\{.+?\}\}/g);
-      if (references && Array.isArray(references)) {
-        new Set(references).forEach(reference => {
-          const wordToFind = reference.replace(/\{\{|\}\}/g, '');
-          const existingWordId = wordExists(wordToFind, true);
-          if (existingWordId !== false) {
-            const wordMarkdownLink = `[${wordToFind}](#${existingWordId})`;
-            detailsMarkdown = detailsMarkdown.replace(new RegExp(reference, 'g'), wordMarkdownLink);
-          }
-        });
-      }
+      let detailsMarkdown = originalWord.details;
+      detailsMarkdown = parseReferences(detailsMarkdown);
       const word = highlightSearchTerm({
         name: removeTags(originalWord.name),
         pronunciation: removeTags(originalWord.pronunciation),
