@@ -292,6 +292,12 @@ export function renderEditForm(wordId = false) {
   }
 }
 
+export function renderIPAHelp() {
+  import('./KeyboardFire/phondue/usage.html').then(html => {
+    renderInfoModal(html);
+  });
+}
+
 export function renderIPATable(ipaTableButton) {
   ipaTableButton = typeof ipaTableButton.target === 'undefined' || ipaTableButton.target === '' ? ipaTableButton : ipaTableButton.target;
   const label = ipaTableButton.parentElement.innerText.replace(/(Field Help|IPA Chart)/g, '').trim();
