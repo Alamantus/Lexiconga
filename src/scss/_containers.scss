@@ -14,7 +14,7 @@ main {
   width: 90%;
   max-width: 1000px;
   min-height: 400px;
-  margin: 0 auto;
+  margin: 0 auto $header-height;
 
   #sideColumn,
   #mainColumn {

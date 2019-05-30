@@ -339,6 +339,7 @@ $nav-font-height: 16px;
   bottom: $general-padding;
   right: $general-padding;
   max-width: 300px;
+  z-index: 10;
 
   .message {
     position: relative;
@@ -391,10 +392,21 @@ $nav-font-height: 16px;
 }
 
 #bottom {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 5;
+  background-color: $light;
   text-align: center;
+  padding: $general-padding / 2;
 
   a {
     color: #000000;
     text-decoration: none;
+  }
+
+  .separator {
+    display: inline;
   }
 }

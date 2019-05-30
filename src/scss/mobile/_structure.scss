@@ -88,4 +88,14 @@
   }
 }
 
+#bottom {
+  position: relative;
+  bottom: unset;
+
+  .separator {
+    display: block;
+    visibility: hidden;
+  }
+}
+
 }

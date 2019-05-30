@@ -12,6 +12,8 @@ header {
 }
 
 main {
+  margin-bottom: $general-padding;
+  
   #sideColumn {
     display: block;
     width: 0;
