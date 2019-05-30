@@ -1,7 +1,6 @@
 header {
   display: block;
   padding: 5px $general-padding;
-  border-bottom: 1px solid $mid;
   margin: 0 0 5px;
 
   &#top {
@@ -35,7 +34,6 @@ main {
   article {
     width: 95%;
     margin: 10px auto;
-    border: $border;
 
     dl {
       padding: 0 $general-padding;
@@ -46,6 +44,5 @@ main {
 footer {
   display: block;
   padding: $general-padding;
-  border-top: 1px solid $mid;
   margin: 5px 0 0;
 }
