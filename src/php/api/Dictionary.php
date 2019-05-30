@@ -143,13 +143,13 @@ VALUES ($new_id, ?, ?, ?, ?)";
       $query = "SELECT words.* FROM words JOIN dictionaries ON id = dictionary WHERE dictionary=? AND is_public=1";
       $results = $this->db->query($query, array($dictionary))->fetchAll();
       if ($results) {
-        return array_map(function ($row) {
+        return array_map(function ($row) use ($dictionary) {
           return array(
             'name' => $row['name'],
             'pronunciation' => $row['pronunciation'],
             'partOfSpeech' => $row['part_of_speech'],
             'definition' => $row['definition'],
-            'details' => $row['details'],
+            'details' => $this->parseReferences($row['details'], $dictionary),
             'lastUpdated' => is_null($row['last_updated']) ? intval($row['created_on']) : intval($row['last_updated']),
             'createdOn' => intval($row['created_on']),
             'wordId' => intval($row['word_id']),
@@ -165,13 +165,12 @@ VALUES ($new_id, ?, ?, ?, ?)";
       $query = "SELECT words.* FROM words JOIN dictionaries ON id = dictionary WHERE dictionary=? AND word_id=? AND is_public=1";
       $result = $this->db->query($query, array($dictionary, $word))->fetch();
       if ($result) {
-        $details = $this->parseReferences($result['details'], $dictionary);
         return array(
           'name' => $result['name'],
           'pronunciation' => $result['pronunciation'],
           'partOfSpeech' => $result['part_of_speech'],
           'definition' => $result['definition'],
-          'details' => $details,
+          'details' => $this->parseReferences($result['details'], $dictionary),
           'lastUpdated' => is_null($result['last_updated']) ? intval($result['created_on']) : intval($result['last_updated']),
           'createdOn' => intval($result['created_on']),
           'wordId' => intval($result['word_id']),
@@ -182,6 +181,7 @@ VALUES ($new_id, ?, ?, ?, ?)";
   }
 
   private function parseReferences($details, $dictionary_id) {
+    $details = strip_tags($details);
     if (preg_match_all('/\{\{.+?\}\}/', $details, $references) !== false) {
       $references = array_unique($references[0]);
       foreach($references as $reference) {
@@ -217,7 +217,8 @@ VALUES ($new_id, ?, ?, ?, ?)";
             }
             $homonymn_sub_html = $homonymn > 0 ? '<sub>' . $homonymn . '</sub>' : '';
             $site_root = substr($_SERVER['REQUEST_URI'], 0, strpos($_SERVER['REQUEST_URI'], $dictionary_id));
-            $markdown_link = '[' . $word_to_find . $homonymn_sub_html . '](' . $site_root . $dictionary_id . '/' . $target_id . ')';
+            $markdown_link = '<a href="' . $site_root . $dictionary_id . '/' . $target_id .'" target="_blank" title="Link to Reference">'
+              . $word_to_find . $homonymn_sub_html . '</a>';
             $details = str_replace($reference, $markdown_link, $details);
           }
         }
