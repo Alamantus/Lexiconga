@@ -1,4 +1,4 @@
-import { renderDictionaryDetails, renderPartsOfSpeech, renderAll } from "./render";
+import { renderDictionaryDetails, renderPartsOfSpeech, renderAll, renderWords } from "./render";
 import { removeTags, cloneObject, getTimestampInSeconds, download, slugify } from "../helpers";
 import { LOCAL_STORAGE_KEY, DEFAULT_DICTIONARY, MIGRATE_VERSION } from "../constants";
 import { addMessage, getNextId, hasToken } from "./utilities";
@@ -63,7 +63,10 @@ export function saveEditModal() {
   window.currentDictionary.settings.caseSensitive = document.getElementById('editCaseSensitive').checked;
   const needsReSort = window.currentDictionary.settings.sortByDefinition !== document.getElementById('editSortByDefinition').checked;
   window.currentDictionary.settings.sortByDefinition = document.getElementById('editSortByDefinition').checked;
+
+  let needsWordRender = false;
   if (hasToken()) {
+    needsWordRender = window.currentDictionary.settings.isPublic !== document.getElementById('editIsPublic').checked;
     window.currentDictionary.settings.isPublic = document.getElementById('editIsPublic').checked;
   } else {
     window.currentDictionary.settings.isPublic = false;
@@ -73,8 +76,8 @@ export function saveEditModal() {
   saveDictionary();
   renderDictionaryDetails();
   renderPartsOfSpeech();
-
-  if (needsReSort) {
+  
+  if (needsReSort || needsWordRender) {
     sortWords(true);
   }
 
