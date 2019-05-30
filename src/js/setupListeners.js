@@ -1,5 +1,5 @@
 import {showSection, hideDetailsPanel} from './displayToggles';
-import { renderWords, renderEditForm, renderMaximizedTextbox, renderInfoModal, renderIPATable } from './render';
+import { renderWords, renderEditForm, renderMaximizedTextbox, renderInfoModal, renderIPATable, renderIPAHelp } from './render';
 import { confirmEditWord, cancelEditWord, confirmDeleteWord, submitWordForm } from './wordManagement';
 import { openEditModal, saveEditModal, saveAndCloseEditModal, exportDictionary, exportWords, importDictionary, importWords, confirmDeleteDictionary } from './dictionaryManagement';
 import { goToNextPage, goToPreviousPage, goToPage } from './pagination';
@@ -287,11 +287,6 @@ export function setupIPAButtons() {
     button.addEventListener('click', renderIPATable);
   });
 
-  const renderIPAHelp = () => {
-    import('./KeyboardFire/phondue/usage.html').then(html => {
-      renderInfoModal(html);
-    });
-  }
   Array.from(ipaFieldHelpButtons).forEach(button => {
     button.removeEventListener('click', renderIPAHelp);
     button.addEventListener('click', renderIPAHelp);
