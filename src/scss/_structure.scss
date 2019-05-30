@@ -42,7 +42,6 @@
         left: unset;
         bottom: unset;
         right: unset;
-        background-color: $white;
         padding: ($general-padding / 2) $general-padding ($general-padding * 0.25);
         font-size: 90%;
 
@@ -104,8 +103,6 @@
   width: 31%;
   max-width: 320px;
   padding: 10px;
-  background-color: $light;
-  border: $border;
   border-radius: 5px;
   max-height: 80%;
   overflow-y: auto;
@@ -119,8 +116,6 @@
 
 #detailsSection {
   padding: $general-padding;
-  background-color: $white;
-  border: $border;
   border-radius: 5px;
 
   #dictionaryName {
@@ -135,8 +130,6 @@
       list-style: none;
       margin: 0;
       padding: 10px $general-padding;
-      border: $border;
-      background-color: $light;
       cursor: pointer;
       
       &:first-child {
@@ -148,15 +141,10 @@
       &:not(:first-child) {
         border-left: none;
       }
-
-      &.active {
-        background-color: #bababa;
-      }
     }
   }
 
   #detailsPanel {
-    background-color: $white;
     padding: $general-padding;
     max-height: 400px;
     overflow-y: auto;
@@ -170,8 +158,6 @@
 
 
 .entry {
-  background-color: $light;
-  
   .word {
     display: inline-block;
     margin: 3px 0;
@@ -202,15 +188,12 @@
       position: absolute;
       top: 3px;
       right: 3px;
-      background-color: $white;
-      border: $border;
       border-radius: 5px;
       
       .word-option {
         padding: 10px 25px;;
 
         &:hover {
-          background-color: $light;
           cursor: pointer;
         }
       }
@@ -345,17 +328,11 @@ $nav-font-height: 16px;
     position: relative;
     display: block;
     padding: $general-padding ($general-padding * 2) $general-padding $general-padding;
-    background-color: $light;
-    border: $border;
     border-radius: 5px;
     margin-bottom: 5px;
 
     &:last-child {
       margin-bottom: 0;
-    }
-
-    &.error {
-      background-color: lighten($red, 0.75);
     }
 
     .close-button {
@@ -373,7 +350,6 @@ $nav-font-height: 16px;
         right: -2px;
         width: 20px;
         height: 20px;
-        background-color: #455455;
         opacity: 0.5;
         transform-origin: center left;
         transform: scaleX(0);
@@ -397,12 +373,10 @@ $nav-font-height: 16px;
   left: 0;
   right: 0;
   z-index: 5;
-  background-color: $light;
   text-align: center;
   padding: $general-padding / 2;
 
   a {
-    color: #000000;
     text-decoration: none;
   }
 
