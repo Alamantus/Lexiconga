@@ -4,26 +4,57 @@
   $light: #efefef;
   $white: #ffffff;
   $red: #b42032;
-  $border: 1px solid $dark;
 
+  $header-color: #eacc9d;
+  $background-color: #e6cfaa;
+  $footer-color: #cb6318;
+  $link-color: #a01000;
+  $button-color: #dcb078;
+  $message-color: #c0c088;
+  $word-form-color: #ba5536;
+  $dictionary-color: #bd7251;
+  $entry-color: #d7ad7d;
+  $input-color: #efdfc0;
+  $details-color: #f2d5b2;
+  $modal-color: #f2d5b2;
+  
+  $border: 1px solid $dark;
+  
+  background-color: $background-color;
+  
+  a {
+    color: $link-color;
+  }
+  
   p, span {
     &.red {
       color: $red;
     }
   }
 
-  .tag {
-    display: inline-block;
-    padding: 3px 9px;
-    border-radius: 3px;
-    line-height: 30px;
-    border: $border;
-    background-color: $light;
-
-    &.small {
-      font-size: 80%;
-      line-height: 25px;
+  label {
+    .label-button {
+      border: 1px solid darken($button-color, 2);
+      background-color: $button-color;
+      color: #000000;
+      text-decoration: none;
     }
+
+    .label-help-button {
+      border: 1px solid darken($button-color, 2);
+      background-color: $button-color;
+      color: #000000;
+      text-decoration: none;
+    }
+  }
+
+  input, textarea, select, option {
+    background-color: $input-color;
+  }
+
+  .tag {
+    border: $border;
+    background-color: $button-color;
 
     &.red {
       background-color: $red;
@@ -32,21 +63,25 @@
   }
 
   span .tag {
-    @extend .tag;
-    
-    border-radius: 3px 0 0 3px;
-    
+    border: $border;
+    background-color: $button-color;
     &+.tag {
-      background-color: $white;
+      background-color: lighten($button-color, 25);
       border-left: none;
-      border-radius: 0 3px 3px 0;
     }
   }
 
   .button {
-    @extend .tag;
-    cursor: pointer;
-    user-select: none;
+    border: 1px solid darken($button-color, 2);
+    background-color: $button-color;
+    color: #000000;
+    text-decoration: none;
+    font-weight: bold;
+
+    &.red {
+      background-color: $red;
+      color: $white;
+    }
   }
 
   .modal {
@@ -54,8 +89,8 @@
       background-color: #000000;
     }
     .modal-content {
-      background-color: $white;
-      border: $border;
+      background-color: $modal-color;
+      border: 1px solid darken($modal-color, 10);
     }
   }
 
@@ -67,11 +102,11 @@
       border-top: $border;
       border-left: $border;
       border-right: $border;
-      background-color: $mid;
+      background-color: $button-color;
 
       &.active {
-        background-color: $white;
-        border-bottom: 1px solid $white;
+        background-color: $modal-color;
+        border-bottom: 1px solid $modal-color;
       }
     }
   }
@@ -91,6 +126,10 @@
   }
 
   #top {
+    background-color: $header-color;
+    border-bottom: 1px solid darken($header-color, 2);
+    box-shadow: 0px 4px 5px 0px rgba(50, 50, 50, 0.75);
+
     #title {
       display: inline-block;
       margin: 3px $general-padding 3px 0;
@@ -103,57 +142,75 @@
     #searchModal {
       .modal-content {
         section+footer {
-          background-color: $white;
+          background-color: $modal-color;
         }
       }
     }
   }
 
   #wordForm {
-    background-color: $light;
-    border: $border;
+    background-color: $word-form-color;
+    border: 1px solid darken($word-form-color, 2);
+    box-shadow: 4px 4px 5px 0px rgba(50, 50, 50, 0.75);
+  }
+
+  #mainColumn {
+    background-color: $dictionary-color;
+    border: 1px solid darken($dictionary-color, 2);
+    box-shadow: 4px 4px 5px 0px rgba(50, 50, 50, 0.75);
   }
 
   #detailsSection {
-    background-color: $white;
-    border: $border;
-
     nav ul {
       li {
-        border: $border;
-        background-color: $light;
+        border: 1px solid darken($button-color, 20);
+        background-color: $button-color;
 
         &.active {
-          background-color: #bababa;
+          background-color: lighten($button-color, 15);
         }
       }
     }
 
     #detailsPanel {
-      background-color: $white;
+      background-color: $details-color;
     }
   }
 
   .entry {
-    background-color: $light;
-
+    background-color: $entry-color;
+    border: 1px solid darken($entry-color, 20);
+    
     header {
+      border-bottom: 1px solid darken($entry-color, 20);
+      
+      .word-option-button {
+        background-color: darken($entry-color, 10);
+        border: 1px solid darken($entry-color, 20);
+      }
+      
       .word-option-list {
-        background-color: $white;
-        border: $border;
+        background-color: darken($entry-color, 5);
+        border: 1px solid darken($entry-color, 10);
         
         .word-option {
           &:hover {
-            background-color: $light;
+            background-color: lighten($entry-color, 5);
           }
         }
+      }
+    }
+
+    .edit-form {
+      .button {
+        background-color: darken($button-color, 10);
       }
     }
   }
 
   #messagingSection {
     .message {
-      background-color: $light;
+      background-color: $message-color;
       border: $border;
 
       &.error {
@@ -169,7 +226,9 @@
   }
 
   #bottom {
-    background-color: $light;
+    background-color: $footer-color;
+    border-top: 1px solid darken($footer-color, 2);
+    box-shadow: 0px -4px 5px 0px rgba(50, 50, 50, 0.75);
 
     a {
       color: #000000;
@@ -191,23 +250,6 @@
     background-color: #00de00;
     border: $border;
     color: $white;
-  }
-
-  .tag {
-    padding: 2px 6px;
-    font-size: 90%;
-    line-height: 120%;
-
-    &.small {
-      font-size: 70%;
-      line-height: 100%;
-    }
-  }
-
-  .button {
-    @extend .tag;
-    cursor: pointer;
-    user-select: none;
   }
 }
 }

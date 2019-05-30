@@ -99,14 +99,13 @@
 
 #wordForm {
   position: fixed;
-  top: auto;
+  top: $header-height + $general-padding;
   width: 31%;
   max-width: 320px;
   padding: 10px;
   border-radius: 5px;
   max-height: 80%;
   overflow-y: auto;
-  box-shadow: 4px 4px 5px 0px rgba(50, 50, 50, 0.75);
 }
 
 .edit-form {
@@ -114,9 +113,12 @@
   max-width: 500px;
 }
 
-#detailsSection {
-  padding: $general-padding;
+#mainColumn {
   border-radius: 5px;
+}
+
+#detailsSection {
+  padding: $general-padding $general-padding 0;
 
   #dictionaryName {
     margin-top: 0;
