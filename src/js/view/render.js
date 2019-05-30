@@ -26,6 +26,9 @@ export function renderDictionaryDetails() {
 export function renderName() {
   const dictionaryName = removeTags(window.currentDictionary.name) + ' ' + removeTags(window.currentDictionary.specification);
   document.getElementById('dictionaryName').innerHTML = dictionaryName;
+  const shareLink = window.location.pathname.match(new RegExp(window.currentDictionary.externalID + '$')) ? window.location.pathname
+    : window.location.pathname.substring(0, window.location.pathname.indexOf(window.currentDictionary.externalID)) + window.currentDictionary.externalID;
+  document.getElementById('dictionaryShare').href = shareLink;
 }
 
 export function renderDescription() {
@@ -145,11 +148,13 @@ export function renderWords() {
         details: detailsMarkdown,
         wordId: originalWord.wordId,
       });
+      const shareLink = window.location.pathname + (window.location.pathname.match(new RegExp(word.wordId + '$')) ? '' : '/' + word.wordId);
       wordsHTML += `<article class="entry" id="${word.wordId}">
         <header>
           <h4 class="word">${word.name}</h4>
           <span class="pronunciation">${word.pronunciation}</span>
           <span class="part-of-speech">${word.partOfSpeech}</span>
+          <a href="${shareLink}" target="_blank" class="small button word-option-button" title="Link to Word">&#10150;</a>
         </header>
         <dl>
           <dt class="definition">${word.definition}</dt>
