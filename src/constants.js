@@ -57,6 +57,7 @@ export const DEFAULT_DICTIONARY = {
 export const DEFAULT_SETTINGS = {
   useIPAPronunciationField: true,
   useHotkeys: true,
+  theme: 'default',
 };
 
 export const DEFAULT_PAGE_SIZE = 50;
