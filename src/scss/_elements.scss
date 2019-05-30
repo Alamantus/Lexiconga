@@ -1,3 +1,7 @@
+a {
+  text-decoration: underline;
+}
+
 p, span {
   &.bold {
     font-weight: bold;
@@ -30,24 +34,42 @@ label {
   }
 
   .label-button {
-    @extend .button;
-
+    display: inline-block;
+    padding: 3px 9px;
+    border-radius: 3px;
+    line-height: 30px;
+    cursor: pointer;
+    user-select: none;
     font-size: 80%;
     font-weight: normal;
     float: right;
     cursor: pointer;
     line-height: 80% !important;
     padding: 3px 3px 5px;
+
+    &.small {
+      font-size: 80%;
+      line-height: 25px;
+    }
   }
 
   .label-help-button {
-    @extend .button;
-
+    display: inline-block;
+    padding: 3px 9px;
+    border-radius: 3px;
+    line-height: 30px;
+    cursor: pointer;
+    user-select: none;
     font-size: 70%;
     font-weight: normal;
     cursor: pointer;
     line-height: 70% !important;
     padding: 2px 2px 4px;
+
+    &.small {
+      font-size: 80%;
+      line-height: 25px;
+    }
   }
 }
 
@@ -55,34 +77,50 @@ ul {
   padding-left: $general-padding;
 }
 
-// .tag {
-//   display: inline-block;
-//   padding: 3px 9px;
-//   border-radius: 3px;
-//   line-height: 30px;
+.tag {
+  display: inline-block;
+  padding: 3px 9px;
+  border-radius: 3px;
+  line-height: 30px;
 
-//   &.small {
-//     font-size: 80%;
-//     line-height: 25px;
-//   }
-// }
+  &.small {
+    font-size: 80%;
+    line-height: 25px;
+  }
+}
 
-// span .tag {
-//   @extend .tag;
+span .tag {
+  border-radius: 3px 0 0 3px;
+
+  display: inline-block;
+  padding: 3px 9px;
+  border-radius: 3px;
+  line-height: 30px;
+
+  &.small {
+    font-size: 80%;
+    line-height: 25px;
+  }
   
-//   border-radius: 3px 0 0 3px;
-  
-//   &+.tag {
-//     border-left: none;
-//     border-radius: 0 3px 3px 0;
-//   }
-// }
+  &+.tag {
+    border-left: none;
+    border-radius: 0 3px 3px 0;
+  }
+}
 
-// .button {
-//   @extend .tag;
-//   cursor: pointer;
-//   user-select: none;
-// }
+.button {
+  display: inline-block;
+  padding: 3px 9px;
+  border-radius: 3px;
+  line-height: 30px;
+  cursor: pointer;
+  user-select: none;
+
+  &.small {
+    font-size: 80%;
+    line-height: 25px;
+  }
+}
 
 .modal {
   position: fixed;

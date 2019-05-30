@@ -13,7 +13,7 @@ main {
   width: 90%;
   max-width: 1000px;
   min-height: 400px;
-  margin: 0 auto $header-height;
+  margin: 0 auto ($header-height * 1.25);
 
   #sideColumn,
   #mainColumn {
@@ -28,7 +28,7 @@ main {
 
   #mainColumn {
     width: 64%;
-    margin: 0;
+    margin: $general-padding 0 0;
   }
 
   article {
