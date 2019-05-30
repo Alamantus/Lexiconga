@@ -160,6 +160,26 @@ VALUES ($new_id, ?, ?, ?, ?)";
     return array();
   }
 
+  public function getSpecificPublicDictionaryWord ($dictionary, $word) {
+    if (is_numeric($dictionary) && is_numeric($word)) {
+      $query = "SELECT words.* FROM words JOIN dictionaries ON id = dictionary WHERE dictionary=? AND word_id=? AND is_public=1";
+      $result = $this->db->query($query, array($dictionary, $word))->fetch();
+      if ($result) {
+        return array(
+          'name' => $result['name'],
+          'pronunciation' => $result['pronunciation'],
+          'partOfSpeech' => $result['part_of_speech'],
+          'definition' => $result['definition'],
+          'details' => $result['details'],
+          'lastUpdated' => is_null($result['last_updated']) ? intval($result['created_on']) : intval($result['last_updated']),
+          'createdOn' => intval($result['created_on']),
+          'wordId' => intval($result['word_id']),
+        );
+      }
+    }
+    return false;
+  }
+
   public function getDetails ($user, $dictionary) {
     $query = "SELECT * FROM dictionaries JOIN dictionary_linguistics ON dictionary = id WHERE user=$user AND id=$dictionary";
     $result = $this->db->query($query)->fetch();
