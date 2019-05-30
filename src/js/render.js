@@ -39,7 +39,9 @@ export function renderName() {
   const name = document.getElementById('dictionaryName');
   name.innerHTML = dictionaryName;
   const isPublic = hasToken() && window.currentDictionary.settings.isPublic;
-  if (isPublic && !document.getElementById('dictionaryShare')) {
+  const shareLinkElement = document.getElementById('dictionaryShare');
+
+  if (isPublic && !shareLinkElement) {
     const shareLink = document.createElement('a');
     shareLink.id = 'dictionaryShare';
     shareLink.classList.add('button');
@@ -50,6 +52,8 @@ export function renderName() {
     shareLink.title = 'Public Link to Dictionary';
     shareLink.innerHTML = '&#10150;';
     name.parentElement.insertBefore(shareLink, name);
+  } else if (!isPublic && shareLinkElement) {
+    shareLinkElement.parentElement.removeChild(shareLinkElement);
   }
 }
 
