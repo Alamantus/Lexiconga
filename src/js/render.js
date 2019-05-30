@@ -36,7 +36,21 @@ export function renderDictionaryDetails() {
 
 export function renderName() {
   const dictionaryName = removeTags(window.currentDictionary.name) + ' ' + removeTags(window.currentDictionary.specification);
-  document.getElementById('dictionaryName').innerHTML = dictionaryName;
+  const name = document.getElementById('dictionaryName');
+  name.innerHTML = dictionaryName;
+  const isPublic = hasToken() && window.currentDictionary.settings.isPublic;
+  if (isPublic && !document.getElementById('dictionaryShare')) {
+    const shareLink = document.createElement('a');
+    shareLink.id = 'dictionaryShare';
+    shareLink.classList.add('button');
+    shareLink.style.float = 'right';
+    shareLink.href = window.location.pathname.match(new RegExp(window.currentDictionary.externalID + '$')) ? window.location.pathname
+      : window.location.pathname.substring(0, window.location.pathname.indexOf(window.currentDictionary.externalID)) + window.currentDictionary.externalID;
+    shareLink.target = '_blank';
+    shareLink.title = 'Public Link to Dictionary';
+    shareLink.innerHTML = '&#10150;';
+    name.parentElement.insertBefore(shareLink, name);
+  }
 }
 
 export function renderDescription() {
@@ -179,10 +193,10 @@ export function renderWords() {
           <h4 class="word">${word.name}${homonymnNumber > 0 ? ' <sub>' + homonymnNumber.toString() + '</sub>' : ''}</h4>
           <span class="pronunciation">${word.pronunciation}</span>
           <span class="part-of-speech">${word.partOfSpeech}</span>
+          ${isPublic ? `<a class="small button share-link" href="${shareLink}" target="_blank" title="Public Link to Word">&#10150;</a>` : ''}
           <span class="small button word-option-button">Options</span>
           <div class="word-option-list" style="display:none;">
             <div class="word-option" id="edit_${word.wordId}">Edit</div>
-            ${isPublic ? `<a class="word-option" href="${shareLink}" target="_blank">Share</a>` : ''}
             <div class="word-option" id="delete_${word.wordId}">Delete</div>
           </div>
         </header>
