@@ -1,8 +1,4 @@
 p, span {
-  &.red {
-    color: $red;
-  }
-
   &.bold {
     font-weight: bold;
   }
@@ -59,42 +55,34 @@ ul {
   padding-left: $general-padding;
 }
 
-.tag {
-  display: inline-block;
-  padding: 3px 9px;
-  border: $border;
-  border-radius: 3px;
-  background-color: $light;
-  line-height: 30px;
+// .tag {
+//   display: inline-block;
+//   padding: 3px 9px;
+//   border-radius: 3px;
+//   line-height: 30px;
 
-  &.small {
-    font-size: 80%;
-    line-height: 25px;
-  }
+//   &.small {
+//     font-size: 80%;
+//     line-height: 25px;
+//   }
+// }
 
-  &.red {
-    background-color: $red;
-    color: $white;
-  }
-}
-
-span .tag {
-  @extend .tag;
+// span .tag {
+//   @extend .tag;
   
-  border-radius: 3px 0 0 3px;
+//   border-radius: 3px 0 0 3px;
   
-  &+.tag {
-    border-left: none;
-    border-radius: 0 3px 3px 0;
-    background-color: $white;
-  }
-}
+//   &+.tag {
+//     border-left: none;
+//     border-radius: 0 3px 3px 0;
+//   }
+// }
 
-.button {
-  @extend .tag;
-  cursor: pointer;
-  user-select: none;
-}
+// .button {
+//   @extend .tag;
+//   cursor: pointer;
+//   user-select: none;
+// }
 
 .modal {
   position: fixed;
@@ -109,7 +97,6 @@ span .tag {
     left: 0;
     bottom: 0;
     right: 0;
-    background-color: #000000;
     opacity: 0.5;
   }
 
@@ -122,8 +109,6 @@ span .tag {
     max-width: 100%;
     height: 600px;
     max-height: 100%;
-    background-color: $white;
-    border: $border;
     border-radius: 5px;
 
     .close-button {
@@ -139,25 +124,13 @@ span .tag {
 }
 
 .tabs {
-  ul {
-    border-bottom: $border;
-  }
   li {
     display: inline-block;
     list-style: none;
     margin: 0 2px -1px;
     padding: 10px $general-padding;
-    border-top: $border;
-    border-left: $border;
-    border-right: $border;
     border-radius: 5px 5px 0 0;
-    background-color: $mid;
     cursor: pointer;
-
-    &.active {
-      background-color: $white;
-      border-bottom: 1px solid $white;
-    }
   }
 }
 
