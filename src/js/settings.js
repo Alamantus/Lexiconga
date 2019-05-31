@@ -8,7 +8,6 @@ import { enableHotKeys, disableHotKeys } from "./hotkeys";
 export function loadSettings() {
   const storedSettings = window.localStorage.getItem(SETTINGS_KEY);
   window.settings = storedSettings ? JSON.parse(storedSettings) : cloneObject(DEFAULT_SETTINGS);
-  updateTheme();
   toggleIPAPronunciationFields();
 }
 
@@ -17,17 +16,12 @@ export function saveSettings() {
   addMessage('Settings Saved!');
 }
 
-export function updateTheme() {
-  const { theme } = window.settings;
-  document.body.id = theme + 'Theme';
-}
-
 export function openSettingsModal() {
-  const { useIPAPronunciationField, useHotkeys, theme } = window.settings;
+  const { useIPAPronunciationField, useHotkeys, defaultTheme } = window.settings;
 
   document.getElementById('settingsUseIPA').checked = useIPAPronunciationField;
   document.getElementById('settingsUseHotkeys').checked = useHotkeys;
-  document.getElementById('settingsTheme').value = theme;
+  document.getElementById('settingsDefaultTheme').value = defaultTheme;
 
   document.getElementById('settingsModal').style.display = '';
 }
@@ -35,7 +29,7 @@ export function openSettingsModal() {
 export function saveSettingsModal() {
   window.settings.useIPAPronunciationField = document.getElementById('settingsUseIPA').checked;
   window.settings.useHotkeys = document.getElementById('settingsUseHotkeys').checked;
-  window.settings.theme = document.getElementById('settingsTheme').value;
+  window.settings.defaultTheme = document.getElementById('settingsDefaultTheme').value;
 
   if (hasToken()) {
     import('./account/index.js').then(account => {
@@ -57,7 +51,6 @@ export function saveSettingsModal() {
   }
 
   saveSettings();
-  updateTheme();
   toggleHotkeysEnabled();
   toggleIPAPronunciationFields();
 }
