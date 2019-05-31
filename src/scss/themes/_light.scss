@@ -1,22 +1,22 @@
-#defaultTheme {
+#lightTheme {
   $dark: #bababa;
   $mid: #dedede;
   $light: #efefef;
   $white: #ffffff;
-  $red: #b42032;
+  $red: #c94557;
 
-  $header-color: #eacc9d;
-  $background-color: #e6cfaa;
-  $footer-color: #cb6318;
-  $link-color: #a01000;
-  $button-color: #dcb078;
-  $message-color: #c0c088;
-  $word-form-color: #ba5536;
-  $dictionary-color: #bd7251;
-  $entry-color: #d7ad7d;
-  $input-color: #efdfc0;
-  $details-color: #f2d5b2;
-  $modal-color: #f2d5b2;
+  $header-color: $mid;
+  $background-color: $white;
+  $footer-color: $dark;
+  $link-color: #0055ff;
+  $button-color: $light;
+  $message-color: $mid;
+  $word-form-color: $mid;
+  $dictionary-color: $mid;
+  $entry-color: $light;
+  $input-color: $white;
+  $details-color: $white;
+  $modal-color: $light;
   
   $border: 1px solid $dark;
   
