@@ -418,6 +418,32 @@ switch ($action) {
       'error' => true,
     ), 400);
   }
+  case 'initiate-password-reset': {
+    if (isset($request['email'])) {
+      $user = new User();
+      $password_reset = $user->setPasswordReset($request['email']);
+      if ($password_reset === true) {
+        return Response::json(array(
+          'data' => $password_reset,
+          'error' => false,
+        ), 200);
+      }
+      if (isset($password_reset['error'])) {
+        return Response::json(array(
+          'data' => $password_reset['error'],
+          'error' => true,
+        ), 500);
+      }
+      return Response::json(array(
+        'data' => 'Could not send password reset key: email not found',
+        'error' => true,
+      ), 401);
+    }
+    return Response::json(array(
+      'data' => 'Could not send password reset key: required data missing',
+      'error' => true,
+    ), 400);
+  }
 
   default: {
     return Response::html('Hi!');
