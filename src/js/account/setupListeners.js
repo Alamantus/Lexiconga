@@ -2,6 +2,7 @@ import { logIn, createAccount } from "./login";
 import { setCookie } from "../StackOverflow/cookie";
 import { changeDictionary, createNewDictionary } from "./dictionaryManagement";
 import { addMessage } from "../utilities";
+import { renderForgotPasswordForm } from "./passwordReset";
 
 export function setupLoginModal(modal) {
   const closeElements = modal.querySelectorAll('.modal-background, .close-button');
@@ -36,6 +37,7 @@ export function setupLoginModal(modal) {
   });
 
   document.getElementById('loginSubmit').addEventListener('click', logIn);
+  document.getElementById('forgotPasswordButton').addEventListener('click', renderForgotPasswordForm);
   document.getElementById('createAccountSubmit').addEventListener('click', createAccount);
 }
 

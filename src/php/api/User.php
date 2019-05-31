@@ -267,6 +267,74 @@ VALUES (?, ?, ?, ?, ?)';
     return false;
   }
 
+  public function setPasswordReset($email) {
+    $date = date("Y-m-d H:i:s");
+    $reset_code = random_int(0, 999999999);
+    $reset_code_hash = $this->token->hash($reset_code);
+    $query = "UPDATE `users` SET `password_reset_code`=?, `password_reset_date`=? WHERE `email`=?;";
+    $reset = $this->db->execute($query, array(
+      $reset_code,
+      $date,
+      $email,
+    ));
+    
+    if ($reset) {
+      $user_data = $this->getUserDataByEmailForPasswordReset($email);
+      if ($user_data) {
+        $to = $email;
+        $subject = "Here's your Lexiconga password reset link";
+        $message = "Hello " . $user_data['public_name'] . "\r\n\r\nSomeone has requested a password reset link for your Lexiconga account. If it was you, you can reset your password by going to the link below and entering a new password for yourself:\r\n";
+        $message .= "http://lexicon.ga/passwordreset?account=" . $user_data['id'] . "&code=" . $reset_code_hash . "\r\n\r\n";
+        $message .= "If it wasn't you who requested the link, you can ignore this email since it was only sent to you, but you might want to consider changing your password when you have a chance.\r\n\r\n";
+        $message .= "The password link will only be valid for today until you use it.\r\n\r\n";
+        $message .= "Thanks!\r\nThe Lexiconga Admins";
+        $header = "From: Lexiconga Password Reset <donotreply@lexicon.ga>\r\n"
+          . "Reply-To: help@lexicon.ga\r\n"
+          . "X-Mailer: PHP/" . phpversion();
+        if (mail($to, $subject, $message, $header)) {
+          return true;
+        } else {
+          return array(
+            'error' => 'Could not send email to ' . $email,
+          );
+        }
+      }
+    } else {
+      return array(
+        'error' => $this->db->last_error_info,
+      );
+    }
+
+    return false;
+  }
+
+  public function checkPasswordReset($id, $code) {
+    $date = date("Y-m-d");
+    $daterange = "'" . $date . " 00:00:00' AND '" . $date . " 23:59:59'";
+    $unhashed_code = $this->token->unhash($code);
+    $query = "SELECT * FROM `users` WHERE `id`=? AND `password_reset_code`=? AND `password_reset_date` BETWEEN " . $daterange . ";";
+    $stmt = $this->db->query($query, array(
+      $id,
+      $unhashed_code,
+    ));
+    $results = $stmt->fetchAll();
+    
+    if ($stmt && $results) {
+        return count($results) === 1;
+    } else {
+        return false;
+    }
+  }
+
+  public function resetPassword($password, $email) {
+    $password_hash = password_hash($password, PASSWORD_DEFAULT);
+    $query = "UPDATE `users` SET `password`=?, `password_reset_date`='0000-00-00 00:00:00' WHERE `email`=?;";
+    return $this->db->execute($query, array(
+      $password_hash,
+      $email,
+    ));
+  }
+
   private function generateUserToken ($user_id, $dictionary_id) {
     $user_data = array(
       'id' => intval($user_id),
@@ -286,5 +354,18 @@ VALUES (?, ?, ?, ?, ?)';
     $update_query = 'UPDATE users SET old_password=NULL, password=? WHERE id=' . $user['id'];
     $stmt = $this->db->query($update_query, array($new_password));
     return $stmt->rowCount() === 1;
+  }
+
+  private function getUserDataByEmailForPasswordReset($email) {
+    $query = 'SELECT id, public_name FROM users WHERE email=?';
+    $stmt = $this->db->query($query, array($email));
+    $result = $stmt->fetch();
+    if ($stmt && $result) {
+      return array(
+        'id' => $result['id'],
+        'public_name' => $result['public_name'] ? $result['public_name'] : 'Lexiconger',
+      );
+    }
+    return false;
   }
 }
