@@ -115,6 +115,8 @@ span .tag {
   line-height: 30px;
   cursor: pointer;
   user-select: none;
+  text-decoration: none;
+  font-weight: bold;
 
   &.small {
     font-size: 80%;
@@ -157,6 +159,7 @@ span .tag {
       font-size: 200%;
       cursor: pointer;
       user-select: none;
+      text-decoration: none;
     }
   }
 }
