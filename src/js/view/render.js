@@ -5,8 +5,10 @@ import { getMatchingSearchWords, highlightSearchTerm, getSearchFilters, getSearc
 import { showSection } from '../displayToggles';
 import { setupSearchFilters, setupInfoModal } from './setupListeners';
 import { parseReferences } from '../wordManagement';
+import { renderTheme } from '../render';
 
 export function renderAll() {
+  renderTheme();
   renderDictionaryDetails();
   renderPartsOfSpeech();
   renderWords();
