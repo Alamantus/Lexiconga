@@ -50,6 +50,7 @@
 
   input, textarea, select, option {
     background-color: $input-color;
+    border: 1px solid $dark;
   }
 
   .tag {
