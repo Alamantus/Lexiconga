@@ -1,4 +1,4 @@
-import { renderDictionaryDetails, renderPartsOfSpeech, renderAll, renderWords } from "./render";
+import { renderDictionaryDetails, renderPartsOfSpeech, renderAll, renderTheme } from "./render";
 import { removeTags, cloneObject, getTimestampInSeconds, download, slugify } from "../helpers";
 import { LOCAL_STORAGE_KEY, DEFAULT_DICTIONARY, MIGRATE_VERSION } from "../constants";
 import { addMessage, getNextId, hasToken } from "./utilities";
@@ -13,7 +13,7 @@ export function openEditModal() {
   const { name, specification, description, partsOfSpeech } = window.currentDictionary;
   const { consonants, vowels, blends, phonotactics } = window.currentDictionary.details.phonology;
   const { orthography, grammar } = window.currentDictionary.details;
-  const { allowDuplicates, caseSensitive, sortByDefinition, isPublic } = window.currentDictionary.settings;
+  const { allowDuplicates, caseSensitive, sortByDefinition, theme, isPublic } = window.currentDictionary.settings;
   
   document.getElementById('editName').value = name;
   document.getElementById('editSpecification').value = specification;
@@ -35,6 +35,7 @@ export function openEditModal() {
   document.getElementById('editCaseSensitive').checked = caseSensitive;
   if (allowDuplicates) document.getElementById('editCaseSensitive').disabled = true;
   document.getElementById('editSortByDefinition').checked = sortByDefinition;
+  document.getElementById('editTheme').value = theme;
   if (hasToken()) {
     document.getElementById('editIsPublic').checked = isPublic;
   }
@@ -63,6 +64,7 @@ export function saveEditModal() {
   window.currentDictionary.settings.caseSensitive = document.getElementById('editCaseSensitive').checked;
   const needsReSort = window.currentDictionary.settings.sortByDefinition !== document.getElementById('editSortByDefinition').checked;
   window.currentDictionary.settings.sortByDefinition = document.getElementById('editSortByDefinition').checked;
+  window.currentDictionary.settings.theme = document.getElementById('editTheme').value;
 
   let needsWordRender = false;
   if (hasToken()) {
@@ -74,6 +76,7 @@ export function saveEditModal() {
 
   addMessage('Saved ' + window.currentDictionary.specification + ' Successfully');
   saveDictionary();
+  renderTheme();
   renderDictionaryDetails();
   renderPartsOfSpeech();
   
@@ -113,6 +116,7 @@ export function loadDictionary() {
 
 export function clearDictionary() {
   window.currentDictionary = cloneObject(DEFAULT_DICTIONARY);
+  window.currentDictionary.settings.theme = window.settings.defaultTheme;
 }
 
 export function deleteDictionary() {
