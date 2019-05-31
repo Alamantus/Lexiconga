@@ -46,7 +46,7 @@ export const DEFAULT_DICTIONARY = {
     allowDuplicates: false,
     caseSensitive: false,
     sortByDefinition: false,
-    isComplete: false,
+    theme: 'default',
     isPublic: false,
   },
   lastUpdated: getTimestampInSeconds(),
