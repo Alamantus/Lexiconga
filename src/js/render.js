@@ -18,9 +18,15 @@ import { getPaginationData } from './pagination';
 import { getOpenEditForms, parseReferences } from './wordManagement';
 
 export function renderAll() {
+  renderTheme();
   renderDictionaryDetails();
   renderPartsOfSpeech();
   renderWords();
+}
+
+export function renderTheme() {
+  const { theme } = window.currentDictionary.settings;
+  document.body.id = theme + 'Theme';
 }
 
 export function renderDictionaryDetails() {
