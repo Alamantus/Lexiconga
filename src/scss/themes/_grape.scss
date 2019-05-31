@@ -1,0 +1,255 @@
+#grapeTheme {
+  $dark: #bababa;
+  $mid: #dedede;
+  $light: #efefef;
+  $white: #ffffff;
+  $red: #de0000;
+
+  $header-color: #cc9dea;
+  $background-color: #cfaae6;
+  $footer-color: #6318cb;
+  $link-color: #1000a0;
+  $button-color: #b078dc;
+  $message-color: #c088c0;
+  $word-form-color: #5536ba;
+  $dictionary-color: #7251bd;
+  $entry-color: #ad7dd7;
+  $input-color: #dfc0ef;
+  $details-color: #d5b2f2;
+  $modal-color: #d5b2f2;
+  
+  $border: 1px solid $dark;
+  
+  background-color: $background-color;
+  color: #000000;
+  
+  a {
+    color: $link-color;
+  }
+  
+  p, span {
+    &.red {
+      color: $red;
+    }
+  }
+
+  label {
+    .label-button {
+      border: 1px solid darken($button-color, 2);
+      background-color: $button-color;
+      color: #000000;
+      text-decoration: none;
+    }
+
+    .label-help-button {
+      border: 1px solid darken($button-color, 2);
+      background-color: $button-color;
+      color: #000000;
+      text-decoration: none;
+    }
+  }
+
+  input, textarea, select, option {
+    background-color: $input-color;
+    border: 1px solid $dark;
+  }
+
+  .tag {
+    border: $border;
+    background-color: $button-color;
+
+    &.red {
+      background-color: $red;
+      color: $white;
+    }
+  }
+
+  span .tag {
+    border: $border;
+    background-color: $button-color;
+    &+.tag {
+      background-color: lighten($button-color, 25);
+      border-left: none;
+    }
+  }
+
+  .button {
+    border: 1px solid darken($button-color, 2);
+    background-color: $button-color;
+    color: #000000;
+
+    &.red {
+      background-color: $red;
+      color: $white;
+    }
+  }
+
+  .modal {
+    .modal-background {
+      background-color: #000000;
+    }
+    .modal-content {
+      background-color: $modal-color;
+      border: 1px solid darken($modal-color, 10);
+    }
+  }
+
+  .tabs {
+    ul {
+      border-bottom: $border;
+    }
+    li {
+      border-top: $border;
+      border-left: $border;
+      border-right: $border;
+      background-color: $button-color;
+
+      &.active {
+        background-color: $modal-color;
+        border-bottom: 1px solid $modal-color;
+      }
+    }
+  }
+
+  header {
+    border-bottom: 1px solid $mid;
+  }
+
+  main {
+    article {
+      border: $border;
+    }
+  }
+
+  footer {
+    border-top: 1px solid $mid;
+  }
+
+  #top {
+    background-color: $header-color;
+    border-bottom: 1px solid darken($header-color, 2);
+    box-shadow: 0px 4px 5px 0px rgba(50, 50, 50, 0.75);
+
+    #title {
+      display: inline-block;
+      margin: 3px $general-padding 3px 0;
+    }
+
+    #openSearchModal {
+      cursor: pointer;
+    }
+
+    #searchModal {
+      .modal-content {
+        section+footer {
+          background-color: $modal-color;
+        }
+      }
+    }
+  }
+
+  #wordForm {
+    background-color: $word-form-color;
+    border: 1px solid darken($word-form-color, 2);
+    box-shadow: 4px 4px 5px 0px rgba(50, 50, 50, 0.75);
+  }
+
+  #mainColumn {
+    background-color: $dictionary-color;
+    border: 1px solid darken($dictionary-color, 2);
+    box-shadow: 4px 4px 5px 0px rgba(50, 50, 50, 0.75);
+  }
+
+  #detailsSection {
+    nav ul {
+      li {
+        border: 1px solid darken($button-color, 20);
+        background-color: $button-color;
+
+        &.active {
+          background-color: lighten($button-color, 15);
+        }
+      }
+    }
+
+    #detailsPanel {
+      background-color: $details-color;
+    }
+  }
+
+  .entry {
+    background-color: $entry-color;
+    border: 1px solid darken($entry-color, 20);
+    
+    header {
+      border-bottom: 1px solid darken($entry-color, 20);
+      
+      .word-option-button {
+        background-color: darken($entry-color, 10);
+        border: 1px solid darken($entry-color, 20);
+      }
+      
+      .word-option-list {
+        background-color: darken($entry-color, 5);
+        border: 1px solid darken($entry-color, 10);
+        
+        .word-option {
+          &:hover {
+            background-color: lighten($entry-color, 5);
+          }
+        }
+      }
+    }
+
+    .edit-form {
+      .button {
+        background-color: darken($button-color, 10);
+      }
+    }
+  }
+
+  #messagingSection {
+    .message {
+      background-color: $message-color;
+      border: $border;
+
+      &.error {
+        background-color: lighten($red, 0.75);
+      }
+
+      .close-button {
+        &:before {
+          background-color: #455455;
+        }
+      }
+    }
+  }
+
+  #bottom {
+    background-color: $footer-color;
+    border-top: 1px solid darken($footer-color, 2);
+    box-shadow: 0px -4px 5px 0px rgba(50, 50, 50, 0.75);
+
+    a {
+      color: #000000;
+    }
+  }
+
+}
+
+@media (max-width: 750px) {
+#defaultTheme {
+  $dark: #bababa;
+  $mid: #dedede;
+  $light: #efefef;
+  $white: #ffffff;
+  $red: #b42032;
+  $border: 1px solid $dark;
+  
+  #mobileWordFormShow {
+    background-color: #00de00;
+    border: $border;
+    color: $white;
+  }
+}
+}
