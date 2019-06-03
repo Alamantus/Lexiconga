@@ -1,4 +1,3 @@
-import '../../main.scss';
 import { renderAll } from './render';
 import setupListeners from './setupListeners';
 
