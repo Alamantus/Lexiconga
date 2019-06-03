@@ -192,7 +192,7 @@ export function syncWords(remoteWords, deletedWords) {
   }
   
   remoteWords.forEach(remoteWord => {
-    const localWord = words.find(word => word.wordId === remoteWord.wordId);
+    let localWord = words.find(word => word.wordId === remoteWord.wordId);
     if (localWord) {
       if (localWord.lastUpdated < remoteWord.lastUpdated) {
         localWord = remoteWord;
