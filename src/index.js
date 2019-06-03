@@ -1,5 +1,3 @@
-import './main.scss';
-
 import setupListeners from './js/setupListeners';
 import { renderAll } from './js/render';
 import { hasToken } from './js/utilities';
