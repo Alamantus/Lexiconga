@@ -132,8 +132,12 @@
     box-shadow: 0px 4px 5px 0px #000000;
 
     #title {
-      display: inline-block;
-      margin: 3px $general-padding 3px 0;
+      #lexi {
+        fill: lighten($background-color, 25);
+      }
+      #conga {
+        fill: darken($footer-color, 10);
+      }
     }
 
     #openSearchModal {
