@@ -16,6 +16,7 @@ import {
 } from './setupListeners';
 import { getPaginationData } from './pagination';
 import { getOpenEditForms, parseReferences } from './wordManagement';
+import { renderAd } from './ads';
 
 export function renderAll() {
   renderTheme();
@@ -181,23 +182,21 @@ export function renderWords() {
     // const { pageStart, pageEnd } = getPaginationData(words);
 
     // words.slice(pageStart, pageEnd).forEach(originalWord => {
-    words.forEach(originalWord => {
-      let detailsMarkdown = removeTags(originalWord.details);
-      const references = detailsMarkdown.match(/\{\{.+?\}\}/g);
-      if (references && Array.isArray(references)) {
-        detailsMarkdown = parseReferences(detailsMarkdown, references);
-      }
+    words.forEach((originalWord, displayIndex) => {
       const word = highlightSearchTerm({
         name: removeTags(originalWord.name),
         pronunciation: removeTags(originalWord.pronunciation),
         partOfSpeech: removeTags(originalWord.partOfSpeech),
         definition: removeTags(originalWord.definition),
-        details: detailsMarkdown,
+        details: parseReferences(removeTags(originalWord.details)),
         wordId: originalWord.wordId,
       });
       const homonymnNumber = getHomonymnNumber(originalWord);
       const shareLink = window.currentDictionary.hasOwnProperty('externalID')
         ? window.location.pathname + window.currentDictionary.externalID + '/' + word.wordId : '';
+
+      wordsHTML += renderAd(displayIndex);
+
       wordsHTML += `<article class="entry" id="${word.wordId}">
         <header>
           <h4 class="word">${word.name}${homonymnNumber > 0 ? ' <sub>' + homonymnNumber.toString() + '</sub>' : ''}</h4>

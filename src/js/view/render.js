@@ -6,6 +6,7 @@ import { showSection } from '../displayToggles';
 import { setupSearchFilters, setupInfoModal } from './setupListeners';
 import { parseReferences } from '../wordManagement';
 import { renderTheme } from '../render';
+import { renderAd } from '../ads';
 
 export function renderAll() {
   renderTheme();
@@ -139,18 +140,19 @@ export function renderWords() {
       </article>`;
     }
 
-    words.forEach(originalWord => {
-      let detailsMarkdown = originalWord.details;
-      detailsMarkdown = parseReferences(detailsMarkdown);
+    words.forEach((originalWord, displayIndex) => {
       const word = highlightSearchTerm({
         name: removeTags(originalWord.name),
         pronunciation: removeTags(originalWord.pronunciation),
         partOfSpeech: removeTags(originalWord.partOfSpeech),
         definition: removeTags(originalWord.definition),
-        details: detailsMarkdown,
+        details: parseReferences(removeTags(originalWord.details)),
         wordId: originalWord.wordId,
       });
       const shareLink = window.location.pathname + (window.location.pathname.match(new RegExp(word.wordId + '$')) ? '' : '/' + word.wordId);
+
+      wordsHTML += renderAd(displayIndex);
+
       wordsHTML += `<article class="entry" id="${word.wordId}">
         <header>
           <h4 class="word">${word.name}</h4>

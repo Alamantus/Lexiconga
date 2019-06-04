@@ -3,6 +3,7 @@ import { renderAll } from './js/render';
 import { hasToken } from './js/utilities';
 import { loadDictionary } from './js/dictionaryManagement';
 import { loadSettings } from './js/settings';
+import { setupAds } from './js/ads';
 
 function initialize() {
   loadDictionary();
@@ -14,8 +15,8 @@ function initialize() {
       account.loginWithToken();
     });
   }
-  
-  renderAll();
+
+  setupAds().then(() => renderAll());
 }
 
 window.onload = (function (oldLoad) {
