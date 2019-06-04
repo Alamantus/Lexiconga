@@ -23,8 +23,10 @@
 html, body {
   margin: 0;
   font-family: $font;
-
+  transition: all 0.2s ease-in;
+  
   * {
+    transition: all 0.2s ease-in;
     box-sizing: border-box;
   }
 }
