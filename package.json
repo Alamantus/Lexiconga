@@ -8,7 +8,7 @@
   "license": "UNLICENCED",
   "scripts": {
     "start": "concurrently \"npm run watch-js\" \"npm run watch-php\"",
-    "watch-js": "parcel watch index.html view.html --public-url ./",
+    "watch-js": "parcel watch index.html view.html --no-hmr --public-url ./",
     "watch-php": "cpx \"src/php/**/{*,.*}\" dist -v -w",
     "bundle": "parcel build index.html && cpx \"src/php/**/{*,.*}\" dist",
     "serve-frontend-only": "parcel index.html",
@@ -20,8 +20,7 @@
     "autoprefixer": "^9.5.1",
     "concurrently": "^4.1.0",
     "cpx": "^1.5.0",
-    "node-sass": "^4.12.0",
-    "parcel-bundler": "1.9.7",
+    "parcel-bundler": "^1.12.3",
     "rimraf": "^2.6.3",
     "sass": "^1.19.0"
   },
