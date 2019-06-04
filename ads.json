@@ -23,6 +23,24 @@
     "cta": "Learn to Play for Free!",
     "link": "https://guts.plus",
     "start": "June 1, 2019",
+    "end": "March 1, 2020",
+    "isPriority": false
+  },
+  {
+    "header": "Get Theonite: Planet Adyn free!",
+    "body": "\"This book is the superhero fantasy you didn't know you needed. Magic, Afrofuturism, and heart-pumping suspense - this book has it all!\" - WeReadFantasy.com",
+    "cta": "Read Free Now",
+    "link": "https://mailchi.mp/ce525124aec3/theonite-planet-adyn-free-copy",
+    "start": "June 1, 2019",
+    "end": "January 1, 2020",
+    "isPriority": false
+  },
+  {
+    "header": "The Sword of Kaigen: A Theonite War Story",
+    "body": "\"Fantasy and martial arts aficionados alike should enjoy this emotionally supercharged novel... which pierces readers' hearts with the precision of a samurai's razor-sharp blade.\" - Blue Ink Review",
+    "cta": "Buy Now",
+    "link": "https://www.amazon.com/Sword-Kaigen-Theonite-War-Story/dp/172019386X/",
+    "start": "June 1, 2019",
     "end": "January 1, 2020",
     "isPriority": false
   }
