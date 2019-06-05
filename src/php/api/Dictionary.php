@@ -1,6 +1,6 @@
 <?php
-require_once('./Db.php');
-require_once('./Token.php');
+require_once(realpath(dirname(__FILE__) . '/./Db.php'));
+require_once(realpath(dirname(__FILE__) . '/./Token.php'));
 
 class Dictionary {
   private $db;

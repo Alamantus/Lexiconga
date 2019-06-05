@@ -1,5 +1,5 @@
 <?php
-require_once('../vendor/autoload.php');
+require_once(realpath(dirname(__FILE__) . '/../vendor/autoload.php'));
 
 use \Firebase\JWT\JWT;
 use \Hashids\Hashids;
