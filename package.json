@@ -8,9 +8,9 @@
   "license": "UNLICENCED",
   "scripts": {
     "start": "concurrently \"npm run watch-js\" \"npm run watch-php\"",
-    "watch-js": "parcel watch index.html view.html --no-hmr --public-url ./",
+    "watch-js": "parcel watch index.html template-view.html template-passwordreset.html --no-hmr --public-url ./",
     "watch-php": "cpx \"src/php/**/{*,.*}\" dist -v -w",
-    "bundle": "parcel build index.html && cpx \"src/php/**/{*,.*}\" dist",
+    "bundle": "parcel build index.html template-view.html template-passwordreset.html && cpx \"src/php/**/{*,.*}\" dist",
     "serve-frontend-only": "parcel index.html",
     "clear": "npm run clear-dist && npm run clear-cache",
     "clear-dist": "rimraf dist/*",

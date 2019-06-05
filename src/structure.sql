@@ -64,7 +64,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `allow_email` tinyint(1) NOT NULL DEFAULT 1,
   `last_login` int(11) DEFAULT NULL,
   `password_reset_code` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `password_reset_date` int(11) DEFAULT NULL,
+  `password_reset_date` datetime DEFAULT NULL,
   `created_on` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
