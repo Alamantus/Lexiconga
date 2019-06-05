@@ -4,14 +4,15 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Lexiconga</title>
+  <title>Lexiconga (OFFLINE)</title>
   <link rel="icon" href="src/images/favicon.png" type="image/x-icon" />
   <link rel="stylesheet" href="src/main.scss" />
+  <script>window.isOffline = true;</script>
   <script src="src/index.js"></script>
 </head>
 <body id="defaultTheme">
   <header id="top">
-    <a href="./"><svg id="title" viewBox="0 0 249.78 55.087">
+    <a href="/"><svg id="title" viewBox="0 0 249.78 55.087">
       <g transform="translate(-107.53 -155.84)">
         <g id="lexi">
           <path d="m144.03 159.39-11.339 22.409h-21.62l11.339-22.409z" />
@@ -28,7 +29,7 @@
           <path d="m345.75 204.47-1.6401-6.3782h-8.1094l-1.7312 6.3782h-5.8771l7.0616-26.515h9.1117l7.0616 26.515zm-5.7404-21.504-2.9158 10.752h5.8315zm-2.1413-6.3326q0.18224 0 1.3212 0.13667 1.139 0.0911 1.7768 0.0911 0.59226 0 1.139 0 0.59226-0.0456 1.1845-0.0456h0.82005l-0.0456 0.63782q-0.18223 0-2.9613 0.0911-2.7335 0.0911-3.9636 0.0911h-2.5513q0.45559-0.13668 0.91117-0.36447 0.68338-0.36447 0.72894-0.59226 0.27335-0.0456 0.68338-0.0456t0.95673 0zm7.0616 0.63782 1.139 0.5467q0.59226 2.8246 0.86561 4.237 0.54671 2.5513 1.0934 4.237-1.0934-2.6424-1.7312-4.4647-0.86561-2.4602-1.3668-4.5559zm5.7404 22.688-0.18224 0.41003q-0.0456-0.59226-0.0911-1.2301 0-4.2825-1.0934-7.4716-0.45559-1.3212-1.8679-4.647l0.95673-0.36447q0.59226 3.5536 1.0478 5.467 0.22779 1.0023 2.2779 8.8839l-1.0478-1.0478zm1.0478 1.7312q0.36446 0.95673 0.95673 1.8223 0.95673 1.4123 1.0934 1.5946l-1.0478-0.18223q-0.13667-0.36447-0.45558-1.0478-0.27335-0.68338-0.36447-1.0934-0.0911-0.45558-0.18223-1.0934zm-17.631-22.962 0.68338-0.36446q-1.0023 3.5536-2.1413 7.5172-1.2756 4.4192-2.2324 7.5172-0.41003 1.3212-2.369 7.5627 1.3212-5.6037 2.8702-11.162 0.45558-1.6857 3.1891-11.071zm6.2871 19.454q0.86562 0 1.959 0.18223 0.36447 0.0456 1.139 0.18223l-0.18223-0.45558q-2.9158 0-4.2825 0.50114-0.31891 0.13668-2.7791 1.1845l0.54671-1.4579zm-13.394 6.2415q0.86561-1.0934 2.369-7.0616 0.95673-3.9636 1.9135-7.9728l-3.4625 15.809zm6.1048-24.647 0.27335-0.18223q-0.7745 2.9158-1.7312 6.196-0.91117 3.2802-2.0046 6.7427 0.68337-3.2347 1.4123-6.4693 1.0023-4.0547 2.0501-6.2871zm10.387 20q0.36447-0.0456 1.0023 2.5513 0.68338 2.5968 1.0478 2.5968 0.86561 0 1.8223 0t2.0046-0.0456q1.3212 0 2.0957 0.0456 0.82006 0.0456 1.5946 0.27335-0.50114 0.31891-1.6857 0.41003-1.139 0.0911-2.0046 0.0911l-5.1026-0.13667q-0.13668 0.0456-0.18224-0.13668 0-0.18223 0-0.63782v-0.68338q0-0.63782-0.18223-1.7768-0.18224-1.1845-0.41003-2.5513zm-7.745 0.77449q0.18223 0.59226 0.18223 1.4579 0 0.5467-0.0456 1.1845-0.0455 0.63782-0.0455 0.68338l0.13667 1.4123h-1.8679q-1.139 0-3.7814-0.0911-2.6424-0.0911-2.8246-0.0911 4.237 0 7.6538-0.36447 0.13667-0.45558 0.18223-1.2301 0.0456-0.77449 0.0456-0.86561 0.18223-0.0911 0.27335-1.0023 0.0911-0.95673 0.0911-1.0934zm6.0137-11.982-1.2301-2.5057 1.0934 4.237zm0.54671 4.5559-0.54671 0.22779-0.0456-0.86561v-0.27335l0.0456-0.50115zm-2.2779-8.7017-1.9135 8.7017 3.0524-0.0456 0.0911 0.41003h-3.6447l2.4146-9.0662z" />
         </g>
       </g>
-    </svg></a>
+    </svg></a> <strong>You are OFFLINE</strong>
 
     <input id="openSearchModal" placeholder="🔍&#xFE0E; Search"> <span id="searchResults"></span>
     <section id="searchModal" class="modal" style="display:none;">
@@ -90,7 +91,7 @@
 
     <div id="headerMenu">
       <a id="settingsButton" class="button">Settings</a>
-      <a id="loginCreateAccountButton" class="button">Log In&nbsp;/ Create Account</a>
+      <a id="loginCreateAccountButton" hidden style="display:none;">Log In&nbsp;/ Create Account</a>
     </div>
     <div style="clear:both;"></div>
   </header>
@@ -368,34 +369,5 @@
   </section>
 
   <div id="messagingSection"></div>
-
-  <script src="//cdnjs.cloudflare.com/ajax/libs/UpUp/1.1.0/upup.min.js"></script>
-  <script>
-  window.onload = (function (oldLoad) {
-    return function () {
-      oldLoad && oldLoad();
-      if (UpUp) {
-        UpUp.start({
-          'cache-version': '2.0.0',
-          'content-url': 'offline.html',
-          'assets': [
-            'src.8d47de22.js',
-            'main.3381ca43.css',
-            'help.ecc721dc.html',
-            'privacy.5cbf7ea0.html',
-            'terms.bcb4cecc.html',
-            'usage.4a51122f.html',
-            'ads.f4e0c99c.js',
-            'favicon.5d013634.png',
-            'ipa-table.6c5cf939.html',
-            'papaparse.min.dab93fe4.js',
-          ],
-          'service-worker-url': 'upup.sw.min.js',
-        });
-      }
-    }
-  })(window.onload);
-    
-  </script>
 </body>
 </html>
