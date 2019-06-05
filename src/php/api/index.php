@@ -445,9 +445,9 @@ switch ($action) {
     ), 400);
   }
   case 'password-reset': {
-    if (isset($request['code']) && isset($request['password'])) {
+    if (isset($request['account']) && isset($request['password'])) {
       $user = new User();
-      $password_reset = $user->setPasswordReset($request['email']);
+      $password_reset = $user->resetPassword($request['password'], $request['account']);
       if ($password_reset === true) {
         return Response::json(array(
           'data' => $password_reset,
