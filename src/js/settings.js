@@ -8,7 +8,7 @@ import { enableHotKeys, disableHotKeys } from "./hotkeys";
 export function loadSettings() {
   const storedSettings = window.localStorage.getItem(SETTINGS_KEY);
   window.settings = storedSettings ? JSON.parse(storedSettings) : cloneObject(DEFAULT_SETTINGS);
-  toggleIPAPronunciationFields();
+  toggleIPAPronunciationFields(false);
 }
 
 export function saveSettings() {
@@ -67,7 +67,7 @@ export function toggleHotkeysEnabled() {
   }
 }
 
-export function toggleIPAPronunciationFields() {
+export function toggleIPAPronunciationFields(render = true) {
   const ipaButtons = document.querySelectorAll('.ipa-table-button, .ipa-field-help-button'),
     ipaFields = document.querySelectorAll('.ipa-field');
   if (!window.settings.useIPAPronunciationField) {
@@ -85,5 +85,7 @@ export function toggleIPAPronunciationFields() {
       field.addEventListener('keypress', usePhondueDigraphs);
     });
   }
-  renderWords();
+  if (render) {
+    renderWords();
+  }
 }
