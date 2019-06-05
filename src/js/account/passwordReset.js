@@ -25,10 +25,10 @@ export function renderForgotPasswordForm() {
 }
 
 function setupStartResetForm() {
-  document.getElementById('forgotPasswordSubmit').addEventListener('click', sendPasswordReset);
+  document.getElementById('forgotPasswordSubmit').addEventListener('click', startPasswordReset);
 }
 
-function sendPasswordReset() {
+function startPasswordReset() {
   const email = document.getElementById('forgotPasswordEmailField').value.trim();
   const errorMessageElement = document.getElementById('forgotPasswordErrorMessages');
   let errorMessage = '';
@@ -57,3 +57,48 @@ function sendPasswordReset() {
     });
   }
 }
+
+function setupPasswordResetForm() {
+  document.getElementById('newPasswordSubmit').addEventListener('click', submitPasswordReset);
+}
+
+function submitPasswordReset() {
+  const password = document.getElementById('newPassword').value;
+  const confirm = document.getElementById('newConfirm').value;
+  const account = document.getElementById('account').value;
+  const errorMessageElement = document.getElementById('newPasswordErrorMessages');
+  let errorMessage = '';
+  
+  if (password === '') {
+    errorMessage += '<p class="red bold">Please enter a password.</p>';
+  } else if (password !== confirm) {
+    errorMessage += '<p class="red bold">The passwords do not match.</p>';
+  }
+
+  errorMessageElement.innerHTML = errorMessage;
+
+  if (errorMessage === '') {
+    request({
+      action: 'password-reset',
+      account,
+      password,
+    }, success => {
+      console.log(success);
+    }, error => {
+      errorMessage += '<p class="red bold">' + error + '</p>';
+    }).then(() => {
+      errorMessageElement.innerHTML = errorMessage;
+      if (errorMessage === '') {
+        document.getElementById('detailsPanel').innerHTML = `<h3>Your password has been reset</h3>
+        <p>You can now <a href="/">Return to Lexiconga</a> and log in using your new password.</p>`;
+      }
+    });
+  }
+}
+
+window.onload = (function (oldLoad) {
+  return function () {
+    oldLoad && oldLoad();
+    setupPasswordResetForm();
+  }
+})(window.onload);

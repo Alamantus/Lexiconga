@@ -284,7 +284,7 @@ VALUES (?, ?, ?, ?, ?)';
         $to = $email;
         $subject = "Here's your Lexiconga password reset link";
         $message = "Hello " . $user_data['public_name'] . "\r\n\r\nSomeone has requested a password reset link for your Lexiconga account. If it was you, you can reset your password by going to the link below and entering a new password for yourself:\r\n";
-        $message .= "http://lexicon.ga/passwordreset?account=" . $user_data['id'] . "&code=" . $reset_code_hash . "\r\n\r\n";
+        $message .= "https://lexicon.ga/passwordreset.php?account=" . $user_data['id'] . "&code=" . $reset_code_hash . "\r\n\r\n";
         $message .= "If it wasn't you who requested the link, you can ignore this email since it was only sent to you, but you might want to consider changing your password when you have a chance.\r\n\r\n";
         $message .= "The password link will only be valid for today until you use it.\r\n\r\n";
         $message .= "Thanks!\r\nThe Lexiconga Admins";
@@ -326,12 +326,13 @@ VALUES (?, ?, ?, ?, ?)';
     }
   }
 
-  public function resetPassword($password, $email) {
+  public function resetPassword($password, $id) {
+    $id = intval($id);
     $password_hash = password_hash($password, PASSWORD_DEFAULT);
-    $query = "UPDATE `users` SET `password`=?, `password_reset_date`='0000-00-00 00:00:00' WHERE `email`=?;";
+    $query = "UPDATE `users` SET `password`=?, `old_password`=null, `password_reset_code`=null WHERE `id`=?;";
     return $this->db->execute($query, array(
       $password_hash,
-      $email,
+      $id,
     ));
   }
 
