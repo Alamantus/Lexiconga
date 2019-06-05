@@ -6,8 +6,8 @@ import { loadSettings } from './js/settings';
 import { setupAds } from './js/ads';
 
 function initialize() {
-  loadDictionary();
   loadSettings();
+  loadDictionary();
   setupListeners();
 
   if (hasToken()) {
