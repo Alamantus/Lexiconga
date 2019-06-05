@@ -7,10 +7,11 @@
   "author": "Robbie Antenesse <dev@alamantus.com>",
   "license": "UNLICENCED",
   "scripts": {
-    "start": "concurrently \"npm run watch-js\" \"npm run watch-php\"",
-    "watch-js": "parcel watch index.html template-view.html template-passwordreset.html --no-hmr --public-url ./",
+    "start": "concurrently \"npm run watch-js\" \"npm run watch-php\" \"npm run copy-files\"",
+    "watch-js": "parcel watch index.html offline.html template-view.html template-passwordreset.html --no-hmr --public-url ./",
     "watch-php": "cpx \"src/php/**/{*,.*}\" dist -v -w",
-    "bundle": "parcel build index.html template-view.html template-passwordreset.html && cpx \"src/php/**/{*,.*}\" dist",
+    "copy-files": "cpx \"node_modules/upup/dist/upup.sw.min.js\" dist -v",
+    "bundle": "parcel build index.html offline.html template-view.html template-passwordreset.html && npm run copy-files && cpx \"src/php/**/{*,.*}\" dist",
     "serve-frontend-only": "parcel index.html",
     "clear": "npm run clear-dist && npm run clear-cache",
     "clear-dist": "rimraf dist/*",
@@ -27,6 +28,7 @@
   "dependencies": {
     "marked": "^0.6.2",
     "normalize.css": "^8.0.1",
-    "papaparse": "^4.6.3"
+    "papaparse": "^4.6.3",
+    "upup": "^1.1.0"
   }
 }

@@ -25,3 +25,9 @@ It's less useful, but `npm run serve-frontend-only` will bundle and serve _only_
 ## Production
 
 `npm run bundle` bundles and minifies the frontend stuff and also copies the backend stuff to `dist`. Be sure to run `npm run clear` to delete the contents of `dist` and `.cache` before using `npm run bundle` to make sure you don't get old dev versions of the bundled code included in your upload.
+
+## UpUp Configuration
+
+[UpUp](https://github.com/TalAter/UpUp) is a tool that enables browsers to download an offline version of a website so users can still access it if they lose internet connection. Because Parcel Bundler hashes every file accessed via reference within the code, you need to ensure that the UpUp configuration at the bottom of `index.html` is kept up to date whenever you make changes to files. Typically the only file hashes that will change are `src.*.js` and `main.*.css`, but it's best to check all of them just to make sure.
+
+After bundling, update the files referenced in the configuration to make sure UpUp can download the files correctly, then bundle again so `dist/index.html` gets updated. I'm desperately hoping I can find a way to automate this in the build process, but I haven't figured it out just yet. Maybe I'll end up using `router.php` and `.htaccess` to do the heavy lifting for me. We'll see.

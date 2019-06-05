@@ -5683,6 +5683,11 @@ upath@^1.1.1:
   resolved "https://registry.yarnpkg.com/upath/-/upath-1.1.2.tgz#3db658600edaeeccbe6db5e684d67ee8c2acd068"
   integrity sha512-kXpym8nmDmlCBr7nKdIx8P2jNBa+pBpIUFRnKJ4dr8htyYGJFokkr2ZvERRtUN+9SY+JqXouNgUPtv6JQva/2Q==
 
+upup@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/upup/-/upup-1.1.0.tgz#2accfeaecb0e1149e0d4f70173557c27288d3920"
+  integrity sha512-0CbaWVFX3mg7mkTtvg06g6bW9sijnSKKQptZdUZiHjAyvlpQWBxo+QoafVnaoQB0AlSCiYp3c8MUIYM+Jdf/Cw==
+
 uri-js@^4.2.2:
   version "4.2.2"
   resolved "https://registry.yarnpkg.com/uri-js/-/uri-js-4.2.2.tgz#94c540e1ff772956e2299507c010aea6c8838eb0"
