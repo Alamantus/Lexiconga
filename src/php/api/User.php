@@ -1,7 +1,7 @@
 <?php
-require_once('./Db.php');
-require_once('./Token.php');
-require_once('./Dictionary.php');
+require_once(realpath(dirname(__FILE__) . '/./Db.php'));
+require_once(realpath(dirname(__FILE__) . '/./Token.php'));
+require_once(realpath(dirname(__FILE__) . '/./Dictionary.php'));
 
 class User {
   private $db;
