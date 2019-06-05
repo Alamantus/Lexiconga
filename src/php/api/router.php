@@ -3,7 +3,7 @@ $view = isset($_GET['view']) ? $_GET['view'] : false;
 
 switch ($view) {
   case 'dictionary': {
-    $html = file_get_contents('../view.html');
+    $html = file_get_contents('../template-view.html');
     $dict = isset($_GET['dict']) ? $_GET['dict'] : false;
     if ($dict !== false) {
       require_once('./Dictionary.php');
@@ -27,7 +27,7 @@ switch ($view) {
     break;
   }
   case 'word': {
-    $html = file_get_contents('../view.html');
+    $html = file_get_contents('../template-view.html');
     $dict = isset($_GET['dict']) ? $_GET['dict'] : false;
     $word = isset($_GET['word']) ? $_GET['word'] : false;
     if ($dict !== false && $word !== false) {
