@@ -192,5 +192,5 @@ export function hideAllModals() {
 }
 
 export function hasToken() {
-  return getCookie('token') !== '';
+  return window.isOffline !== true && getCookie('token') !== '';
 }
