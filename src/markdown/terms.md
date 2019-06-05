@@ -1,8 +1,8 @@
 ## Terms of Service ("Terms")
 
-Last updated: May 16, 2018 — Update to contact information.
+Last updated: June 5, 2019 — Minor text fixes and link additions.
 
-Please read these Terms of Service ("Terms", "Terms of Service") carefully before using the https://lexicon.ga website (the "Service") or the cloud account service (an "Account") operated by Robbie Antenesse and Alamantus GameDev ("us", "we", or "our").
+Please read these Terms of Service ("Terms", "Terms of Service") carefully before using the https://lexicon.ga website (the "Service") or the cloud account service (an "Account") operated by [Robbie Antenesse](https://robbie.antenesse.net) and [Alamantus GameDev](https://alamantus.com) ("us", "we", or "our").
 
 Your access to and use of the Service is conditioned on your acceptance of and compliance with these Terms. These Terms apply to all visitors, users and others who access or use the Service. By accessing or using the Service you agree to be bound by these Terms. If you disagree with any part of the terms then you may not access the Service.
 
@@ -14,7 +14,7 @@ If you stop using our Service, your data will remain unless you request its remo
 Instructions for use are visible through the "Help" button on the site.
 
 ### Public Dictionaries
-Any dictionaries created and associated with an Account are private by default and only visible to the owner of the Account. You may make your dictionaries visible to the public at any time by utilizing the appropriate dictionarys setting.
+Any dictionaries created and associated with an Account are private by default and only visible to the owner of the Account. You may make your dictionaries visible to the public at any time by utilizing the appropriate dictionary setting.
 
 If you utilize the ability to make dictionaries associated with an Account visible to the public, you accept all responsibility for any and all damages that may come as a result of the information you place online and acknowledge that we are not liable in any way. Do not put any personal information online. We cannot protect what you deliberately make publicly visible.
 
