@@ -162,6 +162,22 @@
 }
 
 
+.announcement {
+  position: relative;
+  padding: 0 $general-padding $general-padding;
+  text-align: center;
+
+  .close-button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    font-size: 25px;
+    line-height: 10px;
+    cursor: pointer;
+    text-decoration: none;
+  }
+}
+
 .entry {
   .word {
     display: inline-block;
