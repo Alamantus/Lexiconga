@@ -100,3 +100,19 @@ export function getHomonymnIndexes(word) {
   });
   return foundIndexes;
 }
+
+export function getHomonymnNumber(word) {
+  const homonyms = getHomonymnIndexes(word);
+  if (homonyms.length > 0) {
+    const index = window.currentDictionary.words.findIndex(w => w.wordId === word.wordId);
+    let number = 1;
+
+    for (let i = 0; i < homonyms.length; i++) {
+      if (index < homonyms[i]) break;
+      number++;
+    }
+
+    return number;
+  }
+  return 0;
+}
