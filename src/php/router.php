@@ -66,4 +66,24 @@ switch ($view) {
     }
     break;
   }
+
+  default: {
+    $html = file_get_contents(realpath(dirname(__FILE__) . '/./template-index.html'));
+    $announcements = file_get_contents(realpath(dirname(__FILE__) . '/./announcements.json'));
+    $announcements = json_decode($announcements, true);
+    $announcements_html = '';
+    foreach ($announcements as $announcement) {
+      $expire = strtotime($announcement['expire']);
+      if (time() < $expire) {
+        $announcements_html .= '<article class="announcement">
+        <a class="close-button" title="Close Announcement" onclick="this.parentElement.parentElement.removeChild(this.parentElement);">&times;&#xFE0E;</a>
+        <h4>' . $announcement['header'] . '</h4>
+        ' . $announcement['body'] . '
+      </article>';
+      }
+    }
+    $html = str_replace('{{announcements}}', $announcements_html, $html);
+    return Response::html($html);
+    break;
+  }
 }
