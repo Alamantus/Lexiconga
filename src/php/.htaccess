@@ -1,12 +1,12 @@
 RewriteEngine On    # Turn on the rewriting engine
 
-RewriteRule    ^view/([0-9]+)/([0-9]+)/?$    api/router.php?view=word&dict=$1&word=$2    [NC,L]    # Handle word ids.
+RewriteRule    ^view/([0-9]+)/([0-9]+)/?$    router.php?view=word&dict=$1&word=$2    [NC,L]    # Handle word ids.
 
-RewriteRule    ^([0-9]+)/([0-9]+)/?$    api/router.php?view=word&dict=$1&word=$2    [NC,L]    # Handle word ids.
+RewriteRule    ^([0-9]+)/([0-9]+)/?$    router.php?view=word&dict=$1&word=$2    [NC,L]    # Handle word ids.
 
-RewriteRule    ^view/([0-9]+)/?$    api/router.php?view=dictionary&dict=$1    [NC,L]    # Handle dictionary ids.
+RewriteRule    ^view/([0-9]+)/?$    router.php?view=dictionary&dict=$1    [NC,L]    # Handle dictionary ids.
 
-RewriteRule    ^([0-9]+)/?$    api/router.php?view=dictionary&dict=$1    [NC,L]    # Handle dictionary ids.
+RewriteRule    ^([0-9]+)/?$    router.php?view=dictionary&dict=$1    [NC,L]    # Handle dictionary ids.
 
 #RewriteRule ^issues/?$ https://github.com/Alamantus/Lexiconga/issues [R=301,L] # Shorten issues url.
 
