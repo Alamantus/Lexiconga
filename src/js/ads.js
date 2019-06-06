@@ -1,12 +1,11 @@
 import { DISPLAY_AD_EVERY } from '../constants.js';
+import ads from '../../ads.json';
 
 export function setupAds() {
-  return import('../../ads.json').then(ads => {
-    const shuffle = (a, b) => Math.random() > 0.5 ? 1 : -1;
-    const priority = ads.filter(ad => isActive(ad) && ad.isPriority).sort(shuffle);
-    const regular = ads.filter(ad => isActive(ad) && !ad.isPriority).sort(shuffle);
-    window.ads = [...priority, ...regular];
-  });
+  const shuffle = (a, b) => Math.random() > 0.5 ? 1 : -1;
+  const priority = ads.filter(ad => isActive(ad) && ad.isPriority).sort(shuffle);
+  const regular = ads.filter(ad => isActive(ad) && !ad.isPriority).sort(shuffle);
+  window.ads = [...priority, ...regular];
 }
 
 function isActive(ad) {

@@ -20,12 +20,11 @@ function initialize() {
     });
   }
 
-  setupAds().then(() => renderAll());
+  setupAds();
+  renderAll();
 }
 
 window.onload = (function (oldLoad) {
-  return function () {
-    oldLoad && oldLoad();
-    initialize();
-  }
+  oldLoad && oldLoad();
+  initialize();
 })(window.onload);
