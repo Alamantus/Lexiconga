@@ -5,6 +5,7 @@ import { showSearchModal, clearSearchText } from "./search";
 import { saveAndCloseSettingsModal, openSettingsModal, saveSettings } from "./settings";
 import { saveAndCloseEditModal, openEditModal } from "./dictionaryManagement";
 import { addMessage, hideAllModals } from "./utilities";
+import helpFile from '../markdown/help.md';
 
 export function enableHotKeys() {
   document.addEventListener('keydown', hotKeyActions);
@@ -102,9 +103,7 @@ function submitWord() {
 }
 
 function showHelpModal() {
-  import('../markdown/help.md').then(html => {
-    renderInfoModal(html);
-  });
+  renderInfoModal(helpFile);
 }
 
 function maximizeTextarea() {

@@ -17,6 +17,7 @@ import {
 import { getPaginationData } from './pagination';
 import { getOpenEditForms, parseReferences } from './wordManagement';
 import { renderAd } from './ads';
+import ipaTableFile from './KeyboardFire/phondue/ipa-table.html';
 
 export function renderAll() {
   renderTheme();
@@ -311,24 +312,22 @@ export function renderIPATable(ipaTableButton) {
   ipaTableButton = typeof ipaTableButton.target === 'undefined' || ipaTableButton.target === '' ? ipaTableButton : ipaTableButton.target;
   const label = ipaTableButton.parentElement.innerText.replace(/(Field Help|IPA Chart)/g, '').trim();
   const textBox = ipaTableButton.parentElement.querySelector('input');
-  import('./KeyboardFire/phondue/ipa-table.html').then(html => {
-    const modalElement = document.createElement('section');
-    modalElement.classList.add('modal', 'ipa-table-modal');
-    modalElement.innerHTML = `<div class="modal-background"></div>
-    <div class="modal-content">
-      <a class="close-button">&times;&#xFE0E;</a>
-      <header><label>${label} <input value="${textBox.value}" class="ipa-field"></label></header>
-      <section>
-        ${html}
-      </section>
-      <footer><a class="button done-button">Done</a></footer>
-    </div>`;
+  const modalElement = document.createElement('section');
+  modalElement.classList.add('modal', 'ipa-table-modal');
+  modalElement.innerHTML = `<div class="modal-background"></div>
+  <div class="modal-content">
+    <a class="close-button">&times;&#xFE0E;</a>
+    <header><label>${label} <input value="${textBox.value}" class="ipa-field"></label></header>
+    <section>
+      ${ipaTableFile}
+    </section>
+    <footer><a class="button done-button">Done</a></footer>
+  </div>`;
+
+  document.body.appendChild(modalElement);
   
-    document.body.appendChild(modalElement);
-    
-    setupIPAFields();
-    setupIPATable(modalElement, textBox);
-  });
+  setupIPAFields();
+  setupIPATable(modalElement, textBox);
 }
 
 export function renderMaximizedTextbox(maximizeButton) {

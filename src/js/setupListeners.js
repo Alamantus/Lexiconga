@@ -8,6 +8,9 @@ import { usePhondueDigraphs } from './KeyboardFire/phondue/ipaField';
 import { openSettingsModal, saveSettingsModal, saveAndCloseSettingsModal } from './settings';
 import { enableHotKeys } from './hotkeys';
 import { showSearchModal, clearSearchText, checkAllPartsOfSpeechFilters, uncheckAllPartsOfSpeechFilters } from './search';
+import helpFile from '../markdown/help.md';
+import termsFile from '../markdown/terms.md';
+import privacyFile from '../markdown/privacy.md';
 
 export default function setupListeners() {
   setupDetailsTabs();
@@ -357,19 +360,13 @@ export function setupMaximizeModal(modal, textBox) {
 
 export function setupInfoButtons() {
   document.getElementById('helpInfoButton').addEventListener('click', () => {
-    import('../markdown/help.md').then(html => {
-      renderInfoModal(html);
-    });
+    renderInfoModal(helpFile);
   });
   document.getElementById('termsInfoButton').addEventListener('click', () => {
-    import('../markdown/terms.md').then(html => {
-      renderInfoModal(html);
-    });
+    renderInfoModal(termsFile);
   });
   document.getElementById('privacyInfoButton').addEventListener('click', () => {
-    import('../markdown/privacy.md').then(html => {
-      renderInfoModal(html);
-    });
+    renderInfoModal(privacyFile);
   });
 }
 
