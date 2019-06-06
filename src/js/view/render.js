@@ -1,6 +1,6 @@
 import md from 'marked';
 import { removeTags, slugify } from '../../helpers';
-import { getWordsStats } from './utilities';
+import { getWordsStats, getHomonymnNumber } from './utilities';
 import { getMatchingSearchWords, highlightSearchTerm, getSearchFilters, getSearchTerm } from './search';
 import { showSection } from './displayToggles';
 import { setupSearchFilters, setupInfoModal } from './setupListeners';
@@ -155,13 +155,15 @@ export function renderWords() {
         details: parseReferences(removeTags(originalWord.details)),
         wordId: originalWord.wordId,
       });
+
+      const homonymnNumber = getHomonymnNumber(originalWord);
       const shareLink = window.location.pathname + (window.location.pathname.match(new RegExp(word.wordId + '$')) ? '' : '/' + word.wordId);
 
       wordsHTML += renderAd(displayIndex);
 
       wordsHTML += `<article class="entry" id="${word.wordId}">
         <header>
-          <h4 class="word">${word.name}</h4>
+          <h4 class="word">${word.name}${homonymnNumber > 0 ? ' <sub>' + homonymnNumber.toString() + '</sub>' : ''}</h4>
           <span class="pronunciation">${word.pronunciation}</span>
           <span class="part-of-speech">${word.partOfSpeech}</span>
           <a href="${shareLink}" target="_blank" class="small button word-option-button" title="Link to Word">&#10150;</a>
