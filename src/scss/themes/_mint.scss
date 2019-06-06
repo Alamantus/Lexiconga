@@ -181,6 +181,11 @@
     }
   }
 
+  .announcement {
+    background-color: saturate(lighten($footer-color, 20%), 20%);
+    box-shadow: 4px 4px 5px 0px rgba(50, 50, 50, 0.75);
+  }
+
   .entry {
     background-color: $entry-color;
     border: 1px solid darken($entry-color, 20);
