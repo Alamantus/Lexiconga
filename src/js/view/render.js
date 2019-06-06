@@ -1,11 +1,10 @@
 import md from 'marked';
 import { removeTags, slugify } from '../../helpers';
-import { getWordsStats, wordExists } from '../utilities';
-import { getMatchingSearchWords, highlightSearchTerm, getSearchFilters, getSearchTerm } from '../search';
-import { showSection } from '../displayToggles';
+import { getWordsStats } from './utilities';
+import { getMatchingSearchWords, highlightSearchTerm, getSearchFilters, getSearchTerm } from './search';
+import { showSection } from './displayToggles';
 import { setupSearchFilters, setupInfoModal } from './setupListeners';
-import { parseReferences } from '../wordManagement';
-import { renderTheme } from '../render';
+import { parseReferences } from './wordManagement';
 import { renderAd } from '../ads';
 
 export function renderAll() {
@@ -13,6 +12,11 @@ export function renderAll() {
   renderDictionaryDetails();
   renderPartsOfSpeech();
   renderWords();
+}
+
+export function renderTheme() {
+  const { theme } = window.currentDictionary.settings;
+  document.body.id = theme + 'Theme';
 }
 
 export function renderDictionaryDetails() {

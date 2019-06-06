@@ -1,5 +1,5 @@
 import {showSection, hideDetailsPanel} from './displayToggles';
-import { showSearchModal, clearSearchText, checkAllPartsOfSpeechFilters, uncheckAllPartsOfSpeechFilters } from '../search';
+import { showSearchModal, clearSearchText, checkAllPartsOfSpeechFilters, uncheckAllPartsOfSpeechFilters } from './search';
 import { renderWords, renderInfoModal } from './render';
 
 export default function setupListeners() {
