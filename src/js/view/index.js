@@ -3,7 +3,8 @@ import setupListeners from './setupListeners';
 import { setupAds } from '../ads';
 
 function initialize() {
-  setupAds().then(() => renderAll());
+  setupAds();
+  renderAll();
   setupListeners();
 }
 

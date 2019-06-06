@@ -1,6 +1,9 @@
 import {showSection, hideDetailsPanel} from './displayToggles';
 import { showSearchModal, clearSearchText, checkAllPartsOfSpeechFilters, uncheckAllPartsOfSpeechFilters } from './search';
 import { renderWords, renderInfoModal } from './render';
+import helpFile from '../../markdown/help.md';
+import termsFile from '../../markdown/terms.md';
+import privacyFile from '../../markdown/privacy.md';
 
 export default function setupListeners() {
   setupDetailsTabs();
@@ -79,19 +82,13 @@ export function setupSearchFilters() {
 
 export function setupInfoButtons() {
   document.getElementById('helpInfoButton').addEventListener('click', () => {
-    import('../../markdown/help.md').then(html => {
-      renderInfoModal(html);
-    });
+    renderInfoModal(helpFile);
   });
   document.getElementById('termsInfoButton').addEventListener('click', () => {
-    import('../../markdown/terms.md').then(html => {
-      renderInfoModal(html);
-    });
+    renderInfoModal(termsFile);
   });
   document.getElementById('privacyInfoButton').addEventListener('click', () => {
-    import('../../markdown/privacy.md').then(html => {
-      renderInfoModal(html);
-    });
+    renderInfoModal(privacyFile);
   });
 }
 

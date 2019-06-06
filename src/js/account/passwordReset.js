@@ -1,4 +1,3 @@
-import { setupInfoModal } from "../setupListeners";
 import { request } from "./helpers";
 
 export function renderForgotPasswordForm() {
@@ -22,6 +21,15 @@ export function renderForgotPasswordForm() {
 
   setupStartResetForm();
   setupInfoModal(modal);
+}
+
+function setupInfoModal(modal) {
+  const closeElements = modal.querySelectorAll('.modal-background, .close-button');
+  Array.from(closeElements).forEach(close => {
+    close.addEventListener('click', () => {
+      modal.parentElement.removeChild(modal);
+    });
+  });
 }
 
 function setupStartResetForm() {
@@ -59,7 +67,10 @@ function startPasswordReset() {
 }
 
 function setupPasswordResetForm() {
-  document.getElementById('newPasswordSubmit').addEventListener('click', submitPasswordReset);
+  const submitButton = document.getElementById('newPasswordSubmit');
+  if (submitButton) {
+    submitButton.addEventListener('click', submitPasswordReset);
+  }
 }
 
 function submitPasswordReset() {
@@ -97,8 +108,6 @@ function submitPasswordReset() {
 }
 
 window.onload = (function (oldLoad) {
-  return function () {
-    oldLoad && oldLoad();
-    setupPasswordResetForm();
-  }
+  oldLoad && oldLoad();
+  setupPasswordResetForm();
 })(window.onload);
