@@ -83,6 +83,47 @@ switch ($view) {
       }
     }
     $html = str_replace('{{announcements}}', $announcements_html, $html);
+
+    $upup_files = array(
+      'src.js',
+      'main.css',
+      'help.html',
+      'privacy.html',
+      'terms.html',
+      'usage.html',
+      'ipa-table.html',
+      'favicon.png',
+    );
+    $files = array_map(function($file_name) use($upup_files) {
+      foreach($upup_files as $index => $upup_file) {
+        $file_pieces = explode('.', $upup_file);
+        if (substr($file_name, 0, strlen($file_pieces[0])) === $file_pieces[0]
+          && substr($file_name, -strlen($file_pieces[1])) === $file_pieces[1]) {
+          return str_replace('\\', '/', $file_name);
+        }
+      }
+      return false;
+    }, scandir('.'));
+    $files = array_filter($files);
+
+    $upup_insert = "<script src=\"upup.min.js\"></script>
+    <script>
+    window.onload = (function (oldLoad) {
+      oldLoad && oldLoad();
+      if (UpUp) {
+        UpUp.start({
+          'cache-version': '2.0.0',
+          'content-url': 'offline.html',
+          'assets': [
+            \"" . implode('","', $files) . "\"
+          ],
+        });
+      }
+    })(window.onload);
+    </script>";
+    
+    $html = str_replace('{{upup_insert}}', $upup_insert, $html);
+
     return Response::html($html);
     break;
   }

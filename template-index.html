@@ -370,28 +370,6 @@
 
   <div id="messagingSection"></div>
 
-  <script src="//cdnjs.cloudflare.com/ajax/libs/UpUp/1.1.0/upup.min.js"></script>
-  <script>
-  window.onload = (function (oldLoad) {
-    oldLoad && oldLoad();
-    if (UpUp) {
-      UpUp.start({
-        'cache-version': '2.0.0',
-        'content-url': 'offline.html',
-        'assets': [
-          'src.9470fa7a.js',
-          'main.3381ca43.css',
-          'help.ecc721dc.html',
-          'privacy.5cbf7ea0.html',
-          'terms.bcb4cecc.html',
-          'usage.4a51122f.html',
-          'ipa-table.6c5cf939.html',
-          'favicon.5d013634.png',
-        ],
-        'service-worker-url': 'upup.sw.min.js',
-      });
-    }
-  })(window.onload);
-  </script>
+  {{upup_insert}}
 </body>
 </html>
