@@ -6,11 +6,13 @@ import { showSection } from './displayToggles';
 import { setupSearchFilters, setupInfoModal } from './setupListeners';
 import { parseReferences } from './wordManagement';
 import { renderAd } from '../ads';
+import { sortWords } from './wordManagement';
 
 export function renderAll() {
   renderTheme();
   renderDictionaryDetails();
   renderPartsOfSpeech();
+  sortWords();
   renderWords();
 }
 
