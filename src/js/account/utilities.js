@@ -1,9 +1,23 @@
 import { setCookie } from "../StackOverflow/cookie";
 import { DELETED_WORDS_LOCALSTORAGE_KEY } from "./constants";
-import { getTimestampInSeconds } from "../../helpers";
+import { getTimestampInSeconds, cloneObject } from "../../helpers";
+import { DEFAULT_DICTIONARY } from "../../constants";
 
 export function saveToken(token) {
   setCookie('token', token, 30);
+}
+
+export function dictionaryIsDefault() {
+  const defaultDictionary = cloneObject(DEFAULT_DICTIONARY);
+  delete defaultDictionary.lastUpdated;
+  delete defaultDictionary.createdOn;
+  delete defaultDictionary.version;
+  const currentDictionary = cloneObject(window.currentDictionary);
+  delete currentDictionary.lastUpdated;
+  delete currentDictionary.createdOn;
+  delete currentDictionary.version;
+  console.log(JSON.stringify(defaultDictionary) === JSON.stringify(currentDictionary));
+  return JSON.stringify(defaultDictionary) === JSON.stringify(currentDictionary);
 }
 
 export function saveDeletedWordsLocally(wordIds) {
