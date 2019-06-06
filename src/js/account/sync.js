@@ -1,41 +1,14 @@
 import { addMessage } from "../utilities";
 import { saveDictionary, clearDictionary } from "../dictionaryManagement";
 import { request } from "./helpers";
-import { saveToken } from "./utilities";
+import { saveToken, dictionaryIsDefault } from "./utilities";
 import { renderAll } from "../render";
 import { sortWords } from "../wordManagement";
 import { getLocalDeletedWords, clearLocalDeletedWords, saveDeletedWordsLocally } from "./utilities";
 import { renderChangeDictionaryOptions } from "./render";
 
-/* Outline for syncing
-login
--> check local dictionary id
-  (DONE!) ? no id
-    -> upload dictionary
-    -> make new dictionary current
-  (Canceled) ? mismatched id
-    -> sync local dictionary (see 'same id' below)
-      -> if no matching remote id, ignore (assume deleted)
-    -> clear local dictionary
-    -> insert downloaded dictionary
-  (DONE!) ? same id
-    -> compare detail last updated timestamp
-      ? downloaded details are newer
-        -> replace local details
-      ? local details are newer
-        -> flag to upload details
-    -> filter deleted words from current words
-      -- check id and compare deletedOn with createdOn
-    -> compare each word and by lastUpdated/createdOn
-      ? downloaded word is newer
-        -> update local word
-      ? local word is newer
-        -> put word in an array to upload
-    -> upload anything that needs update
- */
-
 export function syncDictionary(uploadAsNewIfNoExternalID = true) {
-  if (!window.currentDictionary.hasOwnProperty('externalID')) {
+  if (!window.currentDictionary.hasOwnProperty('externalID') && !dictionaryIsDefault()) {
     uploadWholeDictionary(uploadAsNewIfNoExternalID);
   } else {
     addMessage('Syncing...');
