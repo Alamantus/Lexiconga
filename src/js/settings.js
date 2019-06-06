@@ -68,7 +68,7 @@ export function toggleHotkeysEnabled() {
 }
 
 export function toggleIPAPronunciationFields(render = true) {
-  const ipaButtons = document.querySelectorAll('.ipa-table-button, .ipa-field-help-button'),
+  const ipaButtons = document.querySelectorAll('.ipa-field-help-button'),
     ipaFields = document.querySelectorAll('.ipa-field');
   if (!window.settings.useIPAPronunciationField) {
     Array.from(ipaButtons).forEach(button => {
