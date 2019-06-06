@@ -1,12 +1,13 @@
 <?php
+require_once(realpath(dirname(__FILE__) . '/./api/Response.php'));
 $view = isset($_GET['view']) ? $_GET['view'] : false;
 
 switch ($view) {
   case 'dictionary': {
-    $html = file_get_contents('../template-view.html');
+    $html = file_get_contents(realpath(dirname(__FILE__) . '/./template-view.html'));
     $dict = isset($_GET['dict']) ? $_GET['dict'] : false;
     if ($dict !== false) {
-      require_once('./Dictionary.php');
+      require_once(realpath(dirname(__FILE__) . '/./api/Dictionary.php'));
       $dictionary = new Dictionary();
       $dictionary_data = $dictionary->getPublicDictionaryDetails($dict);
       if ($dictionary_data !== false) {
@@ -22,16 +23,16 @@ switch ($view) {
         $html = str_replace('{{public_name}}', 'Error', $html);
         $html = str_replace('{{dict_json}}', '{"name": "Error:", "specification": "Dictionary Not Found", "words": []}', $html);
       }
-      echo $html;
+      return Response::html($html);
     }
     break;
   }
   case 'word': {
-    $html = file_get_contents('../template-view.html');
+    $html = file_get_contents(realpath(dirname(__FILE__) . '/./template-view.html'));
     $dict = isset($_GET['dict']) ? $_GET['dict'] : false;
     $word = isset($_GET['word']) ? $_GET['word'] : false;
     if ($dict !== false && $word !== false) {
-      require_once('./Dictionary.php');
+      require_once(realpath(dirname(__FILE__) . '/./api/Dictionary.php'));
       $dictionary = new Dictionary();
       $dictionary_data = $dictionary->getPublicDictionaryDetails($dict);
       if ($dictionary_data !== false) {
@@ -61,7 +62,7 @@ switch ($view) {
         $html = str_replace('{{public_name}}', 'Error', $html);
         $html = str_replace('{{dict_json}}', '{"name": "Error:", "specification": "Dictionary Not Found", "words": []}', $html);
       }
-      echo $html;
+      return Response::html($html);
     }
     break;
   }
