@@ -38,6 +38,7 @@ export function performSync(remoteDictionary) {
           if (success) {
             renderAll();
             document.getElementById('accountSettingsChangeDictionary').value = window.currentDictionary.externalID;
+            document.getElementById('publicLinkDisplay').style.display = window.currentDictionary.settings.isPublic ? '' : 'none';
           } else {
             console.error('word sync failed');
           }
