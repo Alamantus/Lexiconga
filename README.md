@@ -25,3 +25,11 @@ It's less useful, but `npm run serve-frontend-only` will bundle and serve _only_
 ## Production
 
 `npm run bundle` bundles and minifies the frontend stuff and also copies the backend stuff to `dist`. Be sure to run `npm run clear` to delete the contents of `dist` and `.cache` before using `npm run bundle` to make sure you don't get old dev versions of the bundled code included in your upload.
+
+## Migration
+
+There is a script called `src/php/api/migrate.php.changeme` that can be used to help with the migration process from a `version1` Lexiconga database into a `master` database. **Note:** Migration is intended only for migrating from an old server to a freshly-installed/empty new database. To use this, copy `src/php/api/migrate.php.changeme` to `migrate.php` somewhere in the `version1` project (probably in `/php`) and copy the same to `/api/migrate.php` in your `master` project, making sure that all the variables for referencing the databases are correct.
+
+Visit `migrate.php` on your `version1` server with `?outgoing=true` set in order to begin the transfer. The other server's `migrate.php` will receive an "incoming" request multiple times, and your screen will display messages as it works.
+
+_DELETE THESE `migrate.php` FILES IMMEDIATELY AFTER MIGRATION IS COMPLETE!_.
