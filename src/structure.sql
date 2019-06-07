@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS `dictionaries` (
   `last_updated` int(11) DEFAULT NULL,
   `created_on` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=500 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 DELIMITER $$
 CREATE TRIGGER IF NOT EXISTS `delete_dictionary_parts` AFTER DELETE ON `dictionaries` FOR EACH ROW BEGIN
 	DELETE FROM words WHERE words.dictionary=old.id;
@@ -33,16 +33,16 @@ DELIMITER ;
 
 CREATE TABLE IF NOT EXISTS `dictionary_linguistics` (
   `dictionary` int(11) NOT NULL,
-  `parts_of_speech` text COLLATE utf8_unicode_ci NOT NULL COMMENT 'Comma-separated',
-  `consonants` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT 'Space-separated',
-  `vowels` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT 'Space-separated',
-  `blends` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT 'Space-separated',
-  `onset` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT 'Comma-separated',
-  `nucleus` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT 'Comma-separated',
-  `coda` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT 'Comma-separated',
-  `exceptions` text COLLATE utf8_unicode_ci NOT NULL COMMENT 'Markdown',
-  `orthography_notes` text COLLATE utf8_unicode_ci NOT NULL COMMENT 'Markdown',
-  `grammar_notes` text COLLATE utf8_unicode_ci NOT NULL COMMENT 'Markdown',
+  `parts_of_speech` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT 'Comma-separated',
+  `consonants` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT 'Space-separated',
+  `vowels` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT 'Space-separated',
+  `blends` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT 'Space-separated',
+  `onset` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT 'Comma-separated',
+  `nucleus` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT 'Comma-separated',
+  `coda` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT 'Comma-separated',
+  `exceptions` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT 'Markdown',
+  `orthography_notes` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT 'Markdown',
+  `grammar_notes` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT 'Markdown',
   UNIQUE KEY `dictionary` (`dictionary`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -62,13 +62,13 @@ CREATE TABLE IF NOT EXISTS `users` (
   `public_name` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'Someone',
   `current_dictionary` int(11) DEFAULT NULL,
   `allow_email` tinyint(1) NOT NULL DEFAULT 1,
-  `last_login` int(11) DEFAULT NULL,
+  `last_login` datetime DEFAULT NULL,
   `password_reset_code` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `password_reset_date` datetime DEFAULT NULL,
-  `created_on` int(11) NOT NULL,
+  `password_reset_date` timestamp NULL DEFAULT NULL,
+  `created_on` datetime DEFAULT current_timestamp(),
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=MyISAM AUTO_INCREMENT=200 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=500 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 DELIMITER $$
 CREATE TRIGGER IF NOT EXISTS `Delete_User_Dictionaries` AFTER DELETE ON `users` FOR EACH ROW DELETE FROM dictionaries WHERE dictionaries.user = old.id
 $$

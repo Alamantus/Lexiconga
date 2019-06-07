@@ -23,7 +23,7 @@ class User {
           }
         }
       } else if (password_verify($password, $user['password'])) {
-        $this->db->execute('UPDATE users SET last_login=' . time() . ' WHERE id=' . $user['id']);
+        $this->db->execute('UPDATE users SET last_login=current_timestamp() WHERE id=' . $user['id']);
         $token = $this->generateUserToken($user['id'], $user['current_dictionary']);
         return array(
           'token' => $token,
@@ -42,7 +42,7 @@ class User {
 
   public function create ($email, $password, $user_data) {
     $insert_user_query = 'INSERT INTO users (email, password, public_name, allow_email, created_on)
-VALUES (?, ?, ?, ?, ?)';
+VALUES (?, ?, ?, ?, current_timestamp())';
     $password_hash = password_hash($password, PASSWORD_DEFAULT);
 
     $insert_user = $this->db->execute($insert_user_query, array(
@@ -50,7 +50,6 @@ VALUES (?, ?, ?, ?, ?)';
       $password_hash,
       $user_data['publicName'] !== '' ? $user_data['publicName'] : null,
       $user_data['allowEmail'] ? 1 : 0,
-      time(),
     ));
     if ($insert_user === true) {
       $new_user_id = $this->db->lastInsertId();
@@ -346,7 +345,7 @@ VALUES (?, ?, ?, ?, ?)';
   }
 
   private function hasMembership ($id) {
-    $current_membership = "SELECT * FROM memberships WHERE user=$id AND start_date>=CURRENT_TIMESTAMP AND CURRENT_TIMESTAMP<expire_date";
+    $current_membership = "SELECT * FROM memberships WHERE user=$id AND start_date>=current_timestamp() AND current_timestamp()<expire_date";
     return $this->db->query($current_membership)->rowCount() > 0;
   }
 
