@@ -18,7 +18,7 @@ class User {
     if ($user) {
       if ($user['old_password'] !== null) {
         if ($user['old_password'] === crypt($password, $email)) {
-          if ($this->upgradePassword($password)) {
+          if ($this->upgradePassword($password, $user)) {
             return $this->logIn($email, $password);
           }
         }
@@ -349,7 +349,7 @@ VALUES (?, ?, ?, ?, current_timestamp())';
     return $this->db->query($current_membership)->rowCount() > 0;
   }
 
-  private function upgradePassword ($password) {
+  private function upgradePassword($password, $user) {
     $new_password = password_hash($password, PASSWORD_DEFAULT);
     $update_query = 'UPDATE users SET old_password=NULL, password=? WHERE id=' . $user['id'];
     $stmt = $this->db->query($update_query, array($new_password));
