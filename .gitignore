@@ -4,3 +4,4 @@ dist/
 vendor/
 
 src/php/api/config.php
+src/php/api/migrate.php

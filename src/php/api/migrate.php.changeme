@@ -1,0 +1,274 @@
+<?php
+$incoming = isset($_POST['incoming']) ? json_decode($_POST['incoming'], true) : false;
+$outgoing = isset($_GET['outgoing']);
+
+header('Access-Control-Allow-Origin: *');
+header('Expires: Sun, 01 Nov 2015 22:46:51 GMT');
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+
+define("VERSION1_DATABASE_SERVERNAME", "host");
+define("VERSION1_DATABASE_USERNAME", "username");
+define("VERSION1_DATABASE_PASSWORD", "password");
+define("VERSION1_DATABASE_NAME", "database");
+define("MIGRATE_TO", "remote_url");
+define("NEW_DATABASE_SERVERNAME", "host");
+define("NEW_DATABASE_USERNAME", "username");
+define("NEW_DATABASE_PASSWORD", "password");
+define("NEW_DATABASE_NAME", "database");
+
+if ($outgoing) {
+  echo '<pre>' . PHP_EOL;
+  echo 'Starting migration from ' . VERSION1_DATABASE_SERVERNAME . ' db ' . VERSION1_DATABASE_NAME . PHP_EOL . 'To ' . MIGRATE_TO . PHP_EOL . PHP_EOL;
+
+  $dbconnection = new PDO('mysql:host=' . VERSION1_DATABASE_SERVERNAME . ';dbname=' . VERSION1_DATABASE_NAME . ';charset=utf8', VERSION1_DATABASE_USERNAME, VERSION1_DATABASE_PASSWORD);
+	$dbconnection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	// $dbconnection->setAttribute(PDO::ATTR_EMULATE_PREPARES, true);
+	$dbconnection->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+  try {
+    $users_stmt = $dbconnection->prepare('SELECT * FROM `users`');
+    $users_stmt->execute();
+    if ($users_stmt) {
+      $users = $users_stmt->fetchAll();
+      if ($users !== false) {
+        echo count($users) . ' Users' . PHP_EOL;
+
+        foreach($users as $user) {
+          $send_user_response = send('user', $user);
+
+          if ($send_user_response === "GOT USER") {
+            echo PHP_EOL . 'User ' . $user['id'] . ' sent successfully' . PHP_EOL;
+
+            $dictionaries_stmt = $dbconnection->prepare('SELECT * FROM `dictionaries` WHERE `user`=?');
+            $dictionaries_stmt->execute(array(intval($user['id'])));
+            if ($dictionaries_stmt) {
+              $dictionaries = $dictionaries_stmt->fetchAll();
+              if ($dictionaries !== false) {
+                echo 'User ' . $user['id'] . ' has ' . count($dictionaries) . ' Dictionaries' . PHP_EOL;
+
+                $send_dictionaries_response = send('dictionaries', $dictionaries, array('user' => $user['id']));
+
+                if ($send_dictionaries_response === 'GOT DICTIONARIES') {
+                  echo 'Dictionaries sent successfully' . PHP_EOL;
+
+                  foreach($dictionaries as $dictionary) {
+                    $words_stmt = $dbconnection->prepare('SELECT * FROM `words` WHERE `dictionary`=?');
+                    $words_stmt->execute(array(intval($dictionary['id'])));
+                    if ($words_stmt) {
+                      $words = $words_stmt->fetchAll();
+                      if ($words !== false) {
+                        $send_words_response = send('words', $words);
+
+                        if ($send_words_response === 'GOT WORDS') {
+                          echo 'Words for Dictionary ' . $dictionary['id'] . ' sent successfully' . PHP_EOL;
+                        } else {
+                          echo var_export($send_words_response, true) . PHP_EOL . PHP_EOL;
+                        }
+                      } else {
+                        echo '$words_stmt->fetchAll() failed.' . PHP_EOL . var_export($words_stmt->errorInfo(), true) . PHP_EOL . PHP_EOL;
+                      }
+                    } else {
+                      echo '$words_stmt failed' . PHP_EOL . PHP_EOL;
+                    }
+                  }
+                } else {
+                  echo var_export($send_dictionaries_response, true) . PHP_EOL . PHP_EOL;
+                }
+              } else {
+                echo '$dictionaries_stmt->fetchAll() failed.' . PHP_EOL . var_export($dictionaries_stmt->errorInfo(), true) . PHP_EOL . PHP_EOL;
+              }
+            } else {
+              echo '$dictionaries_stmt failed' . PHP_EOL . PHP_EOL;
+            }
+          } else {
+            var_dump($send_user_response) . PHP_EOL . PHP_EOL;
+          }
+        }
+      } else {
+        echo '$users_stmt->fetchAll() failed.' . PHP_EOL . var_export($users_stmt->errorInfo(), true) . PHP_EOL . PHP_EOL;
+      }
+    } else {
+      echo '$users_stmt failed' . PHP_EOL . PHP_EOL;
+    }
+  }
+  catch (PDOException $ex) {
+    echo var_export($ex, true) . PHP_EOL . PHP_EOL;
+  }
+
+  echo '</pre>';
+} else if ($incoming !== false) {
+  $type = isset($_POST['type']) ? $_POST['type'] : false;
+
+  if ($type !== false) {
+    $dbconnection = new PDO('mysql:host=' . NEW_DATABASE_SERVERNAME . ';dbname=' . NEW_DATABASE_NAME . ';charset=utf8', NEW_DATABASE_USERNAME, NEW_DATABASE_PASSWORD);
+    $dbconnection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    switch($type) {
+      case 'user': {
+        if ($incoming === null) {
+          echo 'Invalid JSON';
+        } else {
+          $user_stmt = $dbconnection->prepare('INSERT INTO `users`(`id`, `email`, `old_password`, `password`, `public_name`, `current_dictionary`, `allow_email`, `last_login`, `password_reset_code`, `password_reset_date`, `created_on`) VALUES (?,?,?,?,?,?,?,?,?,?,?)');
+          $user_stmt->execute(array(
+            intval($incoming['id']),
+            $incoming['email'],
+            $incoming['password'],
+            null,
+            $incoming['public_name'],
+            intval($incoming['current_dictionary']),
+            intval($incoming['allow_email']),
+            $incoming['last_login'],
+            null,
+            null,
+            $incoming['created_on'],
+          ));
+          if ($user_stmt) {
+            echo 'GOT USER';
+          } else {
+            var_dump($user_stmt->errorInfo());
+          }
+        }
+        break;
+      }
+      case 'dictionaries': {
+        if ($incoming === null) {
+          echo 'Invalid JSON';
+        } else {
+          if (count($incoming) === 0) {
+            echo 'Need new dictionary for user ' . $_POST['user'] . ': ';
+            
+            $new_id = mt_rand(1000, 999999999);
+
+            $user = intval($_POST['user']);
+            $insert_dictionary_query = "INSERT INTO dictionaries (id, user, description, created_on) VALUES (?, ?, ?, ?)";
+            $insert_dictionary_stmt = $dbconnection->prepare($insert_dictionary_query);
+            $insert_dictionary = $insert_dictionary_stmt->execute(array($new_id, $user, 'A new dictionary.', time()));
+
+            if ($insert_dictionary) {
+              $insert_linguistics_query = "INSERT INTO dictionary_linguistics (dictionary, parts_of_speech, exceptions, orthography_notes, grammar_notes) VALUES ($new_id, ?, ?, ?, ?)";
+              $insert_linguistics_stmt = $dbconnection->prepare($insert_linguistics_query);
+              $insert_linguistics = $insert_linguistics_stmt->execute(array('Noun,Adjective,Verb', '', '', ''));
+
+              if ($insert_linguistics === true) {
+                $update_query = 'UPDATE users SET current_dictionary=? WHERE id=?';
+                $update_stmt = $dbconnection->prepare($update_query);
+                $update = $update_stmt->execute(array($new_id, $user));
+                if ($update) {
+                  echo 'CREATED DICTIONARY';
+                } else {
+                  var_dump($update_stmt);
+                }
+              } else {
+                var_dump($insert_linguistics_stmt->errorInfo());
+              }
+            } else {
+              var_dump($insert_dictionary_stmt->errorInfo());
+            }
+          } else {
+            $dictionaries_query = 'INSERT INTO `dictionaries`(`id`, `user`, `name`, `specification`, `description`, `allow_duplicates`, `case_sensitive`, `sort_by_definition`, `theme`, `is_public`, `last_updated`, `created_on`) VALUES ';
+            $linguistics_query = "INSERT INTO dictionary_linguistics (dictionary, parts_of_speech, exceptions, orthography_notes, grammar_notes) VALUES ";
+            $dictionaries_params = array();
+            $linguistics_params = array();
+            foreach($incoming as $dictionary) {
+              $dictionaries_query .= '(?,?,?,?,?,?,?,?,?,?,?,?), ';
+              // `id`, `user`, `name`, `description`, `words`, `next_word_id`, `allow_duplicates`, `case_sensitive`, `parts_of_speech`, `sort_by_equivalent`, `is_complete`, `is_public`, `last_updated`, `created_on`
+              $dictionaries_params[] = intval($dictionary['id']);
+              $dictionaries_params[] = intval($dictionary['user']);
+              $dictionaries_params[] = $dictionary['name'];
+              $dictionaries_params[] = 'Dictionary';
+              $dictionaries_params[] = fixStupidOldNonsense($dictionary['description']);
+              $dictionaries_params[] = intval($dictionary['allow_duplicates']);
+              $dictionaries_params[] = intval($dictionary['case_sensitive']);
+              $dictionaries_params[] = intval($dictionary['sort_by_equivalent']);
+              $dictionaries_params[] = 'default';
+              $dictionaries_params[] = intval($dictionary['is_public']);
+              $dictionaries_params[] = $dictionary['last_updated'] ? strtotime($dictionary['last_updated']) : null;
+              $dictionaries_params[] = strtotime($dictionary['created_on']);
+
+              $linguistics_query .= '(?, ?, ?, ?, ?), ';
+              $linguistics_params[] = intval($dictionary['id']);
+              $linguistics_params[] = $dictionary['parts_of_speech'];
+              $linguistics_params[] = '';
+              $linguistics_params[] = '';
+              $linguistics_params[] = '';
+            }
+            $dictionaries_stmt = $dbconnection->prepare(trim($dictionaries_query, ', '));
+            $dictionaries_stmt->execute($dictionaries_params);
+            if ($dictionaries_stmt) {
+              $linguistics_stmt = $dbconnection->prepare(trim($linguistics_query, ', '));
+              $linguistics_stmt->execute($linguistics_params);
+              if ($linguistics_stmt) {
+                echo 'GOT DICTIONARIES';
+              } else {
+                var_dump($linguistics_stmt->errorInfo());
+              }
+            } else {
+              var_dump($dictionaries_stmt->errorInfo());
+            }
+          }
+        }
+        break;
+      }
+      case 'words': {
+        if ($incoming === null) {
+          echo 'Invalid JSON';
+        } else {
+          if (count($incoming) > 0) {
+            $words_query = 'INSERT INTO `words`(`dictionary`, `word_id`, `name`, `pronunciation`, `part_of_speech`, `definition`, `details`, `last_updated`, `created_on`) VALUES ';
+            $words_params = array();
+            foreach($incoming as $word) {
+              $words_query .= '(?,?,?,?,?,?,?,?,?), ';
+              // `dictionary`, `word_id`, `name`, `pronunciation`, `part_of_speech`, `simple_definition`, `long_definition`, `last_updated`, `created_on`
+              $words_params[] = intval($word['dictionary']);
+              $words_params[] = intval($word['word_id']);
+              $words_params[] = $word['name'];
+              $words_params[] = $word['pronunciation'];
+              $words_params[] = $word['part_of_speech'];
+              $words_params[] = $word['simple_definition'];
+              $words_params[] = fixStupidOldNonsense($word['long_definition']);
+              $words_params[] = $word['last_updated'] ? strtotime($word['last_updated']) : null;
+              $words_params[] = strtotime($word['created_on']);
+            }
+            $words_stmt = $dbconnection->prepare(trim($words_query, ', '));
+            $words_stmt->execute($words_params);
+            if ($words_stmt) {
+              echo 'GOT WORDS';
+            } else {
+              var_dump($words_stmt->errorInfo());
+            }
+          } else {
+            echo 'NO WORDS';
+          }
+        }
+        break;
+      }
+    }
+  }
+} else {
+  echo 'no' . PHP_EOL . PHP_EOL;
+}
+
+function send($type, $data, $additional_data = array()) {
+  $send_data = array_merge(array('type' => $type, 'incoming' => json_encode($data)), $additional_data);
+
+  $ch = curl_init();
+  curl_setopt($ch, CURLOPT_URL, MIGRATE_TO . '/api/migrate.php');
+  curl_setopt($ch, CURLOPT_POST, 1);
+  curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($send_data));
+
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+  $server_output = curl_exec($ch);
+
+  curl_close ($ch);
+
+  return $server_output;
+}
+
+function fixStupidOldNonsense($markdown) {
+  $markdown = str_replace('&quot;', '"', $markdown);
+  $markdown = str_replace('&apos;', "'", $markdown);
+  $markdown = str_replace('&#92;', '\\', $markdown);
+  $markdown = str_replace('<br>', '\\n', $markdown);
+  return $markdown;
+}
