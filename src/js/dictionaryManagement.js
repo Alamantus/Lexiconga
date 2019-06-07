@@ -304,8 +304,11 @@ export function migrateDictionary() {
     window.currentDictionary = Object.assign({}, DEFAULT_DICTIONARY, window.currentDictionary);
     window.currentDictionary.partsOfSpeech = window.currentDictionary.settings.partsOfSpeech.split(',').map(val => val.trim()).filter(val => val !== '');
     delete window.currentDictionary.settings.partsOfSpeech;
+    delete window.currentDictionary.nextWordId;
     window.currentDictionary.settings.sortByDefinition = window.currentDictionary.settings.sortByEquivalent;
     delete window.currentDictionary.settings.sortByEquivalent;
+    window.currentDictionary.settings.theme = 'default';
+    delete window.currentDictionary.settings.isComplete;
     
     migrated = true;
   } else if (window.currentDictionary.version !== MIGRATE_VERSION) {
