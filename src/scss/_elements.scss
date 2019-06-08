@@ -212,6 +212,25 @@ span .tag {
   }
 }
 
+.fadeout {
+  overflow: hidden;
+  animation-name: shut;
+  animation-duration: 0.3s;
+  animation-timing-function: linear;
+  animation-iteration-count: 1;
+  animation-fill-mode: both;
+}
+@keyframes shut {
+  0% {
+    opacity: 1;
+    max-height: 200px;
+  }
+  100% {
+    opacity: 0;
+    max-height: 0px;
+  }
+}
+
 .pagination {
   position: relative;
   text-align: center;
