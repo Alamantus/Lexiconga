@@ -11,7 +11,7 @@ import { showSearchModal, clearSearchText, checkAllPartsOfSpeechFilters, uncheck
 import helpFile from '../markdown/help.md';
 import termsFile from '../markdown/terms.md';
 import privacyFile from '../markdown/privacy.md';
-import { dismiss, getDismissed } from './announcements';
+import { dismiss, isDismissed } from './announcements';
 import { fadeOutElement } from './utilities';
 
 export default function setupListeners() {
@@ -39,9 +39,8 @@ export function setupHeaderButtons() {
 
 function setupAnnouncements() {
   const announcements = document.querySelectorAll('.announcement');
-  const dismissed = getDismissed();
   Array.from(announcements).forEach(announcement => {
-    if (announcement.id && dismissed.includes(announcement.id)) {
+    if (announcement.id && isDismissed(announcement.id)) {
       fadeOutElement(announcement);
     } else {
       announcement.querySelector('.close-button').addEventListener('click', () => dismiss(announcement));
