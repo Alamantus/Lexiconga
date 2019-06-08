@@ -218,13 +218,13 @@ If you manage to enter your password wrong 10 times, you'll be locked out from l
 Please report any problems you come across to the [Lexiconga Issues page](https://github.com/Alamantus/Lexiconga/issues). You can also submit enhancement requests to the same place if you have any requests for new features.
 
 ## Update Log
-You can see all previous updates to Lexiconga on the [Lexiconga Releases page]](https://github.com/Alamantus/Lexiconga/releases).
+You can see all previous updates to Lexiconga on the [Lexiconga Releases page](https://github.com/Alamantus/Lexiconga/releases).
 
 ## Open Source
 Lexiconga's source code is fully open and readable on Github here: https://github.com/Alamantus/Lexiconga
 
 ## Thanks!
-If you like Lexiconga and want to buy me a cup of coffee for the service, you can use **[Buy Me A Coffee](https://buymeacoff.ee/robbieantenesse)** to help keep it online if you want.
+If you like Lexiconga and want to help contribute to keeping it online and motivate me to keep adding new features, you can use **[Buy Me A Coffee](https://buymeacoff.ee/robbieantenesse)** to give a one-time donation or **[Liberapay](https://liberapay.com/robbieantenesse)** to make a recurring donation.
 
 I hope you enjoy Lexiconga and that it helps you build some awesome languages.
 
