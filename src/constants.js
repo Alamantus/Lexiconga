@@ -66,3 +66,4 @@ export const DEFAULT_PAGE_SIZE = 50;
 
 export const LOCAL_STORAGE_KEY = 'dictionary';
 export const SETTINGS_KEY = 'settings';
+export const DISMISSED_ANNOUNCEMENTS_KEY = 'dismissedAnnouncements';
