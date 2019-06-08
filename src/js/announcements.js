@@ -1,21 +1,20 @@
-import { DISMISSED_ANNOUNCEMENTS_KEY } from "../constants";
 import { fadeOutElement } from "./utilities";
+import { setCookie, getCookie } from "./StackOverflow/cookie";
 
-export function getDismissed() {
-  let dismissed = window.localStorage.getItem(DISMISSED_ANNOUNCEMENTS_KEY);
-  if (!dismissed) {
-    dismissed = [];
-  } else {
-    dismissed = JSON.parse(dismissed);
-  }
-  return dismissed;
+export function isDismissed(announcementId) {
+  let dismissed = getCookie(announcementId);
+  
+  return dismissed === 'dismissed';
 }
 
 export function dismiss(announcement) {
   if (announcement.id) {
-    const dismissed = getDismissed();
-    dismissed.push(announcement.id);
-    window.localStorage.setItem(DISMISSED_ANNOUNCEMENTS_KEY, JSON.stringify(dismissed));
+    const expireDate = announcement.dataset.expires;
+    const now = new Date();
+    const expire = new Date(expireDate);
+    const timeDiff = Math.abs(now.getTime() - expire.getTime());
+    const dayDifference = Math.ceil(timeDiff / (1000 * 3600 * 24));
+    setCookie(announcement.id, 'dismissed', dayDifference + 1);
   }
   fadeOutElement(announcement)
 }
