@@ -136,31 +136,6 @@ export function getHomonymnNumber(word) {
   return 0;
 }
 
-export function generateRandomWords(numberOfWords) {
-  console.log('Generating', numberOfWords, 'words...');
-  const letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
-  letters.forEach(letter => letters.push(letter.toUpperCase()));
-  const words = [];
-  while (words.length < numberOfWords) {
-    let word = '';
-    while (word === '' || words.includes(word)) {
-      word += letters[Math.floor(Math.random() * letters.length)];
-    }
-    words.push(word);
-  }
-  words.forEach((word, index) => {
-    addWord({
-      name: word,
-      pronunciation: '/' + word + '/',
-      partOfSpeech: Math.random() > 0.5 ? 'Noun' : 'Verb',
-      definition: word,
-      details: word + (index > 0 ? '\n\nRef: {{' + words[index - 1] + '}}' : ''),
-      wordId: getNextId(),
-    }, false);
-  });
-  console.log('done');
-}
-
 export function addMessage(messageText, time = 5000, extraClass = false) {
   const messagingSection = document.getElementById('messagingSection');
   const element = document.createElement('div');
@@ -174,13 +149,20 @@ export function addMessage(messageText, time = 5000, extraClass = false) {
   const closeButton = element.querySelector('.close-button');
   const closeMessage = () => {
     closeButton.removeEventListener('click', closeMessage);
-    messagingSection.removeChild(element);
+    fadeOutElement(element);
   };
   closeButton.addEventListener('click', closeMessage);
 
   if (time > 0) {
     setTimeout(closeMessage, time);
   }
+}
+
+export function fadeOutElement(element) {
+  element.classList.add('fadeout');
+  setTimeout(() => {
+    element.parentElement.removeChild(element);
+  }, 300);
 }
 
 export function hideAllModals() {
