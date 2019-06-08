@@ -1,7 +1,7 @@
 [
   {
-    "header": "Test",
-    "body": "<p>Test</p>",
+    "header": "Welcome to Lexiconga 2.0!",
+    "body": "<p>Lexiconga has been rewritten from the ground up!</p><p>Check the <a href=\"https://github.com/Alamantus/Lexiconga/releases\" target=\"_blank\">Updates page</a> for all the new features, or click Help to get a refresher on how to use Lexiconga!</p>",
     "expire": "January 1, 2020"
   }
 ]

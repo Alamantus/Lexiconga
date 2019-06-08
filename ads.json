@@ -1,16 +1,16 @@
 [
   {
-    "header": "Do You Like Lexiconga?",
-    "body": "If you enjoy Lexiconga, you can help contribute to keeping it online and adding new features. Your donations are much appreciated!",
-    "cta": "Buy Me a Coffee!",
-    "link": "https://buymeacoffee.com/robbieantenesse",
+    "header": "Support Lexiconga",
+    "body": "You can contribute a small amount each month toward keeping Lexiconga online and help us keep working on new features. We appreciate whatever you can offer!",
+    "cta": "Support Lexiconga!",
+    "link": "https://liberapay.com/robbieantenesse/donate",
     "start": "June 1, 2019",
     "end": "August 1, 2099",
     "isPriority": false
   },
   {
-    "header": "Support Lexiconga",
-    "body": "If you enjoy Lexiconga, you can help contribute to keeping it online and adding new features. Your donations are much appreciated!",
+    "header": "Do You Like Lexiconga?",
+    "body": "If you enjoy Lexiconga, you can make a one-time donation to the developer toward keeping it online and adding new features. Your donations are much appreciated!",
     "cta": "Buy Me a Coffee!",
     "link": "https://buymeacoffee.com/robbieantenesse",
     "start": "June 1, 2019",
@@ -24,6 +24,15 @@
     "link": "https://guts.plus",
     "start": "June 1, 2019",
     "end": "March 1, 2020",
+    "isPriority": false
+  },
+  {
+    "header": "Protect Your Readers",
+    "body": "RedFlag puts a wall between your readers or followers and content that you want to share. Choose up to 3 different warnings to help them be aware of what they're about to view!",
+    "cta": "Use RedFlag for Free",
+    "link": "https://redflag.ga",
+    "start": "June 1, 2019",
+    "end": "January 1, 2020",
     "isPriority": false
   },
   {
