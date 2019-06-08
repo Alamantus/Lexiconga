@@ -11,8 +11,11 @@ import { showSearchModal, clearSearchText, checkAllPartsOfSpeechFilters, uncheck
 import helpFile from '../markdown/help.md';
 import termsFile from '../markdown/terms.md';
 import privacyFile from '../markdown/privacy.md';
+import { dismiss, getDismissed } from './announcements';
+import { fadeOutElement } from './utilities';
 
 export default function setupListeners() {
+  setupAnnouncements();
   setupDetailsTabs();
   setupHeaderButtons();
   setupWordForm();
@@ -31,6 +34,18 @@ export function setupHeaderButtons() {
     import('./account/index.js').then(account => {
       account.showLoginForm();
     });
+  });
+}
+
+function setupAnnouncements() {
+  const announcements = document.querySelectorAll('.announcement');
+  const dismissed = getDismissed();
+  Array.from(announcements).forEach(announcement => {
+    if (announcement.id && dismissed.includes(announcement.id)) {
+      fadeOutElement(announcement);
+    } else {
+      announcement.querySelector('.close-button').addEventListener('click', () => dismiss(announcement));
+    }
   });
 }
 

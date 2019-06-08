@@ -75,8 +75,8 @@ switch ($view) {
     foreach ($announcements as $announcement) {
       $expire = strtotime($announcement['expire']);
       if (time() < $expire) {
-        $announcements_html .= '<article class="announcement">
-        <a class="close-button" title="Close Announcement" onclick="this.parentElement.parentElement.removeChild(this.parentElement);">&times;&#xFE0E;</a>
+        $announcements_html .= '<article class="announcement"' . (isset($announcement['dismissId']) ? ' id="announcement-' . $announcement['dismissId'] . '"' : '') . '>
+        <a class="close-button" title="Dismiss Announcement">&times;&#xFE0E;</a>
         <h4>' . $announcement['header'] . '</h4>
         ' . $announcement['body'] . '
       </article>';
