@@ -1,4 +1,5 @@
 <?php
+require_once(realpath(dirname(__FILE__) . '/./config.php'));
 require_once(realpath(dirname(__FILE__) . '/./Response.php'));
 require_once(realpath(dirname(__FILE__) . '/./User.php'));
 
