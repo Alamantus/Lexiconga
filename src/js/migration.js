@@ -64,11 +64,14 @@ function dictionaryIsOldDefault(dictionaryJSON) {
 
 function checkForReceived() {
   if (window.hasOwnProperty('dictionaryImportedFromHTTP')) {
+    let saveOld = true;
     const storedDictionary = window.localStorage.getItem(LOCAL_STORAGE_KEY);
-    if (!storedDictionary) {
+    if (storedDictionary) {
+      saveOld = confirm('You have an old local dictionary to import. Would you like to overwrite your current local dictionary?');
+    }
+    if (saveOld) {
       window.localStorage.setItem(LOCAL_STORAGE_KEY, window.dictionaryImportedFromHTTP);
       delete window.dictionaryImportedFromHTTP;
-      return;
     }
   }
 }
