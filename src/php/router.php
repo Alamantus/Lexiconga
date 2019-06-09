@@ -123,6 +123,12 @@ switch ($view) {
     </script>";
     
     $html = str_replace('{{upup_insert}}', $upup_insert, $html);
+    
+    $imported_from_http = '';
+    if (isset($_POST['oldDictionaryFromHTTP'])) {
+      $imported_from_http = '<script>window.dictionaryImportedFromHTTP = "' . addslashes($_POST['oldDictionaryFromHTTP']) . '";</script>';
+    }
+    $html = str_replace('{{imported_from_http}}', $imported_from_http, $html);
 
     return Response::html($html);
     break;
