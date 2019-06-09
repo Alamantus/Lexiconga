@@ -16,8 +16,8 @@
     "copy-php": "cpx \"src/php/**/{*,.*}\" dist",
     "serve-frontend-only": "parcel template-index.html",
     "clear": "npm run clear-dist && npm run clear-cache",
-    "clear-dist": "rimraf dist/*",
-    "clear-cache": "rimraf .cache/*"
+    "clear-dist": "rimraf dist/{*,.*}",
+    "clear-cache": "rimraf .cache/{*,.*}"
   },
   "devDependencies": {
     "autoprefixer": "^9.5.1",
