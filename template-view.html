@@ -5,14 +5,22 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{dict_name}} | Lexiconga</title>
-  <meta property="og:url" content="http://lexicon.ga/{{dict}}" />
-  <meta property="og:type" content="article" />
-  <meta property="og:title" content="{{dict_name}}" />
-  <meta property="og:description" content="A Lexiconga dictionary by {{public_name}}" />
-  <!--meta property="og:image" content="http://lexicon.ga/images/logo.svg" /-->
+  <meta property="description" content="A Lexiconga dictionary by {{public_name}}">
+  <meta name="keywords" content="conlanging, dictionary, dictionaries, lexicon, conlangs, constructed languages, glossopoeia, builder, app, tool">
+  
+  <meta property="og:site_name" content="Lexiconga">
+  <meta property="og:url" content="http://lexicon.ga/{{dict}}">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="{{dict_name}}">
+  <meta property="og:description" content="A Lexiconga dictionary by {{public_name}}">
+  <meta property="og:image" content="processedImages/logo.png">
+  
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image:alt" content="Lexiconga logo">
+
   <script>window.currentDictionary = JSON.parse('{{dict_json}}');</script>
-  <link rel="icon" href="processedImages/favicon.png" type="image/x-icon" />
-  <link rel="stylesheet" href="src/main.scss" />
+  <link rel="icon" href="processedImages/favicon.png" type="image/x-icon">
+  <link rel="stylesheet" href="src/main.scss">
   <script src="src/js/view/index.js"></script>
 </head>
 <body id="defaultTheme">

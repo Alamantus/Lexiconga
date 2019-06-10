@@ -9,6 +9,11 @@ if (!fs.existsSync(folder)) {
 
 const favicon = sharp('./src/images/favicon.svg');
 
+sharp('./src/images/logo.svg').toFile(folder + 'logo.png', (err, info) => {
+  if (err) return console.error(err);
+  console.log(info);
+});
+
 favicon.clone().resize(32, 32).toFile(folder + 'favicon.png', (err, info) => {
   if (err) return console.error(err);
   console.log(info);
