@@ -79,7 +79,6 @@ export function createAccount() {
     }).then(() => {
       createAccountErrorMessages.innerHTML = errorHTML;
       if (errorHTML === '') {
-        console.log('creating account');
         request({
           action: 'create-account',
           email,
@@ -94,12 +93,9 @@ export function createAccount() {
           if (responseData.hasOwnProperty('dictionary')) {
             uploadWholeDictionary(); // Saves external id
           }
-          return responseData;
         }, errorData => {
-          errorHTML += `<p class="bold red">${errorData}</p>`;        
-          return errorData;
-        }).then(responseData => {
-          console.log(responseData);
+          errorHTML += `<p class="bold red">${errorData}</p>`;
+        }).then(() => {
           createAccountErrorMessages.innerHTML = errorHTML;
           if (errorHTML === '') {
             const loginModal = document.getElementById('loginModal');

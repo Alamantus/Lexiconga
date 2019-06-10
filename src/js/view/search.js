@@ -30,7 +30,6 @@ export function getSearchFilters() {
   const partsOfSpeech = document.querySelectorAll('#searchPartsOfSpeech input[type="checkbox"]');
   let checkedBoxes = 0;
   Array.from(partsOfSpeech).forEach(partOfSpeech => {
-    // console.log('partOfSpeech Inner Text:', partOfSpeech.parentElement.innerText);
     const partOfSpeechLabel = partOfSpeech.parentElement.innerText.trim();
     filters.partsOfSpeech[partOfSpeechLabel] = partOfSpeech.checked;
     if (partOfSpeech.checked) checkedBoxes++;
