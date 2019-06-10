@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -13,20 +13,20 @@
 
   <link rel="icon" href="processedImages/favicon.png" type="image/x-icon">
 
-  <link rel="manifest" href="src/manifest.webmanifest">
+  <link rel="manifest" href="manifest.webmanifest">
   <meta name="theme-color" content="#000000">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="apple-mobile-web-app-title" content="Lexiconga">
   <link rel="apple-touch-icon" href="processedImages/icon-152.png">
-  
+
   <link rel="stylesheet" href="src/main.scss" />
   <script>window.isOffline = true;</script>
   <script src="src/index.js"></script>
 </head>
 <body id="defaultTheme">
   <header id="top">
-    <a href="/"><svg id="title" viewBox="0 0 249.78 55.087">
+    <a href="/" title="Lexiconga"><svg id="title" alt="Lexiconga Logo"viewBox="0 0 249.78 55.087">
       <g transform="translate(-107.53 -155.84)">
         <g id="lexi">
           <path d="m144.03 159.39-11.339 22.409h-21.62l11.339-22.409z" />
@@ -45,7 +45,7 @@
       </g>
     </svg></a> <strong>You are OFFLINE</strong>
 
-    <input id="openSearchModal" placeholder="🔍&#xFE0E; Search"> <span id="searchResults"></span>
+    <input id="openSearchModal" title="Open Search Panel" placeholder="🔍&#xFE0E; Search"> <span id="searchResults"></span>
     <section id="searchModal" class="modal" style="display:none;">
       <div class="modal-background" onclick="this.parentElement.style.display='none';"></div>
       <div class="modal-content">
@@ -166,11 +166,11 @@
   </main>
 
   <footer id="bottom">
-    <a href="https://liberapay.com/robbieantenesse" target="_blank" class="small button">Support Lexiconga</a>
-    <a href="https://blog.lexicon.ga" target="_blank" class="small button">Blog</a>
+    <a href="https://liberapay.com/robbieantenesse" target="_blank" rel="noopener" class="small button">Support Lexiconga</a>
+    <a href="https://blog.lexicon.ga" target="_blank" rel="noopener" class="small button">Blog</a>
     <a href="./advertising.html" target="_blank" class="small button">Advertise</a>
-    <a href="https://github.com/Alamantus/Lexiconga/issues" target="_blank" class="small button">Issues</a>
-    <a href="https://github.com/Alamantus/Lexiconga/releases" target="_blank" class="small button">Updates</a>
+    <a href="https://github.com/Alamantus/Lexiconga/issues" target="_blank" rel="noopener" class="small button">Issues</a>
+    <a href="https://github.com/Alamantus/Lexiconga/releases" target="_blank" rel="noopener" class="small button">Updates</a>
     <span class="separator">|</span>
     <a class="button" id="helpInfoButton">Help</a>
     <a class="button" id="termsInfoButton">Terms</a>
