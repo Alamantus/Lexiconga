@@ -137,7 +137,7 @@ export function deleteDictionary() {
 export function confirmDeleteDictionary() {
   if (confirm(`Are you sure you want to delete your ${window.currentDictionary.name} ${window.currentDictionary.specification}?\n\nThis cannot be undone!`)) {
     const input = prompt(`If you really want to delete your ${window.currentDictionary.name} ${window.currentDictionary.specification} please type DELETE in the text box.\n\nAfter you confirm, cour dicitonary will be PERMANENTLY AND IRRETRIEVABLY DESTROYED!`);
-    console.log(input);
+    
     if (input === 'DELETE') {
       deleteDictionary();
       document.getElementById('editModal').style.display = 'none';

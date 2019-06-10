@@ -8,7 +8,6 @@ export function request (data = {}, success = () => {}, error = () => {}/* , fai
     credentials: 'same-origin',
   }).then(res => res.json())
     .then(response => {
-      console.log('Success:', JSON.stringify(response));
       if (response.error) {
         return error(response.data);
       }

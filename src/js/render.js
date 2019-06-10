@@ -330,7 +330,6 @@ export function renderIPATable(ipaTableButton) {
 
 export function renderMaximizedTextbox(maximizeButton) {
   maximizeButton = typeof maximizeButton.target === 'undefined' || maximizeButton.target === '' ? maximizeButton : maximizeButton.target;
-  console.log(maximizeButton.parentElement);
   const label = maximizeButton.parentElement.innerText.replace(/(\*|Maximize)/g, '').trim();
   const textBox = maximizeButton.parentElement.querySelector('textarea');
   const modalElement = document.createElement('section');

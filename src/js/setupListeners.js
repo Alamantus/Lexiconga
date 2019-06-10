@@ -93,13 +93,10 @@ function setupEditFormTabs() {
 function setupEditFormInteractions() {
   const preventDuplicatesBox = document.getElementById('editPreventDuplicates');
   preventDuplicatesBox.addEventListener('change', () => {
-    console.log('changed');
     const caseSensitiveBox = document.getElementById('editCaseSensitive');
     if (preventDuplicatesBox.checked) {
-      console.log('checked');
       caseSensitiveBox.disabled = false;
     } else {
-      console.log('unchecked');
       caseSensitiveBox.disabled = true;
       caseSensitiveBox.checked = false;
     }

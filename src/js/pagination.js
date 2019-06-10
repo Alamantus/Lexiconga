@@ -20,7 +20,6 @@ export function goToPage(page) {
   window.currentPage = parseFloat(page);
 
   Array.from(document.getElementsByClassName('pagination')).forEach(pagination => {
-    console.log('setting loader');
     pagination.innerHTML = `<span class="loader">Loading Page ${window.currentPage + 1}...</span>`;
   });
 

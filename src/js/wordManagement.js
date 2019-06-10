@@ -144,6 +144,7 @@ export function deleteWord(wordId) {
   const wordIndex = window.currentDictionary.words.findIndex(word => word.wordId === wordId);
   if (wordIndex < 0) {
     console.error('Could not find word to delete');
+    addMessage('Could not find word to delete. Please refresh your browser and try again.', 10000, 'error');
   } else {
     window.currentDictionary.words.splice(wordIndex, 1);
     addMessage('Word Deleted Successfully');
@@ -162,6 +163,7 @@ export function updateWord(word, wordId) {
 
   if (wordIndex < 0) {
     console.error('Could not find word to update');
+    addMessage('Could not find word to update. Please refresh your browser and try again.', 10000, 'error');
   } else {
     word.lastUpdated = getTimestampInSeconds();
     word.createdOn = window.currentDictionary.words[wordIndex].createdOn;
@@ -179,7 +181,6 @@ export function updateWord(word, wordId) {
 
 export function confirmEditWord(id) {
   const wordId = typeof id.target !== 'undefined' ? parseInt(this.id.replace('editWordButton_', '')) : id;
-  console.log(wordId);
   const name = document.getElementById('wordName_' + wordId).value,
     pronunciation = document.getElementById('wordPronunciation_' + wordId).value,
     partOfSpeech = document.getElementById('wordPartOfSpeech_' + wordId).value,
@@ -217,6 +218,7 @@ export function confirmDeleteWord(wordId) {
 
   if (!word) {
     console.error('Something went wrong! Couldn\'t find word with id of ' + wordId);
+    addMessage('Could not find word to delete. Please refresh your browser and try again.', 10000, 'error');
   } else {
     if (confirm(`Are you sure you want to delete "${word.name}"?`)) {
       if (confirm(`Just to double-check:\nDo you really want to delete "${word.name}"?\n\nYou won't be able to undo it!`)) {
