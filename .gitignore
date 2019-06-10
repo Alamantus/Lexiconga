@@ -2,6 +2,7 @@ node_modules/
 .cache/
 dist/
 vendor/
+processedImages/
 
 src/php/api/config.php
 src/php/api/migrate.php

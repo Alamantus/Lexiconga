@@ -7,13 +7,14 @@
   "author": "Robbie Antenesse <dev@alamantus.com>",
   "license": "UNLICENCED",
   "scripts": {
-    "start": "concurrently \"npm run watch-js\" \"npm run watch-php\" \"npm run copy-files\"",
-    "watch-js": "parcel watch template-index.html offline.html template-view.html template-passwordreset.html --no-hmr --public-url ./",
+    "start": "npm run process-images && concurrently \"npm run watch-js\" \"npm run watch-php\" \"npm run copy-files\"",
+    "watch-js": "parcel watch template-index.html offline.html template-view.html template-passwordreset.html --no-hmr --public-url /lexiconga/",
     "watch-php": "cpx \"src/php/**/{*,.*}\" dist -v -w",
-    "bundle": "npm run bundle-js && npm run copy-files && npm run copy-php",
+    "bundle": "npm run process-images && npm run bundle-js && npm run copy-files && npm run copy-php",
     "bundle-js": "parcel build template-index.html offline.html template-view.html template-passwordreset.html",
     "copy-files": "cpx \"node_modules/upup/dist/*.min.js\" dist -v",
     "copy-php": "cpx \"src/php/**/{*,.*}\" dist",
+    "process-images": "node dev/resize-images.js",
     "serve-frontend-only": "parcel template-index.html",
     "clear": "npm run clear-dist && npm run clear-cache",
     "clear-dist": "rimraf dist/{*,.*}",
@@ -25,7 +26,8 @@
     "cpx": "^1.5.0",
     "parcel-bundler": "^1.12.3",
     "rimraf": "^2.6.3",
-    "sass": "^1.19.0"
+    "sass": "^1.19.0",
+    "sharp": "^0.22.1"
   },
   "dependencies": {
     "marked": "^0.6.2",

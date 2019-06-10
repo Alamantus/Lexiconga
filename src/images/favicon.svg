@@ -9,12 +9,12 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="9.0311108mm"
-   height="9.0311117mm"
-   viewBox="0 0 32 32.000003"
+   width="512"
+   height="512"
+   viewBox="0 0 480.00003 480.00003"
    id="svg4162"
    version="1.1"
-   inkscape:version="0.91 r13725"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)"
    sodipodi:docname="favicon.svg"
    inkscape:export-filename="C:\Users\Robbie\Documents\Git Repositories\DictionaryBuilder\images\favicon.png"
    inkscape:export-xdpi="90"
@@ -28,9 +28,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2"
-     inkscape:cx="27.214321"
-     inkscape:cy="14.163793"
+     inkscape:zoom="1"
+     inkscape:cx="256"
+     inkscape:cy="257.06667"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -38,11 +38,12 @@
      fit-margin-left="0"
      fit-margin-right="0"
      fit-margin-bottom="0"
-     inkscape:window-width="1600"
-     inkscape:window-height="837"
-     inkscape:window-x="-8"
+     inkscape:window-width="1920"
+     inkscape:window-height="1058"
+     inkscape:window-x="1912"
      inkscape:window-y="-8"
-     inkscape:window-maximized="1" />
+     inkscape:window-maximized="1"
+     units="px" />
   <metadata
      id="metadata4167">
     <rdf:RDF>
@@ -59,22 +60,23 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(-294.94889,-329.57512)">
+     transform="translate(-294.94889,118.42491)">
     <g
        id="g4154"
-       transform="matrix(0.25948938,0,0,0.1819809,266.12628,316.75349)">
+       transform="matrix(3.8771366,0,0,2.7190508,-134.76396,-309.06057)"
+       style="stroke-width:0.0669281">
       <path
          sodipodi:nodetypes="ccccc"
          inkscape:connector-curvature="0"
          id="rect4136"
-         d="m 234.39344,70.455884 -42.42641,83.842656 -80.8927,0 42.42641,-83.842656 z"
-         style="opacity:1;fill:#ff5500;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+         d="m 234.39344,70.455884 -42.42641,83.842656 h -80.8927 l 42.42641,-83.842656 z"
+         style="opacity:1;fill:#ff5500;fill-opacity:1;stroke:none;stroke-width:0.0669281;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
       <path
          sodipodi:nodetypes="ccccc"
          inkscape:connector-curvature="0"
          id="rect4138"
-         d="m 191.96703,162.45587 42.42641,83.84266 -80.8927,0 -42.42641,-83.84266 z"
-         style="opacity:1;fill:#ff5500;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+         d="m 191.96703,162.45587 42.42641,83.84266 h -80.8927 l -42.42641,-83.84266 z"
+         style="opacity:1;fill:#ff5500;fill-opacity:1;stroke:none;stroke-width:0.0669281;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     </g>
   </g>
 </svg>
