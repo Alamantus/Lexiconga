@@ -16,7 +16,6 @@ export function dictionaryIsDefault() {
   delete currentDictionary.lastUpdated;
   delete currentDictionary.createdOn;
   delete currentDictionary.version;
-  console.log(JSON.stringify(defaultDictionary) === JSON.stringify(currentDictionary));
   return JSON.stringify(defaultDictionary) === JSON.stringify(currentDictionary);
 }
 

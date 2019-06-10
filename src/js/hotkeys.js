@@ -62,7 +62,7 @@ export function hotKeyActions(event) {
 
 function toggleDetailsDisplay() {
   const activeTab = document.querySelector('#detailsSection nav li.active');
-  console.log(activeTab);
+
   Array.from(document.querySelectorAll('#detailsSection nav li')).forEach(li => li.classList.remove('active'));
   if (activeTab) {
     switch(activeTab.innerText.trim().toLowerCase()) {
@@ -110,8 +110,6 @@ function maximizeTextarea() {
   const focused = document.activeElement;
   if (focused) {
     const maximizeButton = focused.parentElement.querySelector('.maximize-button');
-    console.log(maximizeButton);
-    console.log(maximizeButton.parentElement);
     if (maximizeButton) {
       renderMaximizedTextbox(maximizeButton);
     }
