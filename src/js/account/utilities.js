@@ -9,10 +9,12 @@ export function saveToken(token) {
 
 export function dictionaryIsDefault() {
   const defaultDictionary = cloneObject(DEFAULT_DICTIONARY);
+  delete defaultDictionary.settings.theme;
   delete defaultDictionary.lastUpdated;
   delete defaultDictionary.createdOn;
   delete defaultDictionary.version;
   const currentDictionary = cloneObject(window.currentDictionary);
+  delete currentDictionary.settings.theme;
   delete currentDictionary.lastUpdated;
   delete currentDictionary.createdOn;
   delete currentDictionary.version;
