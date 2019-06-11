@@ -5,7 +5,7 @@ class Db {
   private $dbh;
   public $last_error_info;
   function __construct() {
-    $this->dbh = new PDO('mysql:host=localhost;dbname=lexiconga;charset=utf8', DB_USER, DB_PASSWORD);
+    $this->dbh = new PDO('mysql:host=localhost;dbname=' . DB_NAME . ';charset=utf8', DB_USER, DB_PASSWORD);
     $this->dbh->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
     $this->last_error_info = null;
   }

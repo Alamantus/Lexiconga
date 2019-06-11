@@ -283,12 +283,12 @@ VALUES (?, ?, ?, ?, current_timestamp())';
         $to = $email;
         $subject = "Here's your Lexiconga password reset link";
         $message = "Hello " . $user_data['public_name'] . "\r\n\r\nSomeone has requested a password reset link for your Lexiconga account. If it was you, you can reset your password by going to the link below and entering a new password for yourself:\r\n";
-        $message .= "https://lexicon.ga/passwordreset.php?account=" . $user_data['id'] . "&code=" . $reset_code_hash . "\r\n\r\n";
+        $message .= "https://" . $_SERVER['HTTP_HOST'] . "/passwordreset.php?account=" . $user_data['id'] . "&code=" . $reset_code_hash . "\r\n\r\n";
         $message .= "If it wasn't you who requested the link, you can ignore this email since it was only sent to you, but you might want to consider changing your password when you have a chance.\r\n\r\n";
         $message .= "The password link will only be valid for today until you use it.\r\n\r\n";
         $message .= "Thanks!\r\nThe Lexiconga Admins";
-        $header = "From: Lexiconga Password Reset <donotreply@lexicon.ga>\r\n"
-          . "Reply-To: help@lexicon.ga\r\n"
+        $header = "From: Lexiconga Password Reset <donotreply@" . $_SERVER['HTTP_HOST'] . ">\r\n"
+          . "Reply-To: help@" . $_SERVER['HTTP_HOST'] . "\r\n"
           . "X-Mailer: PHP/" . phpversion();
         if (mail($to, $subject, $message, $header)) {
           return true;

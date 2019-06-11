@@ -33,3 +33,11 @@ There is a script called `src/php/api/migrate.php.changeme` that can be used to 
 Visit `migrate.php` on your `version1` server with `?outgoing=true` set in order to begin the transfer. The other server's `migrate.php` will receive an "incoming" request multiple times, and your screen will display messages as it works.
 
 _DELETE THESE `migrate.php` FILES IMMEDIATELY AFTER MIGRATION IS COMPLETE!_.
+
+## Emails
+
+Be sure you set up email senders/receivers for at least these 3 email addresses:
+
+- help (can be forwarder)
+- donotreply (must be sender)
+- ads (can be forwarder)
