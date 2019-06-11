@@ -1,5 +1,6 @@
 <?php
 
+define('DB_NAME', 'lexiconga_db_name');
 define('DB_USER', 'lexiconga_db_username');
 define('DB_PASSWORD', 'user_password');
 
