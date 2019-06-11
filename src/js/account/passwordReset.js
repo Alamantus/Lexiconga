@@ -109,5 +109,5 @@ function submitPasswordReset() {
 
 window.onload = (function (oldLoad) {
   oldLoad && oldLoad();
-  setupPasswordResetForm();
+  setTimeout(setupPasswordResetForm, 1000);
 })(window.onload);
