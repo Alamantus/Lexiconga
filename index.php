@@ -24,8 +24,11 @@ if ($current_user > 0 || !isset($_SESSION['loginfailures']) || (isset($_SESSION[
     // If logged in, never failed, or more than 1 hour has passed, reset login failures.
     $_SESSION['loginfailures'] = 0;
 } else {
-    $alertlockoutmessage = "You failed logging in 10 times. To prevent request flooding and hacking attempts, you may not log in or create an account for 1 hour.\\n\\nThe last time this page was loaded, you had been locked out for " . time_elapsed(time() - $_SESSION['loginlockouttime']) . "\\n\\nRefresh the page once the hour has passed.";
-    $hoverlockoutmessage = str_replace("\\n", "\n", $alertlockoutmessage);
+    $hoverlockoutmessage = '';
+    if (isset($_SESSION['loginlockouttime'])) {
+        $alertlockoutmessage = "You failed logging in 10 times. To prevent request flooding and hacking attempts, you may not log in or create an account for 1 hour.\\n\\nThe last time this page was loaded, you had been locked out for " . time_elapsed(time() - $_SESSION['loginlockouttime']) . "\\n\\nRefresh the page once the hour has passed.";
+        $hoverlockoutmessage = str_replace("\\n", "\n", $alertlockoutmessage);
+    }
 }
 
 require_once(SITE_LOCATION . '/php/notificationconditiontree.php');
@@ -419,7 +422,7 @@ if ($display_mode != "build") {
     </contents>
     <footer>
         <div id="footer-content">
-        Lexiconga only guaranteed to work with most up-to-date HTML5 browsers. <a href="https://blog.lexicon.ga" class="clickable inline-button" target="_blank">Blog</a> <a href="/issues" class="clickable inline-button" target="_blank">Issues</a> <a href="/updates" class="clickable inline-button" target="_blank">Updates</a> | <span class="clickable inline-button" onclick="ShowInfo('termsText')" style="font-size:12px;">Terms</span> <span class="clickable inline-button" onclick="ShowInfo('privacyText')" style="font-size:12px;">Privacy</span>
+        Lexiconga only guaranteed to work in up-to-date browsers. <a href="https://buymeacoff.ee/robbieantenesse" class="clickable inline-button" target="_blank">Support</a> <a href="https://blog.lexicon.ga" class="clickable inline-button" target="_blank">Blog</a> <a href="/issues" class="clickable inline-button" target="_blank">Issues</a> <a href="/updates" class="clickable inline-button" target="_blank">Updates</a> | <span class="clickable inline-button" onclick="ShowInfo('termsText')" style="font-size:12px;">Terms</span> <span class="clickable inline-button" onclick="ShowInfo('privacyText')" style="font-size:12px;">Privacy</span>
         </div>
     </footer>
 
@@ -441,7 +444,7 @@ if ($display_mode != "build") {
     <!-- Public View Functions -->
     <script src="/js/publicView.js"></script>
     <?php } ?>
-    <?php if ($_GET['adminoverride'] != "noadsortracking") { include_once("php/google/analytics.php"); } ?>
+    <?php if (!isset($_GET['adminoverride']) || $_GET['adminoverride'] != "noadsortracking") { include_once("php/google/analytics.php"); } ?>
     <script>
     var aboutText = termsText = privacyText = loginForm = forgotForm = exportForm = importForm = "Loading...";
     <?php if ($display_mode != "build") { ?>

@@ -4,7 +4,7 @@ require_once('config.php');
 require_once(SITE_LOCATION . '/php/functions.php');
 
 session_start();
-if ($_SESSION['user'] > 0) {
+if (isset($_SESSION['user']) && $_SESSION['user'] > 0) {
     if ($_GET['action'] == 'getall') {
         Get_Dictionaries(true);
     }
