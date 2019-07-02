@@ -19,20 +19,3 @@
 @import 'scss/themes/red';
 @import 'scss/themes/mint';
 @import 'scss/themes/grape';
-
-html, body {
-  margin: 0;
-  font-family: $font;
-  transition: all 0.2s ease-in;
-  
-  * {
-    transition: all 0.2s ease-in;
-    box-sizing: border-box;
-  }
-}
-
-input:not([type="checkbox"]),
-select,
-textarea {
-  font-size: 16px;
-}

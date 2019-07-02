@@ -1,3 +1,15 @@
+html, body {
+  margin: 0;
+  font-family: $font;
+  font-size: 13pt;
+  transition: all 0.2s ease-in;
+  
+  * {
+    transition: all 0.2s ease-in;
+    box-sizing: border-box;
+  }
+}
+
 header {
   display: block;
   padding: 5px $general-padding;
