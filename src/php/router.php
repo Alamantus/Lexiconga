@@ -1,5 +1,12 @@
 <?php
 require_once(realpath(dirname(__FILE__) . '/./api/Response.php'));
+$show_upgrade_screen = false;
+
+if ($show_upgrade_screen) {
+  $html = '<h1>Code Update in Progress</h1><p>Please refresh the page in 10 minutes.</p>';
+  return Response::html($html);
+}
+
 $view = isset($_GET['view']) ? $_GET['view'] : false;
 
 switch ($view) {
