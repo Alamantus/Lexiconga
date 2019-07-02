@@ -2,7 +2,7 @@
   
 #top {
   #title {
-    font-size: 13pt;
+    width: 150px;
     margin-right: 10px;
   }
 
@@ -27,12 +27,13 @@
   }
 }
 
+$mobile-word-form-size: 32px;
 #mobileWordFormShow {
   position: fixed;
-  top: $header-height;
+  top: $header-height - ($mobile-word-form-size / 2);
   left: 0;
-  width: 32px;
-  height: 32px;
+  width: $mobile-word-form-size;
+  height: $mobile-word-form-size;
   display: block;
   border-radius: 0 3px 3px 0;
   font-size: 30px;
@@ -48,10 +49,15 @@
   display: none;
   width: 95%;
   max-width: unset;
-  top: $header-height + 32px;
+  max-height: 85%;
+  top: $header-height + ($mobile-word-form-size / 2);
   left: 0;
   right: 3%;
   z-index: 1;
+
+  label:not(:last-child) {
+    margin-bottom: 10px;
+  }
 }
 
 #detailsSection {
@@ -60,7 +66,9 @@
   }
 
   #detailsPanel {
+    width: 100%;
     max-height: 300px;
+    padding: 10px 5px;
   }
 }
 

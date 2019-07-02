@@ -1,8 +1,8 @@
 @media (max-width: 750px) {
 
 html, body {
-  font-size: 90%;
-  line-height: 90%;
+  font-size: 12pt;
+  line-height: 1;
 }
 
 header {
@@ -17,7 +17,6 @@ main {
   #sideColumn {
     display: block;
     width: 0;
-    height: block;
     margin: 0;
     overflow: visible;
   }
