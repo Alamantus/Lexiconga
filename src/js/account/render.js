@@ -56,20 +56,25 @@ export function renderLoginForm() {
 export function renderMakePublic() {
   const editSettingsTab = document.getElementById('editSettingsTab');
   const { isPublic } = window.currentDictionary.settings;
-  const { externalID } = window.currentDictionary;
-  const editSettingsTabHTML = `<label>Make Public
-    <input type="checkbox" id="editIsPublic"${isPublic ? ' checked' : ''}><br>
-    <small>Checking this box will make this public via a link you can share with others.</small>
-  </label>
-  <p id="publicLinkDisplay" style="${!isPublic ? 'display:none;': ''}margin-left:20px;">
-    <strong>Public Link:</strong><br>
-    <input readonly id="publicLink" value="${document.domain + window.location.pathname + (externalID ? externalID.toString() : '')}">
-    <a class="small button" id="publicLinkCopy">Copy</a>
-  </p>
-  `;
-  editSettingsTab.innerHTML += editSettingsTabHTML;
-
-  setupMakePublic();
+  let waitForSync = setInterval(() => {
+    if (window.currentDictionary.hasOwnProperty('externalID') && !isNaN(window.currentDictionary.externalID)) {
+      clearInterval(waitForSync);
+      const { externalID } = window.currentDictionary;
+      const editSettingsTabHTML = `<label>Make Public
+        <input type="checkbox" id="editIsPublic"${isPublic ? ' checked' : ''}><br>
+        <small>Checking this box will make this public via a link you can share with others.</small>
+      </label>
+      <p id="publicLinkDisplay" style="${!isPublic ? 'display:none;': ''}margin-left:20px;">
+        <strong>Public Link:</strong><br>
+        <input readonly id="publicLink" value="${document.domain + window.location.pathname + (externalID ? externalID.toString() : '')}">
+        <a class="small button" id="publicLinkCopy">Copy</a>
+      </p>
+      `;
+      editSettingsTab.innerHTML += editSettingsTabHTML;
+    
+      setupMakePublic();
+    }
+  }, 100);
 }
 
 export function renderAccountSettings() {
