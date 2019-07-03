@@ -18,6 +18,7 @@ export function createNewDictionary() {
 export function changeDictionary(dictionary) {
   dictionary = typeof dictionary.target !== 'undefined' ? dictionary.target.value : dictionary;
   if (dictionary !== window.currentDictionary.externalID) {
+    addMessage('Loading Dictionary...');
     request({
       action: 'change-dictionary',
       dictionary,
