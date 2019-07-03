@@ -18,6 +18,7 @@ import { getPaginationData } from './pagination';
 import { getOpenEditForms, parseReferences } from './wordManagement';
 import { renderAd } from './ads';
 import ipaTableFile from './KeyboardFire/phondue/ipa-table.html';
+import { getPublicLink } from './account/utilities';
 
 export function renderAll() {
   renderTheme();
@@ -54,12 +55,13 @@ export function renderName() {
     shareLink.id = 'dictionaryShare';
     shareLink.classList.add('button');
     shareLink.style.float = 'right';
-    shareLink.href = window.location.pathname.match(new RegExp(window.currentDictionary.externalID + '$')) ? window.location.pathname
-      : window.location.pathname.substring(0, window.location.pathname.indexOf(window.currentDictionary.externalID)) + window.currentDictionary.externalID;
+    shareLink.href = getPublicLink();
     shareLink.target = '_blank';
     shareLink.title = 'Public Link to Dictionary';
     shareLink.innerHTML = '&#10150;';
     name.parentElement.insertBefore(shareLink, name);
+  } else if (isPublic && shareLinkElement) {
+    shareLinkElement.href = getPublicLink();
   } else if (!isPublic && shareLinkElement) {
     shareLinkElement.parentElement.removeChild(shareLinkElement);
   }
@@ -193,8 +195,7 @@ export function renderWords() {
         wordId: originalWord.wordId,
       });
       const homonymnNumber = getHomonymnNumber(originalWord);
-      const shareLink = window.currentDictionary.hasOwnProperty('externalID')
-        ? window.location.pathname + window.currentDictionary.externalID + '/' + word.wordId : '';
+      const shareLink = window.currentDictionary.hasOwnProperty('externalID') ? getPublicLink() + '/' + word.wordId : '';
 
       wordsHTML += renderAd(displayIndex);
 

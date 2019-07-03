@@ -21,6 +21,22 @@ export function dictionaryIsDefault() {
   return JSON.stringify(defaultDictionary) === JSON.stringify(currentDictionary);
 }
 
+export function getPublicLink() {
+  const { externalID } = window.currentDictionary;
+  let path;
+  if (externalID) {
+    path = window.location.pathname.match(new RegExp(externalID + '$'))
+      ? window.location.pathname
+      : (window.location.pathname.indexOf(externalID) > -1
+        ? window.location.pathname.substring(0, window.location.pathname.indexOf(externalID)) + externalID
+        : window.location.pathname + externalID
+      );
+  } else {
+    path = '';
+  }
+  return 'https://' + document.domain + path;
+}
+
 export function saveDeletedWordsLocally(wordIds) {
   let storedDeletedWords = getLocalDeletedWords();
   wordIds.forEach(wordId => {

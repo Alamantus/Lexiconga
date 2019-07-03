@@ -1,7 +1,7 @@
 import { addMessage } from "../utilities";
 import { saveDictionary, clearDictionary } from "../dictionaryManagement";
 import { request } from "./helpers";
-import { saveToken, dictionaryIsDefault } from "./utilities";
+import { saveToken, dictionaryIsDefault, getPublicLink } from "./utilities";
 import { renderAll } from "../render";
 import { sortWords } from "../wordManagement";
 import { getLocalDeletedWords, clearLocalDeletedWords, saveDeletedWordsLocally } from "./utilities";
@@ -37,8 +37,14 @@ export function performSync(remoteDictionary) {
         syncWords(remoteDictionary.words, remoteDictionary.deletedWords).then(success => {
           if (success) {
             renderAll();
+            
             document.getElementById('accountSettingsChangeDictionary').value = window.currentDictionary.externalID;
-            document.getElementById('publicLinkDisplay').style.display = window.currentDictionary.settings.isPublic ? '' : 'none';
+            if (document.getElementById('publicLink')) {
+              document.getElementById('publicLink').value = getPublicLink();
+            }
+            if (document.getElementById('publicLinkDisplay')) {
+              document.getElementById('publicLinkDisplay').style.display = window.currentDictionary.settings.isPublic ? '' : 'none';
+            }
           } else {
             console.error('word sync failed');
           }
