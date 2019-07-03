@@ -1,4 +1,5 @@
 import { setupLoginModal, setupChangeDictionary, setupCreateNewDictionary, setupDeletedDictionaryChangeModal, setupMakePublic } from "./setupListeners";
+import { getPublicLink } from "./utilities";
 import { request } from "./helpers";
 
 export function renderLoginForm() {
@@ -59,14 +60,13 @@ export function renderMakePublic() {
   let waitForSync = setInterval(() => {
     if (window.currentDictionary.hasOwnProperty('externalID') && !isNaN(window.currentDictionary.externalID)) {
       clearInterval(waitForSync);
-      const { externalID } = window.currentDictionary;
       const editSettingsTabHTML = `<label>Make Public
         <input type="checkbox" id="editIsPublic"${isPublic ? ' checked' : ''}><br>
         <small>Checking this box will make this public via a link you can share with others.</small>
       </label>
       <p id="publicLinkDisplay" style="${!isPublic ? 'display:none;': ''}margin-left:20px;">
         <strong>Public Link:</strong><br>
-        <input readonly id="publicLink" value="${document.domain + window.location.pathname + (externalID ? externalID.toString() : '')}">
+        <input readonly id="publicLink" value="${getPublicLink()}">
         <a class="small button" id="publicLinkCopy">Copy</a>
       </p>
       `;
