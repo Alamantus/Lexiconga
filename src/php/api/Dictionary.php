@@ -59,7 +59,7 @@ VALUES ($new_id, ?, ?, ?, ?)";
   public function changeCurrent ($user, $dictionary) {
     $update_query = 'UPDATE users SET current_dictionary=? WHERE id=?';
     $update = $this->db->query($update_query, array($dictionary, $user));
-    if ($update->rowCount() > 0) {
+    if (trim($this->db->last_error_info[2]) == '') {
       return $dictionary;
     }
     return false;
