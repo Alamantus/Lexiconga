@@ -15,7 +15,7 @@ import {
   setupIPAFields
 } from './setupListeners';
 import { getPaginationData } from './pagination';
-import { getOpenEditForms, parseReferences } from './wordManagement';
+import { getOpenEditForms, translateOrthography, parseReferences } from './wordManagement';
 import { renderAd } from './ads';
 import ipaTableFile from './KeyboardFire/phondue/ipa-table.html';
 import { getPublicLink } from './account/utilities';
@@ -68,7 +68,7 @@ export function renderName() {
 }
 
 export function renderDescription() {
-  const descriptionHTML = md(removeTags(window.currentDictionary.description));
+  const descriptionHTML = md(parseReferences(removeTags(window.currentDictionary.description)));
 
   document.getElementById('detailsPanel').innerHTML = '<div class="content">' + descriptionHTML + '</div>';
 }
@@ -199,9 +199,11 @@ export function renderWords() {
 
       wordsHTML += renderAd(displayIndex);
 
+      let wordNameDisplay = translateOrthography(word.name);
+
       wordsHTML += `<article class="entry" id="${word.wordId}">
         <header>
-          <h4 class="word">${word.name}${homonymnNumber > 0 ? ' <sub>' + homonymnNumber.toString() + '</sub>' : ''}</h4>
+          <h4 class="word">${wordNameDisplay}${homonymnNumber > 0 ? ' <sub>' + homonymnNumber.toString() + '</sub>' : ''}</h4>
           <span class="pronunciation">${word.pronunciation}</span>
           <span class="part-of-speech">${word.partOfSpeech}</span>
           ${isPublic ? `<a class="small button share-link" href="${shareLink}" target="_blank" title="Public Link to Word">&#10150;</a>` : ''}

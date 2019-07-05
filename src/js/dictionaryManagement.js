@@ -30,6 +30,7 @@ export function openEditModal() {
   document.getElementById('editCoda').value = phonotactics.coda.join(',');
   document.getElementById('editPhonotacticsNotes').value = phonotactics.notes;
 
+  document.getElementById('editTranslations').value = orthography.translations.join('\n');
   document.getElementById('editOrthography').value = orthography.notes;
   document.getElementById('editGrammar').value = grammar.notes;
 
@@ -59,18 +60,16 @@ export function saveEditModal() {
   window.currentDictionary.details.phonotactics.coda = document.getElementById('editCoda').value.split(',').map(val => val.trim()).filter(val => val !== '');
   window.currentDictionary.details.phonotactics.notes = removeTags(document.getElementById('editPhonotacticsNotes').value.trim());
 
+  window.currentDictionary.details.orthography.translations = document.getElementById('editTranslations').value.split('\n').map(val => val.trim()).filter(val => val !== '');
   window.currentDictionary.details.orthography.notes = removeTags(document.getElementById('editOrthography').value.trim());
   window.currentDictionary.details.grammar.notes = removeTags(document.getElementById('editGrammar').value.trim());
 
   window.currentDictionary.settings.allowDuplicates = !document.getElementById('editPreventDuplicates').checked;
   window.currentDictionary.settings.caseSensitive = document.getElementById('editCaseSensitive').checked;
-  const needsReSort = window.currentDictionary.settings.sortByDefinition !== document.getElementById('editSortByDefinition').checked;
   window.currentDictionary.settings.sortByDefinition = document.getElementById('editSortByDefinition').checked;
   window.currentDictionary.settings.theme = document.getElementById('editTheme').value;
 
-  let needsWordRender = false;
   if (hasToken()) {
-    needsWordRender = window.currentDictionary.settings.isPublic !== document.getElementById('editIsPublic').checked;
     window.currentDictionary.settings.isPublic = document.getElementById('editIsPublic').checked;
   } else {
     window.currentDictionary.settings.isPublic = false;
@@ -81,10 +80,7 @@ export function saveEditModal() {
   renderTheme();
   renderDictionaryDetails();
   renderPartsOfSpeech();
-  
-  if (needsReSort || needsWordRender) {
-    sortWords(true);
-  }
+  sortWords(true);
 
   if (hasToken()) {
     import('./account/index.js').then(account => {

@@ -33,10 +33,11 @@ class Dictionary {
     $insert_dictionary = $this->db->execute($insert_dictionary_query, array($new_id, $user, 'A new dictionary.', time()));
 
     if ($insert_dictionary === true) {
-      $insert_linguistics_query = "INSERT INTO dictionary_linguistics (dictionary, parts_of_speech, phonotactics_notes, orthography_notes, grammar_notes)
-VALUES ($new_id, ?, ?, ?, ?)";
+      $insert_linguistics_query = "INSERT INTO dictionary_linguistics (dictionary, parts_of_speech, phonotactics_notes, translations, orthography_notes, grammar_notes)
+VALUES ($new_id, ?, ?, ?, ?, ?)";
       $insert_linguistics = $this->db->execute($insert_linguistics_query, array(
         $this->defaults['partsOfSpeech'],
+        '',
         '',
         '',
         '',
@@ -117,6 +118,7 @@ VALUES ($new_id, ?, ?, ?, ?)";
               'notes' => $result['phonotactics_notes'],
             ),
             'orthography' => array(
+              'translations' => $result['translations'] !== '' ? explode(PHP_EOL, $result['translations']) : array(),
               'notes' => $result['orthography_notes'],
             ),
             'grammar' => array(
@@ -268,6 +270,7 @@ VALUES ($new_id, ?, ?, ?, ?)";
             'notes' => $result['phonotactics_notes'],
           ),
           'orthography' => array(
+            'translations' => $result['translations'] !== '' ? explode(PHP_EOL, $result['translations']) : array(),
             'notes' => $result['orthography_notes'],
           ),
           'grammar' => array(
@@ -327,6 +330,7 @@ SET parts_of_speech=:parts_of_speech,
   nucleus=:nucleus,
   coda=:coda,
   phonotactics_notes=:phonotactics_notes,
+  translations=:translations,
   orthography_notes=:orthography_notes,
   grammar_notes=:grammar_notes
 WHERE dictionary=$dictionary";
@@ -341,6 +345,7 @@ WHERE dictionary=$dictionary";
         ':nucleus' => implode(',', $linguistics['phonotactics']['nucleus']),
         ':coda' => implode(',', $linguistics['phonotactics']['coda']),
         ':phonotactics_notes' => $linguistics['phonotactics']['notes'],
+        ':translations' => implode(PHP_EOL, $linguistics['orthography']['translations']),
         ':orthography_notes' => $linguistics['orthography']['notes'],
         ':grammar_notes' => $linguistics['grammar']['notes'],
       ));
