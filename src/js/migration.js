@@ -103,6 +103,17 @@ export function migrateDictionary() {
     migrated = true;
   } else if (window.currentDictionary.version !== MIGRATE_VERSION) {
     switch (window.currentDictionary.version) {
+      case '2.0.1': {
+        window.currentDictionary.details.phonotactics = Object.assign({}, window.currentDictionary.details.phonology.phonotactics);
+        delete window.currentDictionary.details.phonology.phonotactics;
+        window.currentDictionary.details.phonotactics.notes = window.currentDictionary.details.phonotactics.exceptions;
+        delete window.currentDictionary.details.phonotactics.exceptions;
+        // Add window.currentDictionary.details.orthography.translations = [];
+        // Add window.currentDictionary.custom.css = '';
+        window.currentDictionary = Object.assign({}, DEFAULT_DICTIONARY, window.currentDictionary);
+        migrated = true;
+        break;
+      }
       default: console.error('Unknown version'); break;
     }
   }
