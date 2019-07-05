@@ -1,9 +1,10 @@
 import papa from 'papaparse';
 import { renderDictionaryDetails, renderPartsOfSpeech, renderAll, renderTheme } from "./render";
 import { removeTags, cloneObject, getTimestampInSeconds, download, slugify } from "../helpers";
-import { LOCAL_STORAGE_KEY, DEFAULT_DICTIONARY, MIGRATE_VERSION } from "../constants";
+import { LOCAL_STORAGE_KEY, DEFAULT_DICTIONARY } from "../constants";
 import { addMessage, getNextId, hasToken } from "./utilities";
 import { addWord, sortWords } from "./wordManagement";
+import { migrateDictionary } from './migration';
 
 export function updateDictionary () {
 
@@ -284,40 +285,4 @@ export function exportWords() {
     const csv = papa.unparse(words, { quotes: true });
     download(csv, fileName, 'text/csv;charset=utf-8');
   }, 1);
-}
-
-export function migrateDictionary() {
-  let migrated = false;
-  if (!window.currentDictionary.hasOwnProperty('version')) {
-    const fixStupidOldNonsense = string => string.replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/&#92;/g, '\\').replace(/<br>/g, '\n');
-    window.currentDictionary.description = fixStupidOldNonsense(window.currentDictionary.description);
-    const timestamp = getTimestampInSeconds();
-    window.currentDictionary.words = window.currentDictionary.words.map(word => {
-      word.definition = word.simpleDefinition;
-      delete word.simpleDefinition;
-      word.details = fixStupidOldNonsense(word.longDefinition);
-      delete word.longDefinition;
-      word.lastUpdated = timestamp;
-      word.createdOn = timestamp;
-      return word;
-    });
-    window.currentDictionary = Object.assign({}, DEFAULT_DICTIONARY, window.currentDictionary);
-    window.currentDictionary.partsOfSpeech = window.currentDictionary.settings.partsOfSpeech.split(',').map(val => val.trim()).filter(val => val !== '');
-    delete window.currentDictionary.settings.partsOfSpeech;
-    delete window.currentDictionary.nextWordId;
-    window.currentDictionary.settings.sortByDefinition = window.currentDictionary.settings.sortByEquivalent;
-    delete window.currentDictionary.settings.sortByEquivalent;
-    window.currentDictionary.settings.theme = 'default';
-    delete window.currentDictionary.settings.isComplete;
-    
-    migrated = true;
-  } else if (window.currentDictionary.version !== MIGRATE_VERSION) {
-    switch (window.currentDictionary.version) {
-      default: console.error('Unknown version'); break;
-    }
-  }
-
-  if (migrated) {
-    saveDictionary();
-  }
 }
