@@ -33,7 +33,7 @@ class Dictionary {
     $insert_dictionary = $this->db->execute($insert_dictionary_query, array($new_id, $user, 'A new dictionary.', time()));
 
     if ($insert_dictionary === true) {
-      $insert_linguistics_query = "INSERT INTO dictionary_linguistics (dictionary, parts_of_speech, exceptions, orthography_notes, grammar_notes)
+      $insert_linguistics_query = "INSERT INTO dictionary_linguistics (dictionary, parts_of_speech, phonotactics_notes, orthography_notes, grammar_notes)
 VALUES ($new_id, ?, ?, ?, ?)";
       $insert_linguistics = $this->db->execute($insert_linguistics_query, array(
         $this->defaults['partsOfSpeech'],
@@ -109,12 +109,12 @@ VALUES ($new_id, ?, ?, ?, ?)";
               'consonants' => $result['consonants'] !== '' ? explode(' ', $result['consonants']) : array(),
               'vowels' => $result['vowels'] !== '' ? explode(' ', $result['vowels']) : array(),
               'blends' => $result['blends'] !== '' ? explode(' ', $result['blends']) : array(),
-              'phonotactics' => array(
-                'onset' => $result['onset'] !== '' ? explode(',', $result['onset']) : array(),
-                'nucleus' => $result['nucleus'] !== '' ? explode(',', $result['nucleus']) : array(),
-                'coda' => $result['coda'] !== '' ? explode(',', $result['coda']) : array(),
-                'exceptions' => $result['exceptions'],
-              ),
+            ),
+            'phonotactics' => array(
+              'onset' => $result['onset'] !== '' ? explode(',', $result['onset']) : array(),
+              'nucleus' => $result['nucleus'] !== '' ? explode(',', $result['nucleus']) : array(),
+              'coda' => $result['coda'] !== '' ? explode(',', $result['coda']) : array(),
+              'notes' => $result['phonotactics_notes'],
             ),
             'orthography' => array(
               'notes' => $result['orthography_notes'],
@@ -260,12 +260,12 @@ VALUES ($new_id, ?, ?, ?, ?)";
             'consonants' => $result['consonants'] !== '' ? explode(' ', $result['consonants']) : array(),
             'vowels' => $result['vowels'] !== '' ? explode(' ', $result['vowels']) : array(),
             'blends' => $result['blends'] !== '' ? explode(' ', $result['blends']) : array(),
-            'phonotactics' => array(
-              'onset' => $result['onset'] !== '' ? explode(',', $result['onset']) : array(),
-              'nucleus' => $result['nucleus'] !== '' ? explode(',', $result['nucleus']) : array(),
-              'coda' => $result['coda'] !== '' ? explode(',', $result['coda']) : array(),
-              'exceptions' => $result['exceptions'],
-            ),
+          ),
+          'phonotactics' => array(
+            'onset' => $result['onset'] !== '' ? explode(',', $result['onset']) : array(),
+            'nucleus' => $result['nucleus'] !== '' ? explode(',', $result['nucleus']) : array(),
+            'coda' => $result['coda'] !== '' ? explode(',', $result['coda']) : array(),
+            'notes' => $result['phonotactics_notes'],
           ),
           'orthography' => array(
             'notes' => $result['orthography_notes'],
@@ -326,7 +326,7 @@ SET parts_of_speech=:parts_of_speech,
   onset=:onset,
   nucleus=:nucleus,
   coda=:coda,
-  exceptions=:exceptions,
+  phonotactics_notes=:phonotactics_notes,
   orthography_notes=:orthography_notes,
   grammar_notes=:grammar_notes
 WHERE dictionary=$dictionary";
@@ -337,10 +337,10 @@ WHERE dictionary=$dictionary";
         ':consonants' => implode(' ', $linguistics['phonology']['consonants']),
         ':vowels' => implode(' ', $linguistics['phonology']['vowels']),
         ':blends' => implode(' ', $linguistics['phonology']['blends']),
-        ':onset' => implode(',', $linguistics['phonology']['phonotactics']['onset']),
-        ':nucleus' => implode(',', $linguistics['phonology']['phonotactics']['nucleus']),
-        ':coda' => implode(',', $linguistics['phonology']['phonotactics']['coda']),
-        ':exceptions' => $linguistics['phonology']['phonotactics']['exceptions'],
+        ':onset' => implode(',', $linguistics['phonotactics']['onset']),
+        ':nucleus' => implode(',', $linguistics['phonotactics']['nucleus']),
+        ':coda' => implode(',', $linguistics['phonotactics']['coda']),
+        ':phonotactics_notes' => $linguistics['phonotactics']['notes'],
         ':orthography_notes' => $linguistics['orthography']['notes'],
         ':grammar_notes' => $linguistics['grammar']['notes'],
       ));

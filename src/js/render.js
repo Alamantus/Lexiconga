@@ -75,14 +75,14 @@ export function renderDescription() {
 
 export function renderDetails() {
   const { partsOfSpeech, alphabeticalOrder } = window.currentDictionary;
-  const { phonology, orthography, grammar } = window.currentDictionary.details;
+  const { phonology, phonotactics, orthography, grammar } = window.currentDictionary.details;
   const partsOfSpeechHTML = `<p><strong>Parts of Speech:</strong> ${partsOfSpeech.map(partOfSpeech => '<span class="tag">' + partOfSpeech + '</span>').join(' ')}</p>`;
   const alphabeticalOrderHTML = `<p><strong>Alphabetical Order:</strong> ${
     (alphabeticalOrder.length > 0 ? alphabeticalOrder : ['English Alphabet']).map(letter => `<span class="tag">${letter}</span>`).join(' ')
     }</p>`;
   const generalHTML = `<h3>General</h3>${partsOfSpeechHTML}${alphabeticalOrderHTML}`;
 
-  const { consonants, vowels, blends, phonotactics } = phonology
+  const { consonants, vowels, blends } = phonology
   const consonantHTML = `<p><strong>Consonants:</strong> ${consonants.map(letter => `<span class="tag">${letter}</span>`).join(' ')}</p>`;
   const vowelHTML = `<p><strong>Vowels:</strong> ${vowels.map(letter => `<span class="tag">${letter}</span>`).join(' ')}</p>`;
   const blendHTML = blends.length > 0 ? `<p><strong>Polyphthongs&nbsp;/&nbsp;Blends:</strong> ${blends.map(letter => `<span class="tag">${letter}</span>`).join(' ')}</p>` : '';
@@ -93,18 +93,18 @@ export function renderDetails() {
   </div>
   ${blendHTML}`;
 
-  const { onset, nucleus, coda, exceptions } = phonotactics;
+  const { onset, nucleus, coda } = phonotactics;
   const onsetHTML = `<p><strong>Onset:</strong> ${onset.map(letter => `<span class="tag">${letter}</span>`).join(' ')}</p>`;
   const nucleusHTML = `<p><strong>Nucleus:</strong> ${nucleus.map(letter => `<span class="tag">${letter}</span>`).join(' ')}</p>`;
   const codaHTML = `<p><strong>Coda:</strong> ${coda.map(letter => `<span class="tag">${letter}</span>`).join(' ')}</p>`;
-  const exceptionsHTML = exceptions.trim().length > 0 ? '<p><strong>Exceptions:</strong></p><div>' + md(removeTags(exceptions)) + '</div>' : '';
+  const phonotacticsNotesHTML = phonotactics.notes.trim().length > 0 ? '<p><strong>Notes:</strong></p><div>' + md(removeTags(phonotactics.notes)) + '</div>' : '';
   const phonotacticsHTML = `<h3>Phonotactics</h3>
   <div class="split three">
   <div>${onsetHTML}</div>
   <div>${nucleusHTML}</div>
   <div>${codaHTML}</div>
   </div>
-  ${exceptionsHTML}`;
+  ${phonotacticsNotesHTML}`;
 
   const orthographyHTML = '<h3>Orthography</h3><p><strong>Notes:</strong></p><div>' + md(removeTags(orthography.notes)) + '</div>';
   const grammarHTML = '<h3>Grammar</h3><p><strong>Notes:</strong></p><div>' + md(removeTags(grammar.notes)) + '</div>';

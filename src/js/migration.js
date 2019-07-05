@@ -1,4 +1,5 @@
 import { LOCAL_STORAGE_KEY, DEFAULT_DICTIONARY, MIGRATE_VERSION } from "../constants";
+import { saveDictionary } from "./dictionaryManagement";
 
 export default function migrate() {
   if (window.location.pathname === '/') {
@@ -103,7 +104,8 @@ export function migrateDictionary() {
     migrated = true;
   } else if (window.currentDictionary.version !== MIGRATE_VERSION) {
     switch (window.currentDictionary.version) {
-      case '2.0.1': {
+      default: console.error('Unknown version'); break;
+      case '2.0.0': {
         window.currentDictionary.details.phonotactics = Object.assign({}, window.currentDictionary.details.phonology.phonotactics);
         delete window.currentDictionary.details.phonology.phonotactics;
         window.currentDictionary.details.phonotactics.notes = window.currentDictionary.details.phonotactics.exceptions;
@@ -111,10 +113,10 @@ export function migrateDictionary() {
         // Add window.currentDictionary.details.orthography.translations = [];
         // Add window.currentDictionary.custom.css = '';
         window.currentDictionary = Object.assign({}, DEFAULT_DICTIONARY, window.currentDictionary);
+        window.currentDictionary.version = MIGRATE_VERSION;
         migrated = true;
-        break;
+        // break; By skipping the break, all migrations can happen in sequence.
       }
-      default: console.error('Unknown version'); break;
     }
   }
 

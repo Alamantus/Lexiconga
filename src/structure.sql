@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS `dictionary_linguistics` (
   `onset` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT 'Comma-separated',
   `nucleus` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT 'Comma-separated',
   `coda` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT 'Comma-separated',
-  `exceptions` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT 'Markdown',
+  `phonotactics_notes` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT 'Markdown',
   `orthography_notes` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT 'Markdown',
   `grammar_notes` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT 'Markdown',
   UNIQUE KEY `dictionary` (`dictionary`)

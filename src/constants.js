@@ -1,6 +1,6 @@
 import { getTimestampInSeconds } from "./helpers";
 
-export const MIGRATE_VERSION = '2.0.1';
+export const MIGRATE_VERSION = '2.1.0';
 export const DEFAULT_DICTIONARY = {
   name: 'New',
   specification: 'Dictionary',
