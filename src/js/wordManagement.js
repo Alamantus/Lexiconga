@@ -32,9 +32,57 @@ export function validateWord(word, wordId = false) {
 
 export function sortWords(render) {
   const { sortByDefinition } = window.currentDictionary.settings;
+  const { alphabeticalOrder } = window.currentDictionary;
   const sortBy = sortByDefinition ? 'definition' : 'name';
 
+  const ordering = {}; // map for efficient lookup of sortIndex
+  for (let i = 0; i < alphabeticalOrder.length; i++) {
+    ordering[alphabeticalOrder[i]] = i;
+  }
+
   window.currentDictionary.words.sort((wordA, wordB) => {
+    if (wordA[sortBy] === wordB[sortBy]) return 0;
+
+    const aLetters = wordA[sortBy].split('');
+    const bLetters = wordB[sortBy].split('');
+    
+    for (let i = 0; i < aLetters.length; i++) {
+      const a = aLetters[i];
+      if (ordering.hasOwnProperty(a)) { // if a is in the alphabet...
+        if (typeof bLetters[i] !== 'undefined') { // and if wordB has a letter at the same position...
+          const b = bLetters[i];
+          if (ordering.hasOwnProperty(b)) { // and b is in the alphabet then compare the letters
+            const aIndex = ordering[a];
+            const bIndex = ordering[b];
+            if (aIndex === bIndex) {  // If the letters are the same, then...
+              // If wordA is shorter than wordB and this is wordA's last letter, then sort a first;
+              if (aLetters.length < bLetters.length && i == aLetters.length - 1) return -1;
+              continue;  // Otherwise if it is the same letter, check the next letter
+            }
+            return aIndex - bIndex; // If different and both in alphabet, compare alphabetical order
+          }
+        } else {
+          return 1; // If b is shorter than a after looping, then sort a after
+        }
+      } else if (ordering.hasOwnProperty(bLetters[i])) {
+        return 1; // If a is not in the alphabet but b is, sort a after
+      } else {
+        if (typeof bLetters[i] !== 'undefined') { // and if wordB has a letter at the same position...
+          const b = bLetters[i];
+          if (removeDiacritics(a).toLowerCase() === removeDiacritics(b).toLowerCase()) {
+            if (aLetters.length < bLetters.length && i == aLetters.length - 1) return -1;
+            continue;
+          }
+          return removeDiacritics(a).toLowerCase() > removeDiacritics(b).toLowerCase() ? 1 : -1;
+        } else {
+          return 1; // If b is shorter than a after looping, then sort a after
+        }
+      }
+    }
+
+    console.log('done looping, comparing normally:', wordA[sortBy], wordB[sortBy]);
+
+    // If after looping, the alphabet is still different, just compare the words alphabetically.
     if (removeDiacritics(wordA[sortBy]).toLowerCase() === removeDiacritics(wordB[sortBy]).toLowerCase()) return 0;
     return removeDiacritics(wordA[sortBy]).toLowerCase() > removeDiacritics(wordB[sortBy]).toLowerCase() ? 1 : -1;
   });
