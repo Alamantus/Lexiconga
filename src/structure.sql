@@ -41,6 +41,7 @@ CREATE TABLE IF NOT EXISTS `dictionary_linguistics` (
   `nucleus` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT 'Comma-separated',
   `coda` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT 'Comma-separated',
   `phonotactics_notes` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT 'Markdown',
+  `translations` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT 'Newline-separated; Translates left character(s) to right character(s)',
   `orthography_notes` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT 'Markdown',
   `grammar_notes` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT 'Markdown',
   UNIQUE KEY `dictionary` (`dictionary`)
