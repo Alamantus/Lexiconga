@@ -4,7 +4,7 @@ import { getWordsStats, getHomonymnNumber } from './utilities';
 import { getMatchingSearchWords, highlightSearchTerm, getSearchFilters, getSearchTerm } from './search';
 import { showSection } from './displayToggles';
 import { setupSearchFilters, setupInfoModal } from './setupListeners';
-import { parseReferences } from './wordManagement';
+import { parseReferences, translateOrthography } from './wordManagement';
 import { renderAd } from '../ads';
 import { sortWords } from './wordManagement';
 
@@ -79,7 +79,7 @@ export function renderDetails() {
   const translationsHTML = `<p><strong>Translations</strong><br>${translations.map(translation => {
     translation = translation.split('=').map(value => value.trim());
     if (translation.length > 1 && translation[0] !== '' && translation[1] !== '') {
-      return `<span><span class="tag">${translation[0]}</span><span class="tag">${translation[1]}</span></span>`;
+      return `<span><span class="tag">${translation[0]}</span><span class="tag orthographic-translation">${translation[1]}</span></span>`;
     }
     return false;
   }).filter(html => html !== false).join(' ')}</p>`;
@@ -170,9 +170,11 @@ export function renderWords() {
 
       wordsHTML += renderAd(displayIndex);
 
+      let wordNameDisplay = translateOrthography(word.name);
+
       wordsHTML += `<article class="entry" id="${word.wordId}">
         <header>
-          <h4 class="word">${word.name}${homonymnNumber > 0 ? ' <sub>' + homonymnNumber.toString() + '</sub>' : ''}</h4>
+          <h4 class="word"><span class="orthographic-translation">${wordNameDisplay}</span>${homonymnNumber > 0 ? ' <sub>' + homonymnNumber.toString() + '</sub>' : ''}</h4>
           <span class="pronunciation">${word.pronunciation}</span>
           <span class="part-of-speech">${word.partOfSpeech}</span>
           <a href="${shareLink}" target="_blank" class="small button word-option-button" title="Link to Word">&#10150;</a>

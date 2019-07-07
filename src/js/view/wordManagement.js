@@ -11,13 +11,23 @@ export function sortWords() {
   });
 }
 
+export function translateOrthography(word) {
+  window.currentDictionary.details.orthography.translations.forEach(translation => {
+    translation = translation.split('=').map(value => value.trim());
+    if (translation.length > 1 && translation[0] !== '' && translation[1] !== '') {
+      word = word.replace(new RegExp(translation[0], 'g'), translation[1]);
+    }
+  });
+  return word;
+}
+
 export function parseReferences(detailsMarkdown) {
   const references = detailsMarkdown.match(/\{\{.+?\}\}/g);
   if (references && Array.isArray(references)) {
     new Set(references).forEach(reference => {
       let wordToFind = reference.replace(/\{\{|\}\}/g, '');
       let homonymn = 0;
-      
+
       if (wordToFind.includes(':')) {
         const separator = wordToFind.indexOf(':');
         homonymn = wordToFind.substr(separator + 1);
@@ -46,7 +56,7 @@ export function parseReferences(detailsMarkdown) {
           homonymn = 1;
         }
         const homonymnSubHTML = homonymn > 0 ? '<sub>' + homonymn.toString() + '</sub>' : '';
-        const wordMarkdownLink = `[${wordToFind}${homonymnSubHTML}](#${existingWordId})`;
+        const wordMarkdownLink = `<span class="word-reference">[<span class="orthographic-translation">${translateOrthography(wordToFind)}</span>${homonymnSubHTML}](#${existingWordId})</span>`;
         detailsMarkdown = detailsMarkdown.replace(new RegExp(reference, 'g'), wordMarkdownLink);
       }
     });

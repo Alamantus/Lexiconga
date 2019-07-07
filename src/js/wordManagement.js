@@ -91,7 +91,7 @@ export function parseReferences(detailsMarkdown) {
           homonymn = 1;
         }
         const homonymnSubHTML = homonymn > 0 ? '<sub>' + homonymn.toString() + '</sub>' : '';
-        const wordMarkdownLink = `[${translateOrthography(wordToFind)}${homonymnSubHTML}](#${existingWordId})`;
+        const wordMarkdownLink = `<span class="word-reference">[<span class="orthographic-translation">${translateOrthography(wordToFind)}</span>${homonymnSubHTML}](#${existingWordId})</span>`;
         detailsMarkdown = detailsMarkdown.replace(new RegExp(reference, 'g'), wordMarkdownLink);
       }
     });
