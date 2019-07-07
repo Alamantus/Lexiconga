@@ -101,7 +101,7 @@ VALUES ($new_id, ?, ?, ?, ?, ?)";
           'externalID' => $result['id'],
           'name' => $result['name'],
           'specification' => $result['specification'],
-          'description' => $result['description'],
+          'description' => $this->parseReferences(strip_tags($result['description']), $result['id']),
           'createdBy' => $result['public_name'],
           'partsOfSpeech' => explode(',', $partsOfSpeech),
           'alphabeticalOrder' => array(),
@@ -147,11 +147,11 @@ VALUES ($new_id, ?, ?, ?, ?, ?)";
       if ($results) {
         return array_map(function ($row) use ($dictionary) {
           return array(
-            'name' => $row['name'],
+            'name' => $this->translateOrthography($row['name'], $dictionary),
             'pronunciation' => $row['pronunciation'],
             'partOfSpeech' => $row['part_of_speech'],
             'definition' => $row['definition'],
-            'details' => $this->parseReferences($row['details'], $dictionary),
+            'details' => $this->parseReferences(strip_tags($row['details']), $dictionary),
             'lastUpdated' => is_null($row['last_updated']) ? intval($row['created_on']) : intval($row['last_updated']),
             'createdOn' => intval($row['created_on']),
             'wordId' => intval($row['word_id']),
@@ -168,11 +168,11 @@ VALUES ($new_id, ?, ?, ?, ?, ?)";
       $result = $this->db->query($query, array($dictionary, $word))->fetch();
       if ($result) {
         return array(
-          'name' => $result['name'],
+          'name' => $this->translateOrthography($result['name'], $dictionary),
           'pronunciation' => $result['pronunciation'],
           'partOfSpeech' => $result['part_of_speech'],
           'definition' => $result['definition'],
-          'details' => $this->parseReferences($result['details'], $dictionary),
+          'details' => $this->parseReferences(strip_tags($result['details']), $dictionary),
           'lastUpdated' => is_null($result['last_updated']) ? intval($result['created_on']) : intval($result['last_updated']),
           'createdOn' => intval($result['created_on']),
           'wordId' => intval($result['word_id']),
@@ -219,8 +219,9 @@ VALUES ($new_id, ?, ?, ?, ?, ?)";
             }
             $homonymn_sub_html = $homonymn > 0 ? '<sub>' . $homonymn . '</sub>' : '';
             $site_root = substr($_SERVER['REQUEST_URI'], 0, strpos($_SERVER['REQUEST_URI'], $dictionary_id));
-            $markdown_link = '<a href="' . $site_root . $dictionary_id . '/' . $target_id .'" target="_blank" title="Link to Reference">'
-              . $word_to_find . $homonymn_sub_html . '</a>';
+            $markdown_link = '<span class="word-reference"><a href="' . $site_root . $dictionary_id . '/' . $target_id .'" target="_blank" title="Link to Reference">'
+              . '<span class="orthographic-translation">' . $this->translateOrthography($word_to_find, $dictionary_id) . '</span>' . $homonymn_sub_html
+            . '</a></span>';
             $details = str_replace($reference, $markdown_link, $details);
           }
         }
@@ -238,6 +239,30 @@ VALUES ($new_id, ?, ?, ?, ?, ?)";
         return array_map(function ($row) {
           return intval($row['word_id']);
         }, $results);
+      }
+    }
+    return array();
+  }
+
+  private function translateOrthography($word, $dictionary) {
+    if (!isset($this->translations)) {
+      $this->translations = $this->getTranslations($dictionary);
+    }
+    foreach($this->translations as $translation) {
+      $translation = array_map('trim', explode('=', $translation));
+      if (count($translation) > 1 && $translation[0] !== '' && $translation[1] !== '') {
+        $word = str_replace($translation[0], $translation[1], $word);
+      }
+    };
+    return $word;
+  }
+
+  private function getTranslations($dictionary) {
+    if (is_numeric($dictionary)) {
+      $query = "SELECT translations FROM dictionary_linguistics WHERE dictionary=?";
+      $result = $this->db->query($query, array($dictionary))->fetch();
+      if ($result) {
+        return explode(PHP_EOL, $result['translations']);
       }
     }
     return array();

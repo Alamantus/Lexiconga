@@ -4,7 +4,6 @@ import { getWordsStats, getHomonymnNumber } from './utilities';
 import { getMatchingSearchWords, highlightSearchTerm, getSearchFilters, getSearchTerm } from './search';
 import { showSection } from './displayToggles';
 import { setupSearchFilters, setupInfoModal } from './setupListeners';
-import { parseReferences, translateOrthography } from './wordManagement';
 import { renderAd } from '../ads';
 import { sortWords } from './wordManagement';
 
@@ -35,7 +34,7 @@ export function renderName() {
 }
 
 export function renderDescription() {
-  const descriptionHTML = md(removeTags(window.currentDictionary.description));
+  const descriptionHTML = md(window.currentDictionary.description);
 
   document.getElementById('detailsPanel').innerHTML = '<div class="content">' + descriptionHTML + '</div>';
 }
@@ -161,7 +160,7 @@ export function renderWords() {
         pronunciation: removeTags(originalWord.pronunciation),
         partOfSpeech: removeTags(originalWord.partOfSpeech),
         definition: removeTags(originalWord.definition),
-        details: parseReferences(removeTags(originalWord.details)),
+        details: originalWord.details,
         wordId: originalWord.wordId,
       });
 
@@ -170,11 +169,9 @@ export function renderWords() {
 
       wordsHTML += renderAd(displayIndex);
 
-      let wordNameDisplay = translateOrthography(word.name);
-
       wordsHTML += `<article class="entry" id="${word.wordId}">
         <header>
-          <h4 class="word"><span class="orthographic-translation">${wordNameDisplay}</span>${homonymnNumber > 0 ? ' <sub>' + homonymnNumber.toString() + '</sub>' : ''}</h4>
+          <h4 class="word"><span class="orthographic-translation">${word.name}</span>${homonymnNumber > 0 ? ' <sub>' + homonymnNumber.toString() + '</sub>' : ''}</h4>
           <span class="pronunciation">${word.pronunciation}</span>
           <span class="part-of-speech">${word.partOfSpeech}</span>
           <a href="${shareLink}" target="_blank" class="small button word-option-button" title="Link to Word">&#10150;</a>
