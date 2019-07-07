@@ -106,7 +106,18 @@ export function renderDetails() {
   </div>
   ${phonotacticsNotesHTML}`;
 
-  const orthographyHTML = '<h3>Orthography</h3><p><strong>Notes:</strong></p><div>' + md(removeTags(orthography.notes)) + '</div>';
+  const { translations } = orthography;
+  const translationsHTML = `<p><strong>Translations</strong></p><div>${translations.map(translation => {
+    translation = translation.split('=').map(value => value.trim());
+    if (translation.length > 1 && translation[0] !== '' && translation[1] !== '') {
+      return `<span><span class="tag">${translation[0]}</span><span class="tag">${translation[1]}</span></span>`;
+    }
+    return false;
+  }).filter(html => html !== false).join(' ')}</div>`;
+  const orthographyNotesHTML = '<p><strong>Notes</strong></p><div>' + md(removeTags(orthography.notes)) + '</div>';
+  const orthographyHTML = `<h3>Orthography</h3>
+  ${translations.length > 0 ? translationsHTML : ''}
+  ${orthographyNotesHTML}`;
   const grammarHTML = '<h3>Grammar</h3><p><strong>Notes:</strong></p><div>' + md(removeTags(grammar.notes)) + '</div>';
 
   detailsPanel.innerHTML = generalHTML + phonologyHTML + phonotacticsHTML + orthographyHTML + grammarHTML;
