@@ -56,7 +56,8 @@ export function hotKeyActions(event) {
       break;
     }
     case 'S': if (event.ctrlKey) {event.preventDefault(); hideAllModals(); openSettingsModal();} break;
-    case 'x': if (event.ctrlKey) {event.preventDefault(); clearSearchText();} break;
+    case 'Delete':
+    case 'Backspace': if (event.ctrlKey) {event.preventDefault(); clearSearchText();} break;
   }
 }
 

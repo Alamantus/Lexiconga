@@ -170,7 +170,7 @@ After making any changes, be sure to click "Save" or "Save & Close" to ensure th
 - **M:** Maximize/Minimize Full Screen textbox when typing in the boxes that have the Maximize button.
 - **S:** Open the Search panel.
 - **Shift + S:** Open the Settings window.
-- **X:** Clear the Search box.
+- **Backspace/Delete:** Clear the Search box.
 
 ## Accounts
 If you are using an account with Lexiconga, your experience should remain essentially the same, but you will see some additional options in the Settings menu and you might notice some slight changes in performance as it saves to and loads from the database. This saving/loading process prioritizes your local dictionary, so if you ever lose connection, it will keep retrying the upload until connection is re-established. It also attempts to sync every time you load Lexiconga, so please be aware of that if you refresh the page.
