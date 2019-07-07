@@ -76,16 +76,16 @@ export function renderDescription() {
 export function renderDetails() {
   const { partsOfSpeech, alphabeticalOrder } = window.currentDictionary;
   const { phonology, phonotactics, orthography, grammar } = window.currentDictionary.details;
-  const partsOfSpeechHTML = `<p><strong>Parts of Speech:</strong> ${partsOfSpeech.map(partOfSpeech => '<span class="tag">' + partOfSpeech + '</span>').join(' ')}</p>`;
-  const alphabeticalOrderHTML = `<p><strong>Alphabetical Order:</strong> ${
+  const partsOfSpeechHTML = `<p><strong>Parts of Speech</strong><br>${partsOfSpeech.map(partOfSpeech => '<span class="tag">' + partOfSpeech + '</span>').join(' ')}</div>`;
+  const alphabeticalOrderHTML = `<p><strong>Alphabetical Order</strong><br>${
     (alphabeticalOrder.length > 0 ? alphabeticalOrder : ['English Alphabet']).map(letter => `<span class="tag">${letter}</span>`).join(' ')
-    }</p>`;
+    }</div>`;
   const generalHTML = `<h3>General</h3>${partsOfSpeechHTML}${alphabeticalOrderHTML}`;
 
   const { consonants, vowels, blends } = phonology
-  const consonantHTML = `<p><strong>Consonants:</strong> ${consonants.map(letter => `<span class="tag">${letter}</span>`).join(' ')}</p>`;
-  const vowelHTML = `<p><strong>Vowels:</strong> ${vowels.map(letter => `<span class="tag">${letter}</span>`).join(' ')}</p>`;
-  const blendHTML = blends.length > 0 ? `<p><strong>Polyphthongs&nbsp;/&nbsp;Blends:</strong> ${blends.map(letter => `<span class="tag">${letter}</span>`).join(' ')}</p>` : '';
+  const consonantHTML = `<p><strong>Consonants</strong><br>${consonants.map(letter => `<span class="tag">${letter}</span>`).join(' ')}</p>`;
+  const vowelHTML = `<p><strong>Vowels</strong><br>${vowels.map(letter => `<span class="tag">${letter}</span>`).join(' ')}</p>`;
+  const blendHTML = blends.length > 0 ? `<p><strong>Polyphthongs&nbsp;/&nbsp;Blends</strong><br>${blends.map(letter => `<span class="tag">${letter}</span>`).join(' ')}</p>` : '';
   const phonologyHTML = `<h3>Phonology</h3>
   <div class="split two">
     <div>${consonantHTML}</div>
@@ -94,31 +94,35 @@ export function renderDetails() {
   ${blendHTML}`;
 
   const { onset, nucleus, coda } = phonotactics;
-  const onsetHTML = `<p><strong>Onset:</strong> ${onset.map(letter => `<span class="tag">${letter}</span>`).join(' ')}</p>`;
-  const nucleusHTML = `<p><strong>Nucleus:</strong> ${nucleus.map(letter => `<span class="tag">${letter}</span>`).join(' ')}</p>`;
-  const codaHTML = `<p><strong>Coda:</strong> ${coda.map(letter => `<span class="tag">${letter}</span>`).join(' ')}</p>`;
-  const phonotacticsNotesHTML = phonotactics.notes.trim().length > 0 ? '<p><strong>Notes:</strong></p><div>' + md(removeTags(phonotactics.notes)) + '</div>' : '';
-  const phonotacticsHTML = `<h3>Phonotactics</h3>
+  const onsetHTML = `<p><strong>Onset</strong><br>${onset.map(letter => `<span class="tag">${letter}</span>`).join(' ')}</p>`;
+  const nucleusHTML = `<p><strong>Nucleus</strong><br>${nucleus.map(letter => `<span class="tag">${letter}</span>`).join(' ')}</p>`;
+  const codaHTML = `<p><strong>Coda</strong><br>${coda.map(letter => `<span class="tag">${letter}</span>`).join(' ')}</p>`;
+  const phonotacticsNotesHTML = phonotactics.notes.trim().length > 0 ? '<p><strong>Notes</strong></p><div>' + md(removeTags(phonotactics.notes)) + '</div>' : '';
+  const phonotacticsHTML = onset.length + nucleus.length + coda.length + phonotacticsNotesHTML.length > 0
+    ? `<h3>Phonotactics</h3>
   <div class="split three">
-  <div>${onsetHTML}</div>
-  <div>${nucleusHTML}</div>
-  <div>${codaHTML}</div>
+    <div>${onsetHTML}</div>
+    <div>${nucleusHTML}</div>
+    <div>${codaHTML}</div>
   </div>
-  ${phonotacticsNotesHTML}`;
+  ${phonotacticsNotesHTML}`
+    : '';
 
   const { translations } = orthography;
-  const translationsHTML = `<p><strong>Translations</strong></p><div>${translations.map(translation => {
+  const translationsHTML = `<p><strong>Translations</strong><br>${translations.map(translation => {
     translation = translation.split('=').map(value => value.trim());
     if (translation.length > 1 && translation[0] !== '' && translation[1] !== '') {
       return `<span><span class="tag">${translation[0]}</span><span class="tag">${translation[1]}</span></span>`;
     }
     return false;
-  }).filter(html => html !== false).join(' ')}</div>`;
-  const orthographyNotesHTML = '<p><strong>Notes</strong></p><div>' + md(removeTags(orthography.notes)) + '</div>';
-  const orthographyHTML = `<h3>Orthography</h3>
+  }).filter(html => html !== false).join(' ')}</p>`;
+  const orthographyNotesHTML = orthography.notes.trim().length > 0 ? '<p><strong>Notes</strong><br>' + md(removeTags(orthography.notes)) + '</div>' : '';
+  const orthographyHTML = translations.length > 0 && orthographyNotesHTML.length > 0
+    ? `<h3>Orthography</h3>
   ${translations.length > 0 ? translationsHTML : ''}
-  ${orthographyNotesHTML}`;
-  const grammarHTML = '<h3>Grammar</h3><p><strong>Notes:</strong></p><div>' + md(removeTags(grammar.notes)) + '</div>';
+  ${orthographyNotesHTML}`
+    : '';
+  const grammarHTML = '<h3>Grammar</h3><div>' + md(removeTags(grammar.notes)) + '</div>';
 
   detailsPanel.innerHTML = generalHTML + phonologyHTML + phonotacticsHTML + orthographyHTML + grammarHTML;
 }
