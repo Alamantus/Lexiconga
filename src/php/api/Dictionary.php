@@ -217,7 +217,7 @@ VALUES ($new_id, ?, ?, ?, ?, ?)";
             if ($homonymn < 1) {
               $homonymn = 1;
             }
-            $homonymn_sub_html = $homonymn > 0 ? '<sub>' . $homonymn . '</sub>' : '';
+            $homonymn_sub_html = count($reference_ids) > 1 && $homonymn - 1 >= 0 ? '<sub>' . $homonymn . '</sub>' : '';
             $site_root = substr($_SERVER['REQUEST_URI'], 0, strpos($_SERVER['REQUEST_URI'], $dictionary_id));
             $markdown_link = '<span class="word-reference"><a href="' . $site_root . $dictionary_id . '/' . $target_id .'" target="_blank" title="Link to Reference">'
               . '<span class="orthographic-translation">' . $this->translateOrthography($word_to_find, $dictionary_id) . '</span>' . $homonymn_sub_html

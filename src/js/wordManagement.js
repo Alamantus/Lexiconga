@@ -90,7 +90,7 @@ export function parseReferences(detailsMarkdown) {
         if (homonymn < 1 && homonymnIndexes.length > 0) {
           homonymn = 1;
         }
-        const homonymnSubHTML = homonymn > 0 ? '<sub>' + homonymn.toString() + '</sub>' : '';
+        const homonymnSubHTML = homonymnIndexes.length > 1 && homonymn - 1 >= 0 ? '<sub>' + homonymn.toString() + '</sub>' : '';
         const wordMarkdownLink = `<span class="word-reference">[<span class="orthographic-translation">${translateOrthography(wordToFind)}</span>${homonymnSubHTML}](#${existingWordId})</span>`;
         detailsMarkdown = detailsMarkdown.replace(new RegExp(reference, 'g'), wordMarkdownLink);
       }
