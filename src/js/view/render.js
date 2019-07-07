@@ -23,13 +23,7 @@ export function renderTheme() {
 
 export function renderDictionaryDetails() {
   renderName();
-
-  const tabs = document.querySelectorAll('#detailsSection nav li');
-  const shownTab = Array.from(tabs).find(tab => tab.classList.contains('active'));
-  if (shownTab) {
-    const tabName = shownTab.innerText.toLowerCase();
-    showSection(tabName);
-  }
+  showSection('description');
 }
 
 export function renderName() {
@@ -48,17 +42,17 @@ export function renderDescription() {
 
 export function renderDetails() {
   const { partsOfSpeech, alphabeticalOrder } = window.currentDictionary;
-  const { phonology, orthography, grammar } = window.currentDictionary.details;
-  const partsOfSpeechHTML = `<p><strong>Parts of Speech:</strong> ${partsOfSpeech.map(partOfSpeech => '<span class="tag">' + partOfSpeech + '</span>').join(' ')}</p>`;
-  const alphabeticalOrderHTML = `<p><strong>Alphabetical Order:</strong> ${
+  const { phonology, phonotactics, orthography, grammar } = window.currentDictionary.details;
+  const partsOfSpeechHTML = `<p><strong>Parts of Speech:</strong></p><div>${partsOfSpeech.map(partOfSpeech => '<span class="tag">' + partOfSpeech + '</span>').join(' ')}</div>`;
+  const alphabeticalOrderHTML = `<p><strong>Alphabetical Order:</strong></p><div>${
     (alphabeticalOrder.length > 0 ? alphabeticalOrder : ['English Alphabet']).map(letter => `<span class="tag">${letter}</span>`).join(' ')
-    }</p>`;
+    }</div>`;
   const generalHTML = `<h3>General</h3>${partsOfSpeechHTML}${alphabeticalOrderHTML}`;
 
-  const { consonants, vowels, blends, phonotactics } = phonology
-  const consonantHTML = `<p><strong>Consonants:</strong> ${consonants.map(letter => `<span class="tag">${letter}</span>`).join(' ')}</p>`;
-  const vowelHTML = `<p><strong>Vowels:</strong> ${vowels.map(letter => `<span class="tag">${letter}</span>`).join(' ')}</p>`;
-  const blendHTML = blends.length > 0 ? `<p><strong>Polyphthongs&nbsp;/&nbsp;Blends:</strong> ${blends.map(letter => `<span class="tag">${letter}</span>`).join(' ')}</p>` : '';
+  const { consonants, vowels, blends } = phonology
+  const consonantHTML = `<p><strong>Consonants:</strong></p><div>${consonants.map(letter => `<span class="tag">${letter}</span>`).join(' ')}</div>`;
+  const vowelHTML = `<p><strong>Vowels:</strong></p><div>${vowels.map(letter => `<span class="tag">${letter}</span>`).join(' ')}</div>`;
+  const blendHTML = blends.length > 0 ? `<p><strong>Polyphthongs&nbsp;/&nbsp;Blends:</strong></p><div>${blends.map(letter => `<span class="tag">${letter}</span>`).join(' ')}</p>` : '';
   const phonologyHTML = `<h3>Phonology</h3>
   <div class="split two">
     <div>${consonantHTML}</div>
@@ -66,21 +60,32 @@ export function renderDetails() {
   </div>
   ${blendHTML}`;
 
-  const { onset, nucleus, coda, exceptions } = phonotactics;
-  const onsetHTML = `<p><strong>Onset:</strong> ${onset.map(letter => `<span class="tag">${letter}</span>`).join(' ')}</p>`;
-  const nucleusHTML = `<p><strong>Nucleus:</strong> ${nucleus.map(letter => `<span class="tag">${letter}</span>`).join(' ')}</p>`;
-  const codaHTML = `<p><strong>Coda:</strong> ${coda.map(letter => `<span class="tag">${letter}</span>`).join(' ')}</p>`;
-  const exceptionsHTML = exceptions.trim().length > 0 ? '<p><strong>Exceptions:</strong></p><div>' + md(removeTags(exceptions)) + '</div>' : '';
+  const { onset, nucleus, coda } = phonotactics;
+  const onsetHTML = `<p><strong>Onset:</strong></p><div>${onset.map(letter => `<span class="tag">${letter}</span>`).join(' ')}</div>`;
+  const nucleusHTML = `<p><strong>Nucleus:</strong></p><div>${nucleus.map(letter => `<span class="tag">${letter}</span>`).join(' ')}</div>`;
+  const codaHTML = `<p><strong>Coda:</strong></p><div>${coda.map(letter => `<span class="tag">${letter}</span>`).join(' ')}</div>`;
+  const phonotacticsNotesHTML = phonotactics.notes.trim().length > 0 ? '<p><strong>Notes:</strong></p><div>' + md(removeTags(phonotactics.notes)) + '</div>' : '';
   const phonotacticsHTML = `<h3>Phonotactics</h3>
   <div class="split three">
   <div>${onsetHTML}</div>
   <div>${nucleusHTML}</div>
   <div>${codaHTML}</div>
   </div>
-  ${exceptionsHTML}`;
+  ${phonotacticsNotesHTML}`;
 
-  const orthographyHTML = '<h3>Orthography</h3><p><strong>Notes:</strong></p><div>' + md(removeTags(orthography.notes)) + '</div>';
-  const grammarHTML = '<h3>Grammar</h3><p><strong>Notes:</strong></p><div>' + md(removeTags(grammar.notes)) + '</div>';
+  const { translations } = orthography;
+  const translationsHTML = `<p><strong>Translations</strong></p><div>${translations.map(translation => {
+    translation = translation.split('=').map(value => value.trim());
+    if (translation.length > 1 && translation[0] !== '' && translation[1] !== '') {
+      return `<span><span class="tag">${translation[0]}</span><span class="tag orthographic-translation">${translation[1]}</span></span>`;
+    }
+    return false;
+  }).filter(html => html !== false).join(' ')}</div>`;
+  const orthographyNotesHTML = '<p><strong>Notes</strong></p><div>' + md(removeTags(orthography.notes)) + '</div>';
+  const orthographyHTML = `<h3>Orthography</h3>
+  ${translations.length > 0 ? translationsHTML : ''}
+  ${orthographyNotesHTML}`;
+  const grammarHTML = '<h3>Grammar</h3><div>' + md(removeTags(grammar.notes)) + '</div>';
 
   detailsPanel.innerHTML = generalHTML + phonologyHTML + phonotacticsHTML + orthographyHTML + grammarHTML;
 }
