@@ -1,4 +1,4 @@
-import { renderDescription, renderDetails, renderStats } from './render';
+import { renderDescription, renderDetails, renderStats } from './render/details';
 
 export function showSection(sectionName) {
   switch (sectionName) {

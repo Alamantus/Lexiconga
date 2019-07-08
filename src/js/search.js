@@ -1,6 +1,6 @@
 import { cloneObject, getIndicesOf } from "../helpers";
 import removeDiacritics from "./StackOverflow/removeDiacritics";
-import { renderWords } from "./render";
+import { renderWords } from "./render/words";
 
 export function showSearchModal() {
   document.getElementById('searchModal').style.display = 'block';

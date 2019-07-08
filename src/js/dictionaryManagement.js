@@ -1,5 +1,6 @@
 import papa from 'papaparse';
-import { renderDictionaryDetails, renderPartsOfSpeech, renderAll, renderTheme } from "./render";
+import { renderDictionaryDetails, renderPartsOfSpeech } from "./render/details";
+import { renderAll, renderTheme } from "./render";
 import { removeTags, cloneObject, getTimestampInSeconds, download, slugify } from "../helpers";
 import { LOCAL_STORAGE_KEY, DEFAULT_DICTIONARY } from "../constants";
 import { addMessage, getNextId, hasToken } from "./utilities";

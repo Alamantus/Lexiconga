@@ -1,5 +1,6 @@
 import {showSection, hideDetailsPanel} from './displayToggles';
-import { renderWords, renderEditForm, renderMaximizedTextbox, renderInfoModal, renderIPATable, renderIPAHelp } from './render';
+import { renderWords, renderEditForm } from './render/words';
+import { renderMaximizedTextbox, renderInfoModal, renderIPATable, renderIPAHelp } from './render/modals';
 import { confirmEditWord, cancelEditWord, confirmDeleteWord, submitWordForm } from './wordManagement';
 import { openEditModal, saveEditModal, saveAndCloseEditModal, exportDictionary, exportWords, importDictionary, importWords, confirmDeleteDictionary } from './dictionaryManagement';
 import { goToNextPage, goToPreviousPage, goToPage } from './pagination';

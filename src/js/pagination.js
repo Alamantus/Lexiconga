@@ -1,5 +1,5 @@
 import { DEFAULT_PAGE_SIZE } from '../constants';
-import { renderWords } from "./render";
+import { renderWords } from "./render/words";
 
 export function getPaginationData(words) {
   const numWords = words.length;

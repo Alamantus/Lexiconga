@@ -1,7 +1,7 @@
 import { SETTINGS_KEY, DEFAULT_SETTINGS } from "../constants";
 import { cloneObject, removeTags } from "../helpers";
 import { usePhondueDigraphs } from "./KeyboardFire/phondue/ipaField";
-import { renderWords } from "./render";
+import { renderWords } from "./render/words";
 import { addMessage, hasToken } from "./utilities";
 import { enableHotKeys, disableHotKeys } from "./hotkeys";
 

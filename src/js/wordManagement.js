@@ -1,4 +1,4 @@
-import { renderWords } from "./render";
+import { renderWords } from "./render/words";
 import { wordExists, addMessage, getNextId, hasToken, getHomonymnIndexes } from "./utilities";
 import removeDiacritics from "./StackOverflow/removeDiacritics";
 import { removeTags, getTimestampInSeconds } from "../helpers";

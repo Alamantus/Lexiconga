@@ -1,6 +1,6 @@
 import { confirmEditWord, submitWordForm } from "./wordManagement";
 import { showSection, hideDetailsPanel } from "./displayToggles";
-import { renderInfoModal, renderMaximizedTextbox } from "./render";
+import { renderInfoModal, renderMaximizedTextbox } from "./render/modals";
 import { showSearchModal, clearSearchText } from "./search";
 import { saveAndCloseSettingsModal, openSettingsModal, saveSettings } from "./settings";
 import { saveAndCloseEditModal, openEditModal } from "./dictionaryManagement";
