@@ -93,7 +93,7 @@ export function renderDetails() {
     return false;
   }).filter(html => html !== false).join(' ')}</p>`;
   const orthographyNotesHTML = orthography.notes.trim().length > 0 ? '<p><strong>Notes</strong><br>' + md(removeTags(orthography.notes)) + '</div>' : '';
-  const orthographyHTML = translations.length > 0 && orthographyNotesHTML.length > 0
+  const orthographyHTML = translations.length > 0 || orthographyNotesHTML.length > 0
     ? `<h3>Orthography</h3>
   ${translations.length > 0 ? translationsHTML : ''}
   ${orthographyNotesHTML}`
