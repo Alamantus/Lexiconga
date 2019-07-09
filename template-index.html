@@ -255,8 +255,12 @@
         <label>Parts of Speech <small>(Comma Separated List)</small><br>
           <input id="editPartsOfSpeech" maxlength="2500" placeholder="Noun,Adjective,Verb">
         </label>
-        <label>Alphabetical Order <small>(Comma Separated List. Include every letter!)</small><br>
-          <input id="editAlphabeticalOrder" disabled value="English Alphabet">
+        <label>Alphabetical Order <small>(Space Separated List)</small><br>
+          <input id="editAlphabeticalOrder" placeholder="a A b B c C d D ...">
+          <a class="label-help-button" onclick="alert('Include every letter and case! Any letters used in your words that are not specified will be sorted in the default order below your alphabetically custom-sorted words.\n\nLexiconga can only sort by single characters and will sort by the words AS ENTERED, not using orthographic translation.')">
+            Field Info
+          </a>&nbsp;
+          <small>Leave blank for default (case-insensitive ASCII/Unicode sorting)</small>
         </label>
         <h3>Phonology</h3>
         <div class="split three">

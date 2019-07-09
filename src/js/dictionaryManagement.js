@@ -13,7 +13,7 @@ export function updateDictionary () {
 }
 
 export function openEditModal() {
-  const { name, specification, description, partsOfSpeech } = window.currentDictionary;
+  const { name, specification, description, partsOfSpeech, alphabeticalOrder } = window.currentDictionary;
   const { consonants, vowels, blends } = window.currentDictionary.details.phonology;
   const { phonotactics, orthography, grammar } = window.currentDictionary.details;
   const { allowDuplicates, caseSensitive, sortByDefinition, theme, isPublic } = window.currentDictionary.settings;
@@ -22,6 +22,7 @@ export function openEditModal() {
   document.getElementById('editSpecification').value = specification;
   document.getElementById('editDescription').value = description;
   document.getElementById('editPartsOfSpeech').value = partsOfSpeech.join(',');
+  document.getElementById('editAlphabeticalOrder').value = alphabeticalOrder.join(' ');
 
   document.getElementById('editConsonants').value = consonants.join(' ');
   document.getElementById('editVowels').value = vowels.join(' ');
@@ -52,6 +53,7 @@ export function saveEditModal() {
   window.currentDictionary.specification = removeTags(document.getElementById('editSpecification').value.trim());
   window.currentDictionary.description = removeTags(document.getElementById('editDescription').value.trim());
   window.currentDictionary.partsOfSpeech = document.getElementById('editPartsOfSpeech').value.split(',').map(val => val.trim()).filter(val => val !== '');
+  window.currentDictionary.alphabeticalOrder = document.getElementById('editAlphabeticalOrder').value.split(' ').map(val => val.trim()).filter(val => val !== '');
 
   window.currentDictionary.details.phonology.consonants = document.getElementById('editConsonants').value.split(' ').map(val => val.trim()).filter(val => val !== '');
   window.currentDictionary.details.phonology.vowels = document.getElementById('editVowels').value.split(' ').map(val => val.trim()).filter(val => val !== '');
@@ -75,13 +77,14 @@ export function saveEditModal() {
   } else {
     window.currentDictionary.settings.isPublic = false;
   }
-
-  addMessage('Saved ' + window.currentDictionary.specification + ' Successfully');
-  saveDictionary();
+  
   renderTheme();
   renderDictionaryDetails();
   renderPartsOfSpeech();
   sortWords(true);
+
+  addMessage('Saved ' + window.currentDictionary.specification + ' Successfully');
+  saveDictionary();
 
   if (hasToken()) {
     import('./account/index.js').then(account => {
