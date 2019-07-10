@@ -52,12 +52,14 @@ export function renderDetails() {
   const consonantHTML = `<p><strong>Consonants</strong><br>${consonants.map(letter => `<span class="tag">${letter}</span>`).join(' ')}</p>`;
   const vowelHTML = `<p><strong>Vowels</strong><br>${vowels.map(letter => `<span class="tag">${letter}</span>`).join(' ')}</p>`;
   const blendHTML = blends.length > 0 ? `<p><strong>Polyphthongs&nbsp;/&nbsp;Blends</strong><br>${blends.map(letter => `<span class="tag">${letter}</span>`).join(' ')}</p>` : '';
+  const phonologyNotesHTML = phonology.notes.trim().length > 0 ? '<p><strong>Notes</strong></p><div>' + md(removeTags(phonology.notes)) + '</div>' : '';
   const phonologyHTML = `<h3>Phonology</h3>
   <div class="split two">
     <div>${consonantHTML}</div>
     <div>${vowelHTML}</div>
   </div>
-  ${blendHTML}`;
+  ${blendHTML}
+  ${phonologyNotesHTML}`;
 
   const { onset, nucleus, coda } = phonotactics;
   const onsetHTML = `<p><strong>Onset</strong><br>${onset.map(letter => `<span class="tag">${letter}</span>`).join(' ')}</p>`;
@@ -66,29 +68,32 @@ export function renderDetails() {
   const phonotacticsNotesHTML = phonotactics.notes.trim().length > 0 ? '<p><strong>Notes</strong></p><div>' + md(removeTags(phonotactics.notes)) + '</div>' : '';
   const phonotacticsHTML = onset.length + nucleus.length + coda.length + phonotacticsNotesHTML.length > 0
     ? `<h3>Phonotactics</h3>
-  <div class="split three">
+  ${onset.length > 0 || nucleus.length > 0 || coda.length > 0
+    ? `<div class="split three">
     <div>${onsetHTML}</div>
     <div>${nucleusHTML}</div>
     <div>${codaHTML}</div>
-  </div>
+  </div>` : ''}
   ${phonotacticsNotesHTML}`
     : '';
 
   const { translations } = orthography;
-  const translationsHTML = `<p><strong>Translations</strong><br>${translations.map(translation => {
+  const translationsHTML = translations.length > 0 ? `<p><strong>Translations</strong><br>${translations.map(translation => {
     translation = translation.split('=').map(value => value.trim());
     if (translation.length > 1 && translation[0] !== '' && translation[1] !== '') {
       return `<span><span class="tag">${translation[0]}</span><span class="tag orthographic-translation">${translation[1]}</span></span>`;
     }
     return false;
-  }).filter(html => html !== false).join(' ')}</p>`;
+  }).filter(html => html !== false).join(' ')}</p>` : '';
   const orthographyNotesHTML = orthography.notes.trim().length > 0 ? '<p><strong>Notes</strong><br>' + md(removeTags(orthography.notes)) + '</div>' : '';
-  const orthographyHTML = translations.length > 0 && orthographyNotesHTML.length > 0
+  const orthographyHTML = translations.length + orthographyNotesHTML.length > 0
     ? `<h3>Orthography</h3>
-  ${translations.length > 0 ? translationsHTML : ''}
+  ${translationsHTML}
   ${orthographyNotesHTML}`
     : '';
-  const grammarHTML = '<h3>Grammar</h3><div>' + md(removeTags(grammar.notes)) + '</div>';
+  const grammarHTML = grammar.notes.trim().length > 0 ? '<h3>Grammar</h3><div>'
+    + (grammar.notes.trim().length > 0 ? md(removeTags(grammar.notes)) : '')
+  + '</div>' : '';
 
   detailsPanel.innerHTML = generalHTML + phonologyHTML + phonotacticsHTML + orthographyHTML + grammarHTML;
 }
