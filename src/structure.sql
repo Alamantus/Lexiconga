@@ -37,6 +37,7 @@ CREATE TABLE IF NOT EXISTS `dictionary_linguistics` (
   `consonants` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT 'Space-separated',
   `vowels` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT 'Space-separated',
   `blends` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT 'Space-separated',
+  `phonology_notes` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT 'Markdown',
   `onset` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT 'Comma-separated',
   `nucleus` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT 'Comma-separated',
   `coda` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT 'Comma-separated',

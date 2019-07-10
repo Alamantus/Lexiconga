@@ -14,8 +14,8 @@ export function updateDictionary () {
 
 export function openEditModal() {
   const { name, specification, description, partsOfSpeech, alphabeticalOrder } = window.currentDictionary;
-  const { consonants, vowels, blends } = window.currentDictionary.details.phonology;
-  const { phonotactics, orthography, grammar } = window.currentDictionary.details;
+  const { phonology, phonotactics, orthography, grammar } = window.currentDictionary.details;
+  const { consonants, vowels, blends } = phonology;
   const { allowDuplicates, caseSensitive, sortByDefinition, theme, isPublic } = window.currentDictionary.settings;
   
   document.getElementById('editName').value = name;
@@ -27,6 +27,8 @@ export function openEditModal() {
   document.getElementById('editConsonants').value = consonants.join(' ');
   document.getElementById('editVowels').value = vowels.join(' ');
   document.getElementById('editBlends').value = blends.join(' ');
+  document.getElementById('editPhonologyNotes').value = phonology.notes;
+
   document.getElementById('editOnset').value = phonotactics.onset.join(',');
   document.getElementById('editNucleus').value = phonotactics.nucleus.join(',');
   document.getElementById('editCoda').value = phonotactics.coda.join(',');
@@ -60,6 +62,8 @@ export function saveEditModal() {
   updatedDictionary.details.phonology.consonants = document.getElementById('editConsonants').value.split(' ').map(val => val.trim()).filter(val => val !== '');
   updatedDictionary.details.phonology.vowels = document.getElementById('editVowels').value.split(' ').map(val => val.trim()).filter(val => val !== '');
   updatedDictionary.details.phonology.blends = document.getElementById('editBlends').value.split(' ').map(val => val.trim()).filter(val => val !== '');
+  updatedDictionary.details.phonology.notes = removeTags(document.getElementById('editPhonologyNotes').value.trim());
+
   updatedDictionary.details.phonotactics.onset = document.getElementById('editOnset').value.split(',').map(val => val.trim()).filter(val => val !== '');
   updatedDictionary.details.phonotactics.nucleus = document.getElementById('editNucleus').value.split(',').map(val => val.trim()).filter(val => val !== '');
   updatedDictionary.details.phonotactics.coda = document.getElementById('editCoda').value.split(',').map(val => val.trim()).filter(val => val !== '');

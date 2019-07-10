@@ -1,6 +1,6 @@
 import { getTimestampInSeconds } from "./helpers";
 
-export const MIGRATE_VERSION = '2.0.1';
+export const MIGRATE_VERSION = '2.0.2';
 export const DEFAULT_DICTIONARY = {
   name: 'New',
   specification: 'Dictionary',
@@ -12,6 +12,7 @@ export const DEFAULT_DICTIONARY = {
       consonants: [],
       vowels: [],
       blends: [],
+      notes: '',
     },
     phonotactics: {
       onset: [],

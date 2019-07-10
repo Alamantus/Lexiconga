@@ -33,10 +33,11 @@ class Dictionary {
     $insert_dictionary = $this->db->execute($insert_dictionary_query, array($new_id, $user, 'A new dictionary.', time()));
 
     if ($insert_dictionary === true) {
-      $insert_linguistics_query = "INSERT INTO dictionary_linguistics (dictionary, parts_of_speech, phonotactics_notes, translations, orthography_notes, grammar_notes)
-VALUES ($new_id, ?, ?, ?, ?, ?)";
+      $insert_linguistics_query = "INSERT INTO dictionary_linguistics (dictionary, parts_of_speech, phonology_notes, phonotactics_notes, translations, orthography_notes, grammar_notes)
+VALUES ($new_id, ?, ?, ?, ?, ?, ?)";
       $insert_linguistics = $this->db->execute($insert_linguistics_query, array(
         $this->defaults['partsOfSpeech'],
+        '',
         '',
         '',
         '',
@@ -110,6 +111,7 @@ VALUES ($new_id, ?, ?, ?, ?, ?)";
               'consonants' => $result['consonants'] !== '' ? explode(' ', $result['consonants']) : array(),
               'vowels' => $result['vowels'] !== '' ? explode(' ', $result['vowels']) : array(),
               'blends' => $result['blends'] !== '' ? explode(' ', $result['blends']) : array(),
+              'notes' => $result['phonology_notes'],
             ),
             'phonotactics' => array(
               'onset' => $result['onset'] !== '' ? explode(',', $result['onset']) : array(),
@@ -287,6 +289,7 @@ VALUES ($new_id, ?, ?, ?, ?, ?)";
             'consonants' => $result['consonants'] !== '' ? explode(' ', $result['consonants']) : array(),
             'vowels' => $result['vowels'] !== '' ? explode(' ', $result['vowels']) : array(),
             'blends' => $result['blends'] !== '' ? explode(' ', $result['blends']) : array(),
+            'notes' => $result['phonology_notes'],
           ),
           'phonotactics' => array(
             'onset' => $result['onset'] !== '' ? explode(',', $result['onset']) : array(),
@@ -351,6 +354,7 @@ SET parts_of_speech=:parts_of_speech,
   consonants=:consonants,
   vowels=:vowels,
   blends=:blends,
+  phonology_notes=:phonology_notes,
   onset=:onset,
   nucleus=:nucleus,
   coda=:coda,
@@ -366,6 +370,7 @@ WHERE dictionary=$dictionary";
         ':consonants' => implode(' ', $linguistics['phonology']['consonants']),
         ':vowels' => implode(' ', $linguistics['phonology']['vowels']),
         ':blends' => implode(' ', $linguistics['phonology']['blends']),
+        ':phonology_notes' => $linguistics['phonology']['notes'],
         ':onset' => implode(',', $linguistics['phonotactics']['onset']),
         ':nucleus' => implode(',', $linguistics['phonotactics']['nucleus']),
         ':coda' => implode(',', $linguistics['phonotactics']['coda']),

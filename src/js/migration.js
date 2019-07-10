@@ -106,6 +106,7 @@ export function migrateDictionary() {
     switch (window.currentDictionary.version) {
       default: console.error('Unknown version'); break;
       case '2.0.0': {
+        window.currentDictionary.details.phonology.notes = '';
         window.currentDictionary.details.phonotactics = Object.assign({}, window.currentDictionary.details.phonology.phonotactics);
         delete window.currentDictionary.details.phonology.phonotactics;
         window.currentDictionary.details.phonotactics.notes = window.currentDictionary.details.phonotactics.exceptions;
