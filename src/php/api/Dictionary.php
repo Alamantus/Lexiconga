@@ -105,7 +105,7 @@ VALUES ($new_id, ?, ?, ?, ?, ?, ?)";
           'description' => $this->parseReferences(strip_tags($result['description']), $result['id']),
           'createdBy' => $result['public_name'],
           'partsOfSpeech' => explode(',', $partsOfSpeech),
-          'alphabeticalOrder' => array(),
+          'alphabeticalOrder' => $result['alphabetical_order'] !== '' ? explode(' ', $result['alphabetical_order']) : array(),
           'details' => array(
             'phonology' => array(
               'consonants' => $result['consonants'] !== '' ? explode(' ', $result['consonants']) : array(),
@@ -284,7 +284,7 @@ VALUES ($new_id, ?, ?, ?, ?, ?, ?)";
         'specification' => $result['specification'],
         'description' => $result['description'],
         'partsOfSpeech' => explode(',', $partsOfSpeech),
-        'alphabeticalOrder' => array(),
+        'alphabeticalOrder' => $result['alphabetical_order'] !== '' ? explode(' ', $result['alphabetical_order']) : array(),
         'details' => array(
           'phonology' => array(
             'consonants' => $result['consonants'] !== '' ? explode(' ', $result['consonants']) : array(),
@@ -355,6 +355,7 @@ WHERE user=$user AND id=$dictionary";
       $linguistics = $dictionary_object['details'];
       $query2 = "UPDATE dictionary_linguistics
 SET parts_of_speech=:parts_of_speech,
+  alphabetical_order=:alphabetical_order,
   consonants=:consonants,
   vowels=:vowels,
   blends=:blends,
@@ -371,6 +372,7 @@ WHERE dictionary=$dictionary";
       // $result2 = $this->db->query($query2, array(
       $result2 = $this->db->execute($query2, array(
         ':parts_of_speech' => implode(',', $dictionary_object['partsOfSpeech']),
+        ':alphabetical_order' => implode(' ', $dictionary_object['alphabeticalOrder']),
         ':consonants' => implode(' ', $linguistics['phonology']['consonants']),
         ':vowels' => implode(' ', $linguistics['phonology']['vowels']),
         ':blends' => implode(' ', $linguistics['phonology']['blends']),

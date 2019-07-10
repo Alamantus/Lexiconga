@@ -35,6 +35,7 @@ DELIMITER ;
 CREATE TABLE IF NOT EXISTS `dictionary_linguistics` (
   `dictionary` int(11) NOT NULL,
   `parts_of_speech` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT 'Comma-separated',
+  `alphabetical_order` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT 'Space-separated',
   `consonants` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT 'Space-separated',
   `vowels` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT 'Space-separated',
   `blends` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT 'Space-separated',
