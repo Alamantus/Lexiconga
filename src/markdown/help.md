@@ -89,6 +89,7 @@ You can refine your search by clicking the "Toggle Options" button and using the
   - **Case-Sensitive:** When checked, Lexiconga finds entries matching the letter case in the entered text. When unchecked, it will find any case as long as the letters match.
   - **Ignore Diacritics/Accents:** When checked, Lexiconga will ignore accented letters and diacritics and identify them as their equivalent unaccented letter and vice-versa, in case you want to find a word with a diacritic without entering the diacritic in the search box. When unchecked, it will only find diacritics and accented letters if they are specifically entered in the search box.
   - **Exact Words:** When checked, the search term will find entries with _exact matches_ in only the Word or Definition field. If Word or Definition has _any_ text aside from exactly what was entered in the search bar, it will not be displayed.
+  - **Translation:** When checked, Lexiconga will translate all words and references by any specified orthographic translations and compare your search term with that instead of the words as entered.
 - **Include in Search**
   - **Word**: When checked, Lexiconga searches your dictionary's "Word" entries for the entered text. When unchecked, it ignores it.
   - **Definition**: When checked, Lexiconga searches your dictionary's "Definition/Equivalent Word(s)" entries for the entered text. When unchecked, it ignores it.
@@ -124,17 +125,19 @@ Clicking the "Edit" button under your dictionary's name will display a window wi
 #### Details
 
   - **Parts of Speech:** The parts of speech available in the dropdown box on word forms. Separate each individual part of speech with a comma.
-  - **Alphabetical Order:** This feature has not been implemented yet.
+  - **Alphabetical Order:** The order that your words will be sorted by. Include every letter and different capitalization used in your dictionary to sort your words in whatever order you want—any letters in your words that are not sorted here are sorted by the default ASCII/Unicode order (i.e. English Alphabetical) _after_ any custom-sorted words. Lexiconga can only sort by single characters (rather than sets of characters) and will sort the words _as entered_, not using orthographic translations. Separate each character with a _space_.
   - **Phonology**
     - **Consonants:** The IPA characters representing the consonants present in your language. Uses the IPA Auto-Fill feature unless it is turned off. Separate each consonant with a _space_ so they will be displayed correctly under the Details section of your dictionary.
     - **Vowels:** The IPA characters representing the vowels present in your language. Uses the IPA Auto-Fill feature unless it is turned off. Separate each vowel with a _space_ so they will be displayed correctly under the Details section of your dictionary.
     - **Polyphthongs/Blends:** The IPA characters representing the polyphthongs or blends present in your language. Uses the IPA Auto-Fill feature unless it is turned off. Separate each one with a _space_ so they will be displayed correctly under the Details section of your dictionary.
+    - **Notes:** Any notes about your constructed language's phonology that you want to share. Uses Markdown.
   - **Phonotactics**
-    - **Onset:** What phonological characters can appear at the beginning of a syllable. Separate each with a comma.
-    - **Nucleus:** What phonological characters can appear in the middle of a syllable. Separate each with a comma.
-    - **Coda:** What phonological characters can appear at the end of a syllable. Separate each with a comma.
-    - **Exceptions:** Any exceptions to the phonotactical rules laid out above. This is a Markdown-enable text area that you can use however you'd like.
+    - **Onset:** What phonological characters can appear at the beginning of a syllable. Separate each with a _comma_.
+    - **Nucleus:** What phonological characters can appear in the middle of a syllable. Separate each with a _comma_.
+    - **Coda:** What phonological characters can appear at the end of a syllable. Separate each with a _comma_.
+    - **Notes:** Any notes about your phonotactical rules laid out above. Uses Markdown.
   - **Orthography**
+    - **Translations:** The specification for how Lexiconga should translate certain character sequences into other character sequences. Use the format "original=new" where "original" is the old letter or sequence of letters and "new" is what you want those letters to change into separated by an equal sign. Put each translation on a _separate line_.
     - **Notes:** Any notes about your constructed language's writing system that you want to share. Uses Markdown.
   - **Grammar**
     - **Notes:** Any notes about your constructed language's grammar that you want to share. Uses Markdown.
@@ -144,6 +147,7 @@ Clicking the "Edit" button under your dictionary's name will display a window wi
   - **Words are Case-Sensitive:** Only available when "Prevent Duplicate Words" is checked. Checking this box will allow the creation of words with the exact same spelling if their capitalization is different.
   - **Sort by Definition:** Checking this box will sort the words in alphabetical order based on the Definition instead of the Word.
   - **Theme:** Set the color theme for the current dictionary.
+  - **Custom Styling:** Specify custom CSS to change the styling of your dictionary. You can use custom fonts by specifying them here and setting the `font-family` style of the `.orthographic-translation` class!
   - **Make Public:** Only visible if logged in with a Lexiconga account. Checking this box will make your dictionary public via a link you can share with others. The link will appear below this checkbox after it is checked.
 
 #### Actions
