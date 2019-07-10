@@ -2,9 +2,7 @@ import md from 'marked';
 import { removeTags, slugify } from '../../helpers';
 import { getWordsStats, hasToken } from '../utilities';
 import { showSection } from '../displayToggles';
-import {
-  setupSearchFilters,
-} from '../setupListeners';
+import { setupSearchFilters } from '../setupListeners/search';
 import { parseReferences } from '../wordManagement';
 import { getPublicLink } from '../account/utilities';
 

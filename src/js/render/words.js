@@ -7,7 +7,7 @@ import {
   setupPagination,
   setupWordOptionSelections,
   setupWordEditFormButtons,
-} from '../setupListeners';
+} from '../setupListeners/words';
 import { getPaginationData } from '../pagination';
 import { getOpenEditForms, translateOrthography, parseReferences } from '../wordManagement';
 import { renderAd } from '../ads';

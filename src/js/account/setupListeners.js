@@ -3,7 +3,7 @@ import { setCookie } from "../StackOverflow/cookie";
 import { changeDictionary, createNewDictionary } from "./dictionaryManagement";
 import { addMessage } from "../utilities";
 import { renderForgotPasswordForm } from "./passwordReset";
-import { setupMaximizeButtons } from "../setupListeners";
+import { setupMaximizeButtons } from "../setupListeners/buttons";
 
 export function setupLoginModal(modal) {
   const closeElements = modal.querySelectorAll('.modal-background, .close-button');

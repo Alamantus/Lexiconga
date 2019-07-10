@@ -3,9 +3,10 @@ import { removeTags, slugify } from '../../helpers';
 import { getWordsStats, getHomonymnNumber } from './utilities';
 import { getMatchingSearchWords, highlightSearchTerm, getSearchFilters, getSearchTerm } from './search';
 import { showSection } from './displayToggles';
-import { setupSearchFilters, setupInfoModal } from './setupListeners';
 import { renderAd } from '../ads';
 import { sortWords } from './wordManagement';
+import { setupInfoModal } from '../setupListeners/modals';
+import { setupSearchFilters } from '../setupListeners/search';
 
 export function renderAll() {
   renderTheme();

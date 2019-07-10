@@ -1,9 +1,9 @@
+import { setupIPAFields } from '../setupListeners';
 import {
   setupMaximizeModal,
   setupInfoModal,
   setupIPATable,
-  setupIPAFields
-} from '../setupListeners';
+} from '../setupListeners/modals';
 import ipaTableFile from '../KeyboardFire/phondue/ipa-table.html';
 
 export function renderIPAHelp() {
