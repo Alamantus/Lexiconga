@@ -1,6 +1,6 @@
 import { getTimestampInSeconds } from "./helpers";
 
-export const MIGRATE_VERSION = '2.0.2';
+export const MIGRATE_VERSION = '2.1.0';
 export const DEFAULT_DICTIONARY = {
   name: 'New',
   specification: 'Dictionary',
@@ -27,15 +27,6 @@ export const DEFAULT_DICTIONARY = {
     grammar: {
       notes: '',
     },
-    custom: {
-      css: '',
-      // tabs: [
-        // {
-        //   name: 'Example Tab',
-        //   content: `This is an _example_ tab to show how **tabs** work with [Markdown](${ MARKDOWN_LINK })!`,
-        // }
-      // ],
-    },
   },
   words: [
     /* {
@@ -52,6 +43,7 @@ export const DEFAULT_DICTIONARY = {
     caseSensitive: false,
     sortByDefinition: false,
     theme: 'default',
+    customCSS: '',
     isPublic: false,
   },
   lastUpdated: getTimestampInSeconds(),

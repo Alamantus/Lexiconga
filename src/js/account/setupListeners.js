@@ -3,6 +3,7 @@ import { setCookie } from "../StackOverflow/cookie";
 import { changeDictionary, createNewDictionary } from "./dictionaryManagement";
 import { addMessage } from "../utilities";
 import { renderForgotPasswordForm } from "./passwordReset";
+import { setupMaximizeButtons } from "../setupListeners";
 
 export function setupLoginModal(modal) {
   const closeElements = modal.querySelectorAll('.modal-background, .close-button');
@@ -73,4 +74,5 @@ export function setupMakePublic() {
     document.execCommand('copy');
     addMessage('Copied public link to clipboard', 3000);
   });
+  setupMaximizeButtons();
 }

@@ -112,7 +112,7 @@ export function migrateDictionary() {
         window.currentDictionary.details.phonotactics.notes = window.currentDictionary.details.phonotactics.exceptions;
         delete window.currentDictionary.details.phonotactics.exceptions;
         window.currentDictionary.details.orthography.translations = [];
-        // Add window.currentDictionary.custom.css = '';
+        window.currentDictionary.settings.customCSS = '';
         window.currentDictionary = Object.assign({}, DEFAULT_DICTIONARY, window.currentDictionary);
         window.currentDictionary.version = MIGRATE_VERSION;
         migrated = true;

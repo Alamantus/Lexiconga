@@ -1,6 +1,6 @@
 import papa from 'papaparse';
 import { renderDictionaryDetails, renderPartsOfSpeech } from "./render/details";
-import { renderAll, renderTheme } from "./render";
+import { renderAll, renderTheme, renderCustomCSS } from "./render";
 import { removeTags, cloneObject, getTimestampInSeconds, download, slugify } from "../helpers";
 import { LOCAL_STORAGE_KEY, DEFAULT_DICTIONARY } from "../constants";
 import { addMessage, getNextId, hasToken, objectValuesAreDifferent } from "./utilities";
@@ -16,7 +16,7 @@ export function openEditModal() {
   const { name, specification, description, partsOfSpeech, alphabeticalOrder } = window.currentDictionary;
   const { phonology, phonotactics, orthography, grammar } = window.currentDictionary.details;
   const { consonants, vowels, blends } = phonology;
-  const { allowDuplicates, caseSensitive, sortByDefinition, theme, isPublic } = window.currentDictionary.settings;
+  const { allowDuplicates, caseSensitive, sortByDefinition, theme, customCSS, isPublic } = window.currentDictionary.settings;
   
   document.getElementById('editName').value = name;
   document.getElementById('editSpecification').value = specification;
@@ -43,6 +43,7 @@ export function openEditModal() {
   if (allowDuplicates) document.getElementById('editCaseSensitive').disabled = true;
   document.getElementById('editSortByDefinition').checked = sortByDefinition;
   document.getElementById('editTheme').value = theme;
+  document.getElementById('editCustomCSS').value = customCSS;
   if (hasToken()) {
     document.getElementById('editIsPublic').checked = isPublic;
   }
@@ -83,6 +84,7 @@ export function saveEditModal() {
   updatedDictionary.settings.caseSensitive = document.getElementById('editCaseSensitive').checked;
   updatedDictionary.settings.sortByDefinition = document.getElementById('editSortByDefinition').checked;
   updatedDictionary.settings.theme = document.getElementById('editTheme').value;
+  updatedDictionary.settings.customCSS = removeTags(document.getElementById('editCustomCSS').value.trim());
 
   if (hasToken()) {
     updatedDictionary.settings.isPublic = document.getElementById('editIsPublic').checked;
@@ -94,6 +96,7 @@ export function saveEditModal() {
     window.currentDictionary = Object.assign(window.currentDictionary, updatedDictionary);
 
     renderTheme();
+    renderCustomCSS();
     renderDictionaryDetails();
     renderPartsOfSpeech();
     sortWords(true);

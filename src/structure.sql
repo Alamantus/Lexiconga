@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS `dictionaries` (
   `case_sensitive` tinyint(1) NOT NULL DEFAULT 0,
   `sort_by_definition` tinyint(1) NOT NULL DEFAULT 0,
   `theme` varchar(20) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'default',
+  `custom_css` text COLLATE utf8_unicode_ci NOT NULL COMMENT 'CSS',
   `is_public` tinyint(1) NOT NULL DEFAULT 0,
   `last_updated` int(11) DEFAULT NULL,
   `created_on` int(11) NOT NULL,
