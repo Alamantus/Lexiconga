@@ -54,7 +54,13 @@ export function saveEditModal() {
   const updatedDictionary = cloneObject(window.currentDictionary);
   delete updatedDictionary.words;
   updatedDictionary.name = removeTags(document.getElementById('editName').value.trim());
+  if (updatedDictionary.name.length < 1) {
+    updatedDictionary.name = window.currentDictionary.name;
+  }
   updatedDictionary.specification = removeTags(document.getElementById('editSpecification').value.trim());
+    if (updatedDictionary.specification.length < 1) {
+      updatedDictionary.specification = window.currentDictionary.specification;
+    }
   updatedDictionary.description = removeTags(document.getElementById('editDescription').value.trim());
   updatedDictionary.partsOfSpeech = document.getElementById('editPartsOfSpeech').value.split(',').map(val => val.trim()).filter(val => val !== '');
   updatedDictionary.alphabeticalOrder = document.getElementById('editAlphabeticalOrder').value.split(' ').map(val => val.trim()).filter(val => val !== '');
