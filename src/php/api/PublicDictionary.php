@@ -6,9 +6,11 @@ class PublicDictionary {
   private $db;
   private $token;
   private $defaults;
+  private $original_words;
   public $details;
   public $words;
-  function __construct ($dictionary_id, $details_only = false) {
+
+  function __construct ($dictionary_id) {
     $this->db = new Db();
     $this->token = new Token();
 
@@ -17,9 +19,8 @@ class PublicDictionary {
     );
 
     $this->details = $this->getPublicDictionaryDetails($dictionary_id);
-    if (!$details_only) {
-      $this->words = $this->getPublicDictionaryWords($dictionary_id);
-    }
+    $this->words = $this->getPublicDictionaryWords($dictionary_id);
+    $this->details['wordStats'] = $this->getWordStats();
   }
 
   public function getPublicDictionaryDetails ($dictionary) {
@@ -77,9 +78,8 @@ class PublicDictionary {
 
   public function getPublicDictionaryWords ($dictionary) {
     if (is_numeric($dictionary)) {
-      $query = "SELECT words.* FROM words JOIN dictionaries ON id = dictionary WHERE dictionary=? AND is_public=1";
-      $results = $this->db->query($query, array($dictionary))->fetchAll();
-      if ($results) {
+      $words = $this->getWordsAsEntered();
+      if ($words) {
         return array_map(function ($row) use ($dictionary) {
           return array(
             'name' => $this->translateOrthography($row['name'], $dictionary),
@@ -91,7 +91,7 @@ class PublicDictionary {
             'createdOn' => intval($row['created_on']),
             'wordId' => intval($row['word_id']),
           );
-        }, $this->sortWords($results));
+        }, $this->sortWords($words));
       }
     }
     return array();
@@ -117,8 +117,15 @@ class PublicDictionary {
     return false;
   }
 
+  private function getWordsAsEntered() {
+    if (!isset($this->original_words)) {
+      $query = "SELECT words.* FROM words JOIN dictionaries ON id = dictionary WHERE dictionary=? AND is_public=1";
+      $this->original_words = $this->db->query($query, array($this->details['externalID']))->fetchAll();
+    }
+    return $this->original_words;
+  }
+
   private function sortWords($words) {
-    $this->details['original_order'] = $words;
     $sort_by = isset($this->details['settings']) && isset($this->details['settings']['sortByDefinition']) && $this->details['settings']['sortByDefinition'] === true
       ? 'definition' : 'name';
     // Transliterator settings from https://stackoverflow.com/a/35178027
@@ -255,5 +262,96 @@ class PublicDictionary {
       }
     }
     return array();
+  }
+
+  private function getWordStats() {
+    $words = $this->getWordsAsEntered();
+    $word_stats = array(
+      'numberOfWords' => array(
+        array(
+          'name' => 'Total',
+          'value' => count($words),
+        ),
+      ),
+      'wordLength' => array(
+        'shortest' => 0,
+        'longest' => 0,
+        'average' => 0,
+      ),
+      'letterDistribution' => array(
+        /* array(
+          'letter' => '',
+          'number' => 0,
+          'percentage' => 0.00,
+        ) */
+      ),
+      'totalLetters' => 0,
+    );
+
+    foreach($this->details['partsOfSpeech'] as $part_of_speech) {
+      $words_with_part_of_speech = array_filter($words, function ($word) use($part_of_speech) {
+        return $word['part_of_speech'] === $part_of_speech;
+      });
+      $word_stats['numberOfWords'][] = array(
+        'name' => $part_of_speech,
+        'value' => count($words_with_part_of_speech),
+      );
+    };
+
+    $word_stats['numberOfWords'][] = array(
+      'name' => 'Unclassified',
+      'value' => count(array_filter($words, function ($word) {
+        return !in_array($word['part_of_speech'], $this->details['partsOfSpeech']);
+      })),
+    );
+
+    $total_letters = 0;
+    $number_of_letters = array();
+
+    foreach($words as $word) {
+      $shortest_word = $word_stats['wordLength']['shortest'];
+      $longest_word = $word_stats['wordLength']['longest'];
+      $word_letters = str_split($word['name']);
+      $letters_in_word = count($word_letters);
+
+      $total_letters += $letters_in_word;
+
+      if ($shortest_word === 0 || $letters_in_word < $shortest_word) {
+        $word_stats['wordLength']['shortest'] = $letters_in_word;
+      }
+
+      if ($longest_word === 0 || $letters_in_word > $longest_word) {
+        $word_stats['wordLength']['longest'] = $letters_in_word;
+      }
+
+      foreach($word_letters as $letter) {
+        $letterToUse = $this->details['settings']['caseSensitive'] ? $letter : strtolower($letter);
+        if (!isset($number_of_letters[$letterToUse])) {
+          $number_of_letters[$letterToUse] = 1;
+        } else {
+          $number_of_letters[$letterToUse]++;
+        }
+      };
+    };
+
+    $word_stats['totalLetters'] = $total_letters;
+    $word_stats['wordLength']['average'] = count($words) > 0 ? round($total_letters / count($words)) : 0;
+
+    foreach ($number_of_letters as $letter => $number) {
+      if (isset($number_of_letters[$letter])) {
+        $word_stats['letterDistribution'][] = array(
+          'letter' => $letter,
+          'number' => $number,
+          'percentage' => $number / $total_letters,
+        );
+      }
+    }
+
+    usort($word_stats['letterDistribution'], function ($a, $b) {
+      if ($a['percentage'] === $b['percentage']) return 0;
+      return ($a['percentage'] > $b['percentage']) ? -1 : 1;
+    });
+
+    return $word_stats;
   }
 }

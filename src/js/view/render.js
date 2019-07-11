@@ -1,6 +1,6 @@
 import md from 'marked';
 import { removeTags, slugify } from '../../helpers';
-import { getWordsStats, getHomonymnNumber } from './utilities';
+import { getHomonymnNumber } from './utilities';
 import { getMatchingSearchWords, highlightSearchTerm, getSearchFilters, getSearchTerm } from './search';
 import { showSection } from './displayToggles';
 import { renderAd } from '../ads';
@@ -113,7 +113,7 @@ export function renderDetails() {
 }
 
 export function renderStats() {
-  const wordStats = getWordsStats();
+  const { wordStats } = window.currentDictionary;
   const numberOfWordsHTML = `<p><strong>Number of Words</strong><br>${wordStats.numberOfWords.map(stat => `<span><span class="tag">${stat.name}</span><span class="tag">${stat.value}</span></span>`).join(' ')}</p>`;
   const wordLengthHTML = `<p><strong>Word Length</strong><br><span><span class="tag">Shortest</span><span class="tag">${wordStats.wordLength.shortest}</span></span>
   <span><span class="tag">Longest</span><span class="tag">${wordStats.wordLength.longest}</span></span>
