@@ -4,7 +4,6 @@ import { getWordsStats, getHomonymnNumber } from './utilities';
 import { getMatchingSearchWords, highlightSearchTerm, getSearchFilters, getSearchTerm } from './search';
 import { showSection } from './displayToggles';
 import { renderAd } from '../ads';
-import { sortWords } from './wordManagement';
 import { setupInfoModal } from '../setupListeners/modals';
 import { setupSearchFilters } from '../setupListeners/search';
 
@@ -13,7 +12,6 @@ export function renderAll() {
   renderCustomCSS();
   renderDictionaryDetails();
   renderPartsOfSpeech();
-  sortWords();
   renderWords();
 }
 
