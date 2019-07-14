@@ -80,6 +80,10 @@ switch ($view) {
     $announcements = json_decode($announcements, true);
     $announcements_html = '';
     foreach ($announcements as $announcement) {
+      if (isset($announcement['dismissId']) && isset($_COOKIE['announcement-' . $announcement['dismissId']])) {
+        continue;
+      }
+      
       $expire = strtotime($announcement['expire']);
       if (time() < $expire) {
         $announcements_html .= '<article class="announcement"' . (isset($announcement['dismissId']) ? ' id="announcement-' . $announcement['dismissId'] . '"' : '') . ' data-expires="' . $announcement['expire'] . '">
