@@ -11,7 +11,7 @@
     "watch-js": "parcel watch template-index.html offline.html template-view.html template-passwordreset.html --no-hmr --public-url /lexiconga/",
     "watch-php": "cpx \"src/php/**/{*,.*}\" dist -v -w",
     "bundle": "npm run process-images && npm run bundle-js && npm run copy-files && npm run copy-php",
-    "bundle-js": "parcel build template-index.html offline.html template-view.html template-passwordreset.html --no-source-maps",
+    "bundle-js": "parcel build template-index.html offline.html template-view.html template-passwordreset.html --no-source-maps --experimental-scope-hoisting",
     "copy-files": "cpx \"node_modules/upup/dist/*.min.js\" dist -v",
     "copy-php": "cpx \"src/php/**/{*,.*}\" dist",
     "process-images": "node dev/resize-images.js",
@@ -21,16 +21,16 @@
     "clear-cache": "rimraf .cache/{*,.*}"
   },
   "devDependencies": {
-    "autoprefixer": "^9.5.1",
-    "concurrently": "^4.1.0",
+    "autoprefixer": "^9.6.1",
+    "concurrently": "^4.1.1",
     "cpx": "^1.5.0",
     "parcel-bundler": "^1.12.3",
     "rimraf": "^2.6.3",
-    "sass": "^1.19.0",
+    "sass": "^1.22.4",
     "sharp": "^0.22.1"
   },
   "dependencies": {
-    "marked": "^0.6.2",
+    "marked": "^0.6.3",
     "normalize.css": "^8.0.1",
     "papaparse": "^4.6.3",
     "upup": "^1.1.0"
