@@ -18,20 +18,20 @@
   * [Creating An Account](#creating-an-account)
   * [Logging In](#logging-in)
   * [Differences](#differences)
-    * [Settings](#settings)
+    * [Settings](#settings-1)
     * [Public Dictionaries](#public-dictionaries)
   * [Forgot Your Password?](#forgot-your-password)
   * [Lockout](#lockout)
 * [Problems or Requests](#problems-or-requests)
 * [Update Log](#update-log)
 * [Open Source](#open-source)
-* [Thanks](#thanks-)
+* [Thanks](#thanks)
 
 ## What is Lexiconga?
 
-Lexiconga is a tool intended to help you build constructed language (conlang) dictionaries/lexicons.
+Lexiconga is a tool built to help you build constructed language (conlang) dictionaries/lexicons quickly and easily.
 
-You can enter words and definitions, and they will appear nicely formatted and in alphabetical order by name under your dictionary's title and details. You can also set your dicitonary to display your words by definition if you prefer that view. If the default parts of speech are not adequate for your conlang, you can change them to whatever you might need. You can also enter a description and full set of language rules that you can toggle on and off below the dictionary's title!
+You can enter words and definitions, and they will appear nicely formatted and in alphabetical order by name under your dictionary's title and details. You can also set your dicitonary to sort your words by definition if you prefer that view or even specify a fully custom alphabetical order. If the default parts of speech are not adequate for your conlang, you can change them to whatever you might need. You can also enter a description and full set of language rules that you can toggle on and off below the dictionary's title!
 
 Lexiconga accepts Unicode characters so you can utilize whatever typable characters you might need and [Markdown](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) for formatting long text entries, and if you want to share or even just make a backup of your dictionary, you can export it to a single convenient file that can be easily re-imported. Your dictionary is saved to your browser's [localStorage](https://www.w3schools.com/html/html5_webstorage.asp) every time you make a change, which means as long as you use the same browser and don't deliberately delete it by clearing your cache, your dictionary will always be there when you come back.
 
@@ -177,6 +177,8 @@ After making any changes, be sure to click "Save" or "Save & Close" to ensure th
 - **Backspace/Delete:** Clear the Search box.
 
 ## Accounts
+**Note:** Lexiconga is 100% functional _without_ creating an account! Using an account only adds additional syncing features that enable you to store more than one dictionary at a time, access your dictionaries from any computer, and optionally share dicitonaries publicly with a link. _An account is not required_ to build your conlang on your local browser.
+
 If you are using an account with Lexiconga, your experience should remain essentially the same, but you will see some additional options in the Settings menu and you might notice some slight changes in performance as it saves to and loads from the database. This saving/loading process prioritizes your local dictionary, so if you ever lose connection, it will keep retrying the upload until connection is re-established. It also attempts to sync every time you load Lexiconga, so please be aware of that if you refresh the page.
 
 ### Creating An Account

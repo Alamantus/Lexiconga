@@ -11,7 +11,7 @@ We may collect personal identification information from Users in a variety of wa
 We may collect non-personal identification information about Users whenever they interact with our Site through website analytics tools. Non-personal identification information may include the browser name, the type of computer and technical information about Users means of connection to our Site, such as the operating system and the Internet service providers utilized and other similar information.
 
 ### Web browser cookies
-Our Site stores exactly one "cookie" that is used to keep Users logged in to their Accounts, and it does use "local storage". User's web browser places local storage on their hard drive for record-keeping purposes and sometimes to track information about them, but we only use this to store your current dictionary. User may choose to set their web browser to refuse local storage usage, but if they do so, the Site will not function properly.
+Our Site stores manually-specified "cookies": one that is used to keep Users logged in to their Accounts and others that track what announcements have been dismissed. Our site does use and require "local storage" to function: the User's web browser places local storage on their hard drive, and our Site uses it for the sole purpose of storing your current dictionary. User may choose to set their web browser to refuse local storage usage, but if they do so, the Site will not function properly.
 
 ### How we use collected information
 Lexiconga may collect and use Users personal information for the following purposes:  
