@@ -5,7 +5,7 @@ export const DEFAULT_DICTIONARY = {
   name: 'New',
   specification: 'Dictionary',
   description: 'A new dictionary.',
-  partsOfSpeech: ['Noun', 'Adjective', 'Verb'],
+  partsOfSpeech: ['Noun', 'Adjective', 'Verb', 'Adverb', 'Preposition', 'Pronoun', 'Conjunction'],
   alphabeticalOrder: [],
   details: {
     phonology: {

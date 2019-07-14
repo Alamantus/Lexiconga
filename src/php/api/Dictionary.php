@@ -11,7 +11,7 @@ class Dictionary {
     $this->token = new Token();
 
     $this->defaults = array(
-      'partsOfSpeech' => 'Noun,Adjective,Verb',
+      'partsOfSpeech' => 'Noun,Adjective,Verb,Adverb,Preposition,Pronoun,Conjunction',
     );
   }
 
