@@ -11,7 +11,7 @@
     "watch-js": "parcel watch template-index.html offline.html template-view.html template-passwordreset.html --no-hmr --public-url /lexiconga/",
     "watch-php": "cpx \"src/php/**/{*,.*}\" dist -v -w",
     "bundle": "npm run process-images && npm run bundle-js && npm run copy-files && npm run copy-php",
-    "bundle-js": "parcel build template-index.html offline.html template-view.html template-passwordreset.html --no-source-maps --experimental-scope-hoisting",
+    "bundle-js": "parcel build template-index.html offline.html template-view.html template-passwordreset.html --no-source-maps",
     "copy-files": "cpx \"node_modules/upup/dist/*.min.js\" dist -v",
     "copy-php": "cpx \"src/php/**/{*,.*}\" dist",
     "process-images": "node dev/resize-images.js",
