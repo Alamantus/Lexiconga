@@ -13,7 +13,7 @@
   <meta property="og:title" content="Lexiconga (OFFLINE)">
   <meta property="og:description" content="The quick and easy (offline) dictionary builder for constructed languages.">
   <meta property="og:image" content="processedImages/logo.png">
-  
+
   <meta name="twitter:card" content="summary">
   <meta name="twitter:image:alt" content="Lexiconga logo">
 
@@ -26,13 +26,13 @@
   <meta name="apple-mobile-web-app-title" content="Lexiconga">
   <link rel="apple-touch-icon" href="processedImages/icon-152.png">
 
-  <link rel="stylesheet" href="src/main.scss" />
+  <link rel="stylesheet" href="src/main.scss">
   <script>window.isOffline = true;</script>
   <script src="src/index.js"></script>
 </head>
 <body id="defaultTheme">
   <header id="top">
-    <a href="/" title="Lexiconga"><svg id="title" alt="Lexiconga Logo"viewBox="0 0 249.78 55.087">
+    <a href="/" title="Lexiconga"><svg id="title" alt="Lexiconga Logo" viewBox="0 0 249.78 55.087">
       <g transform="translate(-107.53 -155.84)">
         <g id="lexi">
           <path d="m144.03 159.39-11.339 22.409h-21.62l11.339-22.409z" />
@@ -80,6 +80,9 @@
               </label>
               <label>Exact Words
                 <input type="checkbox" id="searchExactWords">
+              </label>
+              <label>Translations
+                <input type="checkbox" id="searchOrthography">
               </label>
             </div>
           </div>
@@ -241,9 +244,11 @@
       <section id="editDescriptionTab">
         <label>Name<br>
           <input id="editName" maxlength="50">
+          <small>Won't update if left blank.</small>
         </label>
         <label>Specification<br>
           <input id="editSpecification" maxlength="50">
+          <small>Won't update if left blank.</small>
         </label>
         <label>Description<a class="label-button maximize-button">Maximize</a><br>
           <textarea id="editDescription"></textarea>
@@ -254,8 +259,12 @@
         <label>Parts of Speech <small>(Comma Separated List)</small><br>
           <input id="editPartsOfSpeech" maxlength="2500" placeholder="Noun,Adjective,Verb">
         </label>
-        <label>Alphabetical Order <small>(Comma Separated List. Include every letter!)</small><br>
-          <input id="editAlphabeticalOrder" disabled value="English Alphabet">
+        <label>Alphabetical Order <small>(Space Separated List)</small><br>
+          <input id="editAlphabeticalOrder" placeholder="a A b B c C d D ...">
+          <a class="label-help-button" onclick="alert('Include every letter and case! Any letters used in your words that are not specified will be sorted in the default order below your alphabetically custom-sorted words.\n\nLexiconga can only sort by single characters and will sort by the words AS ENTERED, not using orthographic translation.')">
+            Field Info
+          </a>&nbsp;
+          <small>Leave blank for default (case-insensitive ASCII/Unicode sorting)</small>
         </label>
         <h3>Phonology</h3>
         <div class="split three">
@@ -284,6 +293,9 @@
             </label>
           </div>
         </div>
+        <label>Notes <small>(Markdown-enabled)</small><br>
+          <textarea id="editPhonologyNotes"></textarea>
+        </label>
         <h3>Phonotactics</h3>
         <div class="split three">
           <div>
@@ -305,10 +317,17 @@
             </label>
           </div>
         </div>
-        <label>Exceptions <small>(Markdown-enabled)</small><br>
-          <textarea id="editExceptions"></textarea>
+        <label>Notes <small>(Markdown-enabled)</small><br>
+          <textarea id="editPhonotacticsNotes"></textarea>
         </label>
         <h3>Orthography</h3>
+        <label>Translations <small>(One translation per line)</small><a class="label-button maximize-button">Maximize</a><br>
+          <textarea id="editTranslations" placeholder="ai=I
+AA=ay
+ou=ow"></textarea>
+          <small>Use format: <code>sequence=replacement</code></small><br>
+          <small>Translations occur in the order specified here, so try to avoid double translations!</small>
+        </label>
         <label>Notes <small>(Markdown-enabled)</small><a class="label-button maximize-button">Maximize</a><br>
           <textarea id="editOrthography"></textarea>
         </label>
@@ -344,6 +363,9 @@
             <option value="mint">Mint</option>
             <option value="grape">Grape</option>
           </select>
+        </label>
+        <label>Custom Styling <small>(CSS Only)</small><a class="label-button maximize-button">Maximize</a><br>
+          <textarea id="editCustomCSS" placeholder=".orthographic-translation {font-family: serif;}"></textarea>
         </label>
       </section>
 

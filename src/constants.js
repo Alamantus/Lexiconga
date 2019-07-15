@@ -1,36 +1,32 @@
 import { getTimestampInSeconds } from "./helpers";
 
-export const MIGRATE_VERSION = '2.0.0';
+export const MIGRATE_VERSION = '2.1.0';
 export const DEFAULT_DICTIONARY = {
   name: 'New',
   specification: 'Dictionary',
   description: 'A new dictionary.',
-  partsOfSpeech: ['Noun', 'Adjective', 'Verb'],
+  partsOfSpeech: ['Noun', 'Adjective', 'Verb', 'Adverb', 'Preposition', 'Pronoun', 'Conjunction'],
   alphabeticalOrder: [],
   details: {
     phonology: {
       consonants: [],
       vowels: [],
       blends: [],
-      phonotactics: {
-        onset: [],
-        nucleus: [],
-        coda: [],
-        exceptions: '',
-      },
+      notes: '',
+    },
+    phonotactics: {
+      onset: [],
+      nucleus: [],
+      coda: [],
+      notes: '',
     },
     orthography: {
+      translations: [],
       notes: '',
     },
     grammar: {
       notes: '',
     },
-    // custom: [
-    //   // {
-    //   //   name: 'Example Tab',
-    //   //   content: `This is an _example_ tab to show how **tabs** work with [Markdown](${ MARKDOWN_LINK })!`,
-    //   // }
-    // ],
   },
   words: [
     /* {
@@ -47,6 +43,7 @@ export const DEFAULT_DICTIONARY = {
     caseSensitive: false,
     sortByDefinition: false,
     theme: 'default',
+    customCSS: '',
     isPublic: false,
   },
   lastUpdated: getTimestampInSeconds(),

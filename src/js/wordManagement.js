@@ -1,4 +1,4 @@
-import { renderWords } from "./render";
+import { renderWords } from "./render/words";
 import { wordExists, addMessage, getNextId, hasToken, getHomonymnIndexes } from "./utilities";
 import removeDiacritics from "./StackOverflow/removeDiacritics";
 import { removeTags, getTimestampInSeconds } from "../helpers";
@@ -32,18 +32,84 @@ export function validateWord(word, wordId = false) {
 
 export function sortWords(render) {
   const { sortByDefinition } = window.currentDictionary.settings;
+  const { alphabeticalOrder } = window.currentDictionary;
   const sortBy = sortByDefinition ? 'definition' : 'name';
 
   window.currentDictionary.words.sort((wordA, wordB) => {
-    if (removeDiacritics(wordA[sortBy]).toLowerCase() === removeDiacritics(wordB[sortBy]).toLowerCase()) return 0;
-    return removeDiacritics(wordA[sortBy]).toLowerCase() > removeDiacritics(wordB[sortBy]).toLowerCase() ? 1 : -1;
+    // Sort normally first
+    return wordA[sortBy].localeCompare(wordB[sortBy], 'en', { sensitivity: 'base' }); // This is the smart way to do the below!
+    // if (removeDiacritics(wordA[sortBy]).toLowerCase() === removeDiacritics(wordB[sortBy]).toLowerCase()) return 0;
+    // return removeDiacritics(wordA[sortBy]).toLowerCase() > removeDiacritics(wordB[sortBy]).toLowerCase() ? 1 : -1;
   });
+
+  if (alphabeticalOrder.length > 0) {
+    // If there's an alphabetical order specified, sort by that after! Any letters not in the alphabet will be unsorted, keeping them in ASCII order
+    const ordering = {}; // map for efficient lookup of sortIndex
+    for (let i = 0; i < alphabeticalOrder.length; i++) {
+      ordering[alphabeticalOrder[i]] = i + 1; // Add 1 to prevent 0 from resolving to false
+    }
+    
+    window.currentDictionary.words.sort((wordA, wordB) => {
+      // console.log(alphabeticalOrder, ordering);
+      // console.log('comparing:', wordA[sortBy], wordB[sortBy]);
+      if (wordA[sortBy] === wordB[sortBy]) return 0;
+
+      const aLetters = wordA[sortBy].split('');
+      const bLetters = wordB[sortBy].split('');
+      
+      for (let i = 0; i < aLetters.length; i++) {
+        const a = aLetters[i];
+        const b = bLetters[i];
+        // console.log('comparing letters', a, b);
+        if (!b) {
+          // console.log('no b, ', wordA[sortBy], 'is longer than', wordB[sortBy]);
+          return 1;
+        }
+        if (!ordering[a] && !ordering[b]) {
+          // console.log('a and b not in dictionary:', a, b, 'continuing to the next letter');
+          continue;
+        }
+        if (!ordering[a]) {
+          // console.log('a is not in dictionary:', a, 'moving back:', wordA[sortBy]);
+          return 1;
+        }
+        if (!ordering[b]) {
+          // console.log('b is not in dictionary:', b, 'moving forward:', wordA[sortBy]);
+          return -1;
+        }
+        if (ordering[a] === ordering[b]) {
+          // console.log('letters are the same order:', a, b);
+          if (aLetters.length < bLetters.length && i === aLetters.length - 1) {
+            // console.log(a, 'is shorter than', b);
+            return -1;
+          }
+          // console.log(a, 'is the same as', b, 'continuing to the next letter');
+          continue;
+        }
+        // console.log('comparing order:', a, b, 'result:', ordering[a] - ordering[b]);
+        return ordering[a] - ordering[b];
+      }
+
+      // console.log('all of the letters were dumb, no sort');
+      return 0;
+    });
+  }
   
   saveDictionary(false);
 
   if (render) {
     renderWords();
   }
+}
+
+export function translateOrthography(word) {
+  window.currentDictionary.details.orthography.translations.forEach(translation => {
+    translation = translation.split('=').map(value => value.trim());
+    if (translation.length > 1 && translation[0] !== '' && translation[1] !== '') {
+      word = word.replace(new RegExp(translation[0], 'g'), translation[1]);
+    }
+  });
+  return word;
 }
 
 export function parseReferences(detailsMarkdown) {
@@ -80,8 +146,8 @@ export function parseReferences(detailsMarkdown) {
         if (homonymn < 1 && homonymnIndexes.length > 0) {
           homonymn = 1;
         }
-        const homonymnSubHTML = homonymn > 0 ? '<sub>' + homonymn.toString() + '</sub>' : '';
-        const wordMarkdownLink = `[${wordToFind}${homonymnSubHTML}](#${existingWordId})`;
+        const homonymnSubHTML = homonymnIndexes.length > 1 && homonymn - 1 >= 0 ? '<sub>' + homonymn.toString() + '</sub>' : '';
+        const wordMarkdownLink = `<span class="word-reference">[<span class="orthographic-translation">${translateOrthography(wordToFind)}</span>${homonymnSubHTML}](#${existingWordId})</span>`;
         detailsMarkdown = detailsMarkdown.replace(new RegExp(reference, 'g'), wordMarkdownLink);
       }
     });

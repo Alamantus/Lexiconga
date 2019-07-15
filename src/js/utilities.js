@@ -176,3 +176,19 @@ export function hideAllModals() {
 export function hasToken() {
   return window.isOffline !== true && getCookie('token') !== '';
 }
+
+export function objectValuesAreDifferent(newObject, oldObject) {
+  let valuesAreDifferent = false;
+  for (let property in newObject) {
+    if (!oldObject.hasOwnProperty(property) || JSON.stringify(newObject[property]) !== JSON.stringify(oldObject[property])) {
+      valuesAreDifferent = true;
+    }
+    if (typeof newObject[property] === 'object' && !Array.isArray(newObject[property])) {
+      valuesAreDifferent = objectValuesAreDifferent(newObject[property], oldObject[property]);
+    }
+    
+    if (valuesAreDifferent) break;
+  }
+  
+  return valuesAreDifferent;
+}

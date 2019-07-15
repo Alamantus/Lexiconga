@@ -1,6 +1,6 @@
 import { confirmEditWord, submitWordForm } from "./wordManagement";
 import { showSection, hideDetailsPanel } from "./displayToggles";
-import { renderInfoModal, renderMaximizedTextbox } from "./render";
+import { renderInfoModal, renderMaximizedTextbox } from "./render/modals";
 import { showSearchModal, clearSearchText } from "./search";
 import { saveAndCloseSettingsModal, openSettingsModal, saveSettings } from "./settings";
 import { saveAndCloseEditModal, openEditModal } from "./dictionaryManagement";
@@ -56,7 +56,8 @@ export function hotKeyActions(event) {
       break;
     }
     case 'S': if (event.ctrlKey) {event.preventDefault(); hideAllModals(); openSettingsModal();} break;
-    case 'x': if (event.ctrlKey) {event.preventDefault(); clearSearchText();} break;
+    case 'Delete':
+    case 'Backspace': if (event.ctrlKey) {event.preventDefault(); clearSearchText();} break;
   }
 }
 

@@ -14,11 +14,11 @@ switch ($view) {
     $html = file_get_contents(realpath(dirname(__FILE__) . '/./template-view.html'));
     $dict = isset($_GET['dict']) ? $_GET['dict'] : false;
     if ($dict !== false) {
-      require_once(realpath(dirname(__FILE__) . '/./api/Dictionary.php'));
-      $dictionary = new Dictionary();
-      $dictionary_data = $dictionary->getPublicDictionaryDetails($dict);
+      require_once(realpath(dirname(__FILE__) . '/./api/PublicDictionary.php'));
+      $dictionary = new PublicDictionary($dict);
+      $dictionary_data = $dictionary->details;
       if ($dictionary_data !== false) {
-        $dictionary_data['words'] = $dictionary->getPublicDictionaryWords($dict);
+        $dictionary_data['words'] = $dictionary->words;
         $html = str_replace('{{dict}}', $dict, $html);
         $html = str_replace('{{dict_name}}', $dictionary_data['name'] . ' ' . $dictionary_data['specification'], $html);
         $html = str_replace('{{public_name}}', $dictionary_data['createdBy'], $html);
@@ -39,9 +39,9 @@ switch ($view) {
     $dict = isset($_GET['dict']) ? $_GET['dict'] : false;
     $word = isset($_GET['word']) ? $_GET['word'] : false;
     if ($dict !== false && $word !== false) {
-      require_once(realpath(dirname(__FILE__) . '/./api/Dictionary.php'));
-      $dictionary = new Dictionary();
-      $dictionary_data = $dictionary->getPublicDictionaryDetails($dict);
+      require_once(realpath(dirname(__FILE__) . '/./api/PublicDictionary.php'));
+      $dictionary = new PublicDictionary($dict, true);
+      $dictionary_data = $dictionary->details;
       if ($dictionary_data !== false) {
         $dictionary_name = $dictionary_data['name'] . ' ' . $dictionary_data['specification'];
         $word_data = $dictionary->getSpecificPublicDictionaryWord($dict, $word);
@@ -80,6 +80,10 @@ switch ($view) {
     $announcements = json_decode($announcements, true);
     $announcements_html = '';
     foreach ($announcements as $announcement) {
+      if (isset($announcement['dismissId']) && isset($_COOKIE['announcement-' . $announcement['dismissId']])) {
+        continue;
+      }
+      
       $expire = strtotime($announcement['expire']);
       if (time() < $expire) {
         $announcements_html .= '<article class="announcement"' . (isset($announcement['dismissId']) ? ' id="announcement-' . $announcement['dismissId'] . '"' : '') . ' data-expires="' . $announcement['expire'] . '">
@@ -119,7 +123,7 @@ switch ($view) {
       oldLoad && oldLoad();
       if (UpUp) {
         UpUp.start({
-          'cache-version': '2.0.2',
+          'cache-version': '2.1.0',
           'content-url': 'offline.html',
           'assets': [
             \"" . implode('","', $files) . "\"

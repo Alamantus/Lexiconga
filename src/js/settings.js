@@ -1,8 +1,8 @@
 import { SETTINGS_KEY, DEFAULT_SETTINGS } from "../constants";
 import { cloneObject, removeTags } from "../helpers";
 import { usePhondueDigraphs } from "./KeyboardFire/phondue/ipaField";
-import { renderWords } from "./render";
-import { addMessage, hasToken } from "./utilities";
+import { renderWords } from "./render/words";
+import { addMessage, hasToken, objectValuesAreDifferent } from "./utilities";
 import { enableHotKeys, disableHotKeys } from "./hotkeys";
 
 export function loadSettings() {
@@ -27,9 +27,10 @@ export function openSettingsModal() {
 }
 
 export function saveSettingsModal() {
-  window.settings.useIPAPronunciationField = document.getElementById('settingsUseIPA').checked;
-  window.settings.useHotkeys = document.getElementById('settingsUseHotkeys').checked;
-  window.settings.defaultTheme = document.getElementById('settingsDefaultTheme').value;
+  const updatedSettings = cloneObject(window.settings);
+  updatedSettings.useIPAPronunciationField = document.getElementById('settingsUseIPA').checked;
+  updatedSettings.useHotkeys = document.getElementById('settingsUseHotkeys').checked;
+  updatedSettings.defaultTheme = document.getElementById('settingsDefaultTheme').value;
 
   if (hasToken()) {
     import('./account/index.js').then(account => {
@@ -40,19 +41,30 @@ export function saveSettingsModal() {
         email = window.account.email;
         emailField.value = email;
       }
-      window.account.email = email;
-      window.account.publicName = removeTags(publicName.value).trim();
-      window.account.allowEmails = document.getElementById('accountSettingsAllowEmails').checked;
+      const updatedAccount = cloneObject(window.account);
+      updatedAccount.email = email;
+      updatedAccount.publicName = removeTags(publicName.value).trim();
+      updatedAccount.allowEmails = document.getElementById('accountSettingsAllowEmails').checked;
 
       const newPassword = document.getElementById('accountSettingsNewPassword').value;
 
-      account.editAccount(Object.assign({ newPassword }, window.account));
+      if (objectValuesAreDifferent(updatedAccount, window.account)) {
+        window.account = Object.assign(window.account, updatedAccount);
+        account.editAccount(Object.assign({ newPassword }, window.account));
+      } else {
+        addMessage('No changes made to Account.');
+      }
     });
   }
 
-  saveSettings();
-  toggleHotkeysEnabled();
-  toggleIPAPronunciationFields();
+  if (objectValuesAreDifferent(updatedSettings, window.settings)) {
+    window.settings = Object.assign(window.settings, updatedSettings);
+    saveSettings();
+    toggleHotkeysEnabled();
+    toggleIPAPronunciationFields();
+  } else {
+    addMessage('No changes made to Settings.');
+  }
 }
 
 export function saveAndCloseSettingsModal() {

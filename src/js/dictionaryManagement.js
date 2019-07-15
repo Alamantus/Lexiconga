@@ -1,9 +1,11 @@
 import papa from 'papaparse';
-import { renderDictionaryDetails, renderPartsOfSpeech, renderAll, renderTheme } from "./render";
+import { renderDictionaryDetails, renderPartsOfSpeech } from "./render/details";
+import { renderAll, renderTheme, renderCustomCSS } from "./render";
 import { removeTags, cloneObject, getTimestampInSeconds, download, slugify } from "../helpers";
-import { LOCAL_STORAGE_KEY, DEFAULT_DICTIONARY, MIGRATE_VERSION } from "../constants";
-import { addMessage, getNextId, hasToken } from "./utilities";
+import { LOCAL_STORAGE_KEY, DEFAULT_DICTIONARY } from "../constants";
+import { addMessage, getNextId, hasToken, objectValuesAreDifferent } from "./utilities";
 import { addWord, sortWords } from "./wordManagement";
+import { migrateDictionary } from './migration';
 
 export function updateDictionary () {
 
@@ -11,24 +13,28 @@ export function updateDictionary () {
 }
 
 export function openEditModal() {
-  const { name, specification, description, partsOfSpeech } = window.currentDictionary;
-  const { consonants, vowels, blends, phonotactics } = window.currentDictionary.details.phonology;
-  const { orthography, grammar } = window.currentDictionary.details;
-  const { allowDuplicates, caseSensitive, sortByDefinition, theme, isPublic } = window.currentDictionary.settings;
+  const { name, specification, description, partsOfSpeech, alphabeticalOrder } = window.currentDictionary;
+  const { phonology, phonotactics, orthography, grammar } = window.currentDictionary.details;
+  const { consonants, vowels, blends } = phonology;
+  const { allowDuplicates, caseSensitive, sortByDefinition, theme, customCSS, isPublic } = window.currentDictionary.settings;
   
   document.getElementById('editName').value = name;
   document.getElementById('editSpecification').value = specification;
   document.getElementById('editDescription').value = description;
   document.getElementById('editPartsOfSpeech').value = partsOfSpeech.join(',');
+  document.getElementById('editAlphabeticalOrder').value = alphabeticalOrder.join(' ');
 
   document.getElementById('editConsonants').value = consonants.join(' ');
   document.getElementById('editVowels').value = vowels.join(' ');
   document.getElementById('editBlends').value = blends.join(' ');
+  document.getElementById('editPhonologyNotes').value = phonology.notes;
+
   document.getElementById('editOnset').value = phonotactics.onset.join(',');
   document.getElementById('editNucleus').value = phonotactics.nucleus.join(',');
   document.getElementById('editCoda').value = phonotactics.coda.join(',');
-  document.getElementById('editExceptions').value = phonotactics.exceptions;
+  document.getElementById('editPhonotacticsNotes').value = phonotactics.notes;
 
+  document.getElementById('editTranslations').value = orthography.translations.join('\n');
   document.getElementById('editOrthography').value = orthography.notes;
   document.getElementById('editGrammar').value = grammar.notes;
 
@@ -37,6 +43,7 @@ export function openEditModal() {
   if (allowDuplicates) document.getElementById('editCaseSensitive').disabled = true;
   document.getElementById('editSortByDefinition').checked = sortByDefinition;
   document.getElementById('editTheme').value = theme;
+  document.getElementById('editCustomCSS').value = customCSS;
   if (hasToken()) {
     document.getElementById('editIsPublic').checked = isPublic;
   }
@@ -45,51 +52,66 @@ export function openEditModal() {
 }
 
 export function saveEditModal() {
-  window.currentDictionary.name = removeTags(document.getElementById('editName').value.trim());
-  window.currentDictionary.specification = removeTags(document.getElementById('editSpecification').value.trim());
-  window.currentDictionary.description = removeTags(document.getElementById('editDescription').value.trim());
-  window.currentDictionary.partsOfSpeech = document.getElementById('editPartsOfSpeech').value.split(',').map(val => val.trim()).filter(val => val !== '');
+  const updatedDictionary = cloneObject(window.currentDictionary);
+  delete updatedDictionary.words;
+  updatedDictionary.name = removeTags(document.getElementById('editName').value.trim());
+  if (updatedDictionary.name.length < 1) {
+    updatedDictionary.name = window.currentDictionary.name;
+  }
+  updatedDictionary.specification = removeTags(document.getElementById('editSpecification').value.trim());
+    if (updatedDictionary.specification.length < 1) {
+      updatedDictionary.specification = window.currentDictionary.specification;
+    }
+  updatedDictionary.description = removeTags(document.getElementById('editDescription').value.trim());
+  updatedDictionary.partsOfSpeech = document.getElementById('editPartsOfSpeech').value.split(',').map(val => val.trim()).filter(val => val !== '');
+  updatedDictionary.alphabeticalOrder = document.getElementById('editAlphabeticalOrder').value.split(' ').map(val => val.trim()).filter(val => val !== '');
 
-  window.currentDictionary.details.phonology.consonants = document.getElementById('editConsonants').value.split(' ').map(val => val.trim()).filter(val => val !== '');
-  window.currentDictionary.details.phonology.vowels = document.getElementById('editVowels').value.split(' ').map(val => val.trim()).filter(val => val !== '');
-  window.currentDictionary.details.phonology.blends = document.getElementById('editBlends').value.split(' ').map(val => val.trim()).filter(val => val !== '');
-  window.currentDictionary.details.phonology.phonotactics.onset = document.getElementById('editOnset').value.split(',').map(val => val.trim()).filter(val => val !== '');
-  window.currentDictionary.details.phonology.phonotactics.nucleus = document.getElementById('editNucleus').value.split(',').map(val => val.trim()).filter(val => val !== '');
-  window.currentDictionary.details.phonology.phonotactics.coda = document.getElementById('editCoda').value.split(',').map(val => val.trim()).filter(val => val !== '');
-  window.currentDictionary.details.phonology.phonotactics.exceptions = removeTags(document.getElementById('editExceptions').value.trim());
+  updatedDictionary.details.phonology.consonants = document.getElementById('editConsonants').value.split(' ').map(val => val.trim()).filter(val => val !== '');
+  updatedDictionary.details.phonology.vowels = document.getElementById('editVowels').value.split(' ').map(val => val.trim()).filter(val => val !== '');
+  updatedDictionary.details.phonology.blends = document.getElementById('editBlends').value.split(' ').map(val => val.trim()).filter(val => val !== '');
+  updatedDictionary.details.phonology.notes = removeTags(document.getElementById('editPhonologyNotes').value.trim());
 
-  window.currentDictionary.details.orthography.notes = removeTags(document.getElementById('editOrthography').value.trim());
-  window.currentDictionary.details.grammar.notes = removeTags(document.getElementById('editGrammar').value.trim());
+  updatedDictionary.details.phonotactics.onset = document.getElementById('editOnset').value.split(',').map(val => val.trim()).filter(val => val !== '');
+  updatedDictionary.details.phonotactics.nucleus = document.getElementById('editNucleus').value.split(',').map(val => val.trim()).filter(val => val !== '');
+  updatedDictionary.details.phonotactics.coda = document.getElementById('editCoda').value.split(',').map(val => val.trim()).filter(val => val !== '');
+  updatedDictionary.details.phonotactics.notes = removeTags(document.getElementById('editPhonotacticsNotes').value.trim());
 
-  window.currentDictionary.settings.allowDuplicates = !document.getElementById('editPreventDuplicates').checked;
-  window.currentDictionary.settings.caseSensitive = document.getElementById('editCaseSensitive').checked;
-  const needsReSort = window.currentDictionary.settings.sortByDefinition !== document.getElementById('editSortByDefinition').checked;
-  window.currentDictionary.settings.sortByDefinition = document.getElementById('editSortByDefinition').checked;
-  window.currentDictionary.settings.theme = document.getElementById('editTheme').value;
+  updatedDictionary.details.orthography.translations = document.getElementById('editTranslations').value.split('\n').map(val => val.trim()).filter(val => val !== '');
+  updatedDictionary.details.orthography.notes = removeTags(document.getElementById('editOrthography').value.trim());
+  updatedDictionary.details.grammar.notes = removeTags(document.getElementById('editGrammar').value.trim());
 
-  let needsWordRender = false;
+  updatedDictionary.settings.allowDuplicates = !document.getElementById('editPreventDuplicates').checked;
+  updatedDictionary.settings.caseSensitive = document.getElementById('editCaseSensitive').checked;
+  updatedDictionary.settings.sortByDefinition = document.getElementById('editSortByDefinition').checked;
+  updatedDictionary.settings.theme = document.getElementById('editTheme').value;
+  updatedDictionary.settings.customCSS = removeTags(document.getElementById('editCustomCSS').value.trim());
+
   if (hasToken()) {
-    needsWordRender = window.currentDictionary.settings.isPublic !== document.getElementById('editIsPublic').checked;
-    window.currentDictionary.settings.isPublic = document.getElementById('editIsPublic').checked;
+    updatedDictionary.settings.isPublic = document.getElementById('editIsPublic').checked;
   } else {
-    window.currentDictionary.settings.isPublic = false;
+    updatedDictionary.settings.isPublic = false;
   }
 
-  addMessage('Saved ' + window.currentDictionary.specification + ' Successfully');
-  saveDictionary();
-  renderTheme();
-  renderDictionaryDetails();
-  renderPartsOfSpeech();
-  
-  if (needsReSort || needsWordRender) {
+  if (objectValuesAreDifferent(updatedDictionary, window.currentDictionary)) {
+    window.currentDictionary = Object.assign(window.currentDictionary, updatedDictionary);
+
+    renderTheme();
+    renderCustomCSS();
+    renderDictionaryDetails();
+    renderPartsOfSpeech();
     sortWords(true);
-  }
 
-  if (hasToken()) {
-    import('./account/index.js').then(account => {
-      account.uploadDetailsDirect();
-      account.updateChangeDictionaryOption();
-    })
+    addMessage('Saved ' + window.currentDictionary.specification + ' Successfully');
+    saveDictionary();
+
+    if (hasToken()) {
+      import('./account/index.js').then(account => {
+        account.uploadDetailsDirect();
+        account.updateChangeDictionaryOption();
+      })
+    }
+  } else {
+    addMessage('No changes made to Dictionary Settings.');
   }
 }
 
@@ -284,40 +306,4 @@ export function exportWords() {
     const csv = papa.unparse(words, { quotes: true });
     download(csv, fileName, 'text/csv;charset=utf-8');
   }, 1);
-}
-
-export function migrateDictionary() {
-  let migrated = false;
-  if (!window.currentDictionary.hasOwnProperty('version')) {
-    const fixStupidOldNonsense = string => string.replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/&#92;/g, '\\').replace(/<br>/g, '\n');
-    window.currentDictionary.description = fixStupidOldNonsense(window.currentDictionary.description);
-    const timestamp = getTimestampInSeconds();
-    window.currentDictionary.words = window.currentDictionary.words.map(word => {
-      word.definition = word.simpleDefinition;
-      delete word.simpleDefinition;
-      word.details = fixStupidOldNonsense(word.longDefinition);
-      delete word.longDefinition;
-      word.lastUpdated = timestamp;
-      word.createdOn = timestamp;
-      return word;
-    });
-    window.currentDictionary = Object.assign({}, DEFAULT_DICTIONARY, window.currentDictionary);
-    window.currentDictionary.partsOfSpeech = window.currentDictionary.settings.partsOfSpeech.split(',').map(val => val.trim()).filter(val => val !== '');
-    delete window.currentDictionary.settings.partsOfSpeech;
-    delete window.currentDictionary.nextWordId;
-    window.currentDictionary.settings.sortByDefinition = window.currentDictionary.settings.sortByEquivalent;
-    delete window.currentDictionary.settings.sortByEquivalent;
-    window.currentDictionary.settings.theme = 'default';
-    delete window.currentDictionary.settings.isComplete;
-    
-    migrated = true;
-  } else if (window.currentDictionary.version !== MIGRATE_VERSION) {
-    switch (window.currentDictionary.version) {
-      default: console.error('Unknown version'); break;
-    }
-  }
-
-  if (migrated) {
-    saveDictionary();
-  }
 }

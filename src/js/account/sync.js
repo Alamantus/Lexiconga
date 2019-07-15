@@ -80,7 +80,9 @@ export function uploadWholeDictionary(asNew = false) {
       dictionary,
     }, remoteId => {
       window.currentDictionary.externalID = remoteId;
-      document.getElementById('publicLink').value = document.domain + window.location.pathname + remoteId.toString();
+      if (document.getElementById('publicLink')) {
+        document.getElementById('publicLink').value = getPublicLink();
+      }
       saveDictionary(false);
       addMessage('Dictionary Uploaded Successfully');
       renderChangeDictionaryOptions();

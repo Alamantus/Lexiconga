@@ -42,6 +42,7 @@ export function renderLoginForm() {
           <label>Allow Emails
             <input type="checkbox" id="createNewAllowEmails">
           </label>
+          <p>Creating an account is <em>not</em> required to use Lexiconga's core features. Click "Help" in the site footer to learn what accounts provide.</p>
           <section id="createAccountErrorMessages"></section>
           <button id="createAccountSubmit" class="button">Create Account</button>
         </div>

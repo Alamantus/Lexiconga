@@ -1,4 +1,5 @@
-import { LOCAL_STORAGE_KEY } from "../constants";
+import { LOCAL_STORAGE_KEY, DEFAULT_DICTIONARY, MIGRATE_VERSION } from "../constants";
+import { saveDictionary } from "./dictionaryManagement";
 
 export default function migrate() {
   if (window.location.pathname === '/') {
@@ -73,5 +74,54 @@ function checkForReceived() {
       window.localStorage.setItem(LOCAL_STORAGE_KEY, window.dictionaryImportedFromHTTP);
       delete window.dictionaryImportedFromHTTP;
     }
+  }
+}
+
+export function migrateDictionary() {
+  let migrated = false;
+  if (!window.currentDictionary.hasOwnProperty('version')) {
+    const fixStupidOldNonsense = string => string.replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/&#92;/g, '\\').replace(/<br>/g, '\n');
+    window.currentDictionary.description = fixStupidOldNonsense(window.currentDictionary.description);
+    const timestamp = getTimestampInSeconds();
+    window.currentDictionary.words = window.currentDictionary.words.map(word => {
+      word.definition = word.simpleDefinition;
+      delete word.simpleDefinition;
+      word.details = fixStupidOldNonsense(word.longDefinition);
+      delete word.longDefinition;
+      word.lastUpdated = timestamp;
+      word.createdOn = timestamp;
+      return word;
+    });
+    window.currentDictionary = Object.assign({}, DEFAULT_DICTIONARY, window.currentDictionary);
+    window.currentDictionary.partsOfSpeech = window.currentDictionary.settings.partsOfSpeech.split(',').map(val => val.trim()).filter(val => val !== '');
+    delete window.currentDictionary.settings.partsOfSpeech;
+    delete window.currentDictionary.nextWordId;
+    window.currentDictionary.settings.sortByDefinition = window.currentDictionary.settings.sortByEquivalent;
+    delete window.currentDictionary.settings.sortByEquivalent;
+    window.currentDictionary.settings.theme = 'default';
+    delete window.currentDictionary.settings.isComplete;
+
+    migrated = true;
+  } else if (window.currentDictionary.version !== MIGRATE_VERSION) {
+    switch (window.currentDictionary.version) {
+      default: console.error('Unknown version'); break;
+      case '2.0.0': {
+        window.currentDictionary.details.phonology.notes = '';
+        window.currentDictionary.details.phonotactics = Object.assign({}, window.currentDictionary.details.phonology.phonotactics);
+        delete window.currentDictionary.details.phonology.phonotactics;
+        window.currentDictionary.details.phonotactics.notes = window.currentDictionary.details.phonotactics.exceptions;
+        delete window.currentDictionary.details.phonotactics.exceptions;
+        window.currentDictionary.details.orthography.translations = [];
+        window.currentDictionary.settings.customCSS = '';
+        window.currentDictionary = Object.assign({}, DEFAULT_DICTIONARY, window.currentDictionary);
+        window.currentDictionary.version = MIGRATE_VERSION;
+        migrated = true;
+        // break; By skipping the break, all migrations can happen in sequence.
+      }
+    }
+  }
+
+  if (migrated) {
+    saveDictionary();
   }
 }

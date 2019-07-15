@@ -1,54 +1,48 @@
 import md from 'marked';
 import { removeTags, slugify } from '../../helpers';
-import { getHomonymnNumber } from './utilities';
-import { getMatchingSearchWords, highlightSearchTerm, getSearchFilters, getSearchTerm } from './search';
-import { showSection } from './displayToggles';
-import { renderAd } from '../ads';
-import { setupInfoModal } from '../setupListeners/modals';
+import { getWordsStats, hasToken } from '../utilities';
+import { showSection } from '../displayToggles';
 import { setupSearchFilters } from '../setupListeners/search';
-
-export function renderAll() {
-  renderTheme();
-  renderCustomCSS();
-  renderDictionaryDetails();
-  renderPartsOfSpeech();
-  renderWords();
-}
-
-export function renderTheme() {
-  const { theme } = window.currentDictionary.settings;
-  document.body.id = theme + 'Theme';
-}
-
-export function renderCustomCSS() {
-  const { customCSS } = window.currentDictionary.settings;
-  const stylingId = 'customCSS';
-  const stylingElement = document.getElementById(stylingId);
-  if (!stylingElement) {
-    const styling = document.createElement('style');
-    styling.id = stylingId;
-    styling.innerHTML = customCSS;
-    document.body.appendChild(styling);
-  } else {
-    stylingElement.innerHTML = customCSS;
-  }
-}
+import { parseReferences } from '../wordManagement';
+import { getPublicLink } from '../account/utilities';
 
 export function renderDictionaryDetails() {
   renderName();
-  showSection('description');
+
+  const tabs = document.querySelectorAll('#detailsSection nav li');
+  const shownTab = Array.from(tabs).find(tab => tab.classList.contains('active'));
+  if (shownTab) {
+    const tabName = shownTab.innerText.toLowerCase();
+    showSection(tabName);
+  }
 }
 
 export function renderName() {
   const dictionaryName = removeTags(window.currentDictionary.name) + ' ' + removeTags(window.currentDictionary.specification);
-  document.getElementById('dictionaryName').innerHTML = dictionaryName;
-  const shareLink = window.location.pathname.match(new RegExp(window.currentDictionary.externalID + '$')) ? window.location.pathname
-    : window.location.pathname.substring(0, window.location.pathname.indexOf(window.currentDictionary.externalID)) + window.currentDictionary.externalID;
-  document.getElementById('dictionaryShare').href = shareLink;
+  const name = document.getElementById('dictionaryName');
+  name.innerHTML = dictionaryName;
+  const isPublic = hasToken() && window.currentDictionary.settings.isPublic;
+  const shareLinkElement = document.getElementById('dictionaryShare');
+
+  if (isPublic && !shareLinkElement) {
+    const shareLink = document.createElement('a');
+    shareLink.id = 'dictionaryShare';
+    shareLink.classList.add('button');
+    shareLink.style.float = 'right';
+    shareLink.href = getPublicLink();
+    shareLink.target = '_blank';
+    shareLink.title = 'Public Link to Dictionary';
+    shareLink.innerHTML = '&#10150;';
+    name.parentElement.insertBefore(shareLink, name);
+  } else if (isPublic && shareLinkElement) {
+    shareLinkElement.href = getPublicLink();
+  } else if (!isPublic && shareLinkElement) {
+    shareLinkElement.parentElement.removeChild(shareLinkElement);
+  }
 }
 
 export function renderDescription() {
-  const descriptionHTML = md(window.currentDictionary.description);
+  const descriptionHTML = md(parseReferences(removeTags(window.currentDictionary.description)));
 
   document.getElementById('detailsPanel').innerHTML = '<div class="content">' + descriptionHTML + '</div>';
 }
@@ -113,7 +107,7 @@ export function renderDetails() {
 }
 
 export function renderStats() {
-  const { wordStats } = window.currentDictionary;
+  const wordStats = getWordsStats();
   const numberOfWordsHTML = `<p><strong>Number of Words</strong><br>${wordStats.numberOfWords.map(stat => `<span><span class="tag">${stat.name}</span><span class="tag">${stat.value}</span></span>`).join(' ')}</p>`;
   const wordLengthHTML = `<p><strong>Word Length</strong><br><span><span class="tag">Shortest</span><span class="tag">${wordStats.wordLength.shortest}</span></span>
   <span><span class="tag">Longest</span><span class="tag">${wordStats.wordLength.longest}</span></span>
@@ -144,91 +138,4 @@ export function renderPartsOfSpeech(onlyOptions = false) {
   }
 
   setupSearchFilters();
-}
-
-export function renderWords() {
-  let wordsHTML = '';
-  let words = false;
-
-  if (window.currentDictionary.words.length === 0) {
-    wordsHTML = `<article class="entry">
-      <header>
-        <h4 class="word">No Words Found</h4>
-      </header>
-      <dl>
-        <dt class="definition">Either this dictionary has not yet been started, or something prevented words from downloading.</dt>
-      </dl>
-    </article>`;
-  } else {
-    words = getMatchingSearchWords();
-
-    if (words.length === 0) {
-      wordsHTML = `<article class="entry">
-        <header>
-          <h4 class="word">No Search Results</h4>
-        </header>
-        <dl>
-          <dt class="definition">Edit your search or filter to show words.</dt>
-        </dl>
-      </article>`;
-    }
-
-    words.forEach((originalWord, displayIndex) => {
-      const word = highlightSearchTerm({
-        name: removeTags(originalWord.name),
-        pronunciation: removeTags(originalWord.pronunciation),
-        partOfSpeech: removeTags(originalWord.partOfSpeech),
-        definition: removeTags(originalWord.definition),
-        details: originalWord.details,
-        wordId: originalWord.wordId,
-      });
-
-      const homonymnNumber = getHomonymnNumber(originalWord);
-      const shareLink = window.location.pathname + (window.location.pathname.match(new RegExp(word.wordId + '$')) ? '' : '/' + word.wordId);
-
-      wordsHTML += renderAd(displayIndex);
-
-      wordsHTML += `<article class="entry" id="${word.wordId}">
-        <header>
-          <h4 class="word"><span class="orthographic-translation">${word.name}</span>${homonymnNumber > 0 ? ' <sub>' + homonymnNumber.toString() + '</sub>' : ''}</h4>
-          <span class="pronunciation">${word.pronunciation}</span>
-          <span class="part-of-speech">${word.partOfSpeech}</span>
-          <a href="${shareLink}" target="_blank" class="small button word-option-button" title="Link to Word">&#10150;</a>
-        </header>
-        <dl>
-          <dt class="definition">${word.definition}</dt>
-          <dd class="details">
-            ${md(word.details)}
-          </dd>
-        </dl>
-      </article>`;
-    });
-  }
-
-  document.getElementById('entries').innerHTML = wordsHTML;
-
-  // Show Search Results
-  const searchTerm = getSearchTerm();
-  const filters = getSearchFilters();
-  let resultsText = searchTerm !== '' || !filters.allPartsOfSpeechChecked ? (words ? words.length : 0).toString() + ' Results' : '';
-  resultsText += !filters.allPartsOfSpeechChecked ? ' (Filtered)' : '';
-  document.getElementById('searchResults').innerHTML = resultsText;
-}
-
-export function renderInfoModal(content) {
-  const modalElement = document.createElement('section');
-  modalElement.classList.add('modal', 'info-modal');
-  modalElement.innerHTML = `<div class="modal-background"></div>
-  <div class="modal-content">
-    <a class="close-button">&times;&#xFE0E;</a>
-    <section class="info-modal">
-      <div class="content">
-        ${content}
-      </div>
-    </section>
-  </div>`;
-
-  document.body.appendChild(modalElement);
-
-  setupInfoModal(modalElement);
 }
