@@ -9,6 +9,17 @@ if ($show_upgrade_screen) {
 
 $view = isset($_GET['view']) ? $_GET['view'] : false;
 
+function utf8ize($d) {
+  if (is_array($d)) {
+    foreach ($d as $k => $v) {
+      $d[$k] = utf8ize($v);
+    }
+  } else if (is_string ($d)) {
+    return mb_convert_encoding($d, 'UTF-8', 'UTF-8');
+  }
+  return $d;
+}
+
 switch ($view) {
   case 'dictionary': {
     $html = file_get_contents(realpath(dirname(__FILE__) . '/./template-view.html'));
@@ -22,7 +33,7 @@ switch ($view) {
         $html = str_replace('{{dict}}', $dict, $html);
         $html = str_replace('{{dict_name}}', $dictionary_data['name'] . ' ' . $dictionary_data['specification'], $html);
         $html = str_replace('{{public_name}}', $dictionary_data['createdBy'], $html);
-        $dictionary_json = json_encode($dictionary_data);
+        $dictionary_json = json_encode(utf8ize($dictionary_data));
         $html = str_replace('{{dict_json}}', addslashes($dictionary_json), $html);
       } else {
         $html = str_replace('{{dict}}', 'error', $html);
@@ -61,7 +72,7 @@ switch ($view) {
         $html = str_replace('{{dict}}', $dict, $html);
         $html = str_replace('{{dict_name}}', $word_data['name'] . ' in the ' . $dictionary_name, $html);
         $html = str_replace('{{public_name}}', $dictionary_data['createdBy'], $html);
-        $dictionary_json = json_encode($dictionary_data);
+        $dictionary_json = json_encode(utf8ize($dictionary_data));
         $html = str_replace('{{dict_json}}', addslashes($dictionary_json), $html);
       } else {
         $html = str_replace('{{dict}}', 'error', $html);
@@ -80,10 +91,6 @@ switch ($view) {
     $announcements = json_decode($announcements, true);
     $announcements_html = '';
     foreach ($announcements as $announcement) {
-      if (isset($announcement['dismissId']) && isset($_COOKIE['announcement-' . $announcement['dismissId']])) {
-        continue;
-      }
-      
       $expire = strtotime($announcement['expire']);
       if (time() < $expire) {
         $announcements_html .= '<article class="announcement"' . (isset($announcement['dismissId']) ? ' id="announcement-' . $announcement['dismissId'] . '"' : '') . ' data-expires="' . $announcement['expire'] . '">
