@@ -8,6 +8,10 @@ p, span {
   }
 }
 
+h2 {
+  margin-bottom: 5px;
+}
+
 input:not([type="checkbox"]),
 select,
 textarea {
@@ -19,10 +23,7 @@ label {
   font-weight: bold;
   line-height: 120%;
   cursor: pointer;
-
-  &:not(:last-child) {
-    margin-bottom: $general-padding;
-  }
+  margin-bottom: $general-padding;
 
   small {
     font-weight: normal;
