@@ -173,6 +173,14 @@ export function submitWordForm() {
 
   if (validateWord(word)) {
     addWord(word);
+    sortWords(true);
+
+    if (upload && hasToken()) {
+      import('./account/index.js').then(account => {
+        account.uploadWord(word);
+      });
+    }
+
     clearWordForm();
   }
 }
@@ -187,20 +195,13 @@ export function clearWordForm() {
   document.getElementById('wordName').focus();
 }
 
-export function addWord(word, render = true, message = true, upload = true) {
+export function addWord(word, message = true) {
   const timestamp = getTimestampInSeconds();
   word.lastUpdated = timestamp;
   word.createdOn = timestamp;
   window.currentDictionary.words.push(word);
   if (message) {
     addMessage(`<a href="#${word.wordId}">${word.name}</a> Created Successfully`, 30000);
-  }
-  sortWords(render);
-
-  if (upload && hasToken()) {
-    import('./account/index.js').then(account => {
-      account.uploadWord(word);
-    });
   }
 
   return word;

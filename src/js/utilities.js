@@ -1,4 +1,3 @@
-import { addWord } from './wordManagement';
 import { getCookie } from './StackOverflow/cookie';
 
 export function getNextId() {

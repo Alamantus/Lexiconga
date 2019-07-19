@@ -245,13 +245,18 @@ export function importWords() {
               definition: removeTags(row.definition).trim(),
               details: removeTags(row.explanation).trim(),
               wordId: getNextId(),
-            }, false, false, false);
+            }, false);
 
             importedWords.push(importedWord);
+
+            // Sort and save every 500 words, just in case something goes wrong on large imports
+            if (importedWords.length % 500 == 499) {
+              sortWords(false);
+            }
           }
         },
         complete: () => {
-          saveDictionary(false);
+          sortWords(false);
           renderAll();
           importWordsField.value = '';
           document.getElementById('editModal').style.display = 'none';
