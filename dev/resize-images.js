@@ -9,7 +9,7 @@ if (!fs.existsSync(folder)) {
 
 const favicon = sharp('./src/images/favicon.svg');
 
-sharp('./src/images/logo.svg').toFile(folder + 'logo.png', (err, info) => {
+sharp('./src/images/social.jpg').toFile(folder + 'social.jpg', (err, info) => {
   if (err) return console.error(err);
   console.log(info);
 });

@@ -54,14 +54,14 @@ export function renderDetails() {
   const alphabeticalOrderHTML = `<p><strong>Alphabetical Order</strong><br>${
     (alphabeticalOrder.length > 0 ? alphabeticalOrder : ['English Alphabet']).map(letter => `<span class="tag">${letter}</span>`).join(' ')
     }</div>`;
-  const generalHTML = `<h3>General</h3>${partsOfSpeechHTML}${alphabeticalOrderHTML}`;
+  const generalHTML = `<h2>General</h2>${partsOfSpeechHTML}${alphabeticalOrderHTML}`;
 
   const { consonants, vowels, blends } = phonology
   const consonantHTML = `<p><strong>Consonants</strong><br>${consonants.map(letter => `<span class="tag">${letter}</span>`).join(' ')}</p>`;
   const vowelHTML = `<p><strong>Vowels</strong><br>${vowels.map(letter => `<span class="tag">${letter}</span>`).join(' ')}</p>`;
   const blendHTML = blends.length > 0 ? `<p><strong>Polyphthongs&nbsp;/&nbsp;Blends</strong><br>${blends.map(letter => `<span class="tag">${letter}</span>`).join(' ')}</p>` : '';
   const phonologyNotesHTML = phonology.notes.trim().length > 0 ? '<p><strong>Notes</strong></p><div>' + md(removeTags(phonology.notes)) + '</div>' : '';
-  const phonologyHTML = `<h3>Phonology</h3>
+  const phonologyHTML = `<h2>Phonology</h2>
   <div class="split two">
     <div>${consonantHTML}</div>
     <div>${vowelHTML}</div>
@@ -75,7 +75,7 @@ export function renderDetails() {
   const codaHTML = `<p><strong>Coda</strong><br>${coda.map(letter => `<span class="tag">${letter}</span>`).join(' ')}</p>`;
   const phonotacticsNotesHTML = phonotactics.notes.trim().length > 0 ? '<p><strong>Notes</strong></p><div>' + md(removeTags(phonotactics.notes)) + '</div>' : '';
   const phonotacticsHTML = onset.length + nucleus.length + coda.length + phonotacticsNotesHTML.length > 0
-    ? `<h3>Phonotactics</h3>
+    ? `<h2>Phonotactics</h2>
   ${onset.length > 0 || nucleus.length > 0 || coda.length > 0
     ? `<div class="split three">
     <div>${onsetHTML}</div>
@@ -95,11 +95,11 @@ export function renderDetails() {
   }).filter(html => html !== false).join(' ')}</p>` : '';
   const orthographyNotesHTML = orthography.notes.trim().length > 0 ? '<p><strong>Notes</strong><br>' + md(removeTags(orthography.notes)) + '</div>' : '';
   const orthographyHTML = translations.length + orthographyNotesHTML.length > 0
-    ? `<h3>Orthography</h3>
+    ? `<h2>Orthography</h2>
   ${translationsHTML}
   ${orthographyNotesHTML}`
     : '';
-  const grammarHTML = grammar.notes.trim().length > 0 ? '<h3>Grammar</h3><div>'
+  const grammarHTML = grammar.notes.trim().length > 0 ? '<h2>Grammar</h2><div>'
     + (grammar.notes.trim().length > 0 ? md(removeTags(grammar.notes)) : '')
   + '</div>' : '';
 
