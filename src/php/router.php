@@ -103,6 +103,7 @@ switch ($view) {
     $html = str_replace('{{announcements}}', $announcements_html, $html);
 
     $upup_files = array(
+      'goodie-bag.js',
       'src.js',
       'main.css',
       'help.html',
