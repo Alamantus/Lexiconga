@@ -175,7 +175,7 @@ export function submitWordForm() {
     addWord(word);
     sortWords(true);
 
-    if (upload && hasToken()) {
+    if (hasToken()) {
       import('./account/index.js').then(account => {
         account.uploadWord(word);
       });
