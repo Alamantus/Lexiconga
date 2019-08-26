@@ -31,8 +31,10 @@ switch ($view) {
       if ($dictionary_data !== false) {
         $dictionary_data['words'] = $dictionary->words;
         $html = str_replace('{{dict}}', $dict, $html);
-        $html = str_replace('{{dict_name}}', $dictionary_data['name'] . ' ' . $dictionary_data['specification'], $html);
-        $html = str_replace('{{public_name}}', $dictionary_data['createdBy'], $html);
+        $dictionary_name = (isset($dictionary_data['name']) ? $dictionary_data['name'] : 'Unnamed')
+          . ' ' . (isset($dictionary_data['specification']) ? $dictionary_data['specification'] : 'Dictionary');
+        $html = str_replace('{{dict_name}}', $dictionary_name, $html);
+        $html = str_replace('{{public_name}}', isset($dictionary_data['createdBy']) ? $dictionary_data['createdBy'] : 'Someone', $html);
         $dictionary_json = json_encode(utf8ize($dictionary_data));
         $html = str_replace('{{dict_json}}', addslashes($dictionary_json), $html);
       } else {
@@ -54,7 +56,8 @@ switch ($view) {
       $dictionary = new PublicDictionary($dict, true);
       $dictionary_data = $dictionary->details;
       if ($dictionary_data !== false) {
-        $dictionary_name = $dictionary_data['name'] . ' ' . $dictionary_data['specification'];
+        $dictionary_name = (isset($dictionary_data['name']) ? $dictionary_data['name'] : 'Unnamed')
+          . ' ' . (isset($dictionary_data['specification']) ? $dictionary_data['specification'] : 'Dictionary');
         $word_data = $dictionary->getSpecificPublicDictionaryWord($dict, $word);
         if ($word_data === false) {
           $word_data = array(

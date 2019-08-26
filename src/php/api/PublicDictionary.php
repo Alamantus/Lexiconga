@@ -29,7 +29,7 @@ class PublicDictionary {
       $result = $this->db->query($query, array($dictionary))->fetch();
       if ($result) {
         // Default json values in case they are somehow not created by front end first
-        $partsOfSpeech = $result['parts_of_speech'] !== '' ? $result['parts_of_speech'] : $this->defaults['partsOfSpeech'];
+        $partsOfSpeech = isset($result['parts_of_speech']) && $result['parts_of_speech'] !== '' ? $result['parts_of_speech'] : $this->defaults['partsOfSpeech'];
 
         return array(
           'externalID' => $result['id'],
