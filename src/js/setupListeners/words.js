@@ -1,17 +1,19 @@
 import { renderEditForm } from '../render/words';
-import { confirmEditWord, cancelEditWord, confirmDeleteWord, submitWordForm } from '../wordManagement';
+import { confirmEditWord, cancelEditWord, confirmDeleteWord, expandAdvancedForm, submitWordForm } from '../wordManagement';
 import { goToNextPage, goToPreviousPage, goToPage } from '../pagination';
 import { setupMaximizeButtons } from './buttons';
 import { setupIPAFields } from '.';
 
 export function setupWordForm() {
   const wordForm = document.getElementById('wordForm'),
+    expandAdvancedFormButton = document.getElementById('expandAdvancedForm'),
     addWordButton = document.getElementById('addWordButton');
   wordForm.addEventListener('submit', event => {
     // Allow semantic form and prevent it from getting submitted
     event.preventDefault();
     return false;
   });
+  expandAdvancedFormButton.addEventListener('click', expandAdvancedForm);
   addWordButton.addEventListener('click', submitWordForm);
 
   setupIPAFields();
@@ -61,8 +63,13 @@ export function setupWordOptionSelections() {
 }
 
 export function setupWordEditFormButtons() {
-  const saveChangesButtons = document.getElementsByClassName('edit-save-changes'),
+  const expandAdvancedFormButtons = document.getElementsByClassName('expand-advanced-form'),
+    saveChangesButtons = document.getElementsByClassName('edit-save-changes'),
     cancelChangesButtons = document.getElementsByClassName('edit-cancel');
+  Array.from(expandAdvancedFormButtons).forEach(button => {
+    button.removeEventListener('click', expandAdvancedForm);
+    button.addEventListener('click', expandAdvancedForm);
+  });
   Array.from(saveChangesButtons).forEach(button => {
     button.removeEventListener('click', confirmEditWord);
     button.addEventListener('click', confirmEditWord);

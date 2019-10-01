@@ -155,12 +155,26 @@ export function parseReferences(detailsMarkdown) {
   return detailsMarkdown;
 }
 
+export function expandAdvancedForm(id = false) {
+  const wordId = typeof id.target !== 'undefined' ? this.id.replace('expandAdvancedForm', '') : id;
+  const button = typeof id.target !== 'undefined' ? this : document.getElementById('expandAdvancedForm' + (!wordId ? '' : wordId)),
+    form = document.getElementById('advancedForm' + (!wordId ? '' : wordId));
+  if (form.style.display !== 'block') {
+    button.innerText = 'Hide Advanced';
+    form.style.display = 'block';
+  } else {
+    button.innerText = 'Show Advanced';
+    form.style.display = 'none';
+  }
+}
+
 export function submitWordForm() {
   const name = document.getElementById('wordName').value,
     pronunciation = document.getElementById('wordPronunciation').value,
     partOfSpeech = document.getElementById('wordPartOfSpeech').value,
     definition = document.getElementById('wordDefinition').value,
-    details = document.getElementById('wordDetails').value;
+    details = document.getElementById('wordDetails').value,
+    etymology = document.getElementById('wordEtymology').value;
 
   const word = {
     name: removeTags(name).trim(),
@@ -170,6 +184,10 @@ export function submitWordForm() {
     details: removeTags(details).trim(),
     wordId: getNextId(),
   };
+
+  if (removeTags(etymology).trim() !== '') {
+    word.etymology = removeTags(etymology).trim();
+  }
 
   if (validateWord(word)) {
     addWord(word);
@@ -252,7 +270,8 @@ export function confirmEditWord(id) {
     pronunciation = document.getElementById('wordPronunciation_' + wordId).value,
     partOfSpeech = document.getElementById('wordPartOfSpeech_' + wordId).value,
     definition = document.getElementById('wordDefinition_' + wordId).value,
-    details = document.getElementById('wordDetails_' + wordId).value;
+    details = document.getElementById('wordDetails_' + wordId).value,
+    etymology = document.getElementById('wordEtymology_' + wordId).value;
 
   const word = {
     name: removeTags(name).trim(),
@@ -262,6 +281,10 @@ export function confirmEditWord(id) {
     details: removeTags(details).trim(),
     wordId,
   };
+
+  if (removeTags(etymology).trim() !== '') {
+    word.etymology = removeTags(etymology).trim();
+  }
 
   if (validateWord(word, wordId)) {
     if (confirm(`Are you sure you want to save changes to "${word.name}"?`)) {

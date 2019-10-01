@@ -160,6 +160,12 @@ export function renderEditForm(wordId = false) {
       <label>Details<span class="red">*</span><a class="label-button maximize-button">Maximize</a><br>
         <textarea id="wordDetails_${wordId}" placeholder="Markdown formatting allowed">${word.details}</textarea>
       </label>
+      <a id="expandAdvancedForm_${wordId}" class="expand-advanced-form">Show Advanced</a>
+      <div id="advancedForm_${wordId}" class="advanced-word-form" style="display:none;">
+        <label>Etymology / Root Words<br>
+          <input id="wordEtymology_${wordId}" maxlength="2500" placeholder="comma,separated,root,words" value="${word.hasOwnProperty('etymology') ? word.etymology : ''}">
+        </label>
+      </div>
       <div id="wordErrorMessage_${wordId}"></div>
       <a class="button edit-save-changes" id="editWordButton_${wordId}">Save Changes</a>
       <a class="button edit-cancel">Cancel Edit</a>
