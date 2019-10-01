@@ -1,5 +1,6 @@
 import { LOCAL_STORAGE_KEY, DEFAULT_DICTIONARY, MIGRATE_VERSION } from "../constants";
 import { saveDictionary } from "./dictionaryManagement";
+import { getTimestampInSeconds } from "../helpers";
 
 export default function migrate() {
   if (window.location.pathname === '/') {
