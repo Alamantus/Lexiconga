@@ -86,6 +86,7 @@ CREATE TABLE IF NOT EXISTS `words` (
   `part_of_speech` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `definition` text COLLATE utf8_unicode_ci NOT NULL,
   `details` text COLLATE utf8_unicode_ci NOT NULL COMMENT 'Markdown',
+  `etymology` text COLLATE utf8_unicode_ci DEFAULT NULL,
   `last_updated` int(11) DEFAULT NULL,
   `created_on` int(11) NOT NULL,
   UNIQUE KEY `unique_index` (`dictionary`,`word_id`)

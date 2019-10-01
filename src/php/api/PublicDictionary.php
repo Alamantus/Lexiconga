@@ -81,7 +81,7 @@ class PublicDictionary {
       $words = $this->getWordsAsEntered();
       if ($words) {
         return array_map(function ($row) use ($dictionary) {
-          return array(
+          $word = array(
             'name' => $this->translateOrthography($row['name'], $dictionary),
             'pronunciation' => $row['pronunciation'],
             'partOfSpeech' => $row['part_of_speech'],
@@ -91,6 +91,12 @@ class PublicDictionary {
             'createdOn' => intval($row['created_on']),
             'wordId' => intval($row['word_id']),
           );
+
+          if (!is_null($row['etymology'])) {
+            $word['etymology'] = $row['etymology'];
+          }
+          
+          return $word;
         }, $this->sortWords($words));
       }
     }

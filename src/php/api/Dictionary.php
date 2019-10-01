@@ -219,7 +219,7 @@ WHERE dictionary=$dictionary";
     $results = $this->db->query($query)->fetchAll();
     if ($results) {
       return array_map(function ($row) {
-        return array(
+        $word = array(
           'name' => $row['name'],
           'pronunciation' => $row['pronunciation'],
           'partOfSpeech' => $row['part_of_speech'],
@@ -229,6 +229,12 @@ WHERE dictionary=$dictionary";
           'createdOn' => intval($row['created_on']),
           'wordId' => intval($row['word_id']),
         );
+
+        if (!is_null($row['etymology'])) {
+          $word['etymology'] = $row['etymology'];
+        }
+
+        return $word;
       }, $results);
     }
     return array();
@@ -253,7 +259,7 @@ WHERE dictionary=$dictionary";
       return true;
     }
 
-    $query = 'INSERT INTO words (dictionary, word_id, name, pronunciation, part_of_speech, definition, details, last_updated, created_on) VALUES ';
+    $query = 'INSERT INTO words (dictionary, word_id, name, pronunciation, part_of_speech, definition, details, etymology, last_updated, created_on) VALUES ';
     $params = array();
     $word_ids = array();
     $most_recent_word_update = 0;
@@ -263,7 +269,7 @@ WHERE dictionary=$dictionary";
         $most_recent_word_update = $last_updated;
       }
       $word_ids[] = $word['wordId'];
-      $query .= "(?, ?, ?, ?, ?, ?, ?, ?, ?), ";
+      $query .= "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?), ";
       $params[] = $dictionary;
       $params[] = $word['wordId'];
       $params[] = $word['name'];
@@ -271,6 +277,7 @@ WHERE dictionary=$dictionary";
       $params[] = $word['partOfSpeech'];
       $params[] = $word['definition'];
       $params[] = $word['details'];
+      $params[] = isset($word['etymology']) ? $word['etymology'] : null;
       $params[] = $last_updated;
       $params[] = $word['createdOn'];
     }
@@ -280,6 +287,7 @@ pronunciation=VALUES(pronunciation),
 part_of_speech=VALUES(part_of_speech),
 definition=VALUES(definition),
 details=VALUES(details),
+etymology=VALUES(etymology),
 last_updated=VALUES(last_updated),
 created_on=VALUES(created_on)';
     
