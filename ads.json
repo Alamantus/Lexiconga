@@ -52,5 +52,32 @@
     "start": "June 1, 2019",
     "end": "January 1, 2020",
     "isPriority": false
+  },
+  {
+    "header": "Like the GUTS+ System?",
+    "body": "50% off through December 3rd! Help contribute to the ongoing development of the GUTS+ System by buying the new, nicely-formatted PDF rule book! With imagery and some exclusive content, this is the best way to learn to play!",
+    "cta": "Buy Now",
+    "link": "https://alamantus.itch.io/guts-plus",
+    "start": "November 28, 2019",
+    "end": "December 3, 2019",
+    "isPriority": false
+  },
+  {
+    "header": "Like the GUTS+ System?",
+    "body": "Help contribute to the ongoing development of the GUTS+ System by buying the new, nicely-formatted PDF rule book! With imagery and some exclusive content, this is the best way to learn to play!",
+    "cta": "Buy Now",
+    "link": "https://alamantus.itch.io/guts-plus",
+    "start": "December 4, 2019",
+    "end": "July 1, 2020",
+    "isPriority": false
+  },
+  {
+    "header": "Like the GUTS+ System?",
+    "body": "Help contribute to the ongoing development of the GUTS+ System by buying the new, nicely-formatted PDF rule book! With imagery and some exclusive content, this is the best way to learn to play!",
+    "cta": "Buy Now",
+    "link": "https://www.drivethrurpg.com/product/273132/The-GUTS-System-Core-Rule-Book-PDF",
+    "start": "December 4, 2019",
+    "end": "July 1, 2020",
+    "isPriority": false
   }
 ]
