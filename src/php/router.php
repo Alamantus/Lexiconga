@@ -134,7 +134,7 @@ switch ($view) {
       oldLoad && oldLoad();
       if (UpUp) {
         UpUp.start({
-          'cache-version': '2.1.4',
+          'cache-version': '2.1.5',
           'content-url': 'offline.html',
           'assets': [
             \"" . implode('","', $files) . "\"
