@@ -129,7 +129,7 @@
   #top {
     background-color: $header-color;
     border-bottom: 1px solid darken($header-color, 2);
-    box-shadow: 0px 4px 5px 0px $dark;
+    box-shadow: none;
 
     #title {
       #lexi {
@@ -156,13 +156,13 @@
   #wordForm {
     background-color: $word-form-color;
     border: 1px solid darken($word-form-color, 2);
-    box-shadow: 4px 4px 5px 0px $dark;
+    box-shadow: none;
   }
 
   #mainColumn {
     background-color: $dictionary-color;
     border: 1px solid darken($dictionary-color, 2);
-    box-shadow: 4px 4px 5px 0px $dark;
+    box-shadow: none;
   }
 
   #detailsSection {
@@ -184,7 +184,7 @@
 
   .announcement {
     background-color: saturate(lighten($footer-color, 20%), 20%);
-    box-shadow: 4px 4px 5px 0px $dark;
+    box-shadow: none;
   }
 
   .entry {
@@ -238,7 +238,7 @@
   #bottom {
     background-color: $footer-color;
     border-top: 1px solid darken($footer-color, 2);
-    box-shadow: 0px -4px 5px 0px $dark;
+    box-shadow: none;
 
     a {
       color: $light;

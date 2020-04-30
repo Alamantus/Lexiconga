@@ -23,13 +23,9 @@
   }
 }
 
-.modal {
-  z-index: 10;
-
-  .modal-content .close-button {
-    top: 5px;
-    right: 5px;
-  }
+.modal .modal-content .close-button {
+  top: 5px;
+  right: 5px;
 }
 
 .split {

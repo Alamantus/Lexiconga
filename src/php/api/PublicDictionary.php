@@ -44,20 +44,20 @@ class PublicDictionary {
               'consonants' => $result['consonants'] !== '' ? explode(' ', $result['consonants']) : array(),
               'vowels' => $result['vowels'] !== '' ? explode(' ', $result['vowels']) : array(),
               'blends' => $result['blends'] !== '' ? explode(' ', $result['blends']) : array(),
-              'notes' => $result['phonology_notes'],
+              'notes' => $this->parseReferences(strip_tags($result['phonology_notes']), $result['id']),
             ),
             'phonotactics' => array(
               'onset' => $result['onset'] !== '' ? explode(',', $result['onset']) : array(),
               'nucleus' => $result['nucleus'] !== '' ? explode(',', $result['nucleus']) : array(),
               'coda' => $result['coda'] !== '' ? explode(',', $result['coda']) : array(),
-              'notes' => $result['phonotactics_notes'],
+              'notes' => $this->parseReferences(strip_tags($result['phonotactics_notes']), $result['id']),
             ),
             'orthography' => array(
               'translations' => $result['translations'] !== '' ? explode(PHP_EOL, $result['translations']) : array(),
-              'notes' => $result['orthography_notes'],
+              'notes' => $this->parseReferences(strip_tags($result['orthography_notes']), $result['id']),
             ),
             'grammar' => array(
-              'notes' => $result['grammar_notes'],
+              'notes' => $this->parseReferences(strip_tags($result['grammar_notes']), $result['id']),
             ),
           ),
           'settings' => array(

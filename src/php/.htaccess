@@ -1,3 +1,6 @@
+# To resolve the issue with "Your connection to this site is not secure" message
+Header set Content-Security-Policy: upgrade-insecure-requests env=HTTPS 
+
 RewriteEngine On    # Turn on the rewriting engine
 
 RewriteRule    ^view/([0-9]+)/([0-9]+)/?$    router.php?view=word&dict=$1&word=$2    [NC,L]    # Handle word ids.

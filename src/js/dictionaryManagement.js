@@ -237,7 +237,7 @@ export function importWords() {
               console.error('Error Importing Word: ', err)
             });
           } else {
-            const row = results.data[0];
+            const row = results.data;
             const importedWord = addWord({
               name: removeTags(row.word).trim(),
               pronunciation: removeTags(row.pronunciation).trim(),

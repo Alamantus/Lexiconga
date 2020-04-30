@@ -4,6 +4,9 @@ This is the light-as-possible rewrite of Lexiconga.
 
 ## Installation
 
+0. Some dev tools require build tools.
+  - On Windows, install them with `npm install --global windows-build-tools`.
+  - Alternatively, you can just install the newest Python and Visual Studio (with Desktop C++ devkit).
 1. Clone and run `yarn` and `composer install` to install dependencies.
 1. Import `src/structure.sql` into a database called 'lexiconga' on your MariaDB server to get the database structure.
 1. Copy `src/php/api/config.php.changeme` to `src/php/api/config.php` and update the values within to enable connections to your lexiconga database.

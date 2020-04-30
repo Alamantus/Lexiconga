@@ -16,6 +16,7 @@ input:not([type="checkbox"]),
 select,
 textarea {
   font-size: 12pt;
+  padding: 2px 3px;
 }
 
 label {
@@ -30,8 +31,7 @@ label {
   }
 
   input:not([type="checkbox"]):not([type="radio"]) {
-    padding-bottom: 2px;
-    line-height: 1.3;
+    line-height: 1.6;
   }
 
   input:not([type="checkbox"]):not([type="radio"]),
@@ -153,6 +153,7 @@ span .tag {
   left: 0;
   bottom: 0;
   right: 0;
+  z-index: 10;
   
   .modal-background {
     position: absolute;

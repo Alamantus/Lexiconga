@@ -1,14 +1,8 @@
 [
   {
-    "header": "New Features have Arrived!",
-    "body": "<p><em>July 15, 2019</em> &ndash; Custom Alphabetical Order, Orthographic Translations, and Custom Styling are now here!</p><p>Check the <a href=\"https://github.com/Alamantus/Lexiconga/releases\" target=\"_blank\" rel=\"noopener\">Updates page</a> for all the new features and bug fixes!</p>",
-    "expire": "January 1, 2020",
-    "dismissId": "wave1"
-  },
-  {
-    "header": "Welcome to Lexiconga 2.0!",
-    "body": "<p><em>July 1, 2019</em> &ndash; Lexiconga has been rewritten from the ground up!</p><p>Check the <a href=\"https://github.com/Alamantus/Lexiconga/releases\" target=\"_blank\" rel=\"noopener\">Updates page</a> for all the new features, or click Help to get a refresher on how to use Lexiconga!</p>",
-    "expire": "January 1, 2020",
-    "dismissId": "welcome"
+    "header": "Minor Updates + 1 Important Fix",
+    "body": "<p><em>March 4, 2020</em> &ndash; Lexiconga has been updated to fix a long-standing bug that prevented updated words from syncing between devices!</p><p>Check the <a href=\"https://github.com/Alamantus/Lexiconga/releases\" target=\"_blank\" rel=\"noopener\">Updates page</a> for the other minor updates.</p>",
+    "expire": "April 4, 2020",
+    "dismissId": "marchFixes1"
   }
 ]
