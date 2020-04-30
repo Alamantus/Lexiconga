@@ -215,7 +215,10 @@ WHERE dictionary=$dictionary";
   }
 
   public function getWords ($user, $dictionary) {
-    $query = "SELECT words.* FROM words JOIN dictionaries ON id = dictionary WHERE dictionary=$dictionary AND user=$user";
+    $query = "SELECT words.*, words_advanced.etymology FROM words
+LEFT JOIN words_advanced ON words_advanced.dictionary = words.dictionary AND words_advanced.word_id = words.word_id
+JOIN dictionaries ON dictionaries.id = words.dictionary
+WHERE words.dictionary=$dictionary AND dictionaries.user=$user";
     $results = $this->db->query($query)->fetchAll();
     if ($results) {
       return array_map(function ($row) {
@@ -231,7 +234,7 @@ WHERE dictionary=$dictionary";
         );
 
         if (!is_null($row['etymology'])) {
-          $word['etymology'] = $row['etymology'];
+          $word['etymology'] = explode(',', $row['etymology']);
         }
 
         return $word;
@@ -259,8 +262,10 @@ WHERE dictionary=$dictionary";
       return true;
     }
 
-    $query = 'INSERT INTO words (dictionary, word_id, name, pronunciation, part_of_speech, definition, details, etymology, last_updated, created_on) VALUES ';
-    $params = array();
+    $query1 = 'INSERT INTO words (dictionary, word_id, name, pronunciation, part_of_speech, definition, details, last_updated, created_on) VALUES ';
+    $query2 = 'INSERT INTO words_advanced (dictionary, word_id, etymology) VALUES ';
+    $params1 = array();
+    $params2 = array();
     $word_ids = array();
     $most_recent_word_update = 0;
     foreach($words as $word) {
@@ -269,31 +274,36 @@ WHERE dictionary=$dictionary";
         $most_recent_word_update = $last_updated;
       }
       $word_ids[] = $word['wordId'];
-      $query .= "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?), ";
-      $params[] = $dictionary;
-      $params[] = $word['wordId'];
-      $params[] = $word['name'];
-      $params[] = $word['pronunciation'];
-      $params[] = $word['partOfSpeech'];
-      $params[] = $word['definition'];
-      $params[] = $word['details'];
-      $params[] = isset($word['etymology']) ? $word['etymology'] : null;
-      $params[] = $last_updated;
-      $params[] = $word['createdOn'];
+      $query1 .= "(?, ?, ?, ?, ?, ?, ?, ?, ?), ";
+      $params1[] = $dictionary;
+      $params1[] = $word['wordId'];
+      $params1[] = $word['name'];
+      $params1[] = $word['pronunciation'];
+      $params1[] = $word['partOfSpeech'];
+      $params1[] = $word['definition'];
+      $params1[] = $word['details'];
+      $params1[] = $last_updated;
+      $params1[] = $word['createdOn'];
+
+      $query2 .= "(?, ?, ?), ";
+      $params2[] = $dictionary;
+      $params2[] = $word['wordId'];
+      $params2[] = isset($word['etymology']) ? implode(',', $word['etymology']) : null;
     }
-    $query = trim($query, ', ') . ' ON DUPLICATE KEY UPDATE
+    $query1 = trim($query1, ', ') . ' ON DUPLICATE KEY UPDATE
 name=VALUES(name),
 pronunciation=VALUES(pronunciation),
 part_of_speech=VALUES(part_of_speech),
 definition=VALUES(definition),
 details=VALUES(details),
-etymology=VALUES(etymology),
 last_updated=VALUES(last_updated),
 created_on=VALUES(created_on)';
+    $query2 = trim($query2, ', ') . ' ON DUPLICATE KEY UPDATE
+etymology=VALUES(etymology)';
     
-    $results = $this->db->execute($query, $params);
+    $results1 = $this->db->execute($query1, $params1);
 
-    // if ($results) {
+    // if ($results1) {
     //   $database_words = $this->getWords($user, $dictionary);
     //   $database_ids = array_map(function($database_word) { return $database_word['id']; }, $database_words);
     //   $words_to_delete = array_filter($database_ids, function($database_id) use($word_ids) { return !in_array($database_id, $word_ids); });
@@ -303,8 +313,11 @@ created_on=VALUES(created_on)';
     //   }
     // }
 
-    if ($results) {
-      return $results;
+    if ($results1 === true) {
+      $results2 = $this->db->execute($query2, $params2);
+      if ($results2 === true) {
+        return $results1 && $results2;
+      }
     }
     return array(
       'error' => $this->db->last_error_info,

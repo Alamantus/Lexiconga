@@ -86,8 +86,18 @@ CREATE TABLE IF NOT EXISTS `words` (
   `part_of_speech` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `definition` text COLLATE utf8_unicode_ci NOT NULL,
   `details` text COLLATE utf8_unicode_ci NOT NULL COMMENT 'Markdown',
-  `etymology` text COLLATE utf8_unicode_ci DEFAULT NULL,
   `last_updated` int(11) DEFAULT NULL,
   `created_on` int(11) NOT NULL,
   UNIQUE KEY `unique_index` (`dictionary`,`word_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+DELIMITER $$
+CREATE TRIGGER IF NOT EXISTS `delete_word_advanced` AFTER DELETE ON `words` FOR EACH ROW DELETE FROM words_advanced WHERE words_advanced.dictionary=old.dictionary AND words_advanced.word_id=old.word_id
+$$
+DELIMITER ;
+
+CREATE TABLE IF NOT EXISTS `words_advanced` (
+  `dictionary` int(11) NOT NULL,
+  `word_id` int(11) NOT NULL,
+  `etymology` text NOT NULL COMMENT 'Comma-separated',
+  UNIQUE KEY `dictionary_word_id` (`dictionary`,`word_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
