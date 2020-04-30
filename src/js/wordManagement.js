@@ -186,7 +186,7 @@ export function submitWordForm() {
   };
 
   if (removeTags(etymology).trim() !== '') {
-    word.etymology = removeTags(etymology).trim();
+    word.etymology = removeTags(etymology).split(',').map(w => w.trim()).filter(w => w.length > 0);
   }
 
   if (validateWord(word)) {
@@ -209,6 +209,7 @@ export function clearWordForm() {
   document.getElementById('wordPartOfSpeech').value = '';
   document.getElementById('wordDefinition').value = '';
   document.getElementById('wordDetails').value = '';
+  document.getElementById('wordEtymology').value = '';
 
   document.getElementById('wordName').focus();
 }
@@ -283,7 +284,7 @@ export function confirmEditWord(id) {
   };
 
   if (removeTags(etymology).trim() !== '') {
-    word.etymology = removeTags(etymology).trim();
+    word.etymology = removeTags(etymology).split(',').map(w => w.trim()).filter(w => w.length > 0);
   }
 
   if (validateWord(word, wordId)) {
