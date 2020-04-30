@@ -35,6 +35,7 @@ export const DEFAULT_DICTIONARY = {
       partOfSpeech: '',
       definition: '',
       details: '',
+      etymology: [],
       wordId: 0
     }, */
   ],
