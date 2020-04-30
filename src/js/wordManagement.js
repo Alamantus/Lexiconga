@@ -160,10 +160,10 @@ export function expandAdvancedForm(id = false) {
   const button = typeof id.target !== 'undefined' ? this : document.getElementById('expandAdvancedForm' + (!wordId ? '' : wordId)),
     form = document.getElementById('advancedForm' + (!wordId ? '' : wordId));
   if (form.style.display !== 'block') {
-    button.innerText = 'Hide Advanced';
+    button.innerText = 'Hide Advanced Fields';
     form.style.display = 'block';
   } else {
-    button.innerText = 'Show Advanced';
+    button.innerText = 'Show Advanced Fields';
     form.style.display = 'none';
   }
 }
