@@ -9,6 +9,7 @@ export function loadSettings() {
   const storedSettings = window.localStorage.getItem(SETTINGS_KEY);
   window.settings = storedSettings ? JSON.parse(storedSettings) : cloneObject(DEFAULT_SETTINGS);
   toggleIPAPronunciationFields(false);
+  toggleShowAdvancedFields();
 }
 
 export function saveSettings() {
@@ -17,10 +18,11 @@ export function saveSettings() {
 }
 
 export function openSettingsModal() {
-  const { useIPAPronunciationField, useHotkeys, defaultTheme } = window.settings;
+  const { useIPAPronunciationField, useHotkeys, showAdvanced, defaultTheme } = window.settings;
 
   document.getElementById('settingsUseIPA').checked = useIPAPronunciationField;
   document.getElementById('settingsUseHotkeys').checked = useHotkeys;
+  document.getElementById('settingsShowAdvanced').checked = showAdvanced;
   document.getElementById('settingsDefaultTheme').value = defaultTheme;
 
   document.getElementById('settingsModal').style.display = '';
@@ -30,6 +32,7 @@ export function saveSettingsModal() {
   const updatedSettings = cloneObject(window.settings);
   updatedSettings.useIPAPronunciationField = document.getElementById('settingsUseIPA').checked;
   updatedSettings.useHotkeys = document.getElementById('settingsUseHotkeys').checked;
+  updatedSettings.showAdvanced = document.getElementById('settingsShowAdvanced').checked;
   updatedSettings.defaultTheme = document.getElementById('settingsDefaultTheme').value;
 
   if (hasToken()) {
@@ -62,6 +65,7 @@ export function saveSettingsModal() {
     saveSettings();
     toggleHotkeysEnabled();
     toggleIPAPronunciationFields();
+    toggleShowAdvancedFields();
   } else {
     addMessage('No changes made to Settings.');
   }
@@ -100,4 +104,31 @@ export function toggleIPAPronunciationFields(render = true) {
   if (render) {
     renderWords();
   }
+}
+
+export function toggleShowAdvancedFields() {
+  const buttons = document.getElementsByClassName('expand-advanced-form'),
+    forms = document.getElementsByClassName('advanced-word-form');
+  const formsWithFilledFields = [];
+
+  Array.from(forms).forEach(form => {
+    const fields = form.querySelectorAll('input, textarea');
+    const formHasFieldFilled = Array.from(fields).some(field => field.value.trim() !== '');
+    if (window.settings.showAdvanced || formHasFieldFilled) {
+      form.style.display = 'block';
+    } else {
+      form.style.display = 'none';
+    }
+    if (formHasFieldFilled) {
+      formsWithFilledFields.push(form.id.replace('advancedForm', ''));
+    }
+  });
+  Array.from(buttons).forEach(button => {
+    const formHasFilledField = formsWithFilledFields.includes(button.id.replace('expandAdvancedForm', ''));
+    if (window.settings.showAdvanced || formHasFilledField) {
+      button.innerText = 'Hide Advanced Fields';
+    } else {
+      button.innerText = 'Show Advanced Fields';
+    }
+  });
 }

@@ -142,7 +142,7 @@
         <label>
           <a id="expandAdvancedForm" class="small button expand-advanced-form">Show Advanced Fields</a>
         </label>
-        <div id="advancedForm" style="display:none;">
+        <div id="advancedForm" class="advanced-word-form" style="display:none;">
           <label>Etymology / Root Words<br>
             <input id="wordEtymology" maxlength="2500" placeholder="comma,separated,root,words">
           </label>
@@ -212,6 +212,11 @@
             <label>Use Hotkeys
               <input id="settingsUseHotkeys" type="checkbox" checked><br />
               <small>Check this to enable keyboard combinations to perform different helpful actions.</small>
+            </label>
+
+            <label>Show Advanced Fields By Default
+              <input id="settingsShowAdvanced" type="checkbox"><br />
+              <small>Check this to make the advanced fields show on word forms without needing to click the "Show Advanced Fields" button.</small>
             </label>
     
             <label>Default Theme <small>(the theme new dictionaries will use)</small>

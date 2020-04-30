@@ -55,6 +55,7 @@ export const DEFAULT_DICTIONARY = {
 export const DEFAULT_SETTINGS = {
   useIPAPronunciationField: true,
   useHotkeys: true,
+  showAdvanced: false,
   defaultTheme: 'default',
 };
 
