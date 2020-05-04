@@ -9,7 +9,7 @@ import {
   setupWordEditFormButtons,
 } from '../setupListeners/words';
 import { getPaginationData } from '../pagination';
-import { getOpenEditForms, translateOrthography, parseReferences } from '../wordManagement';
+import { getOpenEditForms, translateOrthography, parseReferences, getWordReferenceMarkdown } from '../wordManagement';
 import { renderAd } from '../ads';
 import { getPublicLink } from '../account/utilities';
 import { renderPartsOfSpeech } from './details';
@@ -60,6 +60,8 @@ export function renderWords() {
         partOfSpeech: removeTags(originalWord.partOfSpeech),
         definition: removeTags(originalWord.definition),
         details: parseReferences(removeTags(originalWord.details)),
+        etymology: typeof originalWord.etymology === 'undefined' || originalWord.etymology.length < 1 ? null
+          : originalWord.etymology.map(root => getWordReferenceMarkdown(removeTags(root))).join(', '),
         wordId: originalWord.wordId,
       });
       const homonymnNumber = getHomonymnNumber(originalWord);
@@ -86,6 +88,11 @@ export function renderWords() {
           <dd class="details">
             ${md(word.details)}
           </dd>
+          ${word.etymology === null ? '' : `<hr>
+          <dt>Etymology <small>(Root Word${originalWord.etymology.length !== 1 ? 's' : ''})</small></dt>
+          <dd class="etymology">
+            ${md(word.etymology).replace(/<\/?p>/g, '')}
+          </dd>`}
         </dl>
       </article>`;
     });
