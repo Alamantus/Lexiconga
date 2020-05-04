@@ -36,6 +36,7 @@ export const DEFAULT_DICTIONARY = {
       definition: '',
       details: '',
       etymology: [],
+      related: [],
       wordId: 0
     }, */
   ],

@@ -62,6 +62,8 @@ export function renderWords() {
         details: parseReferences(removeTags(originalWord.details)),
         etymology: typeof originalWord.etymology === 'undefined' || originalWord.etymology.length < 1 ? null
           : originalWord.etymology.map(root => getWordReferenceMarkdown(removeTags(root))).join(', '),
+        related: typeof originalWord.related === 'undefined' || originalWord.related.length < 1 ? null
+          : originalWord.related.map(relatedWord => getWordReferenceMarkdown(removeTags(relatedWord))).join(', '),
         wordId: originalWord.wordId,
       });
       const homonymnNumber = getHomonymnNumber(originalWord);
@@ -88,10 +90,14 @@ export function renderWords() {
           <dd class="details">
             ${md(word.details)}
           </dd>
-          ${word.etymology === null ? '' : `<hr>
-          <dt>Etymology <small>(Root Word${originalWord.etymology.length !== 1 ? 's' : ''})</small></dt>
+          ${word.etymology === null && word.related === null ? '' : `<hr>`}
+          ${word.etymology === null ? '' : `<dt>Etymology <small>(Root Word${originalWord.etymology.length !== 1 ? 's' : ''})</small></dt>
           <dd class="etymology">
             ${md(word.etymology).replace(/<\/?p>/g, '')}
+          </dd>`}
+          ${word.related === null ? '' : `<dt>Related Word${originalWord.related.length !== 1 ? 's' : ''}</dt>
+          <dd class="related">
+            ${md(word.related).replace(/<\/?p>/g, '')}
           </dd>`}
         </dl>
       </article>`;
@@ -173,6 +179,9 @@ export function renderEditForm(wordId = false) {
       <div id="advancedForm_${wordId}" class="advanced-word-form" style="display:${window.settings.showAdvanced ? 'block' : 'none'};">
         <label>Etymology / Root Words<br>
           <input id="wordEtymology_${wordId}" maxlength="2500" placeholder="comma,separated,root,words" value="${word.hasOwnProperty('etymology') ? word.etymology : ''}">
+        </label>
+        <label>Related Words<br>
+          <input id="wordRelated_${wordId}" maxlength="2500" placeholder="comma,separated,related,words" value="${word.hasOwnProperty('related') ? word.related : ''}">
         </label>
       </div>
       <div id="wordErrorMessage_${wordId}"></div>

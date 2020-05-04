@@ -182,7 +182,8 @@ export function submitWordForm() {
     partOfSpeech = document.getElementById('wordPartOfSpeech').value,
     definition = document.getElementById('wordDefinition').value,
     details = document.getElementById('wordDetails').value,
-    etymology = document.getElementById('wordEtymology').value;
+    etymology = document.getElementById('wordEtymology').value,
+    related = document.getElementById('wordRelated').value;
 
   const word = {
     name: removeTags(name).trim(),
@@ -195,6 +196,10 @@ export function submitWordForm() {
 
   if (removeTags(etymology).trim() !== '') {
     word.etymology = removeTags(etymology).split(',').map(w => w.trim()).filter(w => w.length > 0);
+  }
+
+  if (removeTags(related).trim() !== '') {
+    word.related = removeTags(related).split(',').map(w => w.trim()).filter(w => w.length > 0);
   }
 
   if (validateWord(word)) {
@@ -280,7 +285,8 @@ export function confirmEditWord(id) {
     partOfSpeech = document.getElementById('wordPartOfSpeech_' + wordId).value,
     definition = document.getElementById('wordDefinition_' + wordId).value,
     details = document.getElementById('wordDetails_' + wordId).value,
-    etymology = document.getElementById('wordEtymology_' + wordId).value;
+    etymology = document.getElementById('wordEtymology_' + wordId).value,
+    related = document.getElementById('wordRelated_' + wordId).value;
 
   const word = {
     name: removeTags(name).trim(),
@@ -293,6 +299,10 @@ export function confirmEditWord(id) {
 
   if (removeTags(etymology).trim() !== '') {
     word.etymology = removeTags(etymology).split(',').map(w => w.trim()).filter(w => w.length > 0);
+  }
+
+  if (removeTags(related).trim() !== '') {
+    word.related = removeTags(related).split(',').map(w => w.trim()).filter(w => w.length > 0);
   }
 
   if (validateWord(word, wordId)) {

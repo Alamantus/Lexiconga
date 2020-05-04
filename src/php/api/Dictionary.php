@@ -215,7 +215,7 @@ WHERE dictionary=$dictionary";
   }
 
   public function getWords ($user, $dictionary) {
-    $query = "SELECT words.*, words_advanced.etymology FROM words
+    $query = "SELECT words.*, words_advanced.etymology, words_advanced.related FROM words
 LEFT JOIN words_advanced ON words_advanced.dictionary = words.dictionary AND words_advanced.word_id = words.word_id
 JOIN dictionaries ON dictionaries.id = words.dictionary
 WHERE words.dictionary=$dictionary AND dictionaries.user=$user";
@@ -233,8 +233,12 @@ WHERE words.dictionary=$dictionary AND dictionaries.user=$user";
           'wordId' => intval($row['word_id']),
         );
 
-        if (!is_null($row['etymology'])) {
+        if (!is_null($row['etymology']) && $row['etymology'] !== '') {
           $word['etymology'] = explode(',', $row['etymology']);
+        }
+
+        if (!is_null($row['related']) && $row['related'] !== '') {
+          $word['related'] = explode(',', $row['related']);
         }
 
         return $word;
@@ -263,7 +267,7 @@ WHERE words.dictionary=$dictionary AND dictionaries.user=$user";
     }
 
     $query1 = 'INSERT INTO words (dictionary, word_id, name, pronunciation, part_of_speech, definition, details, last_updated, created_on) VALUES ';
-    $query2 = 'INSERT INTO words_advanced (dictionary, word_id, etymology) VALUES ';
+    $query2 = 'INSERT INTO words_advanced (dictionary, word_id, etymology, related) VALUES ';
     $params1 = array();
     $params2 = array();
     $word_ids = array();
@@ -285,10 +289,11 @@ WHERE words.dictionary=$dictionary AND dictionaries.user=$user";
       $params1[] = $last_updated;
       $params1[] = $word['createdOn'];
 
-      $query2 .= "(?, ?, ?), ";
+      $query2 .= "(?, ?, ?, ?), ";
       $params2[] = $dictionary;
       $params2[] = $word['wordId'];
-      $params2[] = isset($word['etymology']) ? implode(',', $word['etymology']) : null;
+      $params2[] = isset($word['etymology']) ? implode(',', $word['etymology']) : '';
+      $params2[] = isset($word['related']) ? implode(',', $word['related']) : '';
     }
     $query1 = trim($query1, ', ') . ' ON DUPLICATE KEY UPDATE
 name=VALUES(name),
@@ -299,7 +304,8 @@ details=VALUES(details),
 last_updated=VALUES(last_updated),
 created_on=VALUES(created_on)';
     $query2 = trim($query2, ', ') . ' ON DUPLICATE KEY UPDATE
-etymology=VALUES(etymology)';
+etymology=VALUES(etymology),
+related=VALUES(related)';
     
     $results1 = $this->db->execute($query1, $params1);
 
