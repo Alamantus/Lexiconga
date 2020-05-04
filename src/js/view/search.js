@@ -22,7 +22,7 @@ export function getSearchFilters() {
     caseSensitive: document.getElementById('searchCaseSensitive').checked,
     ignoreDiacritics: document.getElementById('searchIgnoreDiacritics').checked,
     exact: document.getElementById('searchExactWords').checked,
-    orthography: document.getElementById('searchOrthography').checked,
+    // orthography is removed my default because it is already rendered on the backend.
     name: document.getElementById('searchIncludeName').checked,
     definition: document.getElementById('searchIncludeDefinition').checked,
     details: document.getElementById('searchIncludeDetails').checked,
@@ -54,13 +54,11 @@ export function getMatchingSearchWords() {
     }).filter(word => {
       searchTerm = filters.ignoreDiacritics ? removeDiacritics(searchTerm) : searchTerm;
       searchTerm = filters.caseSensitive ? searchTerm : searchTerm.toLowerCase();
-      let name = filters.orthography ? translateOrthography(word.name) : word.name;
-      name = filters.ignoreDiacritics ? removeDiacritics(name) : name;
+      let name = filters.ignoreDiacritics ? removeDiacritics(word.name) : word.name;
       name = filters.caseSensitive ? name : name.toLowerCase();
       let definition = filters.ignoreDiacritics ? removeDiacritics(word.definition) : word.definition;
       definition = filters.caseSensitive ? definition : definition.toLowerCase();
-      let details = filters.orthography ? parseReferences(word.details) : word.details;
-      details = filters.ignoreDiacritics ? removeDiacritics(details) : details;
+      let details = filters.ignoreDiacritics ? removeDiacritics(word.details) : word.details;
       details = filters.caseSensitive ? details : details.toLowerCase();
 
       const isInName = filters.name && (filters.exact
@@ -83,10 +81,6 @@ export function highlightSearchTerm(word) {
   if (searchTerm) {
     const filters = getSearchFilters();
     const markedUpWord = cloneObject(word);
-    if (filters.orthography) {
-      markedUpWord.name = translateOrthography(markedUpWord.name);
-      markedUpWord.details = parseReferences(markedUpWord.details);
-    }
     if (filters.ignoreDiacritics) {
       const searchTermLength = searchTerm.length;
       searchTerm = removeDiacritics(searchTerm);
