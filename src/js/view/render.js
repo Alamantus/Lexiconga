@@ -182,6 +182,8 @@ export function renderWords() {
         partOfSpeech: removeTags(originalWord.partOfSpeech),
         definition: removeTags(originalWord.definition),
         details: originalWord.details,
+        etymology: typeof originalWord.etymology === 'undefined' || originalWord.etymology.length < 1 ? null
+          : originalWord.etymology.join(', '),
         wordId: originalWord.wordId,
       });
 
@@ -202,6 +204,11 @@ export function renderWords() {
           <dd class="details">
             ${md(word.details)}
           </dd>
+          ${word.etymology === null ? '' : `<hr>
+          <dt>Etymology <small>(Root Word${originalWord.etymology.length !== 1 ? 's' : ''})</small></dt>
+          <dd class="etymology">
+            ${md(word.etymology).replace(/<\/?p>/g, '')}
+          </dd>`}
         </dl>
       </article>`;
     });
