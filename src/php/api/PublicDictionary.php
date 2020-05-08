@@ -107,6 +107,12 @@ class PublicDictionary {
               }, explode(',', $row['related']));
             }
           }
+
+          if (!is_null($row['principal_parts'])) {
+            if (strlen($row['principal_parts']) > 0) {
+              $word['principalParts'] = explode(',', $row['principal_parts']);
+            }
+          }
           
           return $word;
         }, $this->sortWords($words));
@@ -117,7 +123,7 @@ class PublicDictionary {
 
   public function getSpecificPublicDictionaryWord ($dictionary, $word) {
     if (is_numeric($dictionary) && is_numeric($word)) {
-      $query = "SELECT words.*, wa.etymology, wa.related FROM words
+      $query = "SELECT words.*, wa.etymology, wa.related, wa.principal_parts FROM words
       LEFT JOIN words_advanced wa ON wa.dictionary = words.dictionary AND wa.word_id = words.word_id
       JOIN dictionaries ON dictionaries.id = words.dictionary
       WHERE words.dictionary=? AND words.word_id=? AND dictionaries.is_public=1";
@@ -150,6 +156,12 @@ class PublicDictionary {
           }
         }
 
+        if (!is_null($result['principal_parts'])) {
+          if (strlen($result['principal_parts']) > 0) {
+            $word['principalParts'] = explode(',', $result['principal_parts']);
+          }
+        }
+
         return $word;
       }
     }
@@ -158,7 +170,7 @@ class PublicDictionary {
 
   private function getWordsAsEntered() {
     if (!isset($this->original_words)) {
-      $query = "SELECT words.*, wa.etymology, wa.related FROM words
+      $query = "SELECT words.*, wa.etymology, wa.related, wa.principal_parts FROM words
 LEFT JOIN words_advanced wa ON wa.dictionary = words.dictionary AND wa.word_id = words.word_id
 JOIN dictionaries ON dictionaries.id = words.dictionary
 WHERE words.dictionary=? AND is_public=1";

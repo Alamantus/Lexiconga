@@ -186,6 +186,8 @@ export function renderWords() {
           : originalWord.etymology.join(', '),
         related: typeof originalWord.related === 'undefined' || originalWord.related.length < 1 ? null
           : originalWord.related.join(', '),
+        principalParts: typeof originalWord.principalParts === 'undefined' || originalWord.principalParts.length < 1 ? null
+          : originalWord.principalParts.join(', '),
         wordId: originalWord.wordId,
       });
 
@@ -197,6 +199,7 @@ export function renderWords() {
       wordsHTML += `<article class="entry" id="${word.wordId}">
         <header>
           <h4 class="word"><span class="orthographic-translation">${word.name}</span>${homonymnNumber > 0 ? ' <sub>' + homonymnNumber.toString() + '</sub>' : ''}</h4>
+          ${word.principalParts === null ? '' : `<span class="principalParts">(${word.principalParts})</span>`}
           <span class="pronunciation">${word.pronunciation}</span>
           <span class="part-of-speech">${word.partOfSpeech}</span>
           <a href="${shareLink}" target="_blank" class="small button word-option-button" title="Link to Word">&#10150;</a>
