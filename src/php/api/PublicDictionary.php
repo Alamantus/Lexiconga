@@ -86,7 +86,7 @@ class PublicDictionary {
             'pronunciation' => $row['pronunciation'],
             'partOfSpeech' => $row['part_of_speech'],
             'definition' => $row['definition'],
-            'details' => $this->parseReferences(strip_tags($row['details']), $dictionary),
+            'details' => $this->parseReferences(strip_tags($row['details']), $dictionary, false),
             'lastUpdated' => is_null($row['last_updated']) ? intval($row['created_on']) : intval($row['last_updated']),
             'createdOn' => intval($row['created_on']),
             'wordId' => intval($row['word_id']),
@@ -95,7 +95,7 @@ class PublicDictionary {
           if (!is_null($row['etymology'])) {
             if (strlen($row['etymology']) > 0) {
               $word['etymology'] = array_map(function ($root) use($dictionary) {
-                return $this->getWordReferenceHTML(strip_tags($root), $dictionary);
+                return $this->getWordReferenceHTML(strip_tags($root), $dictionary, false);
               }, explode(',', $row['etymology']));
             }
           }
@@ -103,7 +103,7 @@ class PublicDictionary {
           if (!is_null($row['related'])) {
             if (strlen($row['related']) > 0) {
               $word['related'] = array_map(function ($root) use($dictionary) {
-                return $this->getWordReferenceHTML(strip_tags($root), $dictionary);
+                return $this->getWordReferenceHTML(strip_tags($root), $dictionary, false);
               }, explode(',', $row['related']));
             }
           }
@@ -235,7 +235,7 @@ WHERE words.dictionary=? AND is_public=1";
     return $details;
   }
 
-  private function getWordReferenceHTML($reference, $dictionary_id) {
+  private function getWordReferenceHTML($reference, $dictionary_id, $direct_link = true) {
     $word_to_find = preg_replace('/\{\{|\}\}/', '', $reference);
     $homonymn = 0;
   
@@ -268,7 +268,9 @@ WHERE words.dictionary=? AND is_public=1";
         }
         $homonymn_sub_html = count($reference_ids) > 1 && $homonymn - 1 >= 0 ? '<sub>' . $homonymn . '</sub>' : '';
         $site_root = substr($_SERVER['REQUEST_URI'], 0, strpos($_SERVER['REQUEST_URI'], $dictionary_id));
-        return '<span class="word-reference"><a href="' . $site_root . $dictionary_id . '/' . $target_id .'" target="_blank" title="Link to Reference">'
+        return '<span class="word-reference"><a href="'
+          . ($direct_link ? $site_root . $dictionary_id . '/' : '#') . $target_id .'" '
+          . ($direct_link ? 'target="_blank" ' : '') . 'title="Link to Reference">'
           . '<span class="orthographic-translation">' . $this->translateOrthography($word_to_find, $dictionary_id) . '</span>' . $homonymn_sub_html
         . '</a></span>';
       }
