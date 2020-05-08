@@ -64,6 +64,8 @@ export function renderWords() {
           : originalWord.etymology.map(root => getWordReferenceMarkdown(removeTags(root))).join(', '),
         related: typeof originalWord.related === 'undefined' || originalWord.related.length < 1 ? null
           : originalWord.related.map(relatedWord => getWordReferenceMarkdown(removeTags(relatedWord))).join(', '),
+        principalParts: typeof originalWord.principalParts === 'undefined' || originalWord.principalParts.length < 1 ? null
+          : originalWord.principalParts.join(', '),
         wordId: originalWord.wordId,
       });
       const homonymnNumber = getHomonymnNumber(originalWord);
@@ -76,6 +78,7 @@ export function renderWords() {
       wordsHTML += `<article class="entry" id="${word.wordId}">
         <header>
           <h4 class="word"><span class="orthographic-translation">${wordNameDisplay}</span>${homonymnNumber > 0 ? ' <sub>' + homonymnNumber.toString() + '</sub>' : ''}</h4>
+          ${word.principalParts === null ? '' : `<span class="principalParts">(${word.principalParts})</span>`}
           <span class="pronunciation">${word.pronunciation}</span>
           <span class="part-of-speech">${word.partOfSpeech}</span>
           ${isPublic ? `<a class="small button share-link" href="${shareLink}" target="_blank" title="Public Link to Word">&#10150;</a>` : ''}
@@ -182,6 +185,9 @@ export function renderEditForm(wordId = false) {
         </label>
         <label>Related Words<br>
           <input id="wordRelated_${wordId}" maxlength="2500" placeholder="comma,separated,related,words" value="${word.hasOwnProperty('related') ? word.related : ''}">
+        </label>
+        <label>Principal Parts<a href="https://en.wikipedia.org/wiki/Principal_parts" target="_blank" class="label-button">What's This?</a><br>
+          <input id="wordPrincipalParts_${wordId}" maxlength="2500" placeholder="comma,separated,principal,parts" value="${word.hasOwnProperty('principalParts') ? word.principalParts : ''}">
         </label>
       </div>
       <div id="wordErrorMessage_${wordId}"></div>

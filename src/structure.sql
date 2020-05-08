@@ -100,5 +100,6 @@ CREATE TABLE IF NOT EXISTS `words_advanced` (
   `word_id` int(11) NOT NULL,
   `etymology` text NOT NULL COMMENT 'Comma-separated',
   `related` text NOT NULL COMMENT 'Comma-separated',
+  `principal_parts` text NOT NULL COMMENT 'Comma-separated',
   UNIQUE KEY `dictionary_word_id` (`dictionary`,`word_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
