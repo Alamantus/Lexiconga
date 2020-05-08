@@ -117,10 +117,13 @@ class PublicDictionary {
 
   public function getSpecificPublicDictionaryWord ($dictionary, $word) {
     if (is_numeric($dictionary) && is_numeric($word)) {
-      $query = "SELECT words.* FROM words JOIN dictionaries ON id = dictionary WHERE dictionary=? AND word_id=? AND is_public=1";
+      $query = "SELECT words.*, wa.etymology, wa.related FROM words
+      LEFT JOIN words_advanced wa ON wa.dictionary = words.dictionary AND wa.word_id = words.word_id
+      JOIN dictionaries ON dictionaries.id = words.dictionary
+      WHERE words.dictionary=? AND words.word_id=? AND dictionaries.is_public=1";
       $result = $this->db->query($query, array($dictionary, $word))->fetch();
       if ($result) {
-        return array(
+        $word = array(
           'name' => $this->translateOrthography($result['name'], $dictionary),
           'pronunciation' => $result['pronunciation'],
           'partOfSpeech' => $result['part_of_speech'],
@@ -130,6 +133,24 @@ class PublicDictionary {
           'createdOn' => intval($result['created_on']),
           'wordId' => intval($result['word_id']),
         );
+
+        if (!is_null($result['etymology'])) {
+          if (strlen($result['etymology']) > 0) {
+            $word['etymology'] = array_map(function ($root) use($dictionary) {
+              return $this->getWordReferenceHTML(strip_tags($root), $dictionary);
+            }, explode(',', $result['etymology']));
+          }
+        }
+
+        if (!is_null($result['related'])) {
+          if (strlen($result['related']) > 0) {
+            $word['related'] = array_map(function ($root) use($dictionary) {
+              return $this->getWordReferenceHTML(strip_tags($root), $dictionary);
+            }, explode(',', $result['related']));
+          }
+        }
+
+        return $word;
       }
     }
     return false;
