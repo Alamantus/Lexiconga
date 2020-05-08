@@ -60,15 +60,24 @@ export function getMatchingSearchWords() {
       definition = filters.caseSensitive ? definition : definition.toLowerCase();
       let details = filters.ignoreDiacritics ? removeDiacritics(word.details) : word.details;
       details = filters.caseSensitive ? details : details.toLowerCase();
+      let principalParts = typeof word.principalParts === 'undefined' ? [] : word.principalParts;
+      principalParts = filters.ignoreDiacritics ? principalParts.map(part => removeDiacritics(part)) : principalParts;
+      principalParts = filters.caseSensitive ? principalParts : principalParts.map(part => part.toLowerCase());
 
       const isInName = filters.name && (filters.exact
-          ? searchTerm == name
-          : new RegExp(searchTerm, 'g').test(name));
+        ? searchTerm == name
+        : new RegExp(searchTerm, 'g').test(name)
+      );
       const isInDefinition = filters.definition && (filters.exact
-          ? searchTerm == definition
-          : new RegExp(searchTerm, 'g').test(definition));
+        ? searchTerm == definition
+        : new RegExp(searchTerm, 'g').test(definition)
+      );
       const isInDetails = filters.details && new RegExp(searchTerm, 'g').test(details);
-      return searchTerm === '' || isInName || isInDefinition || isInDetails;
+      const isInPrincipalParts = filters.name && (filters.exact
+        ? principalParts.includes(searchTerm)
+        : principalParts.some(part => new RegExp(searchTerm, 'g').test(part))
+      );
+      return searchTerm === '' || isInName || isInDefinition || isInDetails || isInPrincipalParts;
     });
     return matchingWords;
   }
@@ -92,6 +101,16 @@ export function highlightSearchTerm(word) {
             + '<mark>' + markedUpWord.name.substr(wordIndex, searchTermLength) + '</mark>'
             + markedUpWord.name.substr(wordIndex + searchTermLength);
         });
+
+        if (markedUpWord.principalParts !== null) {
+          const part = getIndicesOf(searchTerm, removeDiacritics(markedUpWord.principalParts), filters.caseSensitive);
+          part.forEach((wordIndex, i) => {
+            wordIndex += '<mark></mark>'.length * i;
+            markedUpWord.principalParts = markedUpWord.principalParts.substring(0, wordIndex)
+              + '<mark>' + markedUpWord.principalParts.substr(wordIndex, searchTermLength) + '</mark>'
+              + markedUpWord.principalParts.substr(wordIndex + searchTermLength);
+          });
+        }
       }
       if (filters.definition) {
         const definitionMatches = getIndicesOf(searchTerm, removeDiacritics(markedUpWord.definition), filters.caseSensitive);
@@ -115,6 +134,10 @@ export function highlightSearchTerm(word) {
       const regexMethod = 'g' + (filters.caseSensitive ? '' : 'i');
       if (filters.name) {
         markedUpWord.name = markedUpWord.name.replace(new RegExp(`(${searchTerm})`, regexMethod), `<mark>$1</mark>`);
+        
+        if (markedUpWord.principalParts !== null) {
+          markedUpWord.principalParts = markedUpWord.principalParts.replace(new RegExp(`(${searchTerm})`, regexMethod), `<mark>$1</mark>`);
+        }
       }
       if (filters.definition) {
         markedUpWord.definition = markedUpWord.definition.replace(new RegExp(`(${searchTerm})`, regexMethod), `<mark>$1</mark>`);
