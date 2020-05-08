@@ -99,6 +99,14 @@ class PublicDictionary {
               }, explode(',', $row['etymology']));
             }
           }
+
+          if (!is_null($row['related'])) {
+            if (strlen($row['related']) > 0) {
+              $word['related'] = array_map(function ($root) use($dictionary) {
+                return $this->getWordReferenceHTML(strip_tags($root), $dictionary);
+              }, explode(',', $row['related']));
+            }
+          }
           
           return $word;
         }, $this->sortWords($words));
@@ -129,8 +137,8 @@ class PublicDictionary {
 
   private function getWordsAsEntered() {
     if (!isset($this->original_words)) {
-      $query = "SELECT words.*, words_advanced.etymology FROM words
-LEFT JOIN words_advanced ON words_advanced.dictionary = words.dictionary AND words_advanced.word_id = words.word_id
+      $query = "SELECT words.*, wa.etymology, wa.related FROM words
+LEFT JOIN words_advanced wa ON wa.dictionary = words.dictionary AND wa.word_id = words.word_id
 JOIN dictionaries ON dictionaries.id = words.dictionary
 WHERE words.dictionary=? AND is_public=1";
       $this->original_words = $this->db->query($query, array($this->details['externalID']))->fetchAll();

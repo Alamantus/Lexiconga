@@ -184,6 +184,8 @@ export function renderWords() {
         details: originalWord.details,
         etymology: typeof originalWord.etymology === 'undefined' || originalWord.etymology.length < 1 ? null
           : originalWord.etymology.join(', '),
+        related: typeof originalWord.related === 'undefined' || originalWord.related.length < 1 ? null
+          : originalWord.related.join(', '),
         wordId: originalWord.wordId,
       });
 
@@ -204,10 +206,14 @@ export function renderWords() {
           <dd class="details">
             ${md(word.details)}
           </dd>
-          ${word.etymology === null ? '' : `<hr>
-          <dt>Etymology <small>(Root Word${originalWord.etymology.length !== 1 ? 's' : ''})</small></dt>
+          ${word.etymology === null && word.related === null ? '' : `<hr>`}
+          ${word.etymology === null ? '' : `<dt>Etymology <small>(Root Word${originalWord.etymology.length !== 1 ? 's' : ''})</small></dt>
           <dd class="etymology">
             ${md(word.etymology).replace(/<\/?p>/g, '')}
+          </dd>`}
+          ${word.related === null ? '' : `<dt>Related Word${originalWord.related.length !== 1 ? 's' : ''}</dt>
+          <dd class="related">
+            ${md(word.related).replace(/<\/?p>/g, '')}
           </dd>`}
         </dl>
       </article>`;
