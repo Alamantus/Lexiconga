@@ -126,7 +126,7 @@ export function parseReferences(detailsMarkdown) {
 }
 
 export function getWordReferenceMarkdown(reference) {
-  const wordToFind = reference.replace(/\{\{|\}\}/g, '');
+  let wordToFind = reference.replace(/\{\{|\}\}/g, '');
   let homonymn = 0;
 
   if (wordToFind.includes(':')) {
