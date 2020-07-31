@@ -53,7 +53,6 @@ $mobile-word-form-size: 32px;
   top: $header-height + ($mobile-word-form-size / 2);
   left: 0;
   right: 3%;
-  z-index: 1;
 
   label:not(:last-child) {
     margin-bottom: 10px;
