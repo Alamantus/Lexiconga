@@ -1,8 +1,9 @@
-import { renderWords } from "./render/words";
+import { renderWords, renderWord } from "./render/words";
 import { wordExists, addMessage, getNextId, hasToken, getHomonymnIndexes } from "./utilities";
 import removeDiacritics from "./StackOverflow/removeDiacritics";
 import { removeTags, getTimestampInSeconds } from "../helpers";
 import { saveDictionary } from "./dictionaryManagement";
+import { setupWordOptionButtons, setupWordOptionSelections } from "./setupListeners/words";
 
 export function validateWord(word, wordId = false) {
   const errorElementId = wordId === false ? 'wordErrorMessage' : 'wordErrorMessage_' + wordId,
@@ -271,11 +272,23 @@ export function updateWord(word, wordId) {
     console.error('Could not find word to update');
     addMessage('Could not find word to update. Please refresh your browser and try again.', 10000, 'error');
   } else {
+    const isPublic = hasToken() && window.currentDictionary.settings.isPublic;
+    const { sortByDefinition } = window.currentDictionary.settings;
+    const existingWord = window.currentDictionary.words[wordIndex];
+    const needsReRender = (sortByDefinition && word.definition !== existingWord.definition)
+      || (!sortByDefinition && word.name !== existingWord.name);
     word.lastUpdated = getTimestampInSeconds();
-    word.createdOn = window.currentDictionary.words[wordIndex].createdOn;
+    word.createdOn = existingWord.createdOn;
     window.currentDictionary.words[wordIndex] = word;
     addMessage('Word Updated Successfully');
-    sortWords(true);
+
+    if (needsReRender) {
+      sortWords(true);
+    } else {
+      document.getElementById(wordId.toString()).outerHTML = renderWord(window.currentDictionary.words[wordIndex], isPublic);
+      setupWordOptionButtons();
+      setupWordOptionSelections();
+    }
 
     if (hasToken()) {
       import('./account/index.js').then(account => {

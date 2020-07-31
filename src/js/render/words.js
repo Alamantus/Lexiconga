@@ -14,6 +14,57 @@ import { renderAd } from '../ads';
 import { getPublicLink } from '../account/utilities';
 import { renderPartsOfSpeech } from './details';
 
+export function renderWord(savedWord, isPublic) {
+  const word = highlightSearchTerm({
+    name: removeTags(savedWord.name),
+    pronunciation: removeTags(savedWord.pronunciation),
+    partOfSpeech: removeTags(savedWord.partOfSpeech),
+    definition: removeTags(savedWord.definition),
+    details: parseReferences(removeTags(savedWord.details)),
+    etymology: typeof savedWord.etymology === 'undefined' || savedWord.etymology.length < 1 ? null
+      : savedWord.etymology.map(root => getWordReferenceMarkdown(removeTags(root))).join(', '),
+    related: typeof savedWord.related === 'undefined' || savedWord.related.length < 1 ? null
+      : savedWord.related.map(relatedWord => getWordReferenceMarkdown(removeTags(relatedWord))).join(', '),
+    principalParts: typeof savedWord.principalParts === 'undefined' || savedWord.principalParts.length < 1 ? null
+      : savedWord.principalParts.join(', '),
+    wordId: savedWord.wordId,
+  });
+  const homonymnNumber = getHomonymnNumber(savedWord);
+  const shareLink = window.currentDictionary.hasOwnProperty('externalID') ? getPublicLink() + '/' + word.wordId : '';
+
+  let wordNameDisplay = translateOrthography(word.name);
+
+  return `<article class="entry" id="${word.wordId}">
+    <header>
+      <h4 class="word"><span class="orthographic-translation">${wordNameDisplay}</span>${homonymnNumber > 0 ? ' <sub>' + homonymnNumber.toString() + '</sub>' : ''}</h4>
+      ${word.principalParts === null ? '' : `<span class="principalParts">(${word.principalParts})</span>`}
+      <span class="pronunciation">${word.pronunciation}</span>
+      <span class="part-of-speech">${word.partOfSpeech}</span>
+      ${isPublic ? `<a class="small button share-link" href="${shareLink}" target="_blank" title="Public Link to Word">&#10150;</a>` : ''}
+      <span class="small button word-option-button">Options</span>
+      <div class="word-option-list" style="display:none;">
+        <div class="word-option" id="edit_${word.wordId}">Edit</div>
+        <div class="word-option" id="delete_${word.wordId}">Delete</div>
+      </div>
+    </header>
+    <dl>
+      <dt class="definition">${word.definition}</dt>
+      <dd class="details">
+        ${md(word.details)}
+      </dd>
+      ${word.etymology === null && word.related === null ? '' : `<hr>`}
+      ${word.etymology === null ? '' : `<dt>Etymology <small>(Root Word${savedWord.etymology.length !== 1 ? 's' : ''})</small></dt>
+      <dd class="etymology">
+        ${md(word.etymology).replace(/<\/?p>/g, '')}
+      </dd>`}
+      ${word.related === null ? '' : `<dt>Related Word${savedWord.related.length !== 1 ? 's' : ''}</dt>
+      <dd class="related">
+        ${md(word.related).replace(/<\/?p>/g, '')}
+      </dd>`}
+    </dl>
+  </article>`;
+}
+
 export function renderWords() {
   let wordsHTML = '';
   let openEditForms = getOpenEditForms();
@@ -52,58 +103,11 @@ export function renderWords() {
 
     // const { pageStart, pageEnd } = getPaginationData(words);
 
-    // words.slice(pageStart, pageEnd).forEach(originalWord => {
-    words.forEach((originalWord, displayIndex) => {
-      const word = highlightSearchTerm({
-        name: removeTags(originalWord.name),
-        pronunciation: removeTags(originalWord.pronunciation),
-        partOfSpeech: removeTags(originalWord.partOfSpeech),
-        definition: removeTags(originalWord.definition),
-        details: parseReferences(removeTags(originalWord.details)),
-        etymology: typeof originalWord.etymology === 'undefined' || originalWord.etymology.length < 1 ? null
-          : originalWord.etymology.map(root => getWordReferenceMarkdown(removeTags(root))).join(', '),
-        related: typeof originalWord.related === 'undefined' || originalWord.related.length < 1 ? null
-          : originalWord.related.map(relatedWord => getWordReferenceMarkdown(removeTags(relatedWord))).join(', '),
-        principalParts: typeof originalWord.principalParts === 'undefined' || originalWord.principalParts.length < 1 ? null
-          : originalWord.principalParts.join(', '),
-        wordId: originalWord.wordId,
-      });
-      const homonymnNumber = getHomonymnNumber(originalWord);
-      const shareLink = window.currentDictionary.hasOwnProperty('externalID') ? getPublicLink() + '/' + word.wordId : '';
-
+    // words.slice(pageStart, pageEnd).forEach(savedWord => {
+    words.forEach((savedWord, displayIndex) => {
       wordsHTML += renderAd(displayIndex);
 
-      let wordNameDisplay = translateOrthography(word.name);
-
-      wordsHTML += `<article class="entry" id="${word.wordId}">
-        <header>
-          <h4 class="word"><span class="orthographic-translation">${wordNameDisplay}</span>${homonymnNumber > 0 ? ' <sub>' + homonymnNumber.toString() + '</sub>' : ''}</h4>
-          ${word.principalParts === null ? '' : `<span class="principalParts">(${word.principalParts})</span>`}
-          <span class="pronunciation">${word.pronunciation}</span>
-          <span class="part-of-speech">${word.partOfSpeech}</span>
-          ${isPublic ? `<a class="small button share-link" href="${shareLink}" target="_blank" title="Public Link to Word">&#10150;</a>` : ''}
-          <span class="small button word-option-button">Options</span>
-          <div class="word-option-list" style="display:none;">
-            <div class="word-option" id="edit_${word.wordId}">Edit</div>
-            <div class="word-option" id="delete_${word.wordId}">Delete</div>
-          </div>
-        </header>
-        <dl>
-          <dt class="definition">${word.definition}</dt>
-          <dd class="details">
-            ${md(word.details)}
-          </dd>
-          ${word.etymology === null && word.related === null ? '' : `<hr>`}
-          ${word.etymology === null ? '' : `<dt>Etymology <small>(Root Word${originalWord.etymology.length !== 1 ? 's' : ''})</small></dt>
-          <dd class="etymology">
-            ${md(word.etymology).replace(/<\/?p>/g, '')}
-          </dd>`}
-          ${word.related === null ? '' : `<dt>Related Word${originalWord.related.length !== 1 ? 's' : ''}</dt>
-          <dd class="related">
-            ${md(word.related).replace(/<\/?p>/g, '')}
-          </dd>`}
-        </dl>
-      </article>`;
+      wordsHTML += renderWord(savedWord, isPublic);
     });
   }
 
