@@ -59,6 +59,7 @@ export const DEFAULT_SETTINGS = {
   useHotkeys: true,
   showAdvanced: false,
   defaultTheme: 'default',
+  templates: [],
 };
 
 export const DISPLAY_AD_EVERY = 10;

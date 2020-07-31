@@ -13,6 +13,7 @@ import { getOpenEditForms, translateOrthography, parseReferences, getWordReferen
 import { renderAd } from '../ads';
 import { getPublicLink } from '../account/utilities';
 import { renderPartsOfSpeech } from './details';
+import { renderTemplateSelectOptions } from './settings';
 
 export function renderWord(savedWord, isPublic) {
   const word = highlightSearchTerm({
@@ -186,6 +187,11 @@ export function renderEditForm(wordId = false) {
         <a id="expandAdvancedForm_${wordId}" class="small button expand-advanced-form">${wordHasAdvancedFields || window.settings.showAdvanced ? 'Hide' : 'Show'} Advanced Fields</a>
       </label>
       <div id="advancedForm_${wordId}" class="advanced-word-form" style="display:${wordHasAdvancedFields || window.settings.showAdvanced ? 'block' : 'none'};">
+        <label>Details Field Templates
+          <select id="templateSelect_${wordId}" class="template-select">
+          </select>
+          <small>Choose one to fill the details field. (Note: Will erase anything currently there.)</small>
+        </label>
         <label>Etymology / Root Words<br>
           <input id="wordEtymology_${wordId}" maxlength="2500" placeholder="comma,separated,root,words" value="${word.hasOwnProperty('etymology') ? word.etymology : ''}">
         </label>
@@ -204,5 +210,6 @@ export function renderEditForm(wordId = false) {
     document.getElementById(wordId.toString()).innerHTML = editForm;
     setupWordEditFormButtons();
     renderPartsOfSpeech(true);
+    renderTemplateSelectOptions();
   }
 }

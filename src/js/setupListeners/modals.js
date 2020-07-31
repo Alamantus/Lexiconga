@@ -1,7 +1,16 @@
 import { insertAtCursor, getInputSelection, setSelectionRange } from '../StackOverflow/inputCursorManagement';
-import { openSettingsModal, saveSettingsModal, saveAndCloseSettingsModal } from '../settings';
+import {
+  openSettingsModal,
+  saveSettingsModal,
+  saveAndCloseSettingsModal,
+  createTemplate,
+  saveTemplate
+} from '../settings';
 
 export function setupSettingsModal() {
+  document.getElementById('createTemplateButton').addEventListener('click', createTemplate);
+  document.getElementById('saveTemplateButton').addEventListener('click', saveTemplate);
+
   document.getElementById('settingsButton').addEventListener('click', openSettingsModal);
   document.getElementById('settingsSave').addEventListener('click', saveSettingsModal);
   document.getElementById('settingsSaveAndClose').addEventListener('click', saveAndCloseSettingsModal);

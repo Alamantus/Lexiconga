@@ -1,11 +1,13 @@
 import { renderDictionaryDetails, renderPartsOfSpeech } from './details';
 import { renderWords } from './words';
+import { renderTemplateSelectOptions } from './settings';
 
 export function renderAll() {
   renderTheme();
   renderCustomCSS();
   renderDictionaryDetails();
   renderPartsOfSpeech();
+  renderTemplateSelectOptions();
   renderWords();
 }
 

@@ -228,6 +228,8 @@ export function clearWordForm() {
   document.getElementById('wordPartOfSpeech').value = '';
   document.getElementById('wordDefinition').value = '';
   document.getElementById('wordDetails').value = '';
+
+  document.getElementById('templateSelect').value = '';
   document.getElementById('wordEtymology').value = '';
   document.getElementById('wordRelated').value = '';
   document.getElementById('wordPrincipalParts').value = '';

@@ -143,6 +143,11 @@
           <a id="expandAdvancedForm" class="small button expand-advanced-form">Show Advanced Fields</a>
         </label>
         <div id="advancedForm" class="advanced-word-form" style="display:none;">
+          <label>Details Field Templates
+            <select id="templateSelect" class="template-select">
+            </select>
+            <small>Choose one to fill the details field. (Note: Will erase anything currently there.)</small>
+          </label>
           <label>Etymology / Root Words<br>
             <input id="wordEtymology" maxlength="2500" placeholder="comma,separated,root,words">
           </label>
@@ -239,9 +244,33 @@
                 <option value="grape">Grape</option>
               </select>
             </label>
+
+            <h4>Templates for Details Fields</h4>
+            <p>Templates created here are saved only to your local browser.</p>
+            <label>Saved Templates <a id="createTemplateButton" class="label-button">Create New Template</a>
+              <select id="savedDetailsTemplates" class="template-select">
+              </select>
+            </label>
+            <div id="templateFields" style="display:none;">
+              <label>Template Name
+                <input id="templateNameField"><br />
+                <small>If you have chosen a template above, this will overwrite the chosen template.</small>
+              </label>
+              <label>Template<a class="label-button maximize-button">Maximize</a><br>
+                <textarea id="templateTextarea" placeholder="**Era:** 
+
+**Dialect:** 
+
+etc."></textarea>
+              </label>
+              <a id="saveTemplateButton" class="button">Save Template</a>
+              <a id="deleteTemplateButton" class="red button">Delete Template</a>
+            </div>
+          </div>
+          <div>
+            <div id="accountActions"></div>
             <div id="accountSettings"></div>
           </div>
-          <div id="accountActions"></div>
         </form>
       </section>
       <footer>
