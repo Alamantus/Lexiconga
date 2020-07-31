@@ -287,6 +287,7 @@ export function updateWord(word, wordId) {
     if (needsReRender) {
       sortWords(true);
     } else {
+      saveDictionary(false);
       document.getElementById(wordId.toString()).outerHTML = renderWord(window.currentDictionary.words[wordIndex], isPublic);
       setupWordOptionButtons();
       setupWordOptionSelections();
