@@ -155,6 +155,8 @@ export function renderEditForm(wordId = false) {
   wordId = typeof wordId.target === 'undefined' ? wordId : parseInt(this.id.replace('edit_', ''));
   const word = window.currentDictionary.words.find(w => w.wordId === wordId);
   if (word) {
+    const wordHasAdvancedFields = (word.hasOwnProperty('etymology') && word.etymology)
+      || (word.hasOwnProperty('related') && word.related) || (word.hasOwnProperty('principalParts') && word.principalParts);
     const ipaPronunciationField = `<input id="wordPronunciation_${wordId}" class="ipa-field" maxlength="200" value="${word.pronunciation}"><br>
       <a class="label-help-button ipa-field-help-button">Field Help</a>`;
     const plainPronunciationField = `<input id="wordPronunciation_${wordId}" maxlength="200" value="${word.pronunciation}">`;
@@ -177,9 +179,9 @@ export function renderEditForm(wordId = false) {
         <textarea id="wordDetails_${wordId}" placeholder="Markdown formatting allowed">${word.details}</textarea>
       </label>
       <label>
-        <a id="expandAdvancedForm_${wordId}" class="small button expand-advanced-form">${window.settings.showAdvanced ? 'Hide' : 'Show'} Advanced Fields</a>
+        <a id="expandAdvancedForm_${wordId}" class="small button expand-advanced-form">${wordHasAdvancedFields || window.settings.showAdvanced ? 'Hide' : 'Show'} Advanced Fields</a>
       </label>
-      <div id="advancedForm_${wordId}" class="advanced-word-form" style="display:${window.settings.showAdvanced ? 'block' : 'none'};">
+      <div id="advancedForm_${wordId}" class="advanced-word-form" style="display:${wordHasAdvancedFields || window.settings.showAdvanced ? 'block' : 'none'};">
         <label>Etymology / Root Words<br>
           <input id="wordEtymology_${wordId}" maxlength="2500" placeholder="comma,separated,root,words" value="${word.hasOwnProperty('etymology') ? word.etymology : ''}">
         </label>
