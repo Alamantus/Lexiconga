@@ -9,6 +9,7 @@
   * [Referencing Other Words](#referencing-other-words)
   * [Maximizing Large Text Boxes](#maximizing-large-text-boxes)
   * [IPA Auto-Fill Fields](#ipa-auto-fill-fields)
+  * [Advanced Fields](#advanced-fields)
   * [Entry Management](#entry-management)
   * [Search/Filter](#searchfilter)
   * [The Settings Window](#the-settings-window)
@@ -62,12 +63,27 @@ If you have more than one word with the same spelling, the duplicate words will 
 If you need more space to see what you are entering into a word's Details field or any other long text field with a "Maximize" button, clicking "Maximize" will give you a larger view of the text box to enter text in. When you're done writing, click either the "Done" or &times; button or any of the darker space outside of the larger view, and your text will be in the original text area. It will even preserve your cursor position or highlighted text so you don't lose your place moving from the larger view back to the small (and vice-versa)!
 
 ### IPA Auto-Fill Fields
-
 You may notice some buttons around the Pronunciation field in the main word form and some other fields in the Details tab of your Dictionary Settings menu. This indicates that the field is using a special feature that generates [International Phonetic Alphabet](https://en.wikipedia.org/wiki/International_Phonetic_Alphabet) (IPA) characters when typing certain combinations of characters. Click the "Field Help" button below the field for instructions on how to use those fields.
 
 You can also click the "IPA Table" button to display a maximized table that shows all of the characters in the IPA. Clicking them will add it to the pronunciation field wherever you position the cursor in the field. If you hover over the button for an IPA character that is not on a standard keyboard, you can what character combinations will produce that character when you type it in the field.
 
 If you do not want to use the IPA field feaure, you can turn it off in the Settings. Click the "Settings" button in the top right side of the website, uncheck "Use IPA Auto-Fill", and click "Save" or "Save & Close". The "IPA Table" and "Field Help" buttons will be removed from all fields they were around, and you can use those fields as normal.
+
+### Advanced Fields
+Clicking the button labeled "Show Advanced Fields" underneath the **Details** field on any word form will expand the "Advanced Fields" section for that word list. Clicking the button again when it says "Hide Advanced Fields" will hide the section again to make it so you don't have to scroll down to reach the "Add Word" button. The fields in the Advanced Fields section are detailed below:
+
+- **Details Field Templates:** A dropdown box with any templates you have previously created (see [Templates for Details Fields](#templates-for-details-fields) in the Settings section below to learn how to create a template). Selecting one of the templates will put that template into the Details field for you, _overwriting **anything** that might have already been written there_.
+  - Each time you select a different template (other than the "None Selected" option), it will overwrite anything in the Details field with the template without warning, so please be careful.
+  - Selecting the "None Selected" option at the top of the list will _not_ change the Details field.
+- **Etymology / Root Words:** Any words that the current word might have stemmed from originally.
+  - Words written here are treated as word references (see [Referencing Other Words](#referencing-other-words) for how to reference a word or a duplicate word) without requiring the \{\{double-curly-braces\}\} as in the Details field. The words referenced here will appear below the word's details in the list.
+  - Separate each individual root word with a comma.
+- **Related Words:** Any words that might be related to the current word.
+  - Words written here are treated as word references (see [Referencing Other Words](#referencing-other-words) for how to reference a word or a duplicate word) without requiring the \{\{double-curly-braces\}\} as in the Details field. The words referenced here will appear below the word's details in the list.
+  - Separate each individual related word with a comma.
+- **Principal Parts:** Any words that someone must know in order to conjugate the current word (see the [Wikipedia entry](https://en.wikipedia.org/wiki/Principal_parts) for more details).
+  - Words written here are treated as word references (see [Referencing Other Words](#referencing-other-words) for how to reference a word or a duplicate word) without requiring the \{\{double-curly-braces\}\} as in the Details field. The words referenced here will appear below the word's details in the list.
+  - Separate each individual principal part with a comma.
 
 ### Entry Management
 After adding some words to your dictionary, you'll see an "Options" button on each entry. Clicking the button reveals Edit and Delete buttons.
@@ -102,15 +118,24 @@ When you have a search term or filter applied, you can see the number of results
 To display _all_ of your words again, clear your search bar and ensure all the "Include Only" checkboxes are checked.
 
 ### The Settings Window
-
 Clicking the "Settings" button in the top-right side of Lexiconga will show the Settings window with some options.
 
 - **Use IPA Auto-Fill:** Check this to use character combinations to input International Phonetic Alphabet characters into Pronunciation fields. Use the "Field Help" button for instructions on how to use it and the "IPA Table" to display available characters. Uncheck it to disable the feature and hide the buttons.
 - **Use Hotkeys:** Check this to enable keyboard combinations to perform different helpful actions (see [Keyboard Shortcuts](#keyboard-shortcuts) below). Unchecking this disables the feature.
   - Note: If your browser does not support required features, this will be disabled automatically.
+- **Show Advanced Fields By Default:** Check this to make the advanced fields show on word forms without needing to click the "Show Advanced Fields" button (see [Advanced Fields](#advanced-fields) above). Unchecking this makes it so you need to click the "Show Advanced Fields" button to show the fields each time you edit a word.
 - **Default Theme:** Choose what color theme new dictionaries will use when they are created.
 
 After making changes, click the "Save" or "Save & Close" button to save your changes.
+
+#### Templates for Details Fields
+Below the "Default Theme" selector is the template editor. Either click "Create New Template" or choose one from the "Saved Templates" dropdown to begin editing the template. Once a new template is created or a saved template is selected, new fields will appear labeled "Template Name" and "Template," plus a "Save Template" and "Delete Template" button.
+
+You can modify the template's name by editing the "Template Name" field, and whatever you set in the "Template" text area will be used as the template in the Details field of a word form if it is selected (see [Advanced Fields](#advanced-fields) above for more about how this is used).
+
+After making any changes to a template, click the "Save Template" button below the "Template" field to save it to your browser. Templates are only stored in the browser they were created on and _do not_ get uploaded to your account (if you have one). If you create a template, it will _not be available on any other web browser_ unless you re-create it!
+
+Clicking the "Delete Template" button will prompt you to confirm that you want to delete it, and if you confirm, it will permanently delete the currently selected template from your browser. There is no way to recover deleted templates!
 
 ### The Dictionary Settings Window
 
