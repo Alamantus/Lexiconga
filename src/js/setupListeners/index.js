@@ -5,14 +5,17 @@ import { fadeOutElement } from '../utilities';
 import { setupDetailsTabs } from './details';
 import { setupWordForm, setupMobileWordFormButton } from './words';
 import { setupIPAButtons, setupHeaderButtons, setupInfoButtons } from './buttons';
+import { setupTemplateForm, setupTemplateSelectOptions } from './settings';
 
 export default function setupListeners() {
   setupAnnouncements();
   setupDetailsTabs();
+  setupTemplateForm();
   setupHeaderButtons();
   setupWordForm();
   setupMobileWordFormButton();
   setupInfoButtons();
+  setupTemplateSelectOptions();
   if (window.settings.useHotkeys) {
     enableHotKeys();
   }

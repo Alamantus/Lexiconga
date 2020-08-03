@@ -15,6 +15,15 @@
   }
 }
 
+details summary {
+  cursor: pointer;
+
+  h4 {
+    display: inline-block;
+    margin: 5px 0;
+  }
+}
+
 .share-link {
   margin-left: $general-padding !important;
   line-height: 16px !important;

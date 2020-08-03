@@ -109,6 +109,7 @@
   border-radius: 5px;
   max-height: 80%;
   overflow-y: auto;
+  z-index: 8;
 }
 
 .edit-form {
@@ -196,6 +197,7 @@
 
   header {
     position: relative;
+    padding-right: 70px;
     
     .word-option-button {
       position: absolute;

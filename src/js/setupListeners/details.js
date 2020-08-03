@@ -35,7 +35,9 @@ function setupEditFormTabs() {
         document.getElementById('edit' + t.innerText + 'Tab').style.display = 'none';
       });
       tab.classList.add('active');
-      document.getElementById('edit' + tab.innerText + 'Tab').style.display = '';
+      const tabSection = document.getElementById('edit' + tab.innerText + 'Tab');
+      tabSection.style.display = '';
+      tabSection.scrollTop = 0;
     });
   });
 }

@@ -8,7 +8,6 @@ import { addWord, sortWords } from "./wordManagement";
 import { migrateDictionary } from './migration';
 
 export function updateDictionary () {
-
   renderDictionaryDetails();
 }
 
@@ -49,6 +48,7 @@ export function openEditModal() {
   }
 
   document.getElementById('editModal').style.display = '';
+  Array.from(document.querySelectorAll('#editModal .modal-content section')).forEach(section => section.scrollTop = 0);
 }
 
 export function saveEditModal() {
@@ -238,14 +238,51 @@ export function importWords() {
             });
           } else {
             const row = results.data;
-            const importedWord = addWord({
+            const wordToImport = {
               name: removeTags(row.word).trim(),
               pronunciation: removeTags(row.pronunciation).trim(),
               partOfSpeech: removeTags(row['part of speech']).trim(),
               definition: removeTags(row.definition).trim(),
               details: removeTags(row.explanation).trim(),
               wordId: getNextId(),
-            }, false);
+            };
+            if (typeof row['etymology'] !== 'undefined') {
+              const etymology = removeTags(row['etymology']).trim().split(',').filter(etymology => etymology.trim() !== '');
+              if (etymology.length > 0) {
+                wordToImport.etymology = etymology;
+              }
+            }
+            if (typeof row['etymology (comma-separated)'] !== 'undefined') {
+              const etymology = removeTags(row['etymology (comma-separated)']).trim().split(',').filter(etymology => etymology.trim() !== '');
+              if (etymology.length > 0) {
+                wordToImport.etymology = etymology;
+              }
+            }
+            if (typeof row['related words'] !== 'undefined') {
+              const related = removeTags(row['related words']).trim().split(',').filter(related => related.trim() !== '');
+              if (related.length > 0) {
+                wordToImport.related = related;
+              }
+            }
+            if (typeof row['related words (comma-separated)'] !== 'undefined') {
+              const related = removeTags(row['related words (comma-separated)']).trim().split(',').filter(related => related.trim() !== '');
+              if (related.length > 0) {
+                wordToImport.related = related;
+              }
+            }
+            if (typeof row['principal parts'] !== 'undefined') {
+              const principalParts = removeTags(row['principal parts']).trim().split(',').filter(principalParts => principalParts.trim() !== '');
+              if (principalParts.length > 0) {
+                wordToImport.principalParts = principalParts;
+              }
+            }
+            if (typeof row['principal parts (comma-separated)'] !== 'undefined') {
+              const principalParts = removeTags(row['principal parts (comma-separated)']).trim().split(',').filter(principalParts => principalParts.trim() !== '');
+              if (principalParts.length > 0) {
+                wordToImport.principalParts = principalParts;
+              }
+            }
+            const importedWord = addWord(wordToImport, false);
 
             importedWords.push(importedWord);
 
@@ -306,6 +343,9 @@ export function exportWords() {
         'part of speech': word.partOfSpeech,
         definition: word.definition,
         explanation: word.details,
+        'etymology (comma-separated)': typeof word.etymology !== 'undefined' ? word.etymology.join(',') : '',
+        'related words (comma-separated)': typeof word.related !== 'undefined' ? word.related.join(',') : '',
+        'principal parts (comma-separated)': typeof word.principalParts !== 'undefined' ? word.principalParts.join(',') : '',
       }
     });
     const csv = papa.unparse(words, { quotes: true });

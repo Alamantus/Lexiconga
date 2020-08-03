@@ -139,6 +139,25 @@
         <label>Details<span class="red">*</span><a class="label-button maximize-button">Maximize</a><br>
           <textarea id="wordDetails" placeholder="Markdown formatting allowed"></textarea>
         </label>
+        <label>
+          <a id="expandAdvancedForm" class="small button expand-advanced-form">Show Advanced Fields</a>
+        </label>
+        <div id="advancedForm" class="advanced-word-form" style="display:none;">
+          <label>Details Field Templates
+            <select id="templateSelect" class="template-select">
+            </select>
+            <small>Choose one to fill the details field. (Note: Will erase anything currently there.)</small>
+          </label>
+          <label>Etymology / Root Words<br>
+            <input id="wordEtymology" maxlength="2500" placeholder="comma,separated,root,words">
+          </label>
+          <label>Related Words<br>
+            <input id="wordRelated" maxlength="2500" placeholder="comma,separated,related,words">
+          </label>
+          <label>Principal Parts<a href="https://en.wikipedia.org/wiki/Principal_parts" target="_blank" class="label-button">What's This?</a><br>
+            <input id="wordPrincipalParts" maxlength="2500" placeholder="comma,separated,principal,parts">
+          </label>
+        </div>
         <div id="wordErrorMessage"></div>
         <a class="button" id="addWordButton">Add Word</a>
       </form>
@@ -205,6 +224,11 @@
               <input id="settingsUseHotkeys" type="checkbox" checked><br />
               <small>Check this to enable keyboard combinations to perform different helpful actions.</small>
             </label>
+
+            <label>Show Advanced Fields By Default
+              <input id="settingsShowAdvanced" type="checkbox"><br />
+              <small>Check this to make the advanced fields show on word forms without needing to click the "Show Advanced Fields" button.</small>
+            </label>
     
             <label>Default Theme <small>(the theme new dictionaries will use)</small>
               <select id="settingsDefaultTheme">
@@ -220,9 +244,33 @@
                 <option value="grape">Grape</option>
               </select>
             </label>
+
+            <h4>Templates for Details Fields</h4>
+            <p>Templates created here are saved only to your local browser.</p>
+            <label>Saved Templates <a id="createTemplateButton" class="label-button">Create New Template</a>
+              <select id="savedDetailsTemplates" class="template-select">
+              </select>
+            </label>
+            <div id="templateFields" style="display:none;">
+              <label>Template Name
+                <input id="templateNameField"><br />
+                <small>If you have chosen a template above, this will overwrite the chosen template.</small>
+              </label>
+              <label>Template<a class="label-button maximize-button">Maximize</a><br>
+                <textarea id="templateTextarea" placeholder="**Era:** 
+
+**Dialect:** 
+
+etc."></textarea>
+              </label>
+              <a id="saveTemplateButton" class="button">Save Template</a>
+              <a id="deleteTemplateButton" class="red button">Delete Template</a>
+            </div>
+          </div>
+          <div>
+            <div id="accountActions"></div>
             <div id="accountSettings"></div>
           </div>
-          <div id="accountActions"></div>
         </form>
       </section>
       <footer>
@@ -383,7 +431,7 @@ ou=ow"></textarea>
               <label class="button">Import Words <input type="file" id="importWordsCSV" accept="text/csv, .csv"><br>
                 <small>Import a CSV file of words.</small>
               </label>
-              <a class="small button" download="Lexiconga_import-template.csv" href="data:text/csv;charset=utf-8,%22word%22,%22pronunciation%22,%22part of speech%22,%22definition%22,%22explanation%22%0A">Download an example file with the correct formatting</a>
+              <a class="small button" download="Lexiconga_import-template.csv" href="data:text/csv;charset=utf-8,%22word%22,%22pronunciation%22,%22part of speech%22,%22definition%22,%22explanation%22,%22etymology %28comma-separated%29%22,%22related words %28comma-separated%29%22,%22principal parts %28comma-separated%29%22%0A">Download an example file with the correct formatting</a>
             </p>
           </div>
           <div>

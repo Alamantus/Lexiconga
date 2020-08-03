@@ -1,6 +1,6 @@
 {
   "name": "lexiconga",
-  "version": "2.1.7",
+  "version": "2.2.0",
   "description": "The quick and easy dictionary builder for constructed languages.",
   "main": "template-index.html",
   "repository": "https://github.com/Alamantus/Lexiconga.git",

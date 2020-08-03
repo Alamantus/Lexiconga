@@ -90,3 +90,16 @@ CREATE TABLE IF NOT EXISTS `words` (
   `created_on` int(11) NOT NULL,
   UNIQUE KEY `unique_index` (`dictionary`,`word_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+DELIMITER $$
+CREATE TRIGGER IF NOT EXISTS `delete_word_advanced` AFTER DELETE ON `words` FOR EACH ROW DELETE FROM words_advanced WHERE words_advanced.dictionary=old.dictionary AND words_advanced.word_id=old.word_id
+$$
+DELIMITER ;
+
+CREATE TABLE IF NOT EXISTS `words_advanced` (
+  `dictionary` int(11) NOT NULL,
+  `word_id` int(11) NOT NULL,
+  `etymology` text NOT NULL COMMENT 'Comma-separated',
+  `related` text NOT NULL COMMENT 'Comma-separated',
+  `principal_parts` text NOT NULL COMMENT 'Comma-separated',
+  UNIQUE KEY `dictionary_word_id` (`dictionary`,`word_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;

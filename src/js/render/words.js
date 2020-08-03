@@ -9,10 +9,62 @@ import {
   setupWordEditFormButtons,
 } from '../setupListeners/words';
 import { getPaginationData } from '../pagination';
-import { getOpenEditForms, translateOrthography, parseReferences } from '../wordManagement';
+import { getOpenEditForms, translateOrthography, parseReferences, getWordReferenceMarkdown } from '../wordManagement';
 import { renderAd } from '../ads';
 import { getPublicLink } from '../account/utilities';
 import { renderPartsOfSpeech } from './details';
+import { renderTemplateSelectOptions } from './settings';
+
+export function renderWord(savedWord, isPublic) {
+  const word = highlightSearchTerm({
+    name: removeTags(savedWord.name),
+    pronunciation: removeTags(savedWord.pronunciation),
+    partOfSpeech: removeTags(savedWord.partOfSpeech),
+    definition: removeTags(savedWord.definition),
+    details: parseReferences(removeTags(savedWord.details)),
+    etymology: typeof savedWord.etymology === 'undefined' || savedWord.etymology.length < 1 ? null
+      : savedWord.etymology.map(root => getWordReferenceMarkdown(removeTags(root))).join(', '),
+    related: typeof savedWord.related === 'undefined' || savedWord.related.length < 1 ? null
+      : savedWord.related.map(relatedWord => getWordReferenceMarkdown(removeTags(relatedWord))).join(', '),
+    principalParts: typeof savedWord.principalParts === 'undefined' || savedWord.principalParts.length < 1 ? null
+      : savedWord.principalParts.join(', '),
+    wordId: savedWord.wordId,
+  });
+  const homonymnNumber = getHomonymnNumber(savedWord);
+  const shareLink = window.currentDictionary.hasOwnProperty('externalID') ? getPublicLink() + '/' + word.wordId : '';
+
+  let wordNameDisplay = translateOrthography(word.name);
+
+  return `<article class="entry" id="${word.wordId}">
+    <header>
+      <h4 class="word"><span class="orthographic-translation">${wordNameDisplay}</span>${homonymnNumber > 0 ? ' <sub>' + homonymnNumber.toString() + '</sub>' : ''}</h4>
+      ${word.principalParts === null ? '' : `<span class="principalParts">(${word.principalParts})</span>`}
+      <span class="pronunciation">${word.pronunciation}</span>
+      <span class="part-of-speech">${word.partOfSpeech}</span>
+      ${isPublic ? `<a class="small button share-link" href="${shareLink}" target="_blank" title="Public Link to Word">&#10150;</a>` : ''}
+      <span class="small button word-option-button">Options</span>
+      <div class="word-option-list" style="display:none;">
+        <div class="word-option" id="edit_${word.wordId}">Edit</div>
+        <div class="word-option" id="delete_${word.wordId}">Delete</div>
+      </div>
+    </header>
+    <dl>
+      <dt class="definition">${word.definition}</dt>
+      <dd class="details">
+        ${md(word.details)}
+      </dd>
+      ${word.etymology === null && word.related === null ? '' : `<hr>`}
+      ${word.etymology === null ? '' : `<dt>Etymology <small>(Root Word${savedWord.etymology.length !== 1 ? 's' : ''})</small></dt>
+      <dd class="etymology">
+        ${md(word.etymology).replace(/<\/?p>/g, '')}
+      </dd>`}
+      ${word.related === null ? '' : `<dt>Related Word${savedWord.related.length !== 1 ? 's' : ''}</dt>
+      <dd class="related">
+        ${md(word.related).replace(/<\/?p>/g, '')}
+      </dd>`}
+    </dl>
+  </article>`;
+}
 
 export function renderWords() {
   let wordsHTML = '';
@@ -52,42 +104,11 @@ export function renderWords() {
 
     // const { pageStart, pageEnd } = getPaginationData(words);
 
-    // words.slice(pageStart, pageEnd).forEach(originalWord => {
-    words.forEach((originalWord, displayIndex) => {
-      const word = highlightSearchTerm({
-        name: removeTags(originalWord.name),
-        pronunciation: removeTags(originalWord.pronunciation),
-        partOfSpeech: removeTags(originalWord.partOfSpeech),
-        definition: removeTags(originalWord.definition),
-        details: parseReferences(removeTags(originalWord.details)),
-        wordId: originalWord.wordId,
-      });
-      const homonymnNumber = getHomonymnNumber(originalWord);
-      const shareLink = window.currentDictionary.hasOwnProperty('externalID') ? getPublicLink() + '/' + word.wordId : '';
-
+    // words.slice(pageStart, pageEnd).forEach(savedWord => {
+    words.forEach((savedWord, displayIndex) => {
       wordsHTML += renderAd(displayIndex);
 
-      let wordNameDisplay = translateOrthography(word.name);
-
-      wordsHTML += `<article class="entry" id="${word.wordId}">
-        <header>
-          <h4 class="word"><span class="orthographic-translation">${wordNameDisplay}</span>${homonymnNumber > 0 ? ' <sub>' + homonymnNumber.toString() + '</sub>' : ''}</h4>
-          <span class="pronunciation">${word.pronunciation}</span>
-          <span class="part-of-speech">${word.partOfSpeech}</span>
-          ${isPublic ? `<a class="small button share-link" href="${shareLink}" target="_blank" title="Public Link to Word">&#10150;</a>` : ''}
-          <span class="small button word-option-button">Options</span>
-          <div class="word-option-list" style="display:none;">
-            <div class="word-option" id="edit_${word.wordId}">Edit</div>
-            <div class="word-option" id="delete_${word.wordId}">Delete</div>
-          </div>
-        </header>
-        <dl>
-          <dt class="definition">${word.definition}</dt>
-          <dd class="details">
-            ${md(word.details)}
-          </dd>
-        </dl>
-      </article>`;
+      wordsHTML += renderWord(savedWord, isPublic);
     });
   }
 
@@ -139,6 +160,8 @@ export function renderEditForm(wordId = false) {
   wordId = typeof wordId.target === 'undefined' ? wordId : parseInt(this.id.replace('edit_', ''));
   const word = window.currentDictionary.words.find(w => w.wordId === wordId);
   if (word) {
+    const wordHasAdvancedFields = (word.hasOwnProperty('etymology') && word.etymology)
+      || (word.hasOwnProperty('related') && word.related) || (word.hasOwnProperty('principalParts') && word.principalParts);
     const ipaPronunciationField = `<input id="wordPronunciation_${wordId}" class="ipa-field" maxlength="200" value="${word.pronunciation}"><br>
       <a class="label-help-button ipa-field-help-button">Field Help</a>`;
     const plainPronunciationField = `<input id="wordPronunciation_${wordId}" maxlength="200" value="${word.pronunciation}">`;
@@ -160,6 +183,25 @@ export function renderEditForm(wordId = false) {
       <label>Details<span class="red">*</span><a class="label-button maximize-button">Maximize</a><br>
         <textarea id="wordDetails_${wordId}" placeholder="Markdown formatting allowed">${word.details}</textarea>
       </label>
+      <label>
+        <a id="expandAdvancedForm_${wordId}" class="small button expand-advanced-form">${wordHasAdvancedFields || window.settings.showAdvanced ? 'Hide' : 'Show'} Advanced Fields</a>
+      </label>
+      <div id="advancedForm_${wordId}" class="advanced-word-form" style="display:${wordHasAdvancedFields || window.settings.showAdvanced ? 'block' : 'none'};">
+        <label>Details Field Templates
+          <select id="templateSelect_${wordId}" class="template-select">
+          </select>
+          <small>Choose one to fill the details field. (Note: Will erase anything currently there.)</small>
+        </label>
+        <label>Etymology / Root Words<br>
+          <input id="wordEtymology_${wordId}" maxlength="2500" placeholder="comma,separated,root,words" value="${word.hasOwnProperty('etymology') ? word.etymology : ''}">
+        </label>
+        <label>Related Words<br>
+          <input id="wordRelated_${wordId}" maxlength="2500" placeholder="comma,separated,related,words" value="${word.hasOwnProperty('related') ? word.related : ''}">
+        </label>
+        <label>Principal Parts<a href="https://en.wikipedia.org/wiki/Principal_parts" target="_blank" class="label-button">What's This?</a><br>
+          <input id="wordPrincipalParts_${wordId}" maxlength="2500" placeholder="comma,separated,principal,parts" value="${word.hasOwnProperty('principalParts') ? word.principalParts : ''}">
+        </label>
+      </div>
       <div id="wordErrorMessage_${wordId}"></div>
       <a class="button edit-save-changes" id="editWordButton_${wordId}">Save Changes</a>
       <a class="button edit-cancel">Cancel Edit</a>
@@ -168,5 +210,6 @@ export function renderEditForm(wordId = false) {
     document.getElementById(wordId.toString()).innerHTML = editForm;
     setupWordEditFormButtons();
     renderPartsOfSpeech(true);
+    renderTemplateSelectOptions();
   }
 }

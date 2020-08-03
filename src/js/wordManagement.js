@@ -1,8 +1,10 @@
-import { renderWords } from "./render/words";
+import { renderWords, renderWord } from "./render/words";
 import { wordExists, addMessage, getNextId, hasToken, getHomonymnIndexes } from "./utilities";
 import removeDiacritics from "./StackOverflow/removeDiacritics";
 import { removeTags, getTimestampInSeconds } from "../helpers";
 import { saveDictionary } from "./dictionaryManagement";
+import { setupWordOptionButtons, setupWordOptionSelections } from "./setupListeners/words";
+import { wordMatchesSearch } from "./search";
 
 export function validateWord(word, wordId = false) {
   const errorElementId = wordId === false ? 'wordErrorMessage' : 'wordErrorMessage_' + wordId,
@@ -116,38 +118,8 @@ export function parseReferences(detailsMarkdown) {
   const references = detailsMarkdown.match(/\{\{.+?\}\}/g);
   if (references && Array.isArray(references)) {
     new Set(references).forEach(reference => {
-      let wordToFind = reference.replace(/\{\{|\}\}/g, '');
-      let homonymn = 0;
-      
-      if (wordToFind.includes(':')) {
-        const separator = wordToFind.indexOf(':');
-        homonymn = wordToFind.substr(separator + 1);
-        wordToFind = wordToFind.substring(0, separator);
-        if (homonymn && homonymn.trim()
-          && !isNaN(parseInt(homonymn.trim())) && parseInt(homonymn.trim()) > 0) {
-          homonymn = parseInt(homonymn.trim());
-        } else {
-          homonymn = false;
-        }
-      }
-
-      let existingWordId = false;
-      const homonymnIndexes = getHomonymnIndexes({ name: wordToFind, wordId: -1 });
-
-      if (homonymn !== false && homonymn > 0) {
-        if (typeof homonymnIndexes[homonymn - 1] !== 'undefined') {
-          existingWordId = window.currentDictionary.words[homonymnIndexes[homonymn - 1]].wordId;
-        }
-      } else if (homonymn !== false) {
-        existingWordId = wordExists(wordToFind, true);
-      }
-
-      if (existingWordId !== false) {
-        if (homonymn < 1 && homonymnIndexes.length > 0) {
-          homonymn = 1;
-        }
-        const homonymnSubHTML = homonymnIndexes.length > 1 && homonymn - 1 >= 0 ? '<sub>' + homonymn.toString() + '</sub>' : '';
-        const wordMarkdownLink = `<span class="word-reference">[<span class="orthographic-translation">${translateOrthography(wordToFind)}</span>${homonymnSubHTML}](#${existingWordId})</span>`;
+      const wordMarkdownLink = getWordReferenceMarkdown(reference);
+      if (wordMarkdownLink !== reference) {
         detailsMarkdown = detailsMarkdown.replace(new RegExp(reference, 'g'), wordMarkdownLink);
       }
     });
@@ -155,12 +127,66 @@ export function parseReferences(detailsMarkdown) {
   return detailsMarkdown;
 }
 
+export function getWordReferenceMarkdown(reference) {
+  let wordToFind = reference.replace(/\{\{|\}\}/g, '');
+  let homonymn = 0;
+
+  if (wordToFind.includes(':')) {
+    const separator = wordToFind.indexOf(':');
+    homonymn = wordToFind.substr(separator + 1);
+    wordToFind = wordToFind.substring(0, separator);
+    if (homonymn && homonymn.trim()
+      && !isNaN(parseInt(homonymn.trim())) && parseInt(homonymn.trim()) > 0) {
+      homonymn = parseInt(homonymn.trim());
+    } else {
+      homonymn = false;
+    }
+  }
+
+  let existingWordId = false;
+  const homonymnIndexes = getHomonymnIndexes({ name: wordToFind, wordId: -1 });
+
+  if (homonymn !== false && homonymn > 0) {
+    if (typeof homonymnIndexes[homonymn - 1] !== 'undefined') {
+      existingWordId = window.currentDictionary.words[homonymnIndexes[homonymn - 1]].wordId;
+    }
+  } else if (homonymn !== false) {
+    existingWordId = wordExists(wordToFind, true);
+  }
+
+  if (existingWordId !== false) {
+    if (homonymn < 1 && homonymnIndexes.length > 0) {
+      homonymn = 1;
+    }
+    const homonymnSubHTML = homonymnIndexes.length > 1 && homonymn - 1 >= 0 ? '<sub>' + homonymn.toString() + '</sub>' : '';
+    return `<span class="word-reference">[<span class="orthographic-translation">${translateOrthography(wordToFind)}</span>${homonymnSubHTML}](#${existingWordId})</span>`;
+  }
+
+  return reference;
+}
+
+export function expandAdvancedForm(id = false) {
+  const wordId = typeof id.target !== 'undefined' ? this.id.replace('expandAdvancedForm', '') : id;
+  const button = typeof id.target !== 'undefined' ? this : document.getElementById('expandAdvancedForm' + (!wordId ? '' : wordId)),
+    form = document.getElementById('advancedForm' + (!wordId ? '' : wordId));
+  if (form.style.display !== 'block') {
+    button.innerText = 'Hide Advanced Fields';
+    form.style.display = 'block';
+  } else {
+    button.innerText = 'Show Advanced Fields';
+    form.style.display = 'none';
+  }
+}
+
 export function submitWordForm() {
   const name = document.getElementById('wordName').value,
     pronunciation = document.getElementById('wordPronunciation').value,
     partOfSpeech = document.getElementById('wordPartOfSpeech').value,
     definition = document.getElementById('wordDefinition').value,
-    details = document.getElementById('wordDetails').value;
+    details = document.getElementById('wordDetails').value,
+    etymology = document.getElementById('wordEtymology').value,
+    related = document.getElementById('wordRelated').value,
+    principalParts = document.getElementById('wordPrincipalParts').value;
 
   const word = {
     name: removeTags(name).trim(),
@@ -170,6 +196,18 @@ export function submitWordForm() {
     details: removeTags(details).trim(),
     wordId: getNextId(),
   };
+
+  if (removeTags(etymology).trim() !== '') {
+    word.etymology = removeTags(etymology).split(',').map(w => w.trim()).filter(w => w.length > 0);
+  }
+
+  if (removeTags(related).trim() !== '') {
+    word.related = removeTags(related).split(',').map(w => w.trim()).filter(w => w.length > 0);
+  }
+
+  if (removeTags(principalParts).trim() !== '') {
+    word.principalParts = removeTags(principalParts).split(',').map(w => w.trim()).filter(w => w.length > 0);
+  }
 
   if (validateWord(word)) {
     addWord(word);
@@ -191,6 +229,11 @@ export function clearWordForm() {
   document.getElementById('wordPartOfSpeech').value = '';
   document.getElementById('wordDefinition').value = '';
   document.getElementById('wordDetails').value = '';
+
+  document.getElementById('templateSelect').value = '';
+  document.getElementById('wordEtymology').value = '';
+  document.getElementById('wordRelated').value = '';
+  document.getElementById('wordPrincipalParts').value = '';
 
   document.getElementById('wordName').focus();
 }
@@ -232,11 +275,30 @@ export function updateWord(word, wordId) {
     console.error('Could not find word to update');
     addMessage('Could not find word to update. Please refresh your browser and try again.', 10000, 'error');
   } else {
+    const isPublic = hasToken() && window.currentDictionary.settings.isPublic;
+    const { sortByDefinition } = window.currentDictionary.settings;
+    const existingWord = window.currentDictionary.words[wordIndex];
+    const needsReRender = (sortByDefinition && word.definition !== existingWord.definition)
+      || (!sortByDefinition && word.name !== existingWord.name);
     word.lastUpdated = getTimestampInSeconds();
-    word.createdOn = window.currentDictionary.words[wordIndex].createdOn;
+    word.createdOn = existingWord.createdOn;
     window.currentDictionary.words[wordIndex] = word;
     addMessage('Word Updated Successfully');
-    sortWords(true);
+
+    if (needsReRender) {
+      sortWords(true);
+    } else {
+      saveDictionary(false);
+      const entry = document.getElementById(wordId.toString());
+      if (!wordMatchesSearch(word)) {
+        entry.parentElement.removeChild(entry);
+      } else {
+        console.log('matches search, updating in place');
+        document.getElementById(wordId.toString()).outerHTML = renderWord(window.currentDictionary.words[wordIndex], isPublic);
+        setupWordOptionButtons();
+        setupWordOptionSelections();
+      }
+    }
 
     if (hasToken()) {
       import('./account/index.js').then(account => {
@@ -252,7 +314,10 @@ export function confirmEditWord(id) {
     pronunciation = document.getElementById('wordPronunciation_' + wordId).value,
     partOfSpeech = document.getElementById('wordPartOfSpeech_' + wordId).value,
     definition = document.getElementById('wordDefinition_' + wordId).value,
-    details = document.getElementById('wordDetails_' + wordId).value;
+    details = document.getElementById('wordDetails_' + wordId).value,
+    etymology = document.getElementById('wordEtymology_' + wordId).value,
+    related = document.getElementById('wordRelated_' + wordId).value,
+    principalParts = document.getElementById('wordPrincipalParts_' + wordId).value;
 
   const word = {
     name: removeTags(name).trim(),
@@ -262,6 +327,18 @@ export function confirmEditWord(id) {
     details: removeTags(details).trim(),
     wordId,
   };
+
+  if (removeTags(etymology).trim() !== '') {
+    word.etymology = removeTags(etymology).split(',').map(w => w.trim()).filter(w => w.length > 0);
+  }
+
+  if (removeTags(related).trim() !== '') {
+    word.related = removeTags(related).split(',').map(w => w.trim()).filter(w => w.length > 0);
+  }
+
+  if (removeTags(principalParts).trim() !== '') {
+    word.principalParts = removeTags(principalParts).split(',').map(w => w.trim()).filter(w => w.length > 0);
+  }
 
   if (validateWord(word, wordId)) {
     if (confirm(`Are you sure you want to save changes to "${word.name}"?`)) {

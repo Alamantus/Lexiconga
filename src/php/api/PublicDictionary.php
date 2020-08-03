@@ -81,16 +81,40 @@ class PublicDictionary {
       $words = $this->getWordsAsEntered();
       if ($words) {
         return array_map(function ($row) use ($dictionary) {
-          return array(
+          $word = array(
             'name' => $this->translateOrthography($row['name'], $dictionary),
             'pronunciation' => $row['pronunciation'],
             'partOfSpeech' => $row['part_of_speech'],
             'definition' => $row['definition'],
-            'details' => $this->parseReferences(strip_tags($row['details']), $dictionary),
+            'details' => $this->parseReferences(strip_tags($row['details']), $dictionary, false),
             'lastUpdated' => is_null($row['last_updated']) ? intval($row['created_on']) : intval($row['last_updated']),
             'createdOn' => intval($row['created_on']),
             'wordId' => intval($row['word_id']),
           );
+
+          if (!is_null($row['etymology'])) {
+            if (strlen($row['etymology']) > 0) {
+              $word['etymology'] = array_map(function ($root) use($dictionary) {
+                return $this->getWordReferenceHTML(strip_tags($root), $dictionary, false);
+              }, explode(',', $row['etymology']));
+            }
+          }
+
+          if (!is_null($row['related'])) {
+            if (strlen($row['related']) > 0) {
+              $word['related'] = array_map(function ($root) use($dictionary) {
+                return $this->getWordReferenceHTML(strip_tags($root), $dictionary, false);
+              }, explode(',', $row['related']));
+            }
+          }
+
+          if (!is_null($row['principal_parts'])) {
+            if (strlen($row['principal_parts']) > 0) {
+              $word['principalParts'] = explode(',', $row['principal_parts']);
+            }
+          }
+          
+          return $word;
         }, $this->sortWords($words));
       }
     }
@@ -99,10 +123,13 @@ class PublicDictionary {
 
   public function getSpecificPublicDictionaryWord ($dictionary, $word) {
     if (is_numeric($dictionary) && is_numeric($word)) {
-      $query = "SELECT words.* FROM words JOIN dictionaries ON id = dictionary WHERE dictionary=? AND word_id=? AND is_public=1";
+      $query = "SELECT words.*, wa.etymology, wa.related, wa.principal_parts FROM words
+      LEFT JOIN words_advanced wa ON wa.dictionary = words.dictionary AND wa.word_id = words.word_id
+      JOIN dictionaries ON dictionaries.id = words.dictionary
+      WHERE words.dictionary=? AND words.word_id=? AND dictionaries.is_public=1";
       $result = $this->db->query($query, array($dictionary, $word))->fetch();
       if ($result) {
-        return array(
+        $word = array(
           'name' => $this->translateOrthography($result['name'], $dictionary),
           'pronunciation' => $result['pronunciation'],
           'partOfSpeech' => $result['part_of_speech'],
@@ -112,6 +139,30 @@ class PublicDictionary {
           'createdOn' => intval($result['created_on']),
           'wordId' => intval($result['word_id']),
         );
+
+        if (!is_null($result['etymology'])) {
+          if (strlen($result['etymology']) > 0) {
+            $word['etymology'] = array_map(function ($root) use($dictionary) {
+              return $this->getWordReferenceHTML(strip_tags($root), $dictionary);
+            }, explode(',', $result['etymology']));
+          }
+        }
+
+        if (!is_null($result['related'])) {
+          if (strlen($result['related']) > 0) {
+            $word['related'] = array_map(function ($root) use($dictionary) {
+              return $this->getWordReferenceHTML(strip_tags($root), $dictionary);
+            }, explode(',', $result['related']));
+          }
+        }
+
+        if (!is_null($result['principal_parts'])) {
+          if (strlen($result['principal_parts']) > 0) {
+            $word['principalParts'] = explode(',', $result['principal_parts']);
+          }
+        }
+
+        return $word;
       }
     }
     return false;
@@ -119,7 +170,10 @@ class PublicDictionary {
 
   private function getWordsAsEntered() {
     if (!isset($this->original_words)) {
-      $query = "SELECT words.* FROM words JOIN dictionaries ON id = dictionary WHERE dictionary=? AND is_public=1";
+      $query = "SELECT words.*, wa.etymology, wa.related, wa.principal_parts FROM words
+LEFT JOIN words_advanced wa ON wa.dictionary = words.dictionary AND wa.word_id = words.word_id
+JOIN dictionaries ON dictionaries.id = words.dictionary
+WHERE words.dictionary=? AND is_public=1";
       $this->original_words = $this->db->query($query, array($this->details['externalID']))->fetchAll();
     }
     return $this->original_words;
@@ -183,48 +237,58 @@ class PublicDictionary {
     if (preg_match_all('/\{\{.+?\}\}/', $details, $references) !== false) {
       $references = array_unique($references[0]);
       foreach($references as $reference) {
-        $word_to_find = preg_replace('/\{\{|\}\}/', '', $reference);
-        $homonymn = 0;
-      
-        if (strpos($word_to_find, ':') !== false) {
-          $separator = strpos($word_to_find, ':');
-          $homonymn = substr($word_to_find, $separator + 1);
-          $word_to_find = substr($word_to_find, 0, $separator);
-          if ($homonymn && trim($homonymn) && intval(trim($homonymn)) > 0) {
-            $homonymn = intval(trim($homonymn));
-          } else {
-            $homonymn = false;
-          }
-        }
-
-        $target_id = false;
-        $reference_ids = $this->getWordIdsWithName($dictionary_id, $word_to_find);
-
-        if (count($reference_ids) > 0) {
-          if ($homonymn !== false && $homonymn > 0) {
-            if (isset($reference_ids[$homonymn - 1])) {
-              $target_id = $reference_ids[$homonymn - 1];
-            }
-          } else if ($homonymn !== false) {
-            $target_id = $reference_ids[0];
-          }
-
-          if ($target_id !== false) {
-            if ($homonymn < 1) {
-              $homonymn = 1;
-            }
-            $homonymn_sub_html = count($reference_ids) > 1 && $homonymn - 1 >= 0 ? '<sub>' . $homonymn . '</sub>' : '';
-            $site_root = substr($_SERVER['REQUEST_URI'], 0, strpos($_SERVER['REQUEST_URI'], $dictionary_id));
-            $markdown_link = '<span class="word-reference"><a href="' . $site_root . $dictionary_id . '/' . $target_id .'" target="_blank" title="Link to Reference">'
-              . '<span class="orthographic-translation">' . $this->translateOrthography($word_to_find, $dictionary_id) . '</span>' . $homonymn_sub_html
-            . '</a></span>';
-            $details = str_replace($reference, $markdown_link, $details);
-          }
+        $reference_link = $this->getWordReferenceHTML($reference, $dictionary_id);
+        if ($reference_link !== $reference) {
+          $details = str_replace($reference, $markdown_link, $details);
         }
       }
     }
 
     return $details;
+  }
+
+  private function getWordReferenceHTML($reference, $dictionary_id, $direct_link = true) {
+    $word_to_find = preg_replace('/\{\{|\}\}/', '', $reference);
+    $homonymn = 0;
+  
+    if (strpos($word_to_find, ':') !== false) {
+      $separator = strpos($word_to_find, ':');
+      $homonymn = substr($word_to_find, $separator + 1);
+      $word_to_find = substr($word_to_find, 0, $separator);
+      if ($homonymn && trim($homonymn) && intval(trim($homonymn)) > 0) {
+        $homonymn = intval(trim($homonymn));
+      } else {
+        $homonymn = false;
+      }
+    }
+
+    $target_id = false;
+    $reference_ids = $this->getWordIdsWithName($dictionary_id, $word_to_find);
+
+    if (count($reference_ids) > 0) {
+      if ($homonymn !== false && $homonymn > 0) {
+        if (isset($reference_ids[$homonymn - 1])) {
+          $target_id = $reference_ids[$homonymn - 1];
+        }
+      } else if ($homonymn !== false) {
+        $target_id = $reference_ids[0];
+      }
+
+      if ($target_id !== false) {
+        if ($homonymn < 1) {
+          $homonymn = 1;
+        }
+        $homonymn_sub_html = count($reference_ids) > 1 && $homonymn - 1 >= 0 ? '<sub>' . $homonymn . '</sub>' : '';
+        $site_root = substr($_SERVER['REQUEST_URI'], 0, strpos($_SERVER['REQUEST_URI'], $dictionary_id));
+        return '<span class="word-reference"><a href="'
+          . ($direct_link ? $site_root . $dictionary_id . '/' : '#') . $target_id .'" '
+          . ($direct_link ? 'target="_blank" ' : '') . 'title="Link to Reference">'
+          . '<span class="orthographic-translation">' . $this->translateOrthography($word_to_find, $dictionary_id) . '</span>' . $homonymn_sub_html
+        . '</a></span>';
+      }
+    }
+
+    return $reference;
   }
 
   private function getWordIdsWithName($dictionary, $word_name) {

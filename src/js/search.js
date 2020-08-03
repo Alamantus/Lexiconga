@@ -42,41 +42,72 @@ export function getSearchFilters() {
   return filters;
 }
 
+function wordMatchesPartsOfSpeechFilter(word, filters) {
+  if (!filters.allPartsOfSpeechChecked) {
+    const partOfSpeech = word.partOfSpeech === '' ? 'Unclassified' : word.partOfSpeech;
+    return filters.partsOfSpeech.hasOwnProperty(partOfSpeech) && filters.partsOfSpeech[partOfSpeech];
+  }
+  return true;
+}
+
+function wordMatchesSearchTermAndOptions(word, searchTerm, filters) {
+  if (searchTerm === '') return true; // If searchTerm is blank, don't process word.
+
+  searchTerm = filters.ignoreDiacritics ? removeDiacritics(searchTerm) : searchTerm;
+  searchTerm = filters.caseSensitive ? searchTerm : searchTerm.toLowerCase();
+  let name = filters.orthography ? translateOrthography(word.name) : word.name;
+  name = filters.ignoreDiacritics ? removeDiacritics(name) : name;
+  name = filters.caseSensitive ? name : name.toLowerCase();
+  let definition = filters.ignoreDiacritics ? removeDiacritics(word.definition) : word.definition;
+  definition = filters.caseSensitive ? definition : definition.toLowerCase();
+  let details = filters.orthography ? parseReferences(word.details) : word.details;
+  details = filters.ignoreDiacritics ? removeDiacritics(details) : details;
+  details = filters.caseSensitive ? details : details.toLowerCase();
+  let principalParts = typeof word.principalParts === 'undefined' ? [] : word.principalParts;
+  principalParts = filters.orthography ? principalParts.map(part => translateOrthography(part)) : principalParts;
+  principalParts = filters.ignoreDiacritics ? principalParts.map(part => removeDiacritics(part)) : principalParts;
+  principalParts = filters.caseSensitive ? principalParts : principalParts.map(part => part.toLowerCase());
+
+  const isInName = filters.name && (filters.exact
+    ? searchTerm == name
+    : new RegExp(searchTerm, 'g').test(name)
+  );
+  const isInDefinition = filters.definition && (filters.exact
+    ? searchTerm == definition
+    : new RegExp(searchTerm, 'g').test(definition)
+  );
+  const isInDetails = filters.details && new RegExp(searchTerm, 'g').test(details);
+  const isInPrincipalParts = filters.name && (filters.exact
+    ? principalParts.includes(searchTerm)
+    : principalParts.some(part => new RegExp(searchTerm, 'g').test(part))
+  );
+  return isInName || isInDefinition || isInDetails || isInPrincipalParts;
+}
+
 export function getMatchingSearchWords() {
-  let searchTerm = getSearchTerm();
+  const searchTerm = getSearchTerm();
   const filters = getSearchFilters();
   if (searchTerm !== '' || !filters.allPartsOfSpeechChecked) {
-    const matchingWords = window.currentDictionary.words.slice().filter(word => {
-      if (!filters.allPartsOfSpeechChecked) {
-        const partOfSpeech = word.partOfSpeech === '' ? 'Unclassified' : word.partOfSpeech;
-        return filters.partsOfSpeech.hasOwnProperty(partOfSpeech) && filters.partsOfSpeech[partOfSpeech];
-      }
-      return true;
-    }).filter(word => {
-      searchTerm = filters.ignoreDiacritics ? removeDiacritics(searchTerm) : searchTerm;
-      searchTerm = filters.caseSensitive ? searchTerm : searchTerm.toLowerCase();
-      let name = filters.orthography ? translateOrthography(word.name) : word.name;
-      name = filters.ignoreDiacritics ? removeDiacritics(name) : name;
-      name = filters.caseSensitive ? name : name.toLowerCase();
-      let definition = filters.ignoreDiacritics ? removeDiacritics(word.definition) : word.definition;
-      definition = filters.caseSensitive ? definition : definition.toLowerCase();
-      let details = filters.orthography ? parseReferences(word.details) : word.details;
-      details = filters.ignoreDiacritics ? removeDiacritics(details) : details;
-      details = filters.caseSensitive ? details : details.toLowerCase();
-
-      const isInName = filters.name && (filters.exact
-          ? searchTerm == name
-          : new RegExp(searchTerm, 'g').test(name));
-      const isInDefinition = filters.definition && (filters.exact
-          ? searchTerm == definition
-          : new RegExp(searchTerm, 'g').test(definition));
-      const isInDetails = filters.details && new RegExp(searchTerm, 'g').test(details);
-      return searchTerm === '' || isInName || isInDefinition || isInDetails;
-    });
+    const matchingWords = window.currentDictionary.words.slice()
+    .filter(word => wordMatchesPartsOfSpeechFilter(word, filters))
+    .filter(word => wordMatchesSearchTermAndOptions(word, searchTerm, filters));
     return matchingWords;
   }
   
-  return window.currentDictionary.words
+  return window.currentDictionary.words;
+}
+
+export function wordMatchesSearch(word) {
+  const searchTerm = getSearchTerm();
+  const filters = getSearchFilters();
+  if (searchTerm !== '' || !filters.allPartsOfSpeechChecked) {
+    if (searchTerm === '') {
+      return wordMatchesPartsOfSpeechFilter(word, filters);
+    }
+    return wordMatchesPartsOfSpeechFilter(word, filters)
+      && wordMatchesSearchTermAndOptions(word, searchTerm, filters);
+  }
+  return true;
 }
 
 export function highlightSearchTerm(word) {
@@ -99,6 +130,16 @@ export function highlightSearchTerm(word) {
             + '<mark>' + markedUpWord.name.substr(wordIndex, searchTermLength) + '</mark>'
             + markedUpWord.name.substr(wordIndex + searchTermLength);
         });
+
+        if (markedUpWord.principalParts !== null) {
+          const part = getIndicesOf(searchTerm, removeDiacritics(markedUpWord.principalParts), filters.caseSensitive);
+          part.forEach((wordIndex, i) => {
+            wordIndex += '<mark></mark>'.length * i;
+            markedUpWord.principalParts = markedUpWord.principalParts.substring(0, wordIndex)
+              + '<mark>' + markedUpWord.principalParts.substr(wordIndex, searchTermLength) + '</mark>'
+              + markedUpWord.principalParts.substr(wordIndex + searchTermLength);
+          });
+        }
       }
       if (filters.definition) {
         const definitionMatches = getIndicesOf(searchTerm, removeDiacritics(markedUpWord.definition), filters.caseSensitive);
@@ -122,6 +163,10 @@ export function highlightSearchTerm(word) {
       const regexMethod = 'g' + (filters.caseSensitive ? '' : 'i');
       if (filters.name) {
         markedUpWord.name = markedUpWord.name.replace(new RegExp(`(${searchTerm})`, regexMethod), `<mark>$1</mark>`);
+        
+        if (markedUpWord.principalParts !== null) {
+          markedUpWord.principalParts = markedUpWord.principalParts.replace(new RegExp(`(${searchTerm})`, regexMethod), `<mark>$1</mark>`);
+        }
       }
       if (filters.definition) {
         markedUpWord.definition = markedUpWord.definition.replace(new RegExp(`(${searchTerm})`, regexMethod), `<mark>$1</mark>`);

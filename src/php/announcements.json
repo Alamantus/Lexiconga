@@ -1,8 +1,8 @@
 [
   {
-    "header": "Minor Updates + 1 Important Fix",
-    "body": "<p><em>March 4, 2020</em> &ndash; Lexiconga has been updated to fix a long-standing bug that prevented updated words from syncing between devices!</p><p>Check the <a href=\"https://github.com/Alamantus/Lexiconga/releases\" target=\"_blank\" rel=\"noopener\">Updates page</a> for the other minor updates.</p>",
-    "expire": "April 4, 2020",
-    "dismissId": "marchFixes1"
+    "header": "New Features: Wave 2",
+    "body": "<p><em>August 3, 2020</em> &ndash; Lexiconga has added new features in the form of advanced fields and templates!</p><p>Check the <a href=\"https://github.com/Alamantus/Lexiconga/releases\" target=\"_blank\" rel=\"noopener\">Updates page</a> to see all the new features, and please <a href=\"https://github.com/Alamantus/Lexiconga/issues\" target=\"_blank\" rel=\"noopener\">report any issues</a> you encounter so I can fix them.</p>",
+    "expire": "October 31, 2020",
+    "dismissId": "wave2"
   }
 ]

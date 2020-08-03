@@ -35,6 +35,9 @@ export const DEFAULT_DICTIONARY = {
       partOfSpeech: '',
       definition: '',
       details: '',
+      etymology: [],
+      related: [],
+      principalParts: [],
       wordId: 0
     }, */
   ],
@@ -54,7 +57,9 @@ export const DEFAULT_DICTIONARY = {
 export const DEFAULT_SETTINGS = {
   useIPAPronunciationField: true,
   useHotkeys: true,
+  showAdvanced: false,
   defaultTheme: 'default',
+  templates: [],
 };
 
 export const DISPLAY_AD_EVERY = 10;
