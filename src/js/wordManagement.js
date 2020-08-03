@@ -4,6 +4,7 @@ import removeDiacritics from "./StackOverflow/removeDiacritics";
 import { removeTags, getTimestampInSeconds } from "../helpers";
 import { saveDictionary } from "./dictionaryManagement";
 import { setupWordOptionButtons, setupWordOptionSelections } from "./setupListeners/words";
+import { wordMatchesSearch } from "./search";
 
 export function validateWord(word, wordId = false) {
   const errorElementId = wordId === false ? 'wordErrorMessage' : 'wordErrorMessage_' + wordId,
@@ -288,9 +289,15 @@ export function updateWord(word, wordId) {
       sortWords(true);
     } else {
       saveDictionary(false);
-      document.getElementById(wordId.toString()).outerHTML = renderWord(window.currentDictionary.words[wordIndex], isPublic);
-      setupWordOptionButtons();
-      setupWordOptionSelections();
+      const entry = document.getElementById(wordId.toString());
+      if (!wordMatchesSearch(word)) {
+        entry.parentElement.removeChild(entry);
+      } else {
+        console.log('matches search, updating in place');
+        document.getElementById(wordId.toString()).outerHTML = renderWord(window.currentDictionary.words[wordIndex], isPublic);
+        setupWordOptionButtons();
+        setupWordOptionSelections();
+      }
     }
 
     if (hasToken()) {
