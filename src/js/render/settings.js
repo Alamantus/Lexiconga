@@ -9,6 +9,11 @@ export function renderTemplateSelectOptions() {
     }).join('');
 
     Array.from(document.getElementsByClassName('template-select')).forEach(select => {
+      if (select.id !== 'savedDetailsTemplates' && templates.length < 1) {
+        return select.parentElement.style.display = 'none';
+      } else {
+        select.parentElement.style.display = '';
+      }
       select.innerHTML = '<option value="" selected="selected">None Selected</option>' + templatesOptionsHTML;
     });
 

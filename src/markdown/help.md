@@ -73,6 +73,7 @@ If you do not want to use the IPA field feaure, you can turn it off in the Setti
 Clicking the button labeled "Show Advanced Fields" underneath the **Details** field on any word form will expand the "Advanced Fields" section for that word list. Clicking the button again when it says "Hide Advanced Fields" will hide the section again to make it so you don't have to scroll down to reach the "Add Word" button. The fields in the Advanced Fields section are detailed below:
 
 - **Details Field Templates:** A dropdown box with any templates you have previously created (see [Templates for Details Fields](#templates-for-details-fields) in the Settings section below to learn how to create a template). Selecting one of the templates will put that template into the Details field for you, _overwriting **anything** that might have already been written there_.
+  - If there are no templates created, this field will not be displayed.
   - Each time you select a different template (other than the "None Selected" option), it will overwrite anything in the Details field with the template without warning, so please be careful.
   - Selecting the "None Selected" option at the top of the list will _not_ change the Details field.
 - **Etymology / Root Words:** Any words that the current word might have stemmed from originally.
