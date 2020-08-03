@@ -25,6 +25,7 @@ export function showTemplateEditor(show = true) {
   document.getElementById('templateFields').style.display = show ? '' : 'none';
   if (show) {
     document.getElementById('templateTextarea').focus();
+    document.querySelector('#settingsModal .modal-content section').scrollTop = 9999;
   } else {
     clearTemplateEditor();
   }
