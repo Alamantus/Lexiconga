@@ -8,7 +8,6 @@ import { addWord, sortWords } from "./wordManagement";
 import { migrateDictionary } from './migration';
 
 export function updateDictionary () {
-
   renderDictionaryDetails();
 }
 
@@ -49,6 +48,7 @@ export function openEditModal() {
   }
 
   document.getElementById('editModal').style.display = '';
+  Array.from(document.querySelectorAll('#editModal .modal-content section')).forEach(section => section.scrollTop = 0);
 }
 
 export function saveEditModal() {

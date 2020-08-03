@@ -30,6 +30,7 @@ export function openSettingsModal() {
   showTemplateEditor(false);
 
   document.getElementById('settingsModal').style.display = '';
+  document.querySelector('#settingsModal .modal-content section').scrollTop = 0;
 }
 
 export function updateTemplateSelects() {
