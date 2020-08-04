@@ -4,11 +4,11 @@ import { getHomonymnNumber, hasToken } from '../utilities';
 import { getMatchingSearchWords, highlightSearchTerm, getSearchFilters, getSearchTerm } from '../search';
 import {
   setupWordOptionButtons,
-  setupPagination,
+  // setupPagination,
   setupWordOptionSelections,
   setupWordEditFormButtons,
 } from '../setupListeners/words';
-import { getPaginationData } from '../pagination';
+// import { getPaginationData } from '../pagination';
 import { getOpenEditForms, translateOrthography, parseReferences, getWordReferenceMarkdown } from '../wordManagement';
 import { renderAd } from '../ads';
 import { getPublicLink } from '../account/utilities';
@@ -136,25 +136,25 @@ export function renderWords() {
   // renderPagination(words);
 }
 
-export function renderPagination(filteredWords) {
-  const paginationData = getPaginationData(filteredWords);
+// export function renderPagination(filteredWords) {
+//   const paginationData = getPaginationData(filteredWords);
 
-  if (paginationData.pages > 0) {
-    let paginationHTML = (paginationData.currentPage > 0 ? '<span class="button prev-button">&laquo; Previous</span>' : '')
-      + '<select class="page-selector">';
-    for (let i = 0; i < paginationData.pages; i++) {
-      paginationHTML += `<option value="${i}"${paginationData.currentPage === i ? ' selected' : ''}>Page ${i + 1}</option>`;
-    }
-    paginationHTML += '</select>'
-      + (paginationData.currentPage < paginationData.pages - 1 ? '<span class="button next-button">Next &raquo;</span>' : '');
+//   if (paginationData.pages > 0) {
+//     let paginationHTML = (paginationData.currentPage > 0 ? '<span class="button prev-button">&laquo; Previous</span>' : '')
+//       + '<select class="page-selector">';
+//     for (let i = 0; i < paginationData.pages; i++) {
+//       paginationHTML += `<option value="${i}"${paginationData.currentPage === i ? ' selected' : ''}>Page ${i + 1}</option>`;
+//     }
+//     paginationHTML += '</select>'
+//       + (paginationData.currentPage < paginationData.pages - 1 ? '<span class="button next-button">Next &raquo;</span>' : '');
 
-    Array.from(document.getElementsByClassName('pagination')).forEach(pagination => {
-      pagination.innerHTML = paginationHTML;
-    });
+//     Array.from(document.getElementsByClassName('pagination')).forEach(pagination => {
+//       pagination.innerHTML = paginationHTML;
+//     });
 
-    setupPagination();
-  }
-}
+//     setupPagination();
+//   }
+// }
 
 export function renderEditForm(wordId = false) {
   wordId = typeof wordId.target === 'undefined' ? wordId : parseInt(this.id.replace('edit_', ''));

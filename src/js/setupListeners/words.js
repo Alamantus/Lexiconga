@@ -1,6 +1,6 @@
 import { renderEditForm } from '../render/words';
 import { confirmEditWord, cancelEditWord, confirmDeleteWord, expandAdvancedForm, submitWordForm } from '../wordManagement';
-import { goToNextPage, goToPreviousPage, goToPage } from '../pagination';
+// import { goToNextPage, goToPreviousPage, goToPage } from '../pagination';
 import { setupMaximizeButtons } from './buttons';
 import { setupIPAFields } from '.';
 
@@ -98,22 +98,22 @@ export function setupMobileWordFormButton() {
   });
 }
 
-export function setupPagination() {
-  const nextButtons = document.getElementsByClassName('next-button'),
-    prevButtons = document.getElementsByClassName('prev-button'),
-    pageSelectors = document.getElementsByClassName('page-selector');
+// export function setupPagination() {
+//   const nextButtons = document.getElementsByClassName('next-button'),
+//     prevButtons = document.getElementsByClassName('prev-button'),
+//     pageSelectors = document.getElementsByClassName('page-selector');
 
-  Array.from(nextButtons).forEach(nextButton => {
-    nextButton.removeEventListener('click', goToNextPage);
-    nextButton.addEventListener('click', goToNextPage);
-  });
-  Array.from(prevButtons).forEach(prevButton => {
-    prevButton.removeEventListener('click', goToPreviousPage);
-    prevButton.addEventListener('click', goToPreviousPage);
-  });
+//   Array.from(nextButtons).forEach(nextButton => {
+//     nextButton.removeEventListener('click', goToNextPage);
+//     nextButton.addEventListener('click', goToNextPage);
+//   });
+//   Array.from(prevButtons).forEach(prevButton => {
+//     prevButton.removeEventListener('click', goToPreviousPage);
+//     prevButton.addEventListener('click', goToPreviousPage);
+//   });
 
-  Array.from(pageSelectors).forEach(pageSelector => {
-    pageSelector.removeEventListener('change', goToPage);
-    pageSelector.addEventListener('change', goToPage);
-  });
-}
+//   Array.from(pageSelectors).forEach(pageSelector => {
+//     pageSelector.removeEventListener('change', goToPage);
+//     pageSelector.addEventListener('change', goToPage);
+//   });
+// }
