@@ -25,7 +25,6 @@ export function renderLoginForm() {
         <div>
           <h2>Create a New Account</h2>
           <p>Creating an account allows you to save and switch between as many dictionaries as you need and access them from any device for free! If you have a dictionary you've been working on loaded already, it will automatically be uploaded to your account when you log in for the first time.</p>
-          <p>Plus if you allow us to send you emails, we'll make sure that you're the first to hear about any new features that get added or if any of our policies change for any reason. We'll never spam you or sell your information.</p>
           <p>By creating an account, you are indicating that you agree to the Terms of Service and that you understand Lexiconga's Privacy Policy.</p>
           <label>Email<br>
             <input type="email" id="createNewEmail" maxlength="100">
@@ -40,9 +39,10 @@ export function renderLoginForm() {
             <input type="text" id="createNewPublicName" maxlength="50">
           </label>
           <label>Allow Emails
-            <input type="checkbox" id="createNewAllowEmails">
+          <input type="checkbox" id="createNewAllowEmails">
           </label>
-          <p>Creating an account is <em>not</em> required to use Lexiconga's core features. Click "Help" in the site footer to learn what accounts provide.</p>
+          <p><small>If you allow emails, you'll be informed if any of our policies change for any reason. We'll <em>never</em> spam you or sell your information.</small></p>
+          <p><strong>Remember:</strong> Creating an account is <em>not</em> required to use Lexiconga's core features. Click "Help" in the site footer to learn what accounts provide.</p>
           <section id="createAccountErrorMessages"></section>
           <button id="createAccountSubmit" class="button">Create Account</button>
         </div>
