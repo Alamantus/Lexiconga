@@ -20,7 +20,9 @@ class PublicDictionary {
 
     $this->details = $this->getPublicDictionaryDetails($dictionary_id);
     $this->words = $this->getPublicDictionaryWords($dictionary_id);
-    $this->details['wordStats'] = $this->getWordStats();
+    if ($this->details !== false) {
+      $this->details['wordStats'] = $this->getWordStats();
+    }
   }
 
   public function getPublicDictionaryDetails ($dictionary) {
@@ -239,7 +241,7 @@ WHERE words.dictionary=? AND is_public=1";
       foreach($references as $reference) {
         $reference_link = $this->getWordReferenceHTML($reference, $dictionary_id);
         if ($reference_link !== $reference) {
-          $details = str_replace($reference, $markdown_link, $details);
+          $details = str_replace($reference, $reference_link, $details);
         }
       }
     }
