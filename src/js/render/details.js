@@ -123,7 +123,7 @@ export function renderPartsOfSpeech(onlyOptions = false) {
     searchHTML = '<label>Unclassified <input type="checkbox" checked id="searchPartOfSpeech__None"></label>';
   window.currentDictionary.partsOfSpeech.forEach(partOfSpeech => {
     partOfSpeech = removeTags(partOfSpeech);
-    optionsHTML += `<option value="${partOfSpeech}">${partOfSpeech}</option>`;
+    optionsHTML += `<option value="${partOfSpeech.replace(/"/g, '&quot;')}">${partOfSpeech}</option>`;
     searchHTML += `<label>${partOfSpeech} <input type="checkbox" checked id="searchPartOfSpeech_${slugify(partOfSpeech)}"></label>`;
   });
   searchHTML += `<a class="small button" id="checkAllFilters">Check All</a> <a class="small button" id="uncheckAllFilters">Uncheck All</a>`;

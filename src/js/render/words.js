@@ -160,25 +160,26 @@ export function renderEditForm(wordId = false) {
   wordId = typeof wordId.target === 'undefined' ? wordId : parseInt(this.id.replace('edit_', ''));
   const word = window.currentDictionary.words.find(w => w.wordId === wordId);
   if (word) {
+    const escapeQuotes = (value) => value.replace(/"/g, '&quot;');
     const wordHasAdvancedFields = (word.hasOwnProperty('etymology') && word.etymology)
       || (word.hasOwnProperty('related') && word.related) || (word.hasOwnProperty('principalParts') && word.principalParts);
-    const ipaPronunciationField = `<input id="wordPronunciation_${wordId}" class="ipa-field" maxlength="200" value="${word.pronunciation}"><br>
+    const ipaPronunciationField = `<input id="wordPronunciation_${wordId}" class="ipa-field" maxlength="200" value="${escapeQuotes(word.pronunciation)}"><br>
       <a class="label-help-button ipa-field-help-button">Field Help</a>`;
-    const plainPronunciationField = `<input id="wordPronunciation_${wordId}" maxlength="200" value="${word.pronunciation}">`;
+    const plainPronunciationField = `<input id="wordPronunciation_${wordId}" maxlength="200" value="${escapeQuotes(word.pronunciation)}">`;
     const editForm = `<form id="editForm_${wordId}" class="edit-form">
       <label>Word<span class="red">*</span><br>
-        <input id="wordName_${wordId}" maxlength="200" value="${word.name}">
+        <input id="wordName_${wordId}" maxlength="200" value="${escapeQuotes(word.name)}">
       </label>
       <label>Pronunciation<a class="label-button ipa-table-button">IPA Chart</a><br>
         ${window.settings.useIPAPronunciationField ? ipaPronunciationField : plainPronunciationField}
       </label>
       <label>Part of Speech<br>
         <select id="wordPartOfSpeech_${wordId}" class="part-of-speech-select">
-          <option value="${word.partOfSpeech}" selected>${word.partOfSpeech}</option>
+          <option value="${escapeQuotes(word.partOfSpeech)}" selected>${word.partOfSpeech}</option>
         </select>
       </label>
       <label>Definition<span class="red">*</span><br>
-        <input id="wordDefinition_${wordId}" maxlength="2500" value="${word.definition}" placeholder="Equivalent words">
+        <input id="wordDefinition_${wordId}" maxlength="2500" value="${escapeQuotes(word.definition)}" placeholder="Equivalent words">
       </label>
       <label>Details<span class="red">*</span><a class="label-button maximize-button">Maximize</a><br>
         <textarea id="wordDetails_${wordId}" placeholder="Markdown formatting allowed">${word.details}</textarea>
@@ -193,13 +194,13 @@ export function renderEditForm(wordId = false) {
           <small>Choose one to fill the details field. (Note: Will erase anything currently there.)</small>
         </label>
         <label>Etymology / Root Words<br>
-          <input id="wordEtymology_${wordId}" maxlength="2500" placeholder="comma,separated,root,words" value="${word.hasOwnProperty('etymology') ? word.etymology : ''}">
+          <input id="wordEtymology_${wordId}" maxlength="2500" placeholder="comma,separated,root,words" value="${word.hasOwnProperty('etymology') ? escapeQuotes(word.etymology.toString()) : ''}">
         </label>
         <label>Related Words<br>
-          <input id="wordRelated_${wordId}" maxlength="2500" placeholder="comma,separated,related,words" value="${word.hasOwnProperty('related') ? word.related : ''}">
+          <input id="wordRelated_${wordId}" maxlength="2500" placeholder="comma,separated,related,words" value="${word.hasOwnProperty('related') ? escapeQuotes(word.related.toString()) : ''}">
         </label>
         <label>Principal Parts<a href="https://en.wikipedia.org/wiki/Principal_parts" target="_blank" class="label-button">What's This?</a><br>
-          <input id="wordPrincipalParts_${wordId}" maxlength="2500" placeholder="comma,separated,principal,parts" value="${word.hasOwnProperty('principalParts') ? word.principalParts : ''}">
+          <input id="wordPrincipalParts_${wordId}" maxlength="2500" placeholder="comma,separated,principal,parts" value="${word.hasOwnProperty('principalParts') ? escapeQuotes(word.principalParts.toString()) : ''}">
         </label>
       </div>
       <div id="wordErrorMessage_${wordId}"></div>
