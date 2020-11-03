@@ -1,8 +1,8 @@
 [
   {
-    "header": "New Features: Wave 2",
-    "body": "<p><em>August 3, 2020</em> &ndash; Lexiconga has added new features in the form of advanced fields and templates!</p><p>Check the <a href=\"https://github.com/Alamantus/Lexiconga/releases\" target=\"_blank\" rel=\"noopener\">Updates page</a> to see all the new features, and please <a href=\"https://github.com/Alamantus/Lexiconga/issues\" target=\"_blank\" rel=\"noopener\">report any issues</a> you encounter so I can fix them.</p>",
-    "expire": "October 31, 2020",
-    "dismissId": "wave2"
+    "header": "Decide the Future of Lexiconga!",
+    "body": "<p><em>November 3, 2020</em> &ndash; Please take the <a href=\"https://polls.lexicon.ga\" target=\"_blank\">Lexiconga Paid Features Poll</a>!</p><p>Let your opinion be known so I can know how to best move forward with Lexiconga development in the future!</p>",
+    "expire": "December 31, 2020",
+    "dismissId": "paidFeaturesPoll"
   }
 ]
