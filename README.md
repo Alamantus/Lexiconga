@@ -25,6 +25,8 @@ This is the light-as-possible rewrite of Lexiconga.
 
 It's less useful, but `npm run serve-frontend-only` will bundle and serve _only_ the front end stuff from `localhost:1234`. The bundled files all still get bundled into `dist`.
 
+Parcel Bundler version < 2 doesn't use PostCSS 8+, so upgrading autoprefixer will not work. Keep autoprefixer at the highest version within the 9 major version until you're able to figure out how parcel-bundler 2+ works.
+
 ## Production
 
 `npm run bundle` bundles and minifies the frontend stuff and also copies the backend stuff to `dist`. Be sure to run `npm run clear` to delete the contents of `dist` and `.cache` before using `npm run bundle` to make sure you don't get old dev versions of the bundled code included in your upload.
