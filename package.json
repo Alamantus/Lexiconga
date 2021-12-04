@@ -22,16 +22,16 @@
   },
   "devDependencies": {
     "autoprefixer": "9.8.6",
-    "concurrently": "^5.3.0",
+    "concurrently": "^6.4.0",
     "cpx": "^1.5.0",
-    "parcel-bundler": "^1.12.4",
+    "parcel-bundler": "^1.12.5",
     "parcel-plugin-goodie-bag": "^2.0.0",
     "rimraf": "^3.0.2",
     "sass": "^1.32.6",
-    "sharp": "^0.27.1"
+    "sharp": "^0.29.3"
   },
   "dependencies": {
-    "marked": "^2.0.0",
+    "marked": "^3.0.8",
     "normalize.css": "^8.0.1",
     "papaparse": "^5.3.0",
     "upup": "^1.1.0"
