@@ -28,7 +28,7 @@ main {
 
   article {
     dl {
-      padding: 0 ($general-padding / 2);
+      padding: 0 calc($general-padding / 2);
 
       dd {
         margin: 0 ($general-padding * 0.75);

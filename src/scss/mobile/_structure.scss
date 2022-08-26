@@ -14,14 +14,14 @@
   #searchModal {
     .modal-content {
       width: 100%;
-      padding: $general-padding ($general-padding / 2) ($general-padding / 4);
+      padding: $general-padding calc($general-padding / 2) calc($general-padding / 4);
 
       #searchBox {
         margin-bottom: 5px;
       }
 
       section+footer {
-        padding: ($general-padding / 2) 0;
+        padding: calc($general-padding / 2) 0;
       }
     }
   }
@@ -30,7 +30,7 @@
 $mobile-word-form-size: 32px;
 #mobileWordFormShow {
   position: fixed;
-  top: $header-height - ($mobile-word-form-size / 2);
+  top: $header-height - calc($mobile-word-form-size / 2);
   left: 0;
   width: $mobile-word-form-size;
   height: $mobile-word-form-size;
@@ -50,7 +50,7 @@ $mobile-word-form-size: 32px;
   width: 95%;
   max-width: unset;
   max-height: 85%;
-  top: $header-height + ($mobile-word-form-size / 2);
+  top: $header-height + calc($mobile-word-form-size / 2);
   left: 0;
   right: 3%;
 
@@ -74,7 +74,7 @@ $mobile-word-form-size: 32px;
 
 .entry {
   .pronunciation {
-    margin: 0 ($general-padding / 2);
+    margin: 0 calc($general-padding / 2);
   }
 }
 

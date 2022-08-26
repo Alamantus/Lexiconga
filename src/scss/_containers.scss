@@ -12,7 +12,7 @@ html, body {
 
 header {
   display: block;
-  padding: 5px ($general-padding / 2);
+  padding: 5px calc($general-padding / 2);
   margin: 0 0 5px;
 
   &#top {

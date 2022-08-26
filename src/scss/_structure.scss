@@ -28,7 +28,7 @@
       max-height: unset;
       margin: 0 auto;
       width: 90%;
-      padding: $general-padding $general-padding ($general-padding / 2);
+      padding: $general-padding $general-padding calc($general-padding / 2);
 
       label {
         display: inline;
@@ -45,7 +45,7 @@
         left: unset;
         bottom: unset;
         right: unset;
-        padding: ($general-padding / 2) $general-padding ($general-padding * 0.25);
+        padding: calc($general-padding / 2) $general-padding ($general-padding * 0.25);
         font-size: 90%;
 
         .split {
@@ -402,7 +402,7 @@ $nav-font-height: 16px;
   right: 0;
   z-index: 5;
   text-align: center;
-  padding: $general-padding / 2;
+  padding: calc($general-padding / 2);
 
   a {
     text-decoration: none;
