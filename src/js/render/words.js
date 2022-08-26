@@ -10,7 +10,6 @@ import {
 } from '../setupListeners/words';
 // import { getPaginationData } from '../pagination';
 import { getOpenEditForms, translateOrthography, parseReferences, getWordReferenceMarkdown } from '../wordManagement';
-import { renderAd } from '../ads';
 import { getPublicLink } from '../account/utilities';
 import { renderPartsOfSpeech } from './details';
 import { renderTemplateSelectOptions } from './settings';
@@ -105,9 +104,7 @@ export function renderWords() {
     // const { pageStart, pageEnd } = getPaginationData(words);
 
     // words.slice(pageStart, pageEnd).forEach(savedWord => {
-    words.forEach((savedWord, displayIndex) => {
-      wordsHTML += renderAd(displayIndex);
-
+    words.forEach(savedWord => {
       wordsHTML += renderWord(savedWord, isPublic);
     });
   }

@@ -1,8 +1,14 @@
 [
   {
-    "header": "Decide the Future of Lexiconga!",
-    "body": "<p><em>November 3, 2020</em> &ndash; Please take the <a href=\"https://polls.lexicon.ga\" target=\"_blank\">Lexiconga Paid Features Poll</a>!</p><p>Let your opinion be known so I can know how to best move forward with Lexiconga development in the future!</p>",
-    "expire": "December 31, 2020",
-    "dismissId": "paidFeaturesPoll"
+    "header": "Lexiconga is now fully ad-free",
+    "body": "<p><em>August 26, 2022</em> &ndash; Out of the goodness of my heart, I've decided to completely remove advertisements from Lexiconga. They were kind of pointless anyway. If you want to support Lexiconga's developer (who keeps Lexiconga online with his own money), we thank you for using the \"Support Lexiconga\" button in the website footer!</p>",
+    "expire": "December 31, 2022",
+    "dismissId": "adFreeAnnouncement"
+  },
+  {
+    "header": "Warning to Safari Users",
+    "body": "<p><em>December 16, 2021</em> &ndash; It has come to our attention that Apple is working on updates to their Safari browser (the default browser engine for iPhones, iPads, and MacBooks) that automatically deletes local content from browsers after 7 days. <a href=\"https://blog.lexicon.ga/post/670777320117764096/important-warning-for-safari-users\" target=\"_blank\">Read our blog post</a> to learn what that means for you.",
+    "expire": "December 31, 2022",
+    "dismissId": "iOSWarning"
   }
 ]

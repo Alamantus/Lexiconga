@@ -69,15 +69,6 @@ export function removeTags(html) {
   return html;
 }
 
-export function shuffle(array) {
-  // Fisher-Yates shuffle
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-  return array;
-}
-
 export function slugify(string) {
   return removeDiacritics(string).replace(/[^a-zA-Z0-9-_]/g, '-');
 }

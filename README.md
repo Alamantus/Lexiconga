@@ -45,4 +45,3 @@ Be sure you set up email senders/receivers for at least these 3 email addresses:
 
 - help (can be forwarder)
 - donotreply (must be sender)
-- ads (can be forwarder)

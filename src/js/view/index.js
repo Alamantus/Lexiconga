@@ -1,9 +1,7 @@
 import { renderAll } from './render';
 import setupListeners from './setupListeners';
-import { setupAds } from '../ads';
 
 function initialize() {
-  setupAds();
   renderAll();
   setupListeners();
 }

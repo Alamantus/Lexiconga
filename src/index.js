@@ -4,7 +4,6 @@ import { renderAll } from './js/render';
 import { hasToken, addMessage } from './js/utilities';
 import { loadDictionary } from './js/dictionaryManagement';
 import { loadSettings } from './js/settings';
-import { setupAds } from './js/ads';
 
 function initialize() {
   if (window.isOffline) {
@@ -23,7 +22,6 @@ function initialize() {
     });
   }
 
-  setupAds();
   renderAll();
 }
 

@@ -37,7 +37,7 @@ If User decides to opt-in to our mailing list, they will receive emails that may
 Users may find advertising or other content on our Site that link to the sites and services of our partners, suppliers, advertisers, sponsors, licencors and other third parties. While we manually curate what links we allow in our advertisements, we do not control the content that appears on these sites and are not responsible for the practices employed by websites linked to or from our Site. In addition, these sites or services, including their content and links, may be constantly changing. These sites and services may have their own privacy policies and customer service policies. Browsing and interaction on any other website, including websites which have a link to our Site, is subject to that website's own terms and policies.
 
 ### Advertising
-Ads appearing on our site are manually chosen to by the Lexiconga's administrator, only appear as text, and never set cookies. You can see all active advertisements at any time in the [source code on Github](https://github.com/Alamantus/Lexiconga/blob/master/ads.json).
+No advertisements exist in the Lexiconga source code. Any advertisements you might see when viewing a Lexiconga dictionary will only have been added by a user for their own reasons.
 
 ### Changes to this privacy policy
 Lexiconga has the discretion to update this privacy policy at any time. When we do, we will post a notification on the main page of our Site. We encourage Users to frequently check this page for any changes to stay informed about how we are helping to protect the personal information we collect. You acknowledge and agree that it is your responsibility to review this privacy policy periodically and become aware of modifications.

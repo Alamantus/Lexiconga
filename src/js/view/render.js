@@ -3,7 +3,6 @@ import { removeTags, slugify } from '../../helpers';
 import { getHomonymnNumber } from './utilities';
 import { getMatchingSearchWords, highlightSearchTerm, getSearchFilters, getSearchTerm } from './search';
 import { showSection } from './displayToggles';
-import { renderAd } from '../ads';
 import { setupInfoModal } from '../setupListeners/modals';
 import { setupSearchFilters } from '../setupListeners/search';
 
@@ -175,7 +174,7 @@ export function renderWords() {
       </article>`;
     }
 
-    words.forEach((originalWord, displayIndex) => {
+    words.forEach(originalWord => {
       const word = highlightSearchTerm({
         name: removeTags(originalWord.name),
         pronunciation: removeTags(originalWord.pronunciation),
@@ -193,8 +192,6 @@ export function renderWords() {
 
       const homonymnNumber = getHomonymnNumber(originalWord);
       const shareLink = window.location.pathname + (window.location.pathname.match(new RegExp(word.wordId + '$')) ? '' : '/' + word.wordId);
-
-      wordsHTML += renderAd(displayIndex);
 
       wordsHTML += `<article class="entry" id="${word.wordId}">
         <header>
