@@ -10,7 +10,7 @@ class PublicDictionary {
   public $details;
   public $words;
 
-  function __construct ($dictionary_id) {
+  function __construct ($dictionary_id, $details_only = false) {
     $this->db = new Db();
     $this->token = new Token();
 
@@ -19,7 +19,7 @@ class PublicDictionary {
     );
 
     $this->details = $this->getPublicDictionaryDetails($dictionary_id);
-    $this->words = $this->getPublicDictionaryWords($dictionary_id);
+    $this->words = $details_only ? [] : $this->getPublicDictionaryWords($dictionary_id);
     if ($this->details !== false) {
       $this->details['wordStats'] = $this->getWordStats();
     }
