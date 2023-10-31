@@ -123,13 +123,10 @@ class PublicDictionary {
     return array();
   }
 
-  public function getSpecificPublicDictionaryWord ($dictionary, $word) {
-    if (is_numeric($dictionary) && is_numeric($word)) {
-      $query = "SELECT words.*, wa.etymology, wa.related, wa.principal_parts FROM words
-      LEFT JOIN words_advanced wa ON wa.dictionary = words.dictionary AND wa.word_id = words.word_id
-      JOIN dictionaries ON dictionaries.id = words.dictionary
-      WHERE words.dictionary=? AND words.word_id=? AND dictionaries.is_public=1";
-      $result = $this->db->query($query, array($dictionary, $word))->fetch();
+  public function getSpecificPublicDictionaryWord ($dictionary, $word_id) {
+    if (is_numeric($dictionary) && is_numeric($word_id)) {
+      $results = array_filter($this->getWordsAsEntered(), fn ($row) => $row['word_id'] == $word_id);
+      $result = array_values($results)[0] ?? null;
       if ($result) {
         $word = array(
           'name' => $this->translateOrthography($result['name'], $dictionary),
@@ -265,7 +262,7 @@ WHERE words.dictionary=? AND is_public=1";
     }
 
     $target_id = false;
-    $reference_ids = $this->getWordIdsWithName($dictionary_id, $word_to_find);
+    $reference_ids = $this->getWordIdsFromName($word_to_find);
 
     if (count($reference_ids) > 0) {
       if ($homonymn !== false && $homonymn > 0) {
@@ -293,15 +290,13 @@ WHERE words.dictionary=? AND is_public=1";
     return $reference;
   }
 
-  private function getWordIdsWithName($dictionary, $word_name) {
-    if (is_numeric($dictionary)) {
-      $query = "SELECT word_id FROM words WHERE dictionary=? AND name=?";
-      $results = $this->db->query($query, array($dictionary, $word_name))->fetchAll();
-      if ($results) {
-        return array_map(function ($row) {
-          return intval($row['word_id']);
-        }, $results);
-      }
+  private function getWordIdsFromName($word_name) {
+    $results = array_filter($this->getWordsAsEntered(), fn ($row) => $row['name'] == $word_name);
+    $results = array_values($results);
+    if ($results) {
+      return array_map(function ($row) {
+        return intval($row['word_id']);
+      }, $results);
     }
     return array();
   }
