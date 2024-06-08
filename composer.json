@@ -1,6 +1,6 @@
 {
   "config": {
-    "vendor-dir": "src/php/vendor"
+    "vendor-dir": "src_2.x/php/vendor"
   },
   "require": {
     "firebase/php-jwt": "^5.0",
