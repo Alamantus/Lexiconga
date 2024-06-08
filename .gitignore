@@ -3,6 +3,8 @@ node_modules/
 dist/
 vendor/
 processedImages/
+public/
+.env
 
 src_2.x/php/api/config.php
 src_2.x/php/api/migrate.php

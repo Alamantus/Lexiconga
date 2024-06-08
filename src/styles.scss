@@ -1,0 +1,11 @@
+@use "../node_modules/bulma/sass/utilities" with (
+	// $family-primary: '"Nunito", sans-serif',
+	// $grey-dark: $brown,
+	// $grey-light: $beige-light,
+	// $primary: $purple,
+	// $link: $pink,
+	$control-border-width: 2px
+);
+
+@forward "../node_modules/bulma/sass/base";
+@forward "../node_modules/bulma/sass/themes/light";
