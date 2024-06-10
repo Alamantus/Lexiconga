@@ -1,7 +1,7 @@
-import { render } from 'uhtml';
-import header from './elements/body/header';
-import main from './elements/body/main';
-import footer from './elements/body/footer';
+const { render } = require('uhtml');
+const header = require('./elements/body/header');
+const main = require('./elements/body/main');
+const footer = require('./elements/body/footer');
 
 (() => {
   class App {
