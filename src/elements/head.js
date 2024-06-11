@@ -1,8 +1,10 @@
 const { html } = require('uhtml-ssr');
 
 module.exports = (pageTitle, pageDescription) => {
-	pageTitle = pageTitle ?? process.env.APP_NAME;
-	pageDescription = pageDescription ?? process.env.APP_DESCRIPTION;
+	pageTitle = pageTitle ?? 'Lexiconga';
+	pageDescription = pageDescription ?? 'The quick and easy dictionary builder for constructed languages.';
+	let ogUrl = typeof window !== 'undefined' ? window.location.href : 'https://lexiconga.com';
+	ogUrl = ogUrl.split('?')[0].split('#')[0];
 	
 	return html`<head>
 		<meta charset="utf-8">
@@ -12,14 +14,14 @@ module.exports = (pageTitle, pageDescription) => {
 		<meta name="description" content="${pageDescription}">
 		<meta name="keywords" content="conlanging, dictionary, dictionaries, lexicon, conlangs, constructed languages, glossopoeia, builder, app, tool">
 
-		<meta property="og:url" content="https://${process.env.APP_DOMAIN}/">
+		<meta property="og:url" content="${ogUrl}/">
 		<meta property="og:type" content="website">
 		<meta property="og:title" content="${pageTitle}">
 		<meta property="og:description" content="${pageDescription}">
 		<meta property="og:image" content="images/social.jpg">
 
 		<meta name="twitter:card" content="summary">
-		<meta name="twitter:image:alt" content="${process.env.APP_NAME} logo">
+		<meta name="twitter:image:alt" content="Lexiconga logo">
 
 		<link rel="icon" href="images/favicon.png" type="image/x-icon">
 
@@ -27,7 +29,7 @@ module.exports = (pageTitle, pageDescription) => {
 		<meta name="theme-color" content="#000000">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
-		<meta name="apple-mobile-web-app-title" content="${process.env.APP_NAME}">
+		<meta name="apple-mobile-web-app-title" content="Lexiconga">
 		<link rel="apple-touch-icon" href="images/icon-152.png">
 
 		<link rel="stylesheet" href="styles.css">

@@ -29,7 +29,7 @@ const footer = require('./elements/body/footer');
     }
   }
   
-  if (window.isOffline) {
+  if (window?.isOffline) {
     // addMessage('<strong>You are using the Offline version of Lexiconga.</strong><br>Refresh the page while connected to the internet to enable using accounts.', 0);
   }
   // Migrate Old Dictionaries

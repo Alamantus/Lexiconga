@@ -1,28 +1,24 @@
-const HyperExpress = require('hyper-express');
-require('dotenv').config();
+if (process.env.NODE_ENV !== 'production') {
+	require('dotenv').config();
+}
 
-const server = new HyperExpress.Server();
-server.files = {};
+const fastify = require('fastify')();
 
-server.use((req, res, next) => {
-	req.hasFile = typeof server.files[req.path] !== 'undefined';
-	res.sendFile = (setFile = () => {}) => {
-		if (!req.hasFile) {
-			server.files[req.path] = setFile();
-		}
-		return res.send(server.files[req.path]);
-	};
+fastify.decorate('isProd', process.env.NODE_ENV === 'production');
 
-	next();
-});
-
-server.use('/', require('./routes/assets'));
-server.use('/', require('./routes/web'));
+fastify.register(require('@fastify/helmet'))
+	// .register(require('@fastify/mysql'), {
+	// 	connectionString: 'mysql://root@localhost/mysql',
+	// })
+	.register(require('@fastify/jwt'), {
+		secret: process.env.JWT_SECRET,
+	})
+	// .register(require('@fastify/websocket'))
+	.register(require('./routes'))
+;
 
 const port = process.env.APP_PORT ?? 8080;
-server.listen(port)
-	.then(socket => console.log(`Web server started on http://localhost:${port}`))
-	.catch(error => console.error('Failed to start web server: ', error));
-
-return server;
-
+fastify.listen({ port }, err => {
+  if (err) throw err;
+  console.log(`server listening on http://localhost:${fastify.server.address().port}`);
+});

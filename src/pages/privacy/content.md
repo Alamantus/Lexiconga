@@ -2,7 +2,7 @@
 
 This document was last updated on June 5, 2019 to update information about our hosting service and how your data is used (i.e. to display your dicitonaries and sometimes send you emails if you agree to receive them) and to reflect changes to Lexiconga made during the app update.
 
-This Privacy Policy governs the manner in which Lexiconga collects, uses, maintains and discloses information collected from users (each, a "User") of the https://lexicon.ga website ("Site") and its accounts ("Account").
+This Privacy Policy governs the manner in which Lexiconga collects, uses, maintains and discloses information collected from users (each, a "User") of the https://lexiconga.com website ("Site") and its accounts ("Account").
 
 ### Personal identification information
 We may collect personal identification information from Users in a variety of ways, including, but not limited to, when Users visit our site, register on the site, and in connection with other activities, services, features or resources we make available on our Site. Users may be asked for, as appropriate, their name and email address. Users may, however, use our Site anonymously. We will collect personal identification information from Users only if they voluntarily submit such information to us. Users can always refuse to supply personal identification information, except that it may prevent them from engaging in certain Site-related activities.

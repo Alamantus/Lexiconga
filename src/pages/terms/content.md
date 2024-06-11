@@ -2,7 +2,7 @@
 
 Last updated: June 5, 2019 — Minor text fixes and link additions.
 
-Please read these Terms of Service ("Terms", "Terms of Service") carefully before using the https://lexicon.ga website (the "Service") or the cloud account service (an "Account") operated by [Robbie Antenesse](https://robbie.antenesse.net) and [Alamantus GameDev](https://alamantus.com) ("us", "we", or "our").
+Please read these Terms of Service ("Terms", "Terms of Service") carefully before using the https://lexiconga.com website (the "Service") or the cloud account service (an "Account") operated by [Robbie Antenesse](https://robbie.antenesse.net) and [Alamantus GameDev](https://alamantus.com) ("us", "we", or "our").
 
 Your access to and use of the Service is conditioned on your acceptance of and compliance with these Terms. These Terms apply to all visitors, users and others who access or use the Service. By accessing or using the Service you agree to be bound by these Terms. If you disagree with any part of the terms then you may not access the Service.
 

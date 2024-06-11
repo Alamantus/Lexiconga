@@ -25,21 +25,18 @@
   },
   "devDependencies": {
     "dotenv": "^16.4.5",
-    "minify-html-literals": "^1.3.5",
-    "nodemon": "^3.1.3",
-    "sharp": "^0.29.3"
+    "nodemon": "^3.1.3"
   },
   "dependencies": {
     "@fastify/helmet": "^11.1.1",
     "@fastify/jwt": "^8.0.1",
     "@fastify/mysql": "^4.3.0",
-    "@fastify/static": "^7.0.4",
     "@fastify/websocket": "^10.0.1",
     "bulma": "^1.0.1",
     "esbuild": "^0.21.5",
     "fastify": "^4.27.0",
-    "hyper-express": "^6.16.3",
     "marked": "^3.0.8",
+    "minify-html-literals": "^1.3.5",
     "papaparse": "^5.4.1",
     "require-overrides": "^0.3.0",
     "sass": "^1.77.4",
