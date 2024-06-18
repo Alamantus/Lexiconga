@@ -96,6 +96,7 @@ switch ($view) {
     foreach ($announcements as $announcement) {
       $expire = strtotime($announcement['expire']);
       if (time() < $expire) {
+        if (isset($_COOKIE['announcement-' . ($announcement['dismissId'] ?? '')])) continue;
         $announcements_html .= '<article class="announcement"' . (isset($announcement['dismissId']) ? ' id="announcement-' . $announcement['dismissId'] . '"' : '') . ' data-expires="' . $announcement['expire'] . '">
         <a class="close-button" title="Dismiss Announcement">&times;&#xFE0E;</a>
         <h4>' . $announcement['header'] . '</h4>
