@@ -1,9 +1,20 @@
 import { renderWords } from '../render/words';
 import { showSearchModal, clearSearchText, checkAllPartsOfSpeechFilters, uncheckAllPartsOfSpeechFilters } from '../search';
 
-export function setupSearchBar() {
+/**
+ * Identify selector strings and handlers
+ * @param {Function} when Passed from setupListeners, which listens to clicks on document.body
+ */
+export function handleSearchClickEvents(when) {
+  when('#clearSearchButton', clearSearchText);
+  when('#openSearchModal', showSearchModal);
+
+  when('#checkAllFilters', checkAllPartsOfSpeechFilters);
+  when('#uncheckAllFilters', uncheckAllPartsOfSpeechFilters);
+}
+
+export function setupSearchBarEvents() {
   const searchBox = document.getElementById('searchBox'),
-    clearSearchButton = document.getElementById('clearSearchButton'),
     openSearchModal = document.getElementById('openSearchModal'),
     searchIgnoreDiacritics = document.getElementById('searchIgnoreDiacritics'),
     searchExactWords = document.getElementById('searchExactWords'),
@@ -14,8 +25,6 @@ export function setupSearchBar() {
   searchBox.addEventListener('input', event => {
     openSearchModal.value = event.target.value;
   });
-  clearSearchButton.addEventListener('click', clearSearchText);
-  openSearchModal.addEventListener('click', showSearchModal);
 
   const toggleDetailsCheck = function() {
     if (searchExactWords.checked) {
@@ -47,8 +56,4 @@ export function setupSearchFilters() {
     filter.removeEventListener('change', renderWords);
     filter.addEventListener('change', renderWords);
   });
-  document.getElementById('checkAllFilters').removeEventListener('click', checkAllPartsOfSpeechFilters);
-  document.getElementById('checkAllFilters').addEventListener('click', checkAllPartsOfSpeechFilters);
-  document.getElementById('uncheckAllFilters').removeEventListener('click', uncheckAllPartsOfSpeechFilters);
-  document.getElementById('uncheckAllFilters').addEventListener('click', uncheckAllPartsOfSpeechFilters);
 }

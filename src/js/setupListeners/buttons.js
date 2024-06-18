@@ -2,41 +2,49 @@ import { renderMaximizedTextbox, renderInfoModal, renderIPATable, renderIPAHelp 
 import helpFile from '../../markdown/help.md';
 import termsFile from '../../markdown/terms.md';
 import privacyFile from '../../markdown/privacy.md';
-import { setupSearchBar } from './search';
-import { setupSettingsModal } from './modals';
+import { handleSearchClickEvents } from './search';
+import { handleSettingsModalClicks } from './settings';
 
-export function setupHeaderButtons() {
-  setupSearchBar();
-  setupSettingsModal();
-
-  document.getElementById('loginCreateAccountButton').addEventListener('click', () => {
-    import('../account/index.js').then(account => {
-      account.showLoginForm();
-    });
-  });
+/**
+ * Identify selector strings and handlers
+ * @param {Function} when Passed from setupListeners, which listens to clicks on document.body
+ */
+export function handleHeaderButtonClicks(when) {
+  handleSearchClickEvents(when);
+  handleSettingsModalClicks(when);
+  when('#loginCreateAccountButton', () => loadAccountScript('showLoginForm'));
 }
 
-export function setupIPAButtons() {
-  const ipaTableButtons = document.getElementsByClassName('ipa-table-button'),
-    ipaFieldHelpButtons = document.getElementsByClassName('ipa-field-help-button');
-
-  Array.from(ipaTableButtons).forEach(button => {
-    button.removeEventListener('click', renderIPATable);
-    button.addEventListener('click', renderIPATable);
-  });
-
-  Array.from(ipaFieldHelpButtons).forEach(button => {
-    button.removeEventListener('click', renderIPAHelp);
-    button.addEventListener('click', renderIPAHelp);
-  });
+// TODO: Set this up correctly
+function loadAccountScript(accountScriptMethod) {
+  let script = document.getElementById('accountScript');
+  if (script) {
+    Account[accountScriptMethod]();
+  } else {
+    script = document.createElement('script');
+    document.body.appendChild(script);
+    script.onload = () => {
+      Account[accountScriptMethod]();
+    }
+    script.src = './account.js';
+  }
 }
 
-export function setupMaximizeButtons() {
-  const maximizeButtons = document.getElementsByClassName('maximize-button');
-  Array.from(maximizeButtons).forEach(button => {
-    button.removeEventListener('click', renderMaximizedTextbox);
-    button.addEventListener('click', renderMaximizedTextbox);
-  });
+/**
+ * Identify selector strings and handlers
+ * @param {Function} when Passed from setupListeners, which listens to clicks on document.body
+ */
+export function handleIPAButtonClicks(when) {
+  when('.ipa-table-button', renderIPATable);
+  when('.ipa-field-help-button', renderIPAHelp);
+}
+
+/**
+ * Identify selector strings and handlers
+ * @param {Function} when Passed from setupListeners, which listens to clicks on document.body
+ */
+export function handleMaximizeButtonClicks(when) {
+  when('.maximize-button', renderMaximizedTextbox);
 }
 
 export function setupInfoButtons() {

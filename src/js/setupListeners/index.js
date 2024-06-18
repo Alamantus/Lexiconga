@@ -1,17 +1,19 @@
 import { usePhondueDigraphs } from '../KeyboardFire/phondue/ipaField';
 import { enableHotKeys } from '../hotkeys';
-import { dismiss, isDismissed } from '../announcements';
-import { fadeOutElement } from '../utilities';
-import { setupDetailsTabs } from './details';
+import { dismiss } from '../announcements';
+import { handleDetailClicks, setupEditFormInteractions } from './details';
 import { setupWordForm, setupMobileWordFormButton } from './words';
-import { setupIPAButtons, setupHeaderButtons, setupInfoButtons } from './buttons';
-import { setupTemplateForm, setupTemplateSelectOptions } from './settings';
+import { setupInfoButtons, handleIPAButtonClicks, handleMaximizeButtonClicks } from './buttons';
+import { handleTemplateFormClicks, setupTemplateChangeEvents, setupTemplateSelectOptions } from './settings';
+import { setupSearchBarEvents } from './search';
 
 export default function setupListeners() {
-  setupAnnouncements();
-  setupDetailsTabs();
-  setupTemplateForm();
-  setupHeaderButtons();
+  document.body.addEventListener('click', handleClickEvents);
+
+  setupEditFormInteractions();
+  setupTemplateChangeEvents();
+  setupSearchBarEvents();
+
   setupWordForm();
   setupMobileWordFormButton();
   setupInfoButtons();
@@ -21,25 +23,36 @@ export default function setupListeners() {
   }
 }
 
-function setupAnnouncements() {
-  const announcements = document.querySelectorAll('.announcement');
-  Array.from(announcements).forEach(announcement => {
-    if (announcement.id && isDismissed(announcement.id)) {
-      fadeOutElement(announcement);
-    } else {
-      announcement.querySelector('.close-button').addEventListener('click', () => dismiss(announcement));
+function handleClickEvents(event) {
+  const when = (selector, cb) => {
+    if (event.target.matches(selector)) {
+      cb(event.target);
     }
+  };
+
+  handleClickAccouncementClose(when);
+  handleDetailClicks(when);
+  handleTemplateFormClicks(when);
+  handleIPAButtonClicks(when);
+  handleMaximizeButtonClicks(when);
+}
+
+/**
+ * Identify selector strings and handlers
+ * @param {Function} when Passed from setupListeners, which listens to clicks on document.body
+ */
+function handleClickAccouncementClose(when) {
+  when('.announcement .close-button', closeElement => {
+    dismiss(closeElement.parentElement);
   });
 }
 
-export function setupIPAFields() {
+export function setupIPAFields(parent) {
   if (window.settings.useIPAPronunciationField) {
-    const ipaFields = document.getElementsByClassName('ipa-field');
+    const ipaFields = (parent ?? document).querySelectorAll('.ipa-field');
     Array.from(ipaFields).forEach(field => {
       field.removeEventListener('keypress', usePhondueDigraphs);
       field.addEventListener('keypress', usePhondueDigraphs);
     });
   }
-
-  setupIPAButtons();
 }

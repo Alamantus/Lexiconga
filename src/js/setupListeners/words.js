@@ -1,7 +1,6 @@
 import { renderEditForm } from '../render/words';
 import { confirmEditWord, cancelEditWord, confirmDeleteWord, expandAdvancedForm, submitWordForm } from '../wordManagement';
 // import { goToNextPage, goToPreviousPage, goToPage } from '../pagination';
-import { setupMaximizeButtons } from './buttons';
 import { setupIPAFields } from '.';
 
 export function setupWordForm() {
@@ -17,7 +16,6 @@ export function setupWordForm() {
   addWordButton.addEventListener('click', submitWordForm);
 
   setupIPAFields();
-  setupMaximizeButtons();
 }
 
 export function setupWordOptionButtons() {
@@ -80,7 +78,6 @@ export function setupWordEditFormButtons() {
   });
 
   setupIPAFields();
-  setupMaximizeButtons();
 }
 
 export function setupMobileWordFormButton() {

@@ -1,68 +1,65 @@
 import { showSection, hideDetailsPanel } from '../displayToggles';
 import { openEditModal, saveEditModal, saveAndCloseEditModal, exportDictionary, exportWords, importDictionary, importWords, confirmDeleteDictionary } from '../dictionaryManagement';
-import { setupMaximizeButtons } from './buttons';
 
-export function setupDetailsTabs() {
-  const tabs = document.querySelectorAll('#detailsSection nav li');
-  tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      const section = tab.innerText.toLowerCase();
-      if (section === 'edit') {
-        openEditModal();
-      } else {
-        const isActive = tab.classList.contains('active');
-        tabs.forEach(t => t.classList.remove('active'));
-        if (isActive) {
-          hideDetailsPanel();
-        } else {
-          tab.classList.add('active');
-          showSection(section);
-        }
-      }
-    });
-  });
-  setupEditFormTabs();
-  setupEditFormInteractions();
-  setupEditFormButtons();
+/**
+ * Identify selector strings and handlers
+ * @param {Function} when Passed from setupListeners, which listens to clicks on document.body
+ */
+export function handleDetailClicks(when) {
+  // Details Tabs
+  when('#detailsSection nav li', handleClickTab);
+  // Edit Form Tabs
+  when('#editModal nav li', handleClickEditFormTab);
+  // Edit Form Buttons
+  when('#editSave', saveEditModal);
+  when('#editSaveAndClose', saveAndCloseEditModal);
+  when('#importDictionaryFile', importDictionary);
+  when('#importWordsCSV', importWords);
+  when('#exportDictionaryButton', exportDictionary);
+  when('#exportWordsButton', exportWords);
+  when('#deleteDictionaryButton', confirmDeleteDictionary);
 }
 
-function setupEditFormTabs() {
-  const tabs = document.querySelectorAll('#editModal nav li');
-  tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      tabs.forEach(t => {
-        t.classList.remove('active');
-        document.getElementById('edit' + t.innerText + 'Tab').style.display = 'none';
-      });
-      tab.classList.add('active');
-      const tabSection = document.getElementById('edit' + tab.innerText + 'Tab');
-      tabSection.style.display = '';
-      tabSection.scrollTop = 0;
-    });
-  });
-}
-
-function setupEditFormInteractions() {
-  const preventDuplicatesBox = document.getElementById('editPreventDuplicates');
-  preventDuplicatesBox.addEventListener('change', () => {
-    const caseSensitiveBox = document.getElementById('editCaseSensitive');
-    if (preventDuplicatesBox.checked) {
-      caseSensitiveBox.disabled = false;
+function handleClickTab(tabElement) {
+  const section = tabElement.innerText.toLowerCase();
+  if (section === 'edit') {
+    openEditModal();
+  } else {
+    const isActive = tabElement.classList.contains('active');
+    document.querySelectorAll('#detailsSection nav li')
+      .forEach(t => t.classList.remove('active'));
+    if (isActive) {
+      hideDetailsPanel();
     } else {
-      caseSensitiveBox.disabled = true;
-      caseSensitiveBox.checked = false;
+      tabElement.classList.add('active');
+      showSection(section);
     }
-  });
+  }
 }
 
-function setupEditFormButtons() {
-  document.getElementById('editSave').addEventListener('click', saveEditModal);
-  document.getElementById('editSaveAndClose').addEventListener('click', saveAndCloseEditModal);
-  document.getElementById('importDictionaryFile').addEventListener('change', importDictionary);
-  document.getElementById('importWordsCSV').addEventListener('change', importWords);
-  document.getElementById('exportDictionaryButton').addEventListener('click', exportDictionary);
-  document.getElementById('exportWordsButton').addEventListener('click', exportWords);
-  document.getElementById('deleteDictionaryButton').addEventListener('click', confirmDeleteDictionary);
+function handleClickEditFormTab(tabElement) {
+  document.querySelectorAll('#editModal nav li').forEach(t => {
+    t.classList.remove('active');
+    document.getElementById('edit' + t.innerText + 'Tab').style.display = 'none';
+  });
+  tabElement.classList.add('active');
+  const tabSection = document.getElementById('edit' + tabElement.innerText + 'Tab');
+  tabSection.style.display = '';
+  tabSection.scrollTop = 0;
+}
 
-  setupMaximizeButtons();
+export function setupEditFormInteractions() {
+  const preventDuplicatesBox = document.getElementById('editPreventDuplicates');
+  preventDuplicatesBox.removeEventListener('change', handlePreventDuplicatesBoxChange);
+  preventDuplicatesBox.addEventListener('change', handlePreventDuplicatesBoxChange);
+}
+
+function handlePreventDuplicatesBoxChange(event) {
+  const caseSensitiveBox = document.getElementById('editCaseSensitive');
+  if (event.target.checked) {
+    caseSensitiveBox.disabled = false;
+  } else {
+    caseSensitiveBox.disabled = true;
+    caseSensitiveBox.checked = false;
+  }
 }
