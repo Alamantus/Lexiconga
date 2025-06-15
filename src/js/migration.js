@@ -13,7 +13,7 @@ export default function migrate() {
 }
 
 function isNotSecure() {
-  return window.location.host !== 'localhost' && window.location.protocol !== 'https:';
+  return !window.location.host.startsWith('localhost') && window.location.protocol !== 'https:';
 }
 
 function sendDictionaryToHTTPS() {

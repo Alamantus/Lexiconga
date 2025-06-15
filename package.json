@@ -8,16 +8,16 @@
   "license": "UNLICENCED",
   "scripts": {
     "dev": "npm run process-images && concurrently \"npm run watch-js\" \"npm run watch-php\" \"npm run copy-files\"",
-    "watch-js": "parcel watch template-index.html offline.html template-view.html template-passwordreset.html --no-hmr --public-url /lexiconga/",
-    "watch-php": "cpx \"src/php/**/{*,.*}\" dist -v -w",
+    "watch-js": "parcel watch template-index.html offline.html template-view.html template-passwordreset.html --no-hmr",
+    "watch-php": "cpx \"src/php/**/{*,.*}\" html -v -w",
     "build": "npm run process-images && npm run bundle-js && npm run copy-files && npm run copy-php",
-    "bundle-js": "parcel build template-index.html offline.html template-view.html template-passwordreset.html --no-source-maps",
-    "copy-files": "cpx \"node_modules/upup/dist/*.min.js\" dist -v",
-    "copy-php": "cpx \"src/php/**/{*,.*}\" dist",
+    "bundle-js": "parcel build template-index.html offline.html template-view.html template-passwordreset.html --no-source-maps --out-dir html",
+    "copy-files": "cpx \"node_modules/upup/dist/*.min.js\" html -v",
+    "copy-php": "cpx \"src/php/**/{*,.*}\" html",
     "process-images": "node dev/resize-images.js",
     "serve-frontend-only": "parcel template-index.html",
     "clear": "npm run clear-dist && npm run clear-cache",
-    "clear-dist": "rimraf dist/{*,.*}",
+    "clear-dist": "rimraf html/{*,.*}",
     "clear-cache": "rimraf .cache/{*,.*}"
   },
   "devDependencies": {

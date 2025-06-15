@@ -1,8 +1,14 @@
 node_modules/
 .cache/
 dist/
+html/
 vendor/
 processedImages/
+*lock*
+.env*
+!.env*.example
+.DS_Store
+
 
 src/php/api/config.php
 src/php/api/migrate.php
