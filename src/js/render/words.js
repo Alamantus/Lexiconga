@@ -200,7 +200,9 @@ export function renderEditForm(event = false) {
       <a class="button edit-cancel">Cancel Edit</a>
     </form>`;
 
-    document.getElementById(wordId.toString()).innerHTML = editForm;
+    const parent = document.getElementById(wordId.toString())
+    parent.innerHTML = editForm;
+    setupIPAFields(parent);
     renderPartsOfSpeech(true);
     renderTemplateSelectOptions();
   }
