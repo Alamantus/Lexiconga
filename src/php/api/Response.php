@@ -3,9 +3,13 @@ class Response {
   private static function defaultHeaders () {
     header('Access-Control-Allow-Origin: *');
     header('Expires: Sun, 01 Nov 2015 22:46:51 GMT');
-    header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
-    header("Cache-Control: post-check=0, pre-check=0", false);
-    header("Pragma: no-cache");
+    header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+    header('Cache-Control: post-check=0, pre-check=0', false);
+    header('Pragma: no-cache');
+    if (strpos($_SERVER['SERVER_NAME'], 'localhost') !== false) {
+      # To resolve the issue with "Your connection to this site is not secure" message
+      header('Content-Security-Policy: upgrade-insecure-requests env=HTTPS');
+    }
   }
   
   public static function json ($data, $http_code = 200) {
