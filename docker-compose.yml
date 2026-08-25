@@ -22,7 +22,9 @@ services:
       MARIADB_PASSWORD: ${PROJECT_DB_PASSWORD}
     ports:
       - "3306:3306"
- 
+    volumes:
+      - lexiconga_db:/var/lib/mysql
+
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     links:
@@ -33,3 +35,6 @@ services:
       PMA_HOST: db
       MYSQL_ROOT_PASSWORD: ${PROJECT_DB_ROOT_PASSWORD}
       UPLOAD_LIMIT: 300M
+
+volumes:
+  lexiconga_db:
