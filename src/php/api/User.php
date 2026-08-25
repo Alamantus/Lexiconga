@@ -4,8 +4,10 @@ require_once(realpath(dirname(__FILE__) . '/./Token.php'));
 require_once(realpath(dirname(__FILE__) . '/./Dictionary.php'));
 
 class User {
-  private $db;
-  private $token;
+  private Db $db;
+  private Token $token;
+  private Dictionary $dictionary;
+
   function __construct () {
     $this->db = new Db();
     $this->token = new Token();
@@ -276,7 +278,7 @@ VALUES (?, ?, ?, ?, current_timestamp())';
       $date,
       $email,
     ));
-    
+
     if ($reset) {
       $user_data = $this->getUserDataByEmailForPasswordReset($email);
       if ($user_data) {
@@ -317,7 +319,7 @@ VALUES (?, ?, ?, ?, current_timestamp())';
       $unhashed_code,
     ));
     $results = $stmt->fetchAll();
-    
+
     if ($stmt && $results) {
         return count($results) === 1;
     } else {

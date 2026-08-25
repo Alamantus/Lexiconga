@@ -61,7 +61,7 @@ VALUES ($new_id, ?, ?, ?, ?, ?, ?)";
   public function changeCurrent ($user, $dictionary) {
     $update_query = 'UPDATE users SET current_dictionary=? WHERE id=?';
     $update = $this->db->query($update_query, array($dictionary, $user));
-    if (trim($this->db->last_error_info[2]) == '') {
+    if (trim($this->db->last_error_info[2] ?? '') == '') {
       return $dictionary;
     }
     return false;
@@ -312,7 +312,7 @@ created_on=VALUES(created_on)';
 etymology=VALUES(etymology),
 related=VALUES(related),
 principal_parts=VALUES(principal_parts)';
-    
+
     $results1 = $this->db->execute($query1, $params1);
 
     // if ($results1) {
@@ -353,7 +353,7 @@ principal_parts=VALUES(principal_parts)';
 
     $insert_query = trim($insert_query, ', ') . ' ON DUPLICATE KEY UPDATE deleted_on=VALUES(deleted_on)';
     $delete_query = trim($delete_query, ', ') . ')';
-    
+
     $insert_results = $this->db->execute($insert_query, $insert_params);
     if ($insert_results) {
       $delete_results = $this->db->execute($delete_query, $delete_params);

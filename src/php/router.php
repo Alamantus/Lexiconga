@@ -156,9 +156,9 @@ switch ($view) {
       }
     })(window.onload);
     </script>";
-    
+
     $html = str_replace('{{upup_insert}}', $upup_insert, $html);
-    
+
     $imported_from_http = '';
     if (isset($_POST['oldDictionaryFromHTTP'])) {
       $imported_from_http = '<script>window.dictionaryImportedFromHTTP = "' . addslashes($_POST['oldDictionaryFromHTTP']) . '";</script>';
